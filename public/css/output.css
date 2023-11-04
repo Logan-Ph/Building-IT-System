@@ -583,10 +583,6 @@ video {
   max-width: 1280px;
 }
 
-.flex-grow {
-  flex-grow: 1;
-}
-
 .items-center {
   align-items: center;
 }
