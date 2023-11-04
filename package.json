@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Logan-Ph/Building-IT-System#readme",
   "dependencies": {
+    "build-css": "^0.2.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
@@ -28,6 +29,10 @@
     "express-session": "^1.17.3",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
+    "node-sass": "^9.0.0",
     "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.5"
   }
 }
