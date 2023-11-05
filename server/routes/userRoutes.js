@@ -4,7 +4,7 @@ const userController = require('../controllers/userController')
 
 /**
  *  App routes
- */
+*/
 
 router.get('/', userController.homepage);
 
