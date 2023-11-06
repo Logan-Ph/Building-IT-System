@@ -1,6 +1,7 @@
 require('../models/database')
 const User = require('../models/user')
 const Vendor = require('../models/vendor')
+const Product = require('../models/product')
 
 exports.homepage = async (req, res) => {
     try {
