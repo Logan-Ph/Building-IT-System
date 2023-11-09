@@ -13,5 +13,5 @@ The "server" run at the port 4000
 
 At the "server" dir create a file '.env' and paste the following:
 
-PORT = 4000
+PORT = 4000 '\n'
 MONGODB_URL = mongodb+srv://phamphuocsang5850:123@rbuy.rzqe1zw.mongodb.net/rBuy?retryWrites=true&w=majority
