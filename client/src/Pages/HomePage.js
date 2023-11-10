@@ -1,8 +1,8 @@
 export default function Homepage() {
     return (
         <>
-            <p>
-                Home
+            <p class="bg-black">
+                Hiii
             </p>
         </>
     )
