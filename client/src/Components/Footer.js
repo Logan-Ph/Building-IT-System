@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div>
               <div className="flex items-center">
-                <img src="/images/logo1.png" className="mr-3 w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
+                <img src={require('./images/logo1.png')} className="mr-3 w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
                 <span className="font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
               </div>
                
