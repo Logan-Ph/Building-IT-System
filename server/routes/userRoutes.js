@@ -8,6 +8,7 @@ const userController = require('../controllers/userController');
 
 router.get('/', userController.homepage);
 router.get('/product/:id', userController.productpage);
-router.get('/register', userController.registerpage);
+router.post('/user-register', userController.userRegister);
+router.post('/vendor-register', userController.vendorRegister);
 
 module.exports = router;
