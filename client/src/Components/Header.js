@@ -3,8 +3,6 @@ export default function Header() {
         <>
             <div className="">
                 <div className="border py-3 px-6 gradient-background">
-
-
                     <div className="flex justify-between">
                         {/* <!-- logo --> */}
                         <div className="flex items-center lg:ml-10 ">
@@ -16,8 +14,6 @@ export default function Header() {
                             <input type="text" className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                                 placeholder="Enter " />
                         </div>
-
-
                         <div className="ml-2 flex">
                             <div className="mr-2 flex">
                                 <div className="lg:hidden flex items-center">

@@ -30,7 +30,7 @@ export default function Router() {
                     element: <Homepage />
                 },
                 {
-                    path: "/product",
+                    path: "/product/:id",
                     element: <ProductPage />
                 },
             ]
