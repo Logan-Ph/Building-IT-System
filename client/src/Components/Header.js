@@ -1,7 +1,7 @@
 export default function Header() {
     return (
         <>
-            <p className="bg-black">
+            <p>
                 This Is the Header
             </p>
         </>
