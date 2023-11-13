@@ -2,7 +2,10 @@ import Header from './Header';
 import Footer from './Footer';
 import Homepage from '../Pages/HomePage';
 import ProductPage from '../Pages/ProductPage';
-import { createBrowserRouter,RouterProvider,Outlet } from 'react-router-dom';
+import LogInHeader from './LogInHeader';
+import SignUpHeader from './SignUpHeader';
+import LogInPage from '../Pages/LogInPage';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 
 export default function Router() {
@@ -18,26 +21,38 @@ export default function Router() {
 
     const BrowserRoutes = createBrowserRouter([
         {
-            path:"/register",
-            element:<RegisterPage/>
+            path: "/register",
+            element: <>
+                <SignUpHeader />
+                <RegisterPage />
+                <Footer />
+            </>
+        },
+        {
+            path: "/login",
+            element: <>
+                <LogInHeader />
+                <LogInPage />
+                <Footer />
+            </>
         },
         {
             path: "/",
             element: <Layout />,
-            children:[
+            children: [
                 {
-                    path:"/",
-                    element:<Homepage/>
+                    path: "/",
+                    element: <Homepage />
                 },
                 {
-                    path:"/product",
-                    element:<ProductPage/>
+                    path: "/product/:id",
+                    element: <ProductPage />
                 },
             ]
         }
     ])
 
-    return(
+    return (
         <RouterProvider router={BrowserRoutes} />
     )
 }
