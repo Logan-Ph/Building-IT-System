@@ -1,4 +1,35 @@
+import axios from 'axios'
+import { useState, useEffect } from 'react'
+
 export default function LogInPage() {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [data, setData] = useState('')
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    const fetchData = async () => {
+        await axios.get("http://localhost:4000/")
+            .then(res => setData(res.data))
+            .catch(er => console.log(er))
+    }
+
+    const axiosPostData = async()=>{
+        const postData = {
+            username:username,
+            password:password
+        }
+        console.log(postData)
+        await axios.post('http://localhost:4000/login', postData)
+    }
+
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        axiosPostData()
+    }
+
     return (
         <>
             <section className="bg-white ">
@@ -7,17 +38,17 @@ export default function LogInPage() {
                     <p className="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Welcome back, We hope you have a great day!</p>
 
                     <div className="p-4 rounded-lg bg-gray-50">
-                        <form name="signup-customer" className="space-y-6" action="#" method="POST">
+                        <form name="signup-customer" className="space-y-6">
                             <div>
                                 <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                 <div className="mt-2">
-                                    <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
+                                    <input type="text" id="username" name="username" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" onChange={e => setUsername(e.target.value)}/>
                                 </div>
                             </div>
                             <div>
                                 <label for="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 <div className="mt-2">
-                                    <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters."/>
+                                    <input id="password" name="password" type="password" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." onChange={e => setPassword(e.target.value)}/>
                                 </div>
                             </div>
                             <div className="mt-3 flex justify-between items-center">
@@ -30,7 +61,7 @@ export default function LogInPage() {
                                 </div>
                             </div>
                             <div>
-                                <button type="submit" className="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign In</button>
+                                <button type="submit" onClick={handleSubmit} className="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign In</button>
                             </div>
                             <div className="relative flex mt-3 items-center">
                                 <div className="flex-grow border-t border-gray-400"></div>
@@ -53,7 +84,7 @@ export default function LogInPage() {
                             </div>
                             <div className="mt-6 flex justify-center items-center gap-1">
                                 <p className="font-medium text-base">Don't have an account yet?</p>
-                                <button href="#" className="font-semibold leading-6 text-[#222160] hover:text-[#000053]">Sign up</button>
+                                <button href="#" className="font-semibold leading-6 text-[#222160] hover:text-[#000053]" >Sign up</button>
                             </div>
                         </form>
                     </div>

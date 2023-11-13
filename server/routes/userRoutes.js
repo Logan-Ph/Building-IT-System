@@ -34,8 +34,8 @@ router.get('/', checkAuthenticated, authenticateToken,userController.homePage);
 router.get('/product/:id', checkAuthenticated,authenticateToken ,userController.productPage);
 router.get('/login', checkNotAuthenticated, userController.loginPage);
 router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
+    successRedirect: 'http://localhost:3000/',
+    failureRedirect: 'http://localhost:3000/login',
     failureFlash: true,
 }));
 router.get('/logout', checkAuthenticated, userController.logout);

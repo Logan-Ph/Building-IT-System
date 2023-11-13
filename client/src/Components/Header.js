@@ -6,7 +6,7 @@ export default function Header() {
                     <div className="flex justify-between">
                         {/* <!-- logo --> */}
                         <div className="flex items-center lg:ml-10 ">
-                            <img src={require('./images/logo1.png')} className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
+                            <img  src={require('./images/logo1.png')} className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
                             <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
                         </div>
 

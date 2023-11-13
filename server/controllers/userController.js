@@ -132,7 +132,7 @@ exports.vendorRegister = async (req, res) => {
 
 exports.loginPage = (req, res) => {
   try {
-    res.json("This is login page");
+    res.json();
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }

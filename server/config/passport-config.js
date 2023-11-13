@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 function initialize(passport) {
-  const authenticateUser = async (email, password, done) => {
-    const user = (await User.find({ email: email }))[0]
+  const authenticateUser = async (username, password, done) => {
+    const user = (await User.find({ username: username }))[0]
     if (user == null) {
-      return done(null, false, { message: 'Wrong password or email' })
+      return done(null, false, { message: 'Wrong password or username' })
     }
 
     try {
@@ -18,14 +18,14 @@ function initialize(passport) {
         userObject.accessToken = accessToken;
         return done(null, userObject)
       } else {
-        return done(null, false, { message: 'Wrong password or email' })
+        return done(null, false, { message: 'Wrong password or username' })
       }
     } catch (e) {
       return done(e)
     }
   }
 
-  passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
+  passport.use(new LocalStrategy({ usernameField: 'username' }, authenticateUser))
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((id, done) => {
     return done(null, async () => { return await User.findById(id) })
