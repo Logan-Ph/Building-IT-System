@@ -6,7 +6,7 @@ export default function Header() {
                     <div className="flex justify-between">
                         {/* <!-- logo --> */}
                         <div className="flex items-center lg:ml-10 ">
-                            <img src="/images/logo1.png" className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo"></img>
+                            <img src={require('./images/logo1.png')} className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
                             <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
                         </div>
 
@@ -70,9 +70,7 @@ export default function Header() {
 
                 <div className="mt-2 flex items-center justify-between">
                     <div className="flex gap-x-2 py-1 px-2">
-
                     </div>
-
                     <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
                         <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">Best seller</span>
                         <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">New Releases</span>
@@ -85,9 +83,7 @@ export default function Header() {
                         <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">Entertainment</span>
                         <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">Toys & Games</span>
                     </div>
-
-
-                    <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10  sm:hidden md:hidden xs:hidden">Becoma a vendor</span>
+                    <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10  sm:hidden md:hidden xs:hidden">Become a vendor</span>
                 </div>
 
             </div>
@@ -104,7 +100,7 @@ export default function Header() {
                             id="sidenav-main">
                             <div className="flex shrink-0 px-8 items-center justify-between h-[96px]">
                                 <a className="transition-colors duration-200 ease-in-out flex items-center" href="/">
-                                    <img alt="Logo" src="/images/logo1.png" className="inline xs:w-8 sm:w-10 md:w-12 mb-2 "></img>
+                                    <img alt="Logo" src={require('./images/logo1.png')} className="inline xs:w-8 sm:w-10 md:w-12 mb-2 " />
                                     <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
                                 </a>
                                 <button className="navbar-close">
@@ -123,7 +119,7 @@ export default function Header() {
                                         <div className="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
                                             <img className="w-[40px] h-[40px] shrink-0 inline-block rounded-[.95rem]"
                                                 src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
-                                                alt="avatar image"></img>
+                                                alt="avatar" />
                                         </div>
                                     </div>
                                     <div className="mr-2 ">
@@ -155,7 +151,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Best seller</a>
                                         </span>
                                     </div>
@@ -165,7 +161,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">New
                                                 Releases</a>
                                         </span>
@@ -175,7 +171,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Electronics</a>
                                         </span>
                                     </div>
@@ -184,7 +180,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Beauty
                                                 & Personal Care</a>
                                         </span>
@@ -194,7 +190,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Household
                                                 Appliances</a>
                                         </span>
@@ -205,7 +201,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Fashion</a>
                                         </span>
                                     </div>
@@ -214,7 +210,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Entertainment</a>
                                         </span>
                                     </div>
@@ -223,7 +219,7 @@ export default function Header() {
                                     <div>
                                         <span
                                             className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                                            <a href=""
+                                            <a href="/"
                                                 className="flex items-center flex-grow  text-white hover:text-dark">Toys
                                                 & Games</a>
                                         </span>
@@ -235,83 +231,6 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <div className="border py-3 px-6 gradient-background">
-                <div className="flex items-center lg:ml-10 ">
-                    <img src="/images/logo1.png" className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo"></img>
-                    <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
-                    <h1 className="text-4xl text-white flex items-center font-semibold ml-16"> Sign in</h1>
-                </div>
-            </div>
-
-
-
-
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <div className="border py-3 px-6 gradient-background">
-                <div className="flex items-center lg:ml-10 ">
-                    <img src="/images/logo1.png" className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo"></img>
-                    <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
-                    <h1 className="text-4xl text-white flex items-center font-semibold ml-16"> Sign up</h1>
-                </div>
-            </div>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-            <h1>asdasdasdasda</h1>
-
-
         </>
-
     )
 }
