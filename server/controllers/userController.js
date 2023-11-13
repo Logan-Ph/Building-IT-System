@@ -16,8 +16,8 @@ exports.homePage = async (req, res) => {
   try {
     let product = await Product
       .find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1 }).limit(10);
-    res.json({product:product})
-  } catch (error) {
+    res.json(product);
+    } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }

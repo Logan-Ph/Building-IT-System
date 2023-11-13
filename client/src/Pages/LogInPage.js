@@ -16,16 +16,16 @@ export default function LogInPage() {
             .catch(er => console.log(er))
     }
 
-    const axiosPostData = async()=>{
+    const axiosPostData = async () => {
         const postData = {
-            username:username,
-            password:password
+            username: username,
+            password: password
         }
         console.log(postData)
         await axios.post('http://localhost:4000/login', postData)
     }
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = (e) => {
         e.preventDefault()
         axiosPostData()
     }
@@ -42,19 +42,19 @@ export default function LogInPage() {
                             <div>
                                 <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                 <div className="mt-2">
-                                    <input type="text" id="username" name="username" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" onChange={e => setUsername(e.target.value)}/>
+                                    <input type="text" id="username" name="username" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" onChange={e => setUsername(e.target.value)} />
                                 </div>
                             </div>
                             <div>
                                 <label for="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 <div className="mt-2">
-                                    <input id="password" name="password" type="password" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." onChange={e => setPassword(e.target.value)}/>
+                                    <input id="password" name="password" type="password" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." onChange={e => setPassword(e.target.value)} />
                                 </div>
                             </div>
                             <div className="mt-3 flex justify-between items-center">
                                 <div>
                                     <input id="terms" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " />
-                                        <label className="ms-2 text-sm font-medium text-gray-900 ">Remember Me</label>
+                                    <label className="ms-2 text-sm font-medium text-gray-900 ">Remember Me</label>
                                 </div>
                                 <div>
                                     <a href="/" className="ms-2 text-sm font-medium text-blue-600 hover:underline">Forgot password?</a>

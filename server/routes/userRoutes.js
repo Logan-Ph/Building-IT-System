@@ -30,7 +30,7 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
-router.get('/', checkAuthenticated, authenticateToken,userController.homePage);
+router.get('/',userController.homePage);
 router.get('/product/:id', checkAuthenticated,authenticateToken ,userController.productPage);
 router.get('/login', checkNotAuthenticated, userController.loginPage);
 router.post('/login', passport.authenticate('local', {
