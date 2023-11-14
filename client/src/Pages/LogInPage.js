@@ -11,8 +11,9 @@ export default function LogInPage() {
     }, [])
 
     const fetchData = async () => {
-        await axios.get("http://localhost:4000/")
+        await axios.get("http://localhost:4000/login")
             .then(res => setData(res.data))
+            .then(console.log(data))
             .catch(er => console.log(er))
     }
 
@@ -21,7 +22,6 @@ export default function LogInPage() {
             username: username,
             password: password
         }
-        console.log(postData)
         await axios.post('http://localhost:4000/login', postData)
     }
 
