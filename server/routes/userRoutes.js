@@ -33,7 +33,12 @@ function checkNotAuthenticated(req, res, next) {
 router.get('/', userController.homePage);
 router.get('/product/:id', userController.productPage);
 router.get('/login', userController.loginPage);
-router.post('/login', passport.authenticate('local'));
+router.post('/login', passport.authenticate('local', {
+    successRedirect: 'http://localhost:3000/',
+    failureRedirect: 'http://localhost:3000/login',
+    failureFlash : true,
+}));
+
 router.get('/logout', checkAuthenticated, userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);
