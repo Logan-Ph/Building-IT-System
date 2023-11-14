@@ -10,7 +10,7 @@ export default function Homepage() {
 
     const fetchData = async () => {
         await axios.get("http://localhost:4000/")
-            .then(res => setProducts([res.data]))
+            .then(res => setProducts(res.data))
             .catch(er => console.log(er))
     }
 
