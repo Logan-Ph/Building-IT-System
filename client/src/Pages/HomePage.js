@@ -10,7 +10,7 @@ export default function Homepage() {
 
     const fetchData = async () => {
         await axios.get("http://localhost:4000/")
-            .then(res => setProducts(res.data))
+            .then(res => setProducts([res.data]))
             .catch(er => console.log(er))
     }
 
@@ -21,12 +21,12 @@ export default function Homepage() {
             </p>
             <p>products</p>
             {products.map(product => (
-                <div key={product._id}>
+                <>
                     <p>{product.product_name}</p>
                     <img src={product.image_link} alt={product.product_name} />
                     <p>price {product.price}</p>
                     <a href={`http://localhost:3000/product/${product._id}`}>View Product</a>
-                </div>
+                </>
             ))}
         </>
     )

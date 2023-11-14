@@ -9,8 +9,8 @@ require('dotenv').config
  *  App routes
 */
 
-function authenticateToken(req,res, next){
-    jwt.verify(req.session.passport.user.accessToken, process.env.ACCESS_TOKEN, (err) =>{
+function authenticateToken(req, res, next) {
+    jwt.verify(req.session.passport.user.accessToken, process.env.ACCESS_TOKEN, (err) => {
         if (err) return res.redirect('/logout')
         next()
     })
@@ -30,16 +30,12 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
-router.get('/',userController.homePage);
-router.get('/product/:id', checkAuthenticated,authenticateToken ,userController.productPage);
-router.get('/login', checkNotAuthenticated, userController.loginPage);
-router.post('/login', passport.authenticate('local', {
-    successRedirect: 'http://localhost:3000/',
-    failureRedirect: 'http://localhost:3000/login',
-    failureFlash: true,
-}));
+router.get('/', userController.homePage);
+router.get('/product/:id', userController.productPage);
+router.get('/login', userController.loginPage);
+router.post('/login', passport.authenticate('local'));
 router.get('/logout', checkAuthenticated, userController.logout);
-router.post('/user-register', checkNotAuthenticated, userController.userRegister);
-router.post('/vendor-register', checkNotAuthenticated, userController.vendorRegister);
+router.post('/user-register', userController.userRegister);
+router.post('/vendor-register', userController.vendorRegister);
 
 module.exports = router;
