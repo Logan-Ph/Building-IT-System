@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function Navbar() {
   return (
     <>
       <div className="gradient-background pt-8 pb-6 mt-auto ">
@@ -8,7 +8,7 @@ export default function Footer() {
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <div>
                   <div className="flex items-center">
-                    <img src={require('./images/logo1.png')} className="mr-3 w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
+                    <img src="/images/logo1.png" className="mr-3 w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
                     <span className="font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
                   </div>
 
@@ -99,7 +99,10 @@ export default function Footer() {
                   </div>
                 </div>
               </div>
+
             </div>
+
+
           </div>
         </div>
 
@@ -108,11 +111,11 @@ export default function Footer() {
           <div className="w-full md:w-4/12 px-4 mx-auto text-center">
             <div className="text-md text-white font-semibold py-1">
               Copyright ©
-              <a href="/" className="text-white hover:text-white">2023 rBuy</a>.
+              <a href="" className="text-white hover:text-white">2023 rBuy</a>.
             </div>
           </div>
         </div>
       </div>
     </>
-  );
+  )
 }
