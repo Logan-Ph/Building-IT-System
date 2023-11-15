@@ -2,33 +2,49 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 export default function LogInPage() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [data, setData] = useState('')
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [data, setData] = useState('');
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     const fetchData = async () => {
-        await axios.get("http://localhost:4000/login")
-            .then(res => setData(res.data))
-            .then(console.log(data))
-            .catch(er => console.log(er))
-    }
+        try {
+            const res = await axios.get('http://localhost:4000/login');
+            setData(res.data);
+            console.log(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const axiosPostData = async () => {
-        const postData = {
-            username: username,
-            password: password
-        }
-        await axios.post('http://localhost:4000/login', postData)
-    }
+        try {
+            const postData = {
+                username: username,
+                password: password,
+            };
 
+            const response = await axios.post('http://localhost:4000/login', postData);
+
+            const accessToken = response.data.accessToken;
+            localStorage.setItem('accessToken', accessToken);
+
+            window.location.href = '/';
+        } catch (error) {
+            setError('Please check your username and password'); 
+            console.error('Login failed:', error.response ? error.response.data : error.message);
+        }
+    };
+   
     const handleSubmit = (e) => {
-        e.preventDefault()
-        axiosPostData()
-    }
+        e.preventDefault();
+        axiosPostData();
+
+    };
 
     return (
         <>
@@ -38,7 +54,7 @@ export default function LogInPage() {
                     <p className="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Welcome back, We hope you have a great day!</p>
 
                     <div className="p-4 rounded-lg bg-gray-50">
-                        <form name="signup-customer" className="space-y-6">
+                        <form action='' name="signin" className="space-y-6">
                             <div>
                                 <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                 <div className="mt-2">
@@ -61,6 +77,7 @@ export default function LogInPage() {
                                 </div>
                             </div>
                             <div>
+                                {error && <p className="text-red-500">{error}</p>}
                                 <button type="submit" onClick={handleSubmit} className="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign In</button>
                             </div>
                             <div className="relative flex mt-3 items-center">
