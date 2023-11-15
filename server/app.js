@@ -16,7 +16,12 @@ const routes = require('./routes/userRoutes.js')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost:3000",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
+
 app.use(cookieParser('ShopWebSecure'));
 app.use(session({
   secret: process.env.ACCESS_TOKEN,

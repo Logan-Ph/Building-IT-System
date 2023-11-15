@@ -4,23 +4,10 @@ const Product = require('../models/product')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
-const initializePassport = require('../config/passport-config')
 const user = require('../models/user')
 require('dotenv').config()
-
-initializePassport(
-  passport,
-)
-
-exports.homePage = async (req, res) => {
-  try {
-    let product = await Product
-      .find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1 }).limit(10);
-    res.json(product);
-    } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
-  }
-}
+require('../config/passportGoogle')
+require('../config/passport-config')
 
 exports.productPage = async (req, res) => {
   try {
@@ -141,5 +128,5 @@ exports.loginPage = (req, res) => {
 
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect("/");
+  res.redirect("http://localhost:3000/");
 };

@@ -3,23 +3,29 @@ import { useState, useEffect } from 'react'
 
 export default function Homepage() {
     const [products, setProducts] = useState([])
+    const [user, setUser] = useState()
 
     useEffect(() => {
         fetchData()
     }, [])
 
     const fetchData = async () => {
-        await axios.get("http://localhost:4000/")
-            .then(res => setProducts(res.data))
+        await axios.get("http://localhost:4000/", { withCredentials: true })
+            .then(res => {
+                setProducts(res.data.product)
+                setUser(res.data.user)
+                console.log(res.data)
+            })
             .catch(er => console.log(er))
     }
-
+    
     return (
         <>
             <p>
                 Home
             </p>
             <p>products</p>
+            <p>{(user)? user.id: user}</p>
             {products.map(product => (
                 <>
                     <p>{product.product_name}</p>
