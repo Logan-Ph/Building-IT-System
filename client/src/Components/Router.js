@@ -5,6 +5,7 @@ import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
+import TestingPage from '../Pages/TestingPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 
@@ -48,6 +49,10 @@ export default function Router() {
                     path: "/product/:id",
                     element: <ProductPage />
                 },
+                {
+                    path:"/test",
+                    element: <TestingPage />
+                }
             ]
         }
     ])
