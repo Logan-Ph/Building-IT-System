@@ -21,8 +21,8 @@ export default function Header() {
   };
 
   return (
-    <>
-      <div className="">
+    <section>
+      <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
             {/* <!-- logo --> */}
@@ -355,7 +355,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </>
+    </section>
   );
 }
 
