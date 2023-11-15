@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport')
 const user = require('../models/user')
 require('dotenv').config()
-require('../config/passportGoogle')
-require('../config/passport-config')
+
 
 exports.productPage = async (req, res) => {
   try {
@@ -119,7 +118,7 @@ exports.vendorRegister = async (req, res) => {
 
 exports.loginPage = (req, res) => {
   try {
-    res.json();
+    res.json("This is login Page");
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }

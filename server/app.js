@@ -25,8 +25,8 @@ app.use(cors({
 app.use(cookieParser('ShopWebSecure'));
 app.use(session({
   secret: process.env.ACCESS_TOKEN,
-  saveUninitialized: false,
-  resave: true
+  saveUninitialized: true,
+  resave: false
 }));
 app.use(flash());
 app.use(fileUpload());
