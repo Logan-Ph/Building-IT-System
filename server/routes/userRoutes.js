@@ -15,7 +15,6 @@ function generateAccessToken(user) {
 }
 
 function authenticateToken(req, res, next) {
-    console.log(req.cookies.accessToken)
     jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => {
         if (err) return res.json()
         next()
@@ -36,8 +35,8 @@ router.get('/', userController.homePage);
 router.get('/product/:id', authenticateToken, userController.productPage);
 router.get('/login', userController.loginPage);
 router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
+    successRedirect: 'http://localhost:3000/',
+    failureRedirect: 'http://localhost:3000/login',
     failureFlash: true,
     failureMessage: true
 }));

@@ -9,6 +9,7 @@ require('dotenv').config()
 
 passport.use(new LocalStrategy({ usernameField: 'username', passReqToCallback: true }, async function (req, username, password, done) {
   const user = (await User.find({ username: username }))[0]
+  console.log(username)
   if (user == null) {
     return done(null, false, { message: 'Wrong password or username' })
   }
