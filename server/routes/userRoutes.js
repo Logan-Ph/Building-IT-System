@@ -9,39 +9,54 @@ require('dotenv').config
  *  App routes
 */
 
+function generateAccessToken(user) {
+    const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+    return accessToken
+}
+
 function authenticateToken(req, res, next) {
-    jwt.verify(req.session.passport.user.accessToken, process.env.ACCESS_TOKEN, (err) => {
-        if (err) return res.redirect('/logout')
+    console.log(req.cookies.accessToken)
+    jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => {
+        if (err) return res.json()
         next()
     })
 }
 
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next()
+router.get('/login/success', (req, res) => {
+    if (req.user) {
+        const accessToken = generateAccessToken(req.user);
+        res.cookie('accessToken', accessToken, { httpOnly: true });
+        res.json({ user: req.user });
+    } else {
+        res.json({ user: "" })
     }
-    res.redirect('/login')
-}
-
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
-    next()
-}
+})
 
 router.get('/', userController.homePage);
-router.get('/product/:id', userController.productPage);
+router.get('/product/:id', authenticateToken, userController.productPage);
 router.get('/login', userController.loginPage);
-
 router.post('/login', passport.authenticate('local', {
-    successRedirect: 'http://localhost:3000/',
-    failureRedirect: 'http://localhost:3000/login',
-    failureFlash : true,
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true,
+    failureMessage: true
 }));
+router.get('/auth/google', passport.authenticate("google", { scope: ["profile"] }))
+router.get('/auth/google/callback', (req, res, next) => {
+    passport.authenticate("google", {
+        failureRedirect: 'http://localhost:3000/login',
+        failureFlash: true,
+        failureMessage: true
+    }, (err, user) => {
+        if (err) return next(err);
+        req.logIn(user, (err) => {
+            if (err) return next(err);
+            res.redirect('http://localhost:3000/');
+        });
+    })(req, res, next);
+});
 
-router.get('/logout', checkAuthenticated, userController.logout);
+router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);
-
 module.exports = router;
