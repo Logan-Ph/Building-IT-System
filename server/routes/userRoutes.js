@@ -2,59 +2,51 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
-const Product = require('../models/product')
 const jwt = require('jsonwebtoken')
 require('dotenv').config
-require('../config/passportGoogle')
-require('../config/passport-config')
+
 /**
  *  App routes
 */
 
+function generateAccessToken(user) {
+    const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+    return accessToken
+}
+
 function authenticateToken(req, res, next) {
-    jwt.verify(req.user.accessToken, process.env.ACCESS_TOKEN, (err) => {
-        if (err) return res.redirect('/logout')
+    console.log(req.cookies.accessToken)
+    jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => {
+        if (err) return res.json()
         next()
     })
 }
 
-function checkAuthenticated(req, res, next) {
-    console.log("log user in authenciated function")
-    console.log(req.session.passport)
-    if (req.isAuthenticated()) {
-        return next()
+router.get('/login/success', (req, res) => {
+    if (req.user) {
+        const accessToken = generateAccessToken(req.user);
+        res.cookie('accessToken', accessToken, { httpOnly: true });
+        res.json({ user: req.user });
+    } else {
+        res.json({ user: "" })
     }
-    res.redirect('/login')
-}
+})
 
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
-    next()
-}
-
-router.get('/',checkAuthenticated , async (req, res) => {
-    try {
-        let product = await Product.find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1 }).limit(10);
-        res.json({ product: product, user: req.session.passport })
-    } catch (error) {
-        res.status(500).send({ message: error.message || "Error Occured" });
-    }
-});
-
-router.get('/product/:id',checkAuthenticated, userController.productPage);
+router.get('/', userController.homePage);
+router.get('/product/:id', authenticateToken, userController.productPage);
 router.get('/login', userController.loginPage);
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: true
+    failureFlash: true,
+    failureMessage: true
 }));
-
 router.get('/auth/google', passport.authenticate("google", { scope: ["profile"] }))
 router.get('/auth/google/callback', (req, res, next) => {
     passport.authenticate("google", {
-        failureRedirect: 'http://localhost:3000/login'
+        failureRedirect: 'http://localhost:3000/login',
+        failureFlash: true,
+        failureMessage: true
     }, (err, user) => {
         if (err) return next(err);
         req.logIn(user, (err) => {
@@ -67,5 +59,4 @@ router.get('/auth/google/callback', (req, res, next) => {
 router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);
-
 module.exports = router;

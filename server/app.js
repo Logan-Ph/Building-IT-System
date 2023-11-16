@@ -13,6 +13,7 @@ const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 4000;
 const routes = require('./routes/userRoutes.js')
+require('./config/passport-config')
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
