@@ -15,6 +15,7 @@ const port = process.env.PORT || 4000;
 const routes = require('./routes/userRoutes.js')
 require('./config/passport-config')
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
@@ -25,7 +26,7 @@ app.use(cors({
 app.use(cookieParser('ShopWebSecure'));
 app.use(session({
   secret: process.env.ACCESS_TOKEN,
-  saveUninitialized: true,
+  saveUninitialized: false,
   resave: false
 }));
 app.use(flash());

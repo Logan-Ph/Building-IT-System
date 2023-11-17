@@ -7,15 +7,7 @@ export default function LogInPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [shouldRedirect, setShouldRedirect] = useState(false);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        await axios.get('http://localhost:4000/login', { withCredentials: true }).catch(er => console.log(er));
-    };
+    const [user, setUser] = useState();
 
     const axiosPostData = async () => {
         const postData = {
@@ -23,7 +15,7 @@ export default function LogInPage() {
         }
 
         await axios.post('http://localhost:4000/login', postData)
-            .then(res => { if (res.status === 200) {setShouldRedirect(true)} })
+            .then(res => { setUser(res.data)})
             .catch(er => {
                 setError("Please check the username and password again")
                 console.log(er)
@@ -31,7 +23,7 @@ export default function LogInPage() {
 
     };
 
-    const googleLogin = () => {
+    const googleLogin = async () => {
         window.open("http://localhost:4000/auth/google");
     }
 
@@ -40,10 +32,9 @@ export default function LogInPage() {
         axiosPostData();
     };
 
-
     return (
         <>
-            {shouldRedirect && <Navigate to="/" replace />}
+            {user && <Navigate to="/" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign In</h2>

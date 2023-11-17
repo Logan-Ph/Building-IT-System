@@ -7,17 +7,17 @@ const passport = require('passport')
 require('dotenv').config()
 
 
-passport.use(new LocalStrategy({ usernameField: 'username' }, async function (username, password, done) {
+passport.use(new LocalStrategy({ usernameField: 'username' }, async function verify(username, password, done) {
   const user = (await User.find({ username: username }))[0]
   if (user == null) {
-    return done(null, false, { message: 'Wrong password or username' })
+    return done(null, false)
   }
 
   try {
     if (await bcrypt.compare(password, user.password)) {
       return done(null, user)
     } else {
-      return done(null, false, { message: 'Wrong password or username' })
+      return done(null, false)
     }
   } catch (e) {
     return done(e)
