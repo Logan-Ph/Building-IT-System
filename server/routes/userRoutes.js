@@ -9,39 +9,27 @@ require('dotenv').config
  *  App routes
 */
 
-function generateAccessToken(user) {
-    const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
-    return accessToken
-}
 
 function authenticateToken(req, res, next) {
-    console.log(req.cookies.accessToken)
     jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => {
         if (err) return res.json()
         next()
     })
 }
 
-router.get('/login/success', (req, res) => {
-    if (req.user) {
-        const accessToken = generateAccessToken(req.user);
-        res.cookie('accessToken', accessToken, { httpOnly: true });
-        res.json({ user: req.user });
-    } else {
-        res.json({ user: "" })
-    }
-})
-
+router.get('/login/success', userController.loginSuccess)
 router.get('/', userController.homePage);
 router.get('/product/:id', authenticateToken, userController.productPage);
 router.get('/login', userController.loginPage);
-router.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true,
-    failureMessage: true
-}));
-router.get('/auth/google', passport.authenticate("google", { scope: ["profile"] }))
+// router.post('/login',passport.authenticate("local", {
+//     failureRedirect: 'http://localhost:3000/login',
+//     successRedirect: '/',
+//     failureFlash: true,
+//     failureMessage: true
+// }))
+router.post('/login',userController.postLoginPage)
+ 
+router.get('/auth/google', passport.authenticate("google", { scope: ["profile"] }));
 router.get('/auth/google/callback', (req, res, next) => {
     passport.authenticate("google", {
         failureRedirect: 'http://localhost:3000/login',

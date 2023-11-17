@@ -4,8 +4,37 @@ const Product = require('../models/product')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
-const user = require('../models/user')
 require('dotenv').config()
+
+function generateAccessToken(user) {
+  const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+  return accessToken
+}
+
+exports.postLoginPage = async (req,res)=>{
+  const user = (await (User.find({username:req.body.username})))[0]
+  try{
+    if (await bcrypt.compare(password, user.password)) {
+      res.json({user:user})
+    }else{
+      res.json({user:""})
+    }
+  }catch (e){
+    console.log(e)
+    res.json({user:""})
+  }
+}
+
+exports.loginSuccess = (req, res) => {
+  console.log(req.user)
+  if (req.user) {
+      const accessToken = generateAccessToken(req.user);
+      res.cookie('accessToken', accessToken, { httpOnly: true });
+      res.json({ user: req.user });
+  } else {
+      res.json({ user: "" })
+  }
+}
 
 exports.homePage = async (req, res) => {
   try {

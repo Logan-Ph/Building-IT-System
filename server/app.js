@@ -22,7 +22,6 @@ app.use(cors({
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }));
-
 app.use(cookieParser('ShopWebSecure'));
 app.use(session({
   secret: process.env.ACCESS_TOKEN,

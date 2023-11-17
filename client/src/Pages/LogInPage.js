@@ -1,47 +1,57 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
+
 
 export default function LogInPage() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [data, setData] = useState('')
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [shouldRedirect, setShouldRedirect] = useState(false);
 
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
 
     const fetchData = async () => {
-        await axios.get("http://localhost:4000/login")
-            .then(res => setData(res.data))
-            .catch(er => console.log(er))
-    }
+        await axios.get('http://localhost:4000/login', { withCredentials: true }).catch(er => console.log(er));
+    };
 
     const axiosPostData = async () => {
         const postData = {
-            username: username,
-            password: password
+            username: username, password: password
         }
-        await axios.post('http://localhost:4000/login', postData)
-    }
 
-    const googleLogin = ()=>{
+        await axios.post('http://localhost:4000/login', postData)
+            .then(res => { if (res.status === 200) {setShouldRedirect(true)} })
+            .catch(er => {
+                setError("Please check the username and password again")
+                console.log(er)
+            });
+
+    };
+
+    const googleLogin = () => {
         window.open("http://localhost:4000/auth/google");
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        axiosPostData()
-    }
+        e.preventDefault();
+        axiosPostData();
+    };
+
 
     return (
         <>
+            {shouldRedirect && <Navigate to="/" replace />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign In</h2>
                     <p className="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Welcome back, We hope you have a great day!</p>
 
                     <div className="p-4 rounded-lg bg-gray-50">
-                        <form name="signup-customer" className="space-y-6">
+                        <form name="SignIn" className="space-y-6">
+
                             <div>
                                 <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                 <div className="mt-2">
@@ -64,6 +74,7 @@ export default function LogInPage() {
                                 </div>
                             </div>
                             <div>
+                                {error && <p className="text-red-500">{error}</p>}
                                 <button type="submit" onClick={handleSubmit} className="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign In</button>
                             </div>
                             <div className="relative flex mt-3 items-center">

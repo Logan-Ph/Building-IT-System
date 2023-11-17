@@ -7,9 +7,8 @@ const passport = require('passport')
 require('dotenv').config()
 
 
-passport.use(new LocalStrategy({ usernameField: 'username', passReqToCallback: true }, async function (req, username, password, done) {
+passport.use(new LocalStrategy({ usernameField: 'username' }, async function (username, password, done) {
   const user = (await User.find({ username: username }))[0]
-  console.log(user)
   if (user == null) {
     return done(null, false, { message: 'Wrong password or username' })
   }
@@ -46,7 +45,9 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-passport.serializeUser((user, done) => done(null, user._id))
+passport.serializeUser((user, done) => {
+  done(null, user._id)
+})
 passport.deserializeUser(async (id, done) => {
   const user = (await User.findById(id))
   done(null, user)
