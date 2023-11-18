@@ -39,18 +39,6 @@ export default function Homepage() {
     return (
         <>
             {!user && <Navigate to="/login" replace={true} />}
-            <p>
-                Home
-            </p>
-            <p>products</p>
-            {products.map(product => (
-                <>
-                    <p>{product.product_name}</p>
-                    <img src={product.image_link} alt={product.product_name} />
-                    <p>price {product.price}</p>
-                    <a href={`http://localhost:3000/product/${product._id}`}>View Product</a>
-                </>
-            ))}
         </>
     )
 }

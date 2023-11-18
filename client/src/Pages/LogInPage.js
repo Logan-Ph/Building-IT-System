@@ -14,7 +14,7 @@ export default function LogInPage() {
             username: username, password: password
         }
 
-        await axios.post('http://localhost:4000/login', postData)
+        await axios.post('http://localhost:4000/login', postData, {withCredentials: true})
             .then(res => { setUser(res.data)})
             .catch(er => {
                 setError("Please check the username and password again")
