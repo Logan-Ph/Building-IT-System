@@ -36,21 +36,11 @@ router.get('/', userController.homePage);
 router.get('/product/:id', authenticateToken, userController.productPage);
 router.get('/login', userController.loginPage);
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            return res.redirect('http://localhost:3000/login');
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
-            }
-            return res.json(req.user);
-        });
-    })(req, res, next);
-});
+    passport.authenticate('local', {
+        successRedirect: 'http://localhost:3000/',
+        failureRedirect: 'http://localhost:3000/login'
+    })
+})
 
 router.get('/auth/google', passport.authenticate("google", { scope: ["profile"] }));
 router.get('/auth/google/callback', (req, res, next) => {

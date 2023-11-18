@@ -6,24 +6,6 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport')
 require('dotenv').config()
 
-
-passport.use(new LocalStrategy({ usernameField: 'username' }, async function verify(username, password, done) {
-  const user = (await User.find({ username: username }))[0]
-  if (user == null) {
-    return done(null, false)
-  }
-
-  try {
-    if (await bcrypt.compare(password, user.password)) {
-      return done(null, user)
-    } else {
-      return done(null, false)
-    }
-  } catch (e) {
-    return done(e)
-  }
-}))
-
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -44,6 +26,23 @@ passport.use(new GoogleStrategy({
     }
   }
 ));
+
+passport.use(new LocalStrategy({ usernameField: 'username' }, async function verify(username, password, done) {
+  const user = (await User.find({ username: username }))[0]
+  if (user == null) {
+    return done(null, false)
+  }
+
+  try {
+    if (await bcrypt.compare(password, user.password)) {
+      return done(null, user)
+    } else {
+      return done(null, false)
+    }
+  } catch (e) {
+    return done(e)
+  }
+}))
 
 passport.serializeUser((user, done) => {
   done(null, user._id)
