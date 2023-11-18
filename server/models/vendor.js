@@ -11,17 +11,17 @@ const vendorSchema = new mongoose.Schema({
         require: true,
     },
 
-    bussiness_name: {
+    businessName: {
         type: String,
         require: true,
     },
 
-    bussiness_address: {
+    address: {
         type: String,
         require: true,
     },
 
-    phone_number: {
+    phoneNumber: {
         type: String,
     },
 
