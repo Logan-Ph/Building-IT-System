@@ -87,13 +87,13 @@ export default function Homepage() {
                 <div className="flex flex-col pb-32 w-full "> 
                     <div className="my-6 ">
                         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto ">
-                            <div className="border border-[#FAC800] rounded-md px-2 py-3 flex items-center justify-around gap-8 shadow-lg shadow-gray-100 bg-[#FAC800]">
+                            <div className="border border-[#FAC800] rounded-md px-2 py-3 flex items-center justify-around shadow-lg shadow-gray-100 bg-[#FAC800]">
                                 <div className="w-12 h-12">
                                     <img src={require("../Components/images/logo1.png")} className="object-cover" />
                                 </div>
 
                                 <div>
-                                    <h4 className="font-bold capitalize text-sm md:text-md lg:text-lg text-[#E61E2A] text-start">Free Shipping</h4>
+                                    <h4 className="font-bold capitalize text-sm md:text-lg lg:text-xl text-[#E61E2A] text-start">Free Shipping</h4>
                                     <p className="text-[#000054] text-sm">order over $200</p>
                                 </div>
                             </div>
