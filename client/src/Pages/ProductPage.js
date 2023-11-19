@@ -3,10 +3,13 @@ import { useState, useEffect } from 'react'
 import axios from "axios"
 import { RelatedProducts } from '@algolia/recommend-react'
 import recommend from '@algolia/recommend'
+import { Navigate } from 'react-router-dom'
+
 
 export default function ProductPage() {
     const params = useParams()
     const [product, setProduct] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
     const indexName = 'rBuy';
 
@@ -16,13 +19,14 @@ export default function ProductPage() {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get(`http://localhost:4000/product/${params.id}`);
-            setProduct(res.data);
+            const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
+            setProduct(res.data.product);
+            setIsLoading(false)
+            console.log(product)
         } catch (error) {
             console.log(error);
         }
     }
-
 
     function RelatedItem({ item }) {
         return (
@@ -35,8 +39,14 @@ export default function ProductPage() {
         );
     }
 
+    if (isLoading){
+        return <div>Loading....</div>
+    }
+
     return (
-        <>
+        <>  
+            {console.log(product.length())}
+            {(product.length ===0) && <Navigate to="/login" replace={true} />}
             <p>
                 This is product page
             </p>

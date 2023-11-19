@@ -13,15 +13,21 @@ const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 4000;
 const routes = require('./routes/userRoutes.js')
+require('./config/passport-config')
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:"http://localhost:3000",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
 app.use(cookieParser('ShopWebSecure'));
 app.use(session({
   secret: process.env.ACCESS_TOKEN,
   saveUninitialized: false,
-  resave: true
+  resave: false
 }));
 app.use(flash());
 app.use(fileUpload());

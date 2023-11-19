@@ -1,47 +1,159 @@
+import axios from 'axios'
+import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 export default function RegisterPage() {
+
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [address, setAddress] = useState('')
+    const [name, setName] = useState('')
+    const [businessName, setBusinessName] = useState('')
+    const [distributionHub, setDistributionHub] = useState('')
+    const [checkBox, setcheckBox] = useState(false)
+    const [error, setError] = useState('The field is empty')
+    const [formType, setFormType] = useState('customer')
+
+    const data = {
+        username: username,
+        password: password,
+        phoneNumber: phoneNumber,
+        address: address,
+    }
+
+    const notify = (error) => {
+        toast.error(error, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
+    async function axiosPostData() {
+        try {
+            if (!checkBox) {
+                notify(error);
+                return;
+            }
+
+            switch (formType) {
+                case 'customer':
+                    data.name = name;
+                    if (!(username && password && phoneNumber && address && name)) {
+                        setError("The field is empty");
+                        notify(error);
+                        return;
+                    }
+                    await axios.post('http://localhost:4000/user-register', data, { withCredentials: true })
+                        .then(res => {
+                            setError(res.data)
+                        })
+                        .catch(er => console.log(er));
+                    break;
+                case 'business':
+                    data.businessName = businessName;
+                    if (!(username && password && phoneNumber && address && businessName)) {
+                        setError("The field is empty");
+                        notify();
+                        return;
+                    }
+                    await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
+                        .then(res => {
+                            setError(res.data)
+                        })
+                        .catch(er => console.log(er));
+                    break;
+                case 'shipper':
+                    data.name = name;
+                    data.distributionHub = distributionHub;
+                    if (!(username && password && phoneNumber && address && name && distributionHub)) {
+                        setError("The field is empty");
+                        notify();
+                        return;
+                    }
+                    await axios.post('http://localhost:4000/shipper-register', data, { withCredentials: true })
+                        .then(res => {
+                            setError(res.data)
+                        })
+                        .catch(er => console.log(er));
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.error('Registration failed', error);
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axiosPostData();
+    }
+
     return (
         <>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
+            {error === 'success' && <Navigate to="/" replace={true} />}
             <section class="bg-white">
+
                 <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign Up</h2>
                     <p class="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Already have account?
-                        <a href="/" class="font-semibold leading-6 text-[#222160] hover:text-[#000053]">Sign In</a>
+                        <a href="\login" class="font-semibold leading-6 text-[#222160] hover:text-[#000053]">Sign In</a>
                     </p>
                     <div class="mb-4 border-b border-gray-200">
                         <ul class="text-lg flex justify-center flex-wrap -mb-px font-medium text-center " id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
                             <li class="me-2" role="presentation">
-                                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="customer-tab" data-tabs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="false">Personal Account</button>
+                                <button onClick={() => { setFormType('customer') }} class="inline-block p-4 border-b-2 rounded-t-lg" id="customer-tab" data-tabs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="false">Personal Account</button>
                             </li>
                             <li class="me-2" role="presentation">
-                                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="business-tab" data-tabs-target="#business" type="button" role="tab" aria-controls="business" aria-selected="false">Business Account</button>
+                                <button onClick={() => { setFormType('business') }} class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="business-tab" data-tabs-target="#business" type="button" role="tab" aria-controls="business" aria-selected="false">Business Account</button>
                             </li>
                             <li role="presentation">
-                                <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="shipper-tab" data-tabs-target="#shipper" type="button" role="tab" aria-controls="shipper" aria-selected="false">Shipper</button>
+                                <button onClick={() => { setFormType('shipper') }} class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="shipper-tab" data-tabs-target="#shipper" type="button" role="tab" aria-controls="shipper" aria-selected="false">Shipper</button>
                             </li>
                         </ul>
                     </div>
-
                     {/* <!-- Form of Customer --> */}
                     <div id="default-tab-content">
                         <div class="hidden p-4 rounded-lg bg-gray-50" id="customer" role="tabpanel" aria-labelledby="customer-tab">
                             {/* <!-- Sign up form of customer, name="signup-customer" --> */}
-                            <form name="signup-customer" class="space-y-6" action="#" method="POST">
+                            <form name="signup-customer" class="space-y-6">
                                 <div>
                                     <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                     <div class="mt-2">
-                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
+                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" onChange={(e) => { setUsername(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                     <div class="mt-2">
-                                        <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
+                                        <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setPassword(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                     <div class="mt-2">
-                                        <input type="text" name="name" id="name" required minlength="5" title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="text" name="name" id="name" onChange={(e) => { setName(e.target.value); setError() }} required minlength="5" title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
                                 <div>
@@ -50,18 +162,18 @@ export default function RegisterPage() {
                                         <span class="inline-flex items-center px-3 text-sm bg-gray-200 border border-e-0 border-gray-300 rounded-s-md text-gray-400 shadow-sm ">
                                             <p>(+84)</p>
                                         </span>
-                                        <input type="tel" name="phoneNumber" id="phoneNumber" pattern="^(\+84)?[0-9]{8,}$" required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
+                                        <input type="tel" name="phoneNumber" id="phoneNumber" pattern="^(\+84)?[0-9]{8,}$" onChange={(e) => { setPhoneNumber(e.target.value); setError() }} required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                     <div class="mt-2">
-                                        <input type="text" name="address" id="address" minlength="5" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="text" name="address" id="address" minlength="5" onChange={(e) => { setAddress(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onClick={() => setcheckBox(true)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="default-modal" data-modal-toggle="default-modal" href="#" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>
@@ -95,7 +207,7 @@ export default function RegisterPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
+                                    <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                 </div>
                             </form>
                         </div>
@@ -103,41 +215,41 @@ export default function RegisterPage() {
                         {/* <!-- Form of Bussiness --> */}
                         <div class="hidden p-4 rounded-lg bg-gray-50" id="business" role="tabpanel" aria-labelledby="business-tab">
                             {/* <!-- Sign up form of business, name="signup-business" --> */}
-                            <form name="signup-business" class="space-y-6" action="#" method="POST">
+                            <form name="signup-business" class="space-y-6">
                                 <div>
                                     <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                     <div class="mt-2">
-                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters"/>
+                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" onChange={(e) => { setUsername(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                     <div class="mt-2">
-                                        <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters."/>
+                                        <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setPassword(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
                                     </div>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                     <div class="mt-2">
                                         <input type="text" name="name" id="name" required minlength="5" title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div>
                                     <label for="phoneNumber" class="block text-sm font-medium leading-6 text-gray-900">Phone Number</label>
                                     <div class="mt-2 flex">
                                         <span class="inline-flex items-center px-3 text-sm bg-gray-200 border border-e-0 border-gray-300 rounded-s-md text-gray-400 shadow-sm ">
                                             <p>(+84)</p>
                                         </span>
-                                        <input type="tel" name="phoneNumber" id="phoneNumber" pattern="^(\+84)?[0-9]{8,}$" required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="tel" name="phoneNumber" id="phoneNumber" pattern="^(\+84)?[0-9]{8,}$" onChange={(e) => { setPhoneNumber(e.target.value); setError() }} required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="businessName" class="block text-sm font-medium leading-6 text-gray-900">Business Name</label>
                                     <div class="mt-2">
-                                        <input type="text" name="businessName" id="businessName" required minlength="5" title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="text" name="businessName" id="businessName" required minlength="5" onChange={(e) => { setBusinessName(e.target.value); setError() }} title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label for="businessPhone" class="block text-sm font-medium leading-6 text-gray-900">Business Phone Number</label>
                                     <div class="mt-2 flex">
                                         <span class="inline-flex items-center px-3 text-sm bg-gray-200 border border-e-0 border-gray-300 rounded-s-md text-gray-400 shadow-sm ">
@@ -145,16 +257,16 @@ export default function RegisterPage() {
                                         </span>
                                         <input type="tel" name="businessPhone" id="businessPhone" pattern="^(\+84)?[0-9]{8,}$" required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div>
-                                    <label for="businessAddress" class="block text-sm font-medium leading-6 text-gray-900">Business Address</label>
+                                    <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Business Address</label>
                                     <div class="mt-2">
-                                        <input type="text" name="businessAddress" id="businessAddress" minlength="5" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="text" name="address" id="address" minlength="5" required onChange={(e) => { setAddress(e.target.value); setError() }} class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required/>
+                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="business-modal" data-modal-toggle="business-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>
@@ -188,7 +300,7 @@ export default function RegisterPage() {
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
+                                    <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                 </div>
                             </form>
                         </div>
@@ -196,23 +308,23 @@ export default function RegisterPage() {
                         {/* <!-- Form of Shipper --> */}
                         <div class="hidden p-4 rounded-lg bg-gray-50" id="shipper" role="tabpanel" aria-labelledby="shipper-tab">
                             {/* <!-- Sign up form of shipper, name="signup-shipper" --> */}
-                            <form name="signup-shipper" class="space-y-6" action="#" method="POST">
+                            <form name="signup-shipper" class="space-y-6">
                                 <div>
                                     <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                     <div class="mt-2">
-                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters"/>
+                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" onChange={(e) => { setUsername(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                     <div class="mt-2">
-                                        <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters."/>
+                                        <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setPassword(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                     <div class="mt-2">
-                                        <input type="text" name="name" id="name" required minlength="5" title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="text" name="name" id="name" required minlength="5" title="Please enter at least 5 characters" onChange={(e) => { setName(e.target.value); setError() }} class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
 
@@ -222,20 +334,20 @@ export default function RegisterPage() {
                                         <span class="inline-flex items-center px-3 text-sm text-gray-400 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                                             <p>(+84)</p>
                                         </span>
-                                        <input type="tel" name="phoneNumber" id="phoneNumber" pattern="^(\+84)?[0-9]{8,}$" required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="tel" name="phoneNumber" id="phoneNumber" pattern="^(\+84)?[0-9]{8,}$" onChange={(e) => { setPhoneNumber(e.target.value); setError() }} required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
 
                                 <div>
                                     <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                     <div class="mt-2">
-                                        <input type="text" name="address" id="address" minlength="5" required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                        <input type="text" name="address" id="address" minlength="5" onChange={(e) => { setAddress(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                     </div>
                                 </div>
                                 <div>
                                     <label for="distributionHub" class="block text-sm font-medium leading-6 text-gray-900">Distribution Hub</label>
                                     <div class="mt-2">
-                                        <select name="distributionHub" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" aria-label="Default select example">
+                                        <select name="distributionHub" onChange={(e) => { setDistributionHub(e.target.value); setError() }} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" aria-label="Default select example">
                                             <option selected>Choose your distribution hub</option>
                                             <option value="HCM">Ho Chi Minh</option>
                                             <option value="HN">Ha Noi</option>
@@ -246,7 +358,7 @@ export default function RegisterPage() {
 
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required/>
+                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="shipper-modal" data-modal-toggle="shipper-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>
@@ -281,7 +393,7 @@ export default function RegisterPage() {
                                 </div>
 
                                 <div>
-                                    <button type="submit" class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
+                                    <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                 </div>
 
                             </form>

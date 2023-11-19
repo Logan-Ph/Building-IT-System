@@ -1,23 +1,33 @@
 const User = require('../models/user')
 const Vendor = require('../models/vendor')
+const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
-const initializePassport = require('../config/passport-config')
 const user = require('../models/user')
 require('dotenv').config()
 
-initializePassport(
-  passport,
-)
+function generateAccessToken(user) {
+  const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+  return accessToken
+}
+
+exports.loginSuccess = (req, res) => {
+  if (req.user) {
+    const accessToken = generateAccessToken(req.user);
+    res.cookie('accessToken', accessToken, { httpOnly: true });
+    res.json({ user: req.user });
+  } else {
+    res.json({ user: "" })
+  }
+}
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product
-      .find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1 }).limit(10);
-    res.json(product);
-    } catch (error) {
+    let product = await Product.find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1, ratings: 1 }).limit(10);
+    return res.json({ product: product, user: req.user })
+  } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }
@@ -25,15 +35,7 @@ exports.homePage = async (req, res) => {
 exports.productPage = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-    res.json(product);
-  } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
-  }
-}
-
-exports.registerpage = (req, res) => {
-  try {
-    res.render('register', { title: 'Shop Web - register' });
+    res.json({ product: product });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -51,38 +53,33 @@ exports.userRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
     const username = req.body.username;
-    const email = req.body.email;
-    const phone_number = req.body.phone_number;
+    const phoneNumber = req.body.phoneNumber;
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const checkUsername =
       (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username }));
-
-    const checkEmail = (await User.findOne({ email: email }));
+      (await Vendor.findOne({ username: username })) ||
+      (await Shipper.findOne({ username: username }));
 
     const checkPhone =
-      (await User.findOne({ phone_number: phone_number })) ||
-      (await Vendor.findOne({ phone_number: phone_number }));
+      (await User.findOne({ phoneNumber: phoneNumber })) ||
+      (await Vendor.findOne({ phoneNumber: phoneNumber }));
 
     if (checkUsername) {
-      res.send(`Username ${username} already exists. Please enter another one.`);
-    } else if (checkEmail) {
-      res.send(`Email ${email} has already been registered. Please enter another one.`);
+      return res.json("Username already exists.")
     } else if (checkPhone) {
-      res.send(`Phone number ${phone_number} has already been registered. Please enter another one.`);
+      return res.json("Phone number already exists.")
     } else {
       const newUser = new User({
         username: username,
         password: hashedPassword,
         name: req.body.name,
-        email: email,
         address: req.body.address,
-        phone_number: phone_number,
+        phoneNumber: phoneNumber,
       });
       await newUser.save();
-      res.send("User registered successfully.");
+      return res.json("success");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -93,37 +90,80 @@ exports.vendorRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
     const username = req.body.username;
-    const phone_number = req.body.phone_number;
-    const business_name = req.body.business_name;
+    const phoneNumber = req.body.phoneNumber;
+    const businessName = req.body.businessName;
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const checkUsername =
       (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username }));
+      (await Vendor.findOne({ username: username })) ||
+      (await Shipper.findOne({ username: username }));
 
     const checkPhone =
-      (await User.findOne({ phone_number: phone_number })) ||
-      (await Vendor.findOne({ phone_number: phone_number }));
+      (await User.findOne({ phoneNumber: phoneNumber })) ||
+      (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+      (await Shipper.findOne({ phoneNumber: phoneNumber }));
 
-    const checkBusinessName = (await Vendor.findOne({ business_name: business_name }));
+    const checkBusinessName = (await Vendor.findOne({ businessName: businessName }));
 
     if (checkUsername) {
-      res.send(`Username ${username} already exists. Please enter another one.`);
+      return res.json("Username already exists.");
     } else if (checkPhone) {
-      res.send(`Phone number ${phone_number} has already been registered. Please enter another one.`);
+      return res.json("Phone number already exists.")
     } else if (checkBusinessName) {
-      res.send(`Business Name ${business_name} has already been registered. Please enter another one.`);
+      return res.json("Business name already exists.")
     } else {
       const newVendor = new Vendor({
         username: username,
         password: hashedPassword,
-        business_name: business_name,
-        business_address: req.body.business_address,
-        phone_number: phone_number,
+        businessName: businessName,
+        address: req.body.address,
+        phoneNumber: phoneNumber,
       });
       await newVendor.save();
-      res.send("Vendor registered successfully.");
+      return res.json("success");
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.shipperRegister = async (req, res) => {
+  const bcrypt = require('bcrypt');
+  try {
+    const username = req.body.username;
+    const phoneNumber = req.body.phoneNumber;
+    const distributionHub = req.body.distributionHub
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const checkUsername =
+      (await User.findOne({ username: username })) ||
+      (await Vendor.findOne({ username: username })) ||
+      (await Vendor.findOne({ username: username }));
+
+
+    const checkPhone =
+      (await User.findOne({ phoneNumber: phoneNumber })) ||
+      (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+      (await Shipper.findOne({ phoneNumber: phoneNumber }));
+
+    if (checkUsername) {
+      return res.json("Username already exists.")
+    } else if (checkPhone) {
+      return res.json("Phone number already exists.")
+    } else {
+      const newShipper = new Shipper({
+        username: username,
+        password: hashedPassword,
+        name: req.body.name,
+        address: req.body.address,
+        phoneNumber: phoneNumber,
+        distributionHub: distributionHub
+      });
+      await newShipper.save();
+      return res.json("success");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -132,7 +172,7 @@ exports.vendorRegister = async (req, res) => {
 
 exports.loginPage = (req, res) => {
   try {
-    res.json();
+    res.json("This is login Page");
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -141,5 +181,5 @@ exports.loginPage = (req, res) => {
 
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect("/");
+  res.redirect("http://localhost:3000/");
 };

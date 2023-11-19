@@ -1,32 +1,35 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+    googleId: {
+        type: String,
+    },
+
+    facebookId:{
+        type: String,
+    },
+
     username: {
         type: String,
-        require: true,
     },
     
     email: {
         type: String,
-        require: false,
     },
 
     password: {
         type: String,
-        require: true,
     },
 
     address: {
         type: String,
-        require: true,
     },
 
     name: {
         type: String,
-        require: true,
     },
 
-    phone_number: {
+    phoneNumber: {
         type: String,
     },
 
