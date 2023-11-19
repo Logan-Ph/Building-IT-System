@@ -1,24 +1,39 @@
 import axios from 'axios'
-import { useState} from 'react'
+import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
-
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function LogInPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [error, setError] = useState('Please check the username and password');
     const [user, setUser] = useState();
+
+
+    const notify = (error) => {
+        toast.error(error, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+    }
 
     const axiosPostData = async () => {
         const postData = {
             username: username, password: password
         }
 
-        await axios.post('http://localhost:4000/login', postData, {withCredentials: true})
-            .then(res => { setUser(res.data)})
+        await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
+            .then(res => { setUser(res.data) })
             .catch(er => {
                 setError("Please check the username and password again")
-                console.log(er)
+                notify(error);
+                console.log(er);
             });
 
     };
@@ -34,6 +49,17 @@ export default function LogInPage() {
 
     return (
         <>
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                theme="light"
+            />
             {user && <Navigate to="/" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
@@ -65,7 +91,6 @@ export default function LogInPage() {
                                 </div>
                             </div>
                             <div>
-                                {error && <p className="text-red-500">{error}</p>}
                                 <button type="submit" onClick={handleSubmit} className="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign In</button>
                             </div>
                             <div className="relative flex mt-3 items-center">
@@ -80,16 +105,13 @@ export default function LogInPage() {
                                     </svg>
                                     Sign in with Google</button>
                             </div>
-                            <div className="mt-4">
-                                <button className="border-2 flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 gap-2 w-full hover:bg-transparent hover:text-indigo-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-                                        <linearGradient id="Ld6sqrtcxMyckEl6xeDdMa_uLWV5A9vXIPu_gr1" x1="9.993" x2="40.615" y1="9.993" y2="40.615" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2aa4f4"></stop><stop offset="1" stop-color="#007ad9"></stop></linearGradient><path fill="url(#Ld6sqrtcxMyckEl6xeDdMa_uLWV5A9vXIPu_gr1)" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z"></path><path fill="#fff" d="M26.707,29.301h5.176l0.813-5.258h-5.989v-2.874c0-2.184,0.714-4.121,2.757-4.121h3.283V12.46 c-0.577-0.078-1.797-0.248-4.102-0.248c-4.814,0-7.636,2.542-7.636,8.334v3.498H16.06v5.258h4.948v14.452 C21.988,43.9,22.981,44,24,44c0.921,0,1.82-0.084,2.707-0.204V29.301z"></path>
-                                    </svg>
-                                    Sign in with Facebook</button>
-                            </div>
                             <div className="mt-6 flex justify-center items-center gap-1">
                                 <p className="font-medium text-base">Don't have an account yet?</p>
-                                <button href="#" className="font-semibold leading-6 text-[#222160] hover:text-[#000053]" >Sign up</button>
+                                <button className="font-semibold leading-6 text-[#222160] hover:text-[#000053]" >
+                                    <a href='\register'>
+                                        Sign up
+                                    </a>
+                                </button>
                             </div>
                         </form>
                     </div>

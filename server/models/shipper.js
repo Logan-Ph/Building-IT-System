@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const vendorSchema = new mongoose.Schema({
+const shipperSchema = new mongoose.Schema({
     username: {
         type: String,
         require: true,
@@ -11,17 +11,21 @@ const vendorSchema = new mongoose.Schema({
         require: true,
     },
 
-    businessName: {
-        type: String,
-        require: true,
-    },
-
     address: {
         type: String,
         require: true,
     },
 
+    name: {
+        type: String,
+        require: true,
+    },
+
     phoneNumber: {
+        type: String,
+    },
+
+    distributionHub: {
         type: String,
     },
 
@@ -31,4 +35,4 @@ const vendorSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Vendor', vendorSchema)
+module.exports = mongoose.model('Shipper', shipperSchema)
