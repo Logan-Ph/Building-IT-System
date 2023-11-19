@@ -19,6 +19,7 @@ export default function LogInPage() {
             closeOnClick: true,
             draggable: true,
             progress: undefined,
+            pauseOnHover: false,
             theme: "light",
         });
     }
@@ -58,6 +59,7 @@ export default function LogInPage() {
                 rtl={false}
                 pauseOnFocusLoss
                 draggable
+                pauseOnHover={false}
                 theme="light"
             />
             {user && <Navigate to="/" replace={true} />}

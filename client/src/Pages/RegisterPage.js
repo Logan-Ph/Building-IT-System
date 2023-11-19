@@ -32,6 +32,7 @@ export default function RegisterPage() {
             closeOnClick: true,
             draggable: true,
             progress: undefined,
+            pauseOnHover: false,
             theme: "light",
         });
     }
@@ -39,9 +40,7 @@ export default function RegisterPage() {
     async function axiosPostData() {
         try {
             if (!checkBox) {
-                const errorMessage = "Please read our policy";
-                setError(errorMessage);
-                notify(errorMessage);
+                notify(error);
                 return;
             }
 
@@ -110,6 +109,7 @@ export default function RegisterPage() {
                 rtl={false}
                 pauseOnFocusLoss
                 draggable
+                pauseOnHover={false}
                 theme="light"
             />
             {error === 'success' && <Navigate to="/" replace={true} />}
