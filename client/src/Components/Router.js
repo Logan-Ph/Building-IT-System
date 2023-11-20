@@ -3,6 +3,7 @@ import Footer from './Footer';
 import Homepage from '../Pages/HomePage';
 import ResetPasswordPage from '../Pages/ResetPasswordPage';
 import ChangePasswordPage from '../Pages/ChangePasswordPage';
+import VerifyEmailPage from '../Pages/VerifyEmailPage';
 import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
@@ -54,6 +55,13 @@ export default function Router() {
                 <LogInHeader />
                 <ChangePasswordPage />
                 <Footer />
+            </>
+        },
+
+        {
+            path: "/verify",
+            element: <>
+                <VerifyEmailPage/>
             </>
         },
 
