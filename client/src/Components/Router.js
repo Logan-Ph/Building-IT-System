@@ -1,6 +1,8 @@
 import Header from './Header';
 import Footer from './Footer';
 import Homepage from '../Pages/HomePage';
+import ResetPasswordPage from '../Pages/ResetPasswordPage';
+import ChangePasswordPage from '../Pages/ChangePasswordPage';
 import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
@@ -36,6 +38,25 @@ export default function Router() {
                 <Footer />
             </>
         },
+
+        {
+            path: "/reset",
+            element: <>
+                <LogInHeader />
+                <ResetPasswordPage />
+                <Footer />
+            </>
+        },
+
+        {
+            path: "/reset/change",
+            element: <>
+                <LogInHeader />
+                <ChangePasswordPage />
+                <Footer />
+            </>
+        },
+
         {
             path: "/",
             element: <Layout />,
