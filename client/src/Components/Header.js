@@ -67,7 +67,7 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-slate-300">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -86,7 +86,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-slate-300">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -104,7 +104,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-slate-300">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -137,33 +137,33 @@ export default function Header() {
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Best seller
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Electronics
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Beauty & Personal Care
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Household Appliances
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Fashion
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Entertainment
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
               Toys & Games
             </span>
           </div>
 
-          <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+          <a href='/register' className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
             Becoma a vendor
           </a>
         </div>
