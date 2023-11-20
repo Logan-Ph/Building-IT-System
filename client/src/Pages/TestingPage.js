@@ -37,7 +37,7 @@ export default function TestingPage() {
       <img alt="ecommerce" className="lg:w-1/2  w-full lg:h-auto h-64 object-cover object-center rounded" src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" />
       <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
         <h2 className="text-sm title-font text-gray-500 tracking-widest">VENDOR</h2>
-        <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">NAME OF THE PRODUCT</h1>
+        <h1 className="text-gray-900 text-3xl title-font font-medium mb-1 line-clamp-1">In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.</h1>
         <div className="flex mb-4">
           <span className="flex items-center">
             <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 text-[#222160]" viewBox="0 0 24 24">
