@@ -172,7 +172,7 @@ export default function Header() {
         <div className="">
           <div className="container flex flex-col mx-auto bg-white ">
             <aside
-              className="group/sidebar flex flex-col shrink-0 lg:w-[250px] w-[200px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-[#222160] border-r border-r-dashed border-r-neutral-200 sidenav fixed-start loopple-fixed-start"
+              className="group/sidebar flex flex-col shrink-0 lg:w-[280px] md:w-[280px]  sm:w-[280px] xs:w-[200px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-[#222160] border-r border-r-dashed border-r-neutral-200 sidenav fixed-start loopple-fixed-start"
               id="sidenav-main"
             >
               <div className="flex shrink-0 px-8 items-center justify-between h-[96px]">
@@ -253,13 +253,13 @@ export default function Header() {
               <div className="hidden border-b border-dashed lg:block  border-neutral-200"></div>
 
               <div className="relative pl-3 my-5 ">
-                <div className="flex flex-col w-full font-medium text-[12.5px]">
+                <div className="flex flex-col w-full font-medium text-[12.5px] ">
                   {/* <!-- menu item --> */}
                   <div>
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Best seller
                       </a>
@@ -271,7 +271,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         New Releases
                       </a>
@@ -280,10 +280,10 @@ export default function Header() {
 
                   {/* <!-- menu item --> */}
                   <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem] ">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Electronics
                       </a>
@@ -295,7 +295,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Beauty & Personal Care
                       </a>
@@ -307,7 +307,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Household Appliances
                       </a>
@@ -319,7 +319,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Fashion
                       </a>
@@ -331,7 +331,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Entertainment
                       </a>
@@ -343,7 +343,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Toys & Games
                       </a>
