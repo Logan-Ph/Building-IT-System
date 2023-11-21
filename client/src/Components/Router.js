@@ -7,6 +7,8 @@ import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
+import CheckoutPage from "../Pages/CheckoutPage";
+
 
 export default function Router() {
     const Layout = () => {
@@ -33,6 +35,14 @@ export default function Router() {
             element: <>
                 <LogInHeader />
                 <LogInPage />
+                <Footer />
+            </>
+        },
+        {
+            path: "/checkout",
+            element: <>
+                <Header />
+                <CheckoutPage />
                 <Footer />
             </>
         },

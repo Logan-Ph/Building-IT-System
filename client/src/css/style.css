@@ -3,3 +3,19 @@
     background-size: 180% 180%;
     animation: gradient-animation 18s ease infinite;
   } 
+
+.order-columns {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+}
+
+.order-info-product{
+  flex: 1;
+  order: 2;
+}
+
+
+.order-product-img{
+  width: 30%;
+}
