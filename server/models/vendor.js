@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const vendorSchema = new mongoose.Schema({
-    username: {
+    email: {
         type: String,
         require: true,
     },
@@ -28,6 +28,11 @@ const vendorSchema = new mongoose.Schema({
     img: {
         data: Buffer,
         contentType: String,
+    },
+
+    verify: {
+        type: Boolean,
+        default: false,
     },
 });
 

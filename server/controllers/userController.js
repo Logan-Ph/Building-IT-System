@@ -5,7 +5,9 @@ const Product = require('../models/product')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
+const Mailgen = require('mailgen')
 const user = require('../models/user')
+const nodemailer = require('nodemailer')
 require('dotenv').config()
 
 function generateAccessToken(user) {
@@ -19,7 +21,7 @@ exports.loginSuccess = (req, res) => {
     res.cookie('accessToken', accessToken, { httpOnly: true });
     res.json({ user: req.user });
   } else {
-    res.json({ user: "" })
+    res.json({ user: ""})
   }
 }
 
@@ -52,27 +54,27 @@ exports.registerpage = (req, res) => {
 exports.userRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const checkUsername =
-      (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username })) ||
-      (await Shipper.findOne({ username: username }));
+    const checkEmail =
+      (await User.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email })) ||
+      (await Shipper.findOne({ email: email }));
 
     const checkPhone =
       (await User.findOne({ phoneNumber: phoneNumber })) ||
       (await Vendor.findOne({ phoneNumber: phoneNumber }));
 
-    if (checkUsername) {
-      return res.json("Username already exists.")
+    if (checkEmail) {
+      return res.json("Email already exists.")
     } else if (checkPhone) {
       return res.json("Phone number already exists.")
     } else {
       const newUser = new User({
-        username: username,
+        email: email,
         password: hashedPassword,
         name: req.body.name,
         address: req.body.address,
@@ -89,16 +91,16 @@ exports.userRegister = async (req, res) => {
 exports.vendorRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const businessName = req.body.businessName;
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const checkUsername =
-      (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username })) ||
-      (await Shipper.findOne({ username: username }));
+    const checkEmail =
+      (await User.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email })) ||
+      (await Shipper.findOne({ email: email }));
 
     const checkPhone =
       (await User.findOne({ phoneNumber: phoneNumber })) ||
@@ -107,15 +109,15 @@ exports.vendorRegister = async (req, res) => {
 
     const checkBusinessName = (await Vendor.findOne({ businessName: businessName }));
 
-    if (checkUsername) {
-      return res.json("Username already exists.");
+    if (checkEmail) {
+      return res.json("Email already exists.");
     } else if (checkPhone) {
       return res.json("Phone number already exists.")
     } else if (checkBusinessName) {
       return res.json("Business name already exists.")
     } else {
       const newVendor = new Vendor({
-        username: username,
+        email: email,
         password: hashedPassword,
         businessName: businessName,
         address: req.body.address,
@@ -132,16 +134,16 @@ exports.vendorRegister = async (req, res) => {
 exports.shipperRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const distributionHub = req.body.distributionHub
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const checkUsername =
-      (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username }));
+    const checkEmail =
+      (await User.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email }));
 
 
     const checkPhone =
@@ -149,18 +151,18 @@ exports.shipperRegister = async (req, res) => {
       (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
       (await Shipper.findOne({ phoneNumber: phoneNumber }));
 
-    if (checkUsername) {
-      return res.json("Username already exists.")
+    if (checkEmail) {
+      return res.json("Email already exists.")
     } else if (checkPhone) {
       return res.json("Phone number already exists.")
     } else {
       const newShipper = new Shipper({
-        username: username,
+        email: email,
         password: hashedPassword,
         name: req.body.name,
         address: req.body.address,
         phoneNumber: phoneNumber,
-        distributionHub: distributionHub
+        distributionHub: distributionHub,
       });
       await newShipper.save();
       return res.json("success");
@@ -168,6 +170,52 @@ exports.shipperRegister = async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
+}
+
+exports.forgotPassword = async (req, res) => {
+  let userEmail = req.body.email
+
+  let config = {
+    service: 'gmail',
+    auth: {
+      user: process.env.GOOGLE_USER,
+      pass:  process.env.GOOGLE_PASS
+    }
+  }
+
+  let transporter = nodemailer.createTransport(config);
+
+  let mailgenerator = new Mailgen({
+    theme: "default",
+    product: {
+      name: "Mailgen",
+      link: "https://mailgen.js"
+    }
+  })
+
+  const url = "http://localhost:3000"
+
+  let response = {
+    body: {
+      intro: "Forgot password verification link",
+      outro: `Please lick on this verification link ${url}`
+    }
+  }
+
+  let mail = mailgenerator.generate(response);
+
+  let message = {
+    from: "rBuy@gmail.com",
+    to: userEmail,
+    subject: "Forgot password verification",
+    html: mail
+  }
+
+  transporter.sendMail(message).then(() => {
+    return res.status(201).json({ msg: "Email sent" })
+  }).catch(er => {
+    return res.status(500).json({ er: er })
+  })
 }
 
 exports.loginPage = (req, res) => {

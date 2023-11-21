@@ -1,15 +1,20 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function LogInPage() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('Please check the username and password');
+    const [error, setError] = useState('');
     const [user, setUser] = useState();
 
+    useEffect(() => {
+        if (error) {
+            notify(error);
+        }
+    }, [error]);
 
     const notify = (error) => {
         toast.error(error, {
@@ -26,26 +31,41 @@ export default function LogInPage() {
 
     const axiosPostData = async () => {
         const postData = {
-            username: username, password: password
+            email: email, password: password
         }
 
         await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
-            .then(res => { setUser(res.data) })
+            .then(res => { setUser(res.data.user); setError(res.data.message) })
             .catch(er => {
-                setError("Please check the username and password again")
-                notify(error);
                 console.log(er);
             });
 
     };
 
     const googleLogin = async () => {
-        window.open("http://localhost:4000/auth/google");
+        // window.open("http://localhost:4000/auth/google");
+        const loginWindow = window.open("http://localhost:4000/auth/google", "_blank");
+
+        window.addEventListener('message', (event) => {
+            if (event.origin !== "http://localhost:4000") return;
+            
+            const { data } = event;
+            if (data.user) {
+                setUser(data.user);
+            } else if (data.error) {
+                setError(data.error);
+            }
+
+            loginWindow.close();
+        });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosPostData();
+        if (error) {
+            notify(error);
+        }
     };
 
     return (
@@ -72,9 +92,9 @@ export default function LogInPage() {
                         <form name="SignIn" className="space-y-6">
 
                             <div>
-                                <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                                <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                 <div className="mt-2">
-                                    <input type="text" id="username" name="username" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" onChange={e => setUsername(e.target.value)} />
+                                    <input type="text" id="email" name="email" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Email must be in the format: name@domain.com" onChange={e => setEmail(e.target.value)} />
                                 </div>
                             </div>
                             <div>
@@ -89,7 +109,7 @@ export default function LogInPage() {
                                     <label className="ms-2 text-sm font-medium text-gray-900 ">Remember Me</label>
                                 </div>
                                 <div>
-                                    <a href="/" className="ms-2 text-sm font-medium text-blue-600 hover:underline">Forgot password?</a>
+                                    <a href="\forgot-password" className="ms-2 text-sm font-medium text-blue-600 hover:underline">Forgot password?</a>
                                 </div>
                             </div>
                             <div>
