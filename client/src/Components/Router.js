@@ -1,11 +1,13 @@
 import Header from './Header';
 import Footer from './Footer';
 import Homepage from '../Pages/HomePage';
+import ResetPasswordPage from '../Pages/ResetPasswordPage';
+import VerifyEmailPage from '../Pages/VerifyEmailPage';
 import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
-import ForgotPassword from '../Pages/ForgotPassword';
+import ForgotPassword from '../Pages/ForgotPasswordPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 
@@ -32,8 +34,8 @@ export default function Router() {
         {
             path: "/forgot-password",
             element: <>
-                <SignUpHeader />
-                <ForgotPassword/>
+                <LogInHeader />
+                <ForgotPassword />
                 <Footer />
             </>
         },
@@ -45,6 +47,22 @@ export default function Router() {
                 <Footer />
             </>
         },
+        {
+            path: "/user/:token/forgot-password",
+            element: <>
+                <LogInHeader />
+                <ResetPasswordPage />
+                <Footer />
+            </>
+        },
+
+        {
+            path: "user/:token/verify-email",
+            element: <>
+                <VerifyEmailPage />
+            </>
+        },
+
         {
             path: "/",
             element: <Layout />,

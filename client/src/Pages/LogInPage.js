@@ -43,7 +43,6 @@ export default function LogInPage() {
     };
 
     const googleLogin = async () => {
-        // window.open("http://localhost:4000/auth/google");
         const loginWindow = window.open("http://localhost:4000/auth/google", "_blank");
 
         window.addEventListener('message', (event) => {

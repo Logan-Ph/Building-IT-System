@@ -13,7 +13,9 @@ function authenticateToken(req, res, next) {
         next()
     })
 }
-
+router.get('/user/:token/verify-email', userController.verifyEmail);
+router.get('/user/:token/forgot-password', userController.resetPassword);
+router.post('/user/:token/forgot-password', userController.postResetPassword);
 router.post('/forgot-password', userController.forgotPassword);
 router.get('/login/success', userController.loginSuccess);
 router.get('/', userController.homePage);
@@ -45,12 +47,14 @@ router.get('/auth/google/callback', (req, res, next) => {
         if (err || !user) {
             // Authentication failed
             res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
+            return;
         }
-
+        
         // Authentication sucess
         req.logIn(user, (err) => {
             if (err) {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
+                return;
             }
             res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);
         });

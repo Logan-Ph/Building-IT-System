@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -15,13 +14,13 @@ export default function RegisterPage() {
     const [distributionHub, setDistributionHub] = useState('')
     const [checkBox, setcheckBox] = useState(false)
     const [error, setError] = useState('')
+    const [msg, setMsg] = useState('')
     const [formType, setFormType] = useState('customer')
 
     useEffect(() => {
-        if (error!=='success' && error) {
-            notify(error);
-        }
-    }, [error]);
+        error && notify(error)
+        msg && success(msg)
+    }, [error, msg]);
 
     const data = {
         email: email,
@@ -43,50 +42,64 @@ export default function RegisterPage() {
         });
     }
 
+    const success = (error) => {
+        toast.success(error, {
+            position: "top-center",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
     async function axiosPostData() {
         try {
-            if (!checkBox) {
-                setError("The field is empty")
-                return;
-            }
-
             switch (formType) {
                 case 'customer':
                     data.name = name;
-                    if (!(email && password && phoneNumber && address && name)) {
+                    if (!(email && password && phoneNumber && address && name && checkBox)) {
                         setError("The field is empty");
+                        setMsg('')
                         return;
                     }
                     await axios.post('http://localhost:4000/user-register', data, { withCredentials: true })
                         .then(res => {
-                            setError(res.data)
+                            setMsg(res.data)
+                            setError('')
                         })
-                        .catch(er => console.log(er));
+                        .catch(er => {setError(er.response.data); setMsg()});
                     break;
                 case 'business':
                     data.businessName = businessName;
-                    if (!(email && password && phoneNumber && address && businessName)) {
+                    if (!(email && password && phoneNumber && address && businessName && checkBox)) {
                         setError("The field is empty");
+                        setMsg('');
                         return;
                     }
                     await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
                         .then(res => {
-                            setError(res.data)
+                            setMsg(res.data)
+                            setError('')
                         })
-                        .catch(er => console.log(er));
+                        .catch(er => {setError(er.response.data); setMsg()});
                     break;
                 case 'shipper':
                     data.name = name;
                     data.distributionHub = distributionHub;
-                    if (!(email && password && phoneNumber && address && name && distributionHub)) {
+                    if (!(email && password && phoneNumber && address && name && distributionHub && checkBox)) {
                         setError("The field is empty");
+                        setMsg('')
                         return;
                     }
                     await axios.post('http://localhost:4000/shipper-register', data, { withCredentials: true })
                         .then(res => {
-                            setError(res.data)
+                            setMsg(res.data)
+                            setError('')
                         })
-                        .catch(er => console.log(er));
+                        .catch(er => {setError(er.response.data); setMsg()});
                     break;
                 default:
                     break;
@@ -108,6 +121,19 @@ export default function RegisterPage() {
         <>
             <ToastContainer
                 position="top-center"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
+
+            <ToastContainer
+                position="top-center"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
@@ -118,9 +144,7 @@ export default function RegisterPage() {
                 pauseOnHover={false}
                 theme="light"
             />
-            {error === 'success' && <Navigate to="/" replace={true} />}
             <section class="bg-white">
-
                 <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign Up</h2>
                     <p class="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Already have account?
@@ -179,7 +203,7 @@ export default function RegisterPage() {
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState=>!prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="default-modal" data-modal-toggle="default-modal" href="#" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                     {/* <!-- Main modal --> */}
@@ -273,7 +297,7 @@ export default function RegisterPage() {
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState=>!prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="business-modal" data-modal-toggle="business-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>
@@ -365,7 +389,7 @@ export default function RegisterPage() {
 
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState=>!prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="shipper-modal" data-modal-toggle="shipper-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>

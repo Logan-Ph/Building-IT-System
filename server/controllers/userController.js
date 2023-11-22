@@ -15,13 +15,54 @@ function generateAccessToken(user) {
   return accessToken
 }
 
+function sendEmailVerification(userEmail) {
+  let config = {
+    service: 'gmail',
+    auth: {
+      user: process.env.GOOGLE_USER,
+      pass: process.env.GOOGLE_PASS
+    }
+  }
+
+  let transporter = nodemailer.createTransport(config);
+
+  let mailgenerator = new Mailgen({
+    theme: "default",
+    product: {
+      name: "Mailgen",
+      link: "https://mailgen.js"
+    }
+  })
+
+  const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
+  const url = `http://localhost:3000/user/${userToken}/verify-email`;
+
+  let response = {
+    body: {
+      intro: "Email verification",
+      outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
+    }
+  }
+
+  let mail = mailgenerator.generate(response);
+
+  let message = {
+    from: "rBuy@gmail.com",
+    to: userEmail,
+    subject: "Forgot password verification",
+    html: mail
+  }
+
+  transporter.sendMail(message)
+}
+
 exports.loginSuccess = (req, res) => {
   if (req.user) {
     const accessToken = generateAccessToken(req.user);
     res.cookie('accessToken', accessToken, { httpOnly: true });
     res.json({ user: req.user });
   } else {
-    res.json({ user: ""})
+    res.json({ user: "" })
   }
 }
 
@@ -69,9 +110,9 @@ exports.userRegister = async (req, res) => {
       (await Vendor.findOne({ phoneNumber: phoneNumber }));
 
     if (checkEmail) {
-      return res.json("Email already exists.")
+      return res.status(500).json("Email already exists.")
     } else if (checkPhone) {
-      return res.json("Phone number already exists.")
+      return res.status(500).json("Phone number already exists.")
     } else {
       const newUser = new User({
         email: email,
@@ -81,7 +122,8 @@ exports.userRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newUser.save();
-      return res.json("success");
+      sendEmailVerification(email)
+      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -110,11 +152,11 @@ exports.vendorRegister = async (req, res) => {
     const checkBusinessName = (await Vendor.findOne({ businessName: businessName }));
 
     if (checkEmail) {
-      return res.json("Email already exists.");
+      return res.status(500).json("Email already exists.");
     } else if (checkPhone) {
-      return res.json("Phone number already exists.")
+      return res.status(500).json("Phone number already exists.")
     } else if (checkBusinessName) {
-      return res.json("Business name already exists.")
+      return res.status(500).json("Business name already exists.")
     } else {
       const newVendor = new Vendor({
         email: email,
@@ -124,7 +166,8 @@ exports.vendorRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newVendor.save();
-      return res.json("success");
+      sendEmailVerification(email)
+      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -152,9 +195,9 @@ exports.shipperRegister = async (req, res) => {
       (await Shipper.findOne({ phoneNumber: phoneNumber }));
 
     if (checkEmail) {
-      return res.json("Email already exists.")
+      return res.status(500).json("Email already exists.")
     } else if (checkPhone) {
-      return res.json("Phone number already exists.")
+      return res.status(500).json("Phone number already exists.")
     } else {
       const newShipper = new Shipper({
         email: email,
@@ -165,7 +208,8 @@ exports.shipperRegister = async (req, res) => {
         distributionHub: distributionHub,
       });
       await newShipper.save();
-      return res.json("success");
+      sendEmailVerification(email)
+      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -179,7 +223,7 @@ exports.forgotPassword = async (req, res) => {
     service: 'gmail',
     auth: {
       user: process.env.GOOGLE_USER,
-      pass:  process.env.GOOGLE_PASS
+      pass: process.env.GOOGLE_PASS
     }
   }
 
@@ -193,12 +237,13 @@ exports.forgotPassword = async (req, res) => {
     }
   })
 
-  const url = "http://localhost:3000"
+  const userToken = jwt.sign({ user: userEmail }, process.env.RESETPWD, { expiresIn: '10m' });
+  const url = `http://localhost:3000/user/${userToken}/forgot-password`;
 
   let response = {
     body: {
       intro: "Forgot password verification link",
-      outro: `Please lick on this verification link ${url}`
+      outro: `Please lick on this link to reset your password ${url}, This link will be expired in 10 minutes`,
     }
   }
 
@@ -226,6 +271,28 @@ exports.loginPage = (req, res) => {
   }
 }
 
+exports.resetPassword = (req, res) => {
+  jwt.verify(req.params.token, process.env.RESETPWD, (err, user) => {
+    if (err) return res.json()
+    res.json({ userEmail: user })
+  })
+}
+
+exports.postResetPassword = async (req, res) => {
+  const { userEmail, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await User.findOneAndUpdate({ email: userEmail }, { password: hashedPassword, verify: true });
+  return res.json({ msg: "Password updated successfully. You will be directed to login page in 5 seconds" });
+}
+
+exports.verifyEmail = async (req, res) => {
+  jwt.verify(req.params.token, process.env.VERIFY_EMAIL, async (err, user) => {
+    if (err) return res.status(500).json("error");
+    const foundUser = await User.findOneAndUpdate({ email: user.user }, { verify: true })
+    if (!foundUser) return res.status.json("error");
+    return res.status(200).json("success")
+  })
+}
 
 exports.logout = (req, res) => {
   req.session.destroy();
