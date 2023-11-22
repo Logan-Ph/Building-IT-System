@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const shipperSchema = new mongoose.Schema({
-    username: {
+    email: {
         type: String,
         require: true,
     },
@@ -33,6 +33,12 @@ const shipperSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String,
     },
+
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+
 });
 
 module.exports = mongoose.model('Shipper', shipperSchema)

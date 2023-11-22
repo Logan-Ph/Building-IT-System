@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import axios from "axios"
 import { RelatedProducts } from '@algolia/recommend-react'
 import recommend from '@algolia/recommend'
@@ -13,11 +13,7 @@ export default function ProductPage() {
     const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
     const indexName = 'rBuy';
 
-    useEffect(() => {
-        fetchData()
-    }, [])
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
             setProduct(res.data.product);
@@ -26,7 +22,13 @@ export default function ProductPage() {
         } catch (error) {
             console.log(error);
         }
-    }
+    }, [params.id, product])
+
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
+
 
     function RelatedItem({ item }) {
         return (
@@ -39,14 +41,14 @@ export default function ProductPage() {
         );
     }
 
-    if (isLoading){
+    if (isLoading) {
         return <div>Loading....</div>
     }
 
     return (
-        <>  
+        <>
             {console.log(product.length())}
-            {(product.length ===0) && <Navigate to="/login" replace={true} />}
+            {(product.length === 0) && <Navigate to="/login" replace={true} />}
             <p>
                 This is product page
             </p>

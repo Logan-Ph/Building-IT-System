@@ -5,12 +5,55 @@ const Product = require('../models/product')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const passport = require('passport')
+const Mailgen = require('mailgen')
 const user = require('../models/user')
+const nodemailer = require('nodemailer')
 require('dotenv').config()
 
 function generateAccessToken(user) {
   const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
   return accessToken
+}
+
+function sendEmailVerification(userEmail) {
+  let config = {
+    service: 'gmail',
+    auth: {
+      user: process.env.GOOGLE_USER,
+      pass: process.env.GOOGLE_PASS
+    }
+  }
+
+  let transporter = nodemailer.createTransport(config);
+
+  let mailgenerator = new Mailgen({
+    theme: "default",
+    product: {
+      name: "Mailgen",
+      link: "https://mailgen.js"
+    }
+  })
+
+  const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
+  const url = `http://localhost:3000/user/${userToken}/verify-email`;
+
+  let response = {
+    body: {
+      intro: "Email verification",
+      outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
+    }
+  }
+
+  let mail = mailgenerator.generate(response);
+
+  let message = {
+    from: "rBuy@gmail.com",
+    to: userEmail,
+    subject: "Forgot password verification",
+    html: mail
+  }
+
+  transporter.sendMail(message)
 }
 
 exports.loginSuccess = (req, res) => {
@@ -52,34 +95,35 @@ exports.registerpage = (req, res) => {
 exports.userRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const checkUsername =
-      (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username })) ||
-      (await Shipper.findOne({ username: username }));
+    const checkEmail =
+      (await User.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email })) ||
+      (await Shipper.findOne({ email: email }));
 
     const checkPhone =
       (await User.findOne({ phoneNumber: phoneNumber })) ||
       (await Vendor.findOne({ phoneNumber: phoneNumber }));
 
-    if (checkUsername) {
-      return res.json("Username already exists.")
+    if (checkEmail) {
+      return res.status(500).json("Email already exists.")
     } else if (checkPhone) {
-      return res.json("Phone number already exists.")
+      return res.status(500).json("Phone number already exists.")
     } else {
       const newUser = new User({
-        username: username,
+        email: email,
         password: hashedPassword,
         name: req.body.name,
         address: req.body.address,
         phoneNumber: phoneNumber,
       });
       await newUser.save();
-      return res.json("success");
+      sendEmailVerification(email)
+      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -89,16 +133,16 @@ exports.userRegister = async (req, res) => {
 exports.vendorRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const businessName = req.body.businessName;
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const checkUsername =
-      (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username })) ||
-      (await Shipper.findOne({ username: username }));
+    const checkEmail =
+      (await User.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email })) ||
+      (await Shipper.findOne({ email: email }));
 
     const checkPhone =
       (await User.findOne({ phoneNumber: phoneNumber })) ||
@@ -107,22 +151,23 @@ exports.vendorRegister = async (req, res) => {
 
     const checkBusinessName = (await Vendor.findOne({ businessName: businessName }));
 
-    if (checkUsername) {
-      return res.json("Username already exists.");
+    if (checkEmail) {
+      return res.status(500).json("Email already exists.");
     } else if (checkPhone) {
-      return res.json("Phone number already exists.")
+      return res.status(500).json("Phone number already exists.")
     } else if (checkBusinessName) {
-      return res.json("Business name already exists.")
+      return res.status(500).json("Business name already exists.")
     } else {
       const newVendor = new Vendor({
-        username: username,
+        email: email,
         password: hashedPassword,
         businessName: businessName,
         address: req.body.address,
         phoneNumber: phoneNumber,
       });
       await newVendor.save();
-      return res.json("success");
+      sendEmailVerification(email)
+      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -132,16 +177,16 @@ exports.vendorRegister = async (req, res) => {
 exports.shipperRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
-    const username = req.body.username;
+    const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const distributionHub = req.body.distributionHub
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    const checkUsername =
-      (await User.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username })) ||
-      (await Vendor.findOne({ username: username }));
+    const checkEmail =
+      (await User.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email })) ||
+      (await Vendor.findOne({ email: email }));
 
 
     const checkPhone =
@@ -149,25 +194,73 @@ exports.shipperRegister = async (req, res) => {
       (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
       (await Shipper.findOne({ phoneNumber: phoneNumber }));
 
-    if (checkUsername) {
-      return res.json("Username already exists.")
+    if (checkEmail) {
+      return res.status(500).json("Email already exists.")
     } else if (checkPhone) {
-      return res.json("Phone number already exists.")
+      return res.status(500).json("Phone number already exists.")
     } else {
       const newShipper = new Shipper({
-        username: username,
+        email: email,
         password: hashedPassword,
         name: req.body.name,
         address: req.body.address,
         phoneNumber: phoneNumber,
-        distributionHub: distributionHub
+        distributionHub: distributionHub,
       });
       await newShipper.save();
-      return res.json("success");
+      sendEmailVerification(email)
+      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
+}
+
+exports.forgotPassword = async (req, res) => {
+  let userEmail = req.body.email
+
+  let config = {
+    service: 'gmail',
+    auth: {
+      user: process.env.GOOGLE_USER,
+      pass: process.env.GOOGLE_PASS
+    }
+  }
+
+  let transporter = nodemailer.createTransport(config);
+
+  let mailgenerator = new Mailgen({
+    theme: "default",
+    product: {
+      name: "Mailgen",
+      link: "https://mailgen.js"
+    }
+  })
+
+  const userToken = jwt.sign({ user: userEmail }, process.env.RESETPWD, { expiresIn: '10m' });
+  const url = `http://localhost:3000/user/${userToken}/forgot-password`;
+
+  let response = {
+    body: {
+      intro: "Forgot password verification link",
+      outro: `Please lick on this link to reset your password ${url}, This link will be expired in 10 minutes`,
+    }
+  }
+
+  let mail = mailgenerator.generate(response);
+
+  let message = {
+    from: "rBuy@gmail.com",
+    to: userEmail,
+    subject: "Forgot password verification",
+    html: mail
+  }
+
+  transporter.sendMail(message).then(() => {
+    return res.status(201).json({ msg: "Email sent" })
+  }).catch(er => {
+    return res.status(500).json({ er: er })
+  })
 }
 
 exports.loginPage = (req, res) => {
@@ -178,6 +271,28 @@ exports.loginPage = (req, res) => {
   }
 }
 
+exports.resetPassword = (req, res) => {
+  jwt.verify(req.params.token, process.env.RESETPWD, (err, user) => {
+    if (err) return res.json()
+    res.json({ userEmail: user })
+  })
+}
+
+exports.postResetPassword = async (req, res) => {
+  const { userEmail, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await User.findOneAndUpdate({ email: userEmail }, { password: hashedPassword, verify: true });
+  return res.json({ msg: "Password updated successfully. You will be directed to login page in 5 seconds" });
+}
+
+exports.verifyEmail = async (req, res) => {
+  jwt.verify(req.params.token, process.env.VERIFY_EMAIL, async (err, user) => {
+    if (err) return res.status(500).json("error");
+    const foundUser = await User.findOneAndUpdate({ email: user.user }, { verify: true })
+    if (!foundUser) return res.status.json("error");
+    return res.status(200).json("success")
+  })
+}
 
 exports.logout = (req, res) => {
   req.session.destroy();

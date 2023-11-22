@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
 
-    username: {
-        type: String,
-    },
-    
     email: {
         type: String,
     },
@@ -37,6 +33,12 @@ const userSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String,
     },
+
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+
 });
 
 module.exports = mongoose.model('User',userSchema)
