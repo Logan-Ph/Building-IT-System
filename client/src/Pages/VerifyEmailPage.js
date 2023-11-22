@@ -20,8 +20,8 @@ export default function VerifyEmailPage() {
 
 
     return <>
-        {error && <Navigate to={'/login'} replace={true}/>}
-        {msg && <Navigate to={'/'} replace={true}/>}
+        {error && <Navigate to={'/login'} replace={true} />}
+        {msg && <Navigate to={'/'} replace={true} />}
         <section className="bg-white">
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <div className="flex flex-col items-center bg-gray-50 py-10 border-gray-50 shadow-md">
@@ -32,17 +32,17 @@ export default function VerifyEmailPage() {
                     <p className="font-light text-lg text-gray-900">Your email has been successfully verified.</p>
                     <p className="font-light text-lg text-gray-900 mb-5">You can now navigate to the login page by clicking the button below. </p>
 
-                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 focus:outline-non">Login</button>
+                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 focus:outline-non"> <a href='/login'>Login</a></button>
 
                     <div className="flex flex-row items-center">
                         <div className="text-gray-900 text-lg font-medium">
-                            <a href="#">
+                            <a href="/login">
                                 <i class="fa-solid fa-arrow-left"></i>
                             </a>
                         </div>
 
                         <div className="ml-5">
-                            <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <a className="font-medium text-gray-900 hover:underline text-center" href="#">SignUp</a></label>
+                            <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <a className="font-medium text-gray-900 hover:underline text-center" href="/register">SignUp</a></label>
                         </div>
 
                     </div>

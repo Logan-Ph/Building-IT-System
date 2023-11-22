@@ -10,12 +10,14 @@ import LogInPage from '../Pages/LogInPage';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
+import CheckoutPage from "../Pages/CheckoutPage";
+
 
 export default function Router() {
-    const Layout = () => {
+    const Layout = ({ header }) => {
         return (
             <>
-                <Header />
+                {header}
                 <Outlet />
                 <Footer />
             </>
@@ -32,40 +34,14 @@ export default function Router() {
             </>
         },
         {
-            path: "/forgot-password",
-            element: <>
-                <LogInHeader />
-                <ForgotPassword />
-                <Footer />
-            </>
-        },
-        {
-            path: "/login",
-            element: <>
-                <LogInHeader />
-                <LogInPage />
-                <Footer />
-            </>
-        },
-        {
-            path: "/user/:token/forgot-password",
-            element: <>
-                <LogInHeader />
-                <ResetPasswordPage />
-                <Footer />
-            </>
-        },
-
-        {
             path: "user/:token/verify-email",
             element: <>
                 <VerifyEmailPage />
             </>
         },
-
         {
             path: "/",
-            element: <Layout />,
+            element: <Layout header={<Header />} />,
             children: [
                 {
                     path: "/",
@@ -75,8 +51,30 @@ export default function Router() {
                     path: "/product/:id",
                     element: <ProductPage />
                 },
+                {
+                    path: "/checkout",
+                    element: <CheckoutPage />
+                },
             ]
-        }
+        },
+        {
+            path: "/",
+            element: <Layout header={<LogInHeader />} />,
+            children: [
+                {
+                    path: "/login",
+                    element: <LogInPage />
+                },
+                {
+                    path: "/forgot-password",
+                    element: <ForgotPassword />
+                },
+                {
+                    path: "/user/:token/forgot-password",
+                    element: <ResetPasswordPage />
+                },
+            ]
+        },
     ])
 
     return (

@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export default function ForgotPassword() {
     const [error, setError] = useState('')
-    const [checkBox, setCheckBox] = useState(false);
+    const [checkBox, setcheckBox] = useState(false);
     const [email, setEmail] = useState('');
     const [msg, setMsg] = useState('');
 
@@ -67,7 +67,7 @@ export default function ForgotPassword() {
             notify(error);
             return;
         }
-        
+
     }
 
 
@@ -111,10 +111,10 @@ export default function ForgotPassword() {
                             </div>
                             <div className="flex items-start">
                                 <div className="flex items-center h-5">
-                                    <input id="terms" aria-describedby="terms" type="checkbox" onChange={() => setCheckBox(prevState=>!prevState)} className="w-4 h-4 border border-gray-500 rounded bg-white focus:ring-3 focus:ring-primary-300" />
+                                    <input id="terms" aria-describedby="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} className="w-4 h-4 border border-gray-500 rounded bg-white focus:ring-3 focus:ring-primary-300" />
                                 </div>
                                 <div className="ml-3 text-sm">
-                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900">I accept the <a className="font-medium text-primary-600 hover:underline" href="#">Terms and Conditions</a></label>
+                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900">I accept the <span className="font-medium text-primary-600 hover:underline">Terms and Conditions</span></label>
                                 </div>
                             </div>
                             <div className="flex flex-col justify-center items-center my-5">

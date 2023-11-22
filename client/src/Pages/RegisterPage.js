@@ -205,7 +205,7 @@ export default function RegisterPage() {
                                     <div class="flex items-center h-5">
                                         <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
-                                    <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="default-modal" data-modal-toggle="default-modal" href="#" class="text-blue-600 hover:underline">terms and conditions</span></label>
+                                    <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="default-modal" data-modal-toggle="default-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                     {/* <!-- Main modal --> */}
                                     <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                         <div class="relative p-4 w-full max-w-2xl max-h-full">
