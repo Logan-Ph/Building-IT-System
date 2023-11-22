@@ -135,7 +135,7 @@ export default function Header() {
 
           <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Best seller
+              Best Seller
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
@@ -349,8 +349,21 @@ export default function Header() {
                       </a>
                     </span>
                   </div>
+                  
                 </div>
+                
               </div>
+              
+              <div className="mt-20">
+              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+              <span className="text-md font-medium text-black">Sign in</span>
+              </div>
+              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
+              <span className="text-md font-medium text-black">Become a vendor</span>
+            </div>
+              </div>
+             
+            
             </aside>
           </div>
         </div>
