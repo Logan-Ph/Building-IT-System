@@ -370,7 +370,7 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                               <div class="order-product-img">
-                                <img
+                                <img alt=""
                                   src={require("../Components/images/logo1.png")}
                                 />
                               </div>
@@ -408,7 +408,7 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                               <div class="order-product-img">
-                                <img
+                                <img alt=""
                                   src={require("../Components/images/house.jpg")}
                                 />
                               </div>
@@ -434,7 +434,7 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                               <div class="order-product-img">
-                                <img
+                                <img alt=""
                                   src={require("../Components/images/devices.jpg")}
                                 />
                               </div>
