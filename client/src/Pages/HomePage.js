@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import React, { Component } from "react";
-import Slider from "react-slick";
 
 export default function Homepage() {
     const [products, setProducts] = useState([])

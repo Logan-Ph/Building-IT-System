@@ -1,12 +1,11 @@
 import axios from 'axios'
-import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function RegisterPage() {
 
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [address, setAddress] = useState('')
@@ -14,11 +13,17 @@ export default function RegisterPage() {
     const [businessName, setBusinessName] = useState('')
     const [distributionHub, setDistributionHub] = useState('')
     const [checkBox, setcheckBox] = useState(false)
-    const [error, setError] = useState('The field is empty')
+    const [error, setError] = useState('')
+    const [msg, setMsg] = useState('')
     const [formType, setFormType] = useState('customer')
 
+    useEffect(() => {
+        error && notify(error)
+        msg && success(msg)
+    }, [error, msg]);
+
     const data = {
-        username: username,
+        email: email,
         password: password,
         phoneNumber: phoneNumber,
         address: address,
@@ -27,7 +32,20 @@ export default function RegisterPage() {
     const notify = (error) => {
         toast.error(error, {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
+    const success = (error) => {
+        toast.success(error, {
+            position: "top-center",
+            autoClose: 10000,
             hideProgressBar: false,
             closeOnClick: true,
             draggable: true,
@@ -39,51 +57,49 @@ export default function RegisterPage() {
 
     async function axiosPostData() {
         try {
-            if (!checkBox) {
-                notify(error);
-                return;
-            }
-
             switch (formType) {
                 case 'customer':
                     data.name = name;
-                    if (!(username && password && phoneNumber && address && name)) {
+                    if (!(email && password && phoneNumber && address && name && checkBox)) {
                         setError("The field is empty");
-                        notify(error);
+                        setMsg('')
                         return;
                     }
                     await axios.post('http://localhost:4000/user-register', data, { withCredentials: true })
                         .then(res => {
-                            setError(res.data)
+                            setMsg(res.data)
+                            setError('')
                         })
-                        .catch(er => console.log(er));
+                        .catch(er => {setError(er.response.data); setMsg()});
                     break;
                 case 'business':
                     data.businessName = businessName;
-                    if (!(username && password && phoneNumber && address && businessName)) {
+                    if (!(email && password && phoneNumber && address && businessName && checkBox)) {
                         setError("The field is empty");
-                        notify();
+                        setMsg('');
                         return;
                     }
                     await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
                         .then(res => {
-                            setError(res.data)
+                            setMsg(res.data)
+                            setError('')
                         })
-                        .catch(er => console.log(er));
+                        .catch(er => {setError(er.response.data); setMsg()});
                     break;
                 case 'shipper':
                     data.name = name;
                     data.distributionHub = distributionHub;
-                    if (!(username && password && phoneNumber && address && name && distributionHub)) {
+                    if (!(email && password && phoneNumber && address && name && distributionHub && checkBox)) {
                         setError("The field is empty");
-                        notify();
+                        setMsg('')
                         return;
                     }
                     await axios.post('http://localhost:4000/shipper-register', data, { withCredentials: true })
                         .then(res => {
-                            setError(res.data)
+                            setMsg(res.data)
+                            setError('')
                         })
-                        .catch(er => console.log(er));
+                        .catch(er => {setError(er.response.data); setMsg()});
                     break;
                 default:
                     break;
@@ -96,13 +112,16 @@ export default function RegisterPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosPostData();
+        if (error) {
+            notify(error);
+        }
     }
 
     return (
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={3000}
+                autoClose={10000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick
@@ -112,9 +131,20 @@ export default function RegisterPage() {
                 pauseOnHover={false}
                 theme="light"
             />
-            {error === 'success' && <Navigate to="/" replace={true} />}
-            <section class="bg-white">
 
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
+            <section class="bg-white">
                 <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign Up</h2>
                     <p class="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Already have account?
@@ -139,9 +169,9 @@ export default function RegisterPage() {
                             {/* <!-- Sign up form of customer, name="signup-customer" --> */}
                             <form name="signup-customer" class="space-y-6">
                                 <div>
-                                    <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                     <div class="mt-2">
-                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" onChange={(e) => { setUsername(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
+                                        <input type="text" id="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" onChange={(e) => { setEmail(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Email must be in the format: name@domain.com" />
                                     </div>
                                 </div>
                                 <div>
@@ -173,39 +203,40 @@ export default function RegisterPage() {
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" onClick={() => setcheckBox(true)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="default-modal" data-modal-toggle="default-modal" href="#" class="text-blue-600 hover:underline">terms and conditions</span></label>
-                                </div>
-                                {/* <!-- Main modal --> */}
-                                <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                    <div class="relative p-4 w-full max-w-2xl max-h-full">
-                                        {/* <!-- Modal content --> */}
-                                        <div class="relative bg-white rounded-lg shadow">
-                                            {/* <!-- Modal header --> */}
-                                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                                                <h3 class="text-xl font-semibold text-gray-900">
-                                                    Terms of Service
-                                                </h3>
-                                                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="default-modal">
-                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                    </svg>
-                                                    <span class="sr-only">Close modal</span>
-                                                </button>
-                                            </div>
-                                            {/* <!-- Modal body --> */}
-                                            <div class="p-4 md:p-5 space-y-4">
-                                                <p class="text-base leading-relaxed text-gray-500">
-                                                    With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-                                                </p>
-                                                <p class="text-base leading-relaxed text-gray-500">
-                                                    The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
-                                                </p>
+                                    {/* <!-- Main modal --> */}
+                                    <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative p-4 w-full max-w-2xl max-h-full">
+                                            {/* <!-- Modal content --> */}
+                                            <div class="relative bg-white rounded-lg shadow">
+                                                {/* <!-- Modal header --> */}
+                                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                                                    <h3 class="text-xl font-semibold text-gray-900">
+                                                        Terms of Service
+                                                    </h3>
+                                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="default-modal">
+                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
+                                                </div>
+                                                {/* <!-- Modal body --> */}
+                                                <div class="p-4 md:p-5 space-y-4">
+                                                    <p class="text-base leading-relaxed text-gray-500">
+                                                        With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
+                                                    </p>
+                                                    <p class="text-base leading-relaxed text-gray-500">
+                                                        The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div>
                                     <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                 </div>
@@ -217,9 +248,9 @@ export default function RegisterPage() {
                             {/* <!-- Sign up form of business, name="signup-business" --> */}
                             <form name="signup-business" class="space-y-6">
                                 <div>
-                                    <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                     <div class="mt-2">
-                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" onChange={(e) => { setUsername(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
+                                        <input type="text" id="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" onChange={(e) => { setEmail(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Email must be in the format: name@domain.com" />
                                     </div>
                                 </div>
                                 <div>
@@ -266,7 +297,7 @@ export default function RegisterPage() {
                                 </div>
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="business-modal" data-modal-toggle="business-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>
@@ -310,9 +341,9 @@ export default function RegisterPage() {
                             {/* <!-- Sign up form of shipper, name="signup-shipper" --> */}
                             <form name="signup-shipper" class="space-y-6">
                                 <div>
-                                    <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                     <div class="mt-2">
-                                        <input type="text" id="username" name="username" pattern="[a-zA-Z0-9]+{8, 15}" onChange={(e) => { setUsername(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Username must contain only letters (lower and upper case) and digits, has a length from 8 to 15 characters" />
+                                        <input type="text" id="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" onChange={(e) => { setEmail(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Email must be in the format: name@domain.com" />
                                     </div>
                                 </div>
                                 <div>
@@ -358,7 +389,7 @@ export default function RegisterPage() {
 
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
-                                        <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                                        <input id="terms" type="checkbox" onChange={() => setcheckBox(prevState => !prevState)} value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                     </div>
                                     <label for="terms" class="ms-2 text-sm font-medium text-gray-900 ">I agree with the <span data-modal-target="shipper-modal" data-modal-toggle="shipper-modal" class="text-blue-600 hover:underline">terms and conditions</span></label>
                                 </div>
