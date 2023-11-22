@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 
 
@@ -8,16 +8,15 @@ export default function VerifyEmailPage() {
     const [msg, setMsg] = useState('')
     const [error, setError] = useState('')
 
-    useEffect(() => {
-        fetchData();
-    }, [])
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         await axios.get(`http://localhost:4000/user/${params.token}/verify-email`, { withCredentials: true })
             .then(res => setMsg(res.data))
             .catch(er => setError(er))
-    }
+    }, [params.token])
 
+    useEffect(() => {
+        fetchData();
+    }, [fetchData])
 
     return <>
         {error && <Navigate to={'/login'} replace={true} />}
