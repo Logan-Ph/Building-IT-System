@@ -121,7 +121,7 @@ export default function ForgotPassword() {
                                 <button type="submit" onClick={handleSubmit} className="flex w-1/2 justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Send Email</button>
 
                                 <div className="my-5">
-                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">If you still need help, contact <a className="font-medium text-[#E61E2A] hover:underline text-center" href="#">rBuy support.</a></label>
+                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">If you still need help, contact <span className="font-medium text-[#E61E2A] hover:underline text-center" href="#">rBuy support.</span></label>
                                 </div>
                             </div>
                         </form>

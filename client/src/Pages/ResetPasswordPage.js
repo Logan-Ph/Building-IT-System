@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useParams } from "react-router-dom"
 import { Navigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -15,12 +15,6 @@ export default function ResetPassword() {
     const [navigate, setNavigate] = useState(false);
     const [msg, setMsg] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        fetchData();
-        error && notify(error)
-        msg && success(msg)
-    }, [error, msg])
 
     const notify = (error) => {
         toast.error(error, {
@@ -48,7 +42,7 @@ export default function ResetPassword() {
         });
     }
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         await axios.get(`http://localhost:4000/user/${params.token}/forgot-password`, { withCredentials: true })
             .then(res => {
                 setUserEmail(res.data.userEmail.user)
@@ -57,7 +51,14 @@ export default function ResetPassword() {
                 console.log(er)
                 setIsLoading(false)
             })
-    }
+    }, [params.token])
+
+    useEffect(() => {
+        fetchData();
+        error && notify(error)
+        msg && success(msg)
+    }, [error, msg, fetchData])
+
 
     const postData = async () => {
         if (!password) { setError('The field is empty'); return }
