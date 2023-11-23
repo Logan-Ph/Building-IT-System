@@ -1,11 +1,20 @@
+'use client';
+
+
+import { useEffect } from 'react';
+import { initFlowbite } from 'flowbite-react';
+import { Rating } from 'flowbite-react';
+
+
+
 export default function TestingPage() {
   return (
   <>
       
 
-  <section className="text-gray-600 body-font overflow-hidden">
+  <section className="text-gray-600 body-font overflow-hidden ">
   
-<div className="container py-10 mx-auto">
+<div className="container py-12 px-12 mx-auto mt-10 bg-gray-50 ">
 
   <div className="lg:w-4/5 mx-auto flex flex-wrap">
     <img alt="ecommerce" className="lg:w-1/2  w-full lg:h-auto h-64 object-cover object-center rounded" src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" />
@@ -95,14 +104,76 @@ export default function TestingPage() {
 </div>
 </section>
 
-<div className="bg-white">
-<div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-  <h2 className="text-2xl font-bold tracking-tight text-gray-900">Customers also purchased</h2>
+<section className="container mx-auto ">
+
+
+
+<div className='container py-12 px-12 mx-auto mt-10 bg-gray-50 '>
+<Rating className="mb-2 ">
+        <Rating.Star />
+        <Rating.Star />
+        <Rating.Star />
+        <Rating.Star />
+        <Rating.Star filled={false} />
+        <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">4.95 out of 5</p>
+      </Rating>
+      <p className="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">1,745 global ratings</p>
+      <Rating.Advanced percentFilled={70} className="mb-2  ">
+        5 star
+      </Rating.Advanced>
+      <Rating.Advanced percentFilled={17} className="mb-2">
+        4 star
+      </Rating.Advanced>
+      <Rating.Advanced percentFilled={8} className="mb-2">
+        3 star
+      </Rating.Advanced>
+      <Rating.Advanced percentFilled={4} className="mb-2">
+        2 star
+      </Rating.Advanced>
+      <Rating.Advanced percentFilled={1}>1 star</Rating.Advanced>
+
+
+</div>
+
+
+
+{/* 
+<div class="w-3/4 mx-auto">
+        <div class="flex items-start mb-5">
+            <div class="pe-4">
+                <footer>
+                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">Reviewed: <time datetime="2022-01-20 19:00">January 20, 2022</time></p>
+                </footer>
+                <h4 class="text-xl font-bold text-gray-900 dark:text-white">Spotless, good appliances, excellent layout, host was genuinely nice and helpful.</h4>
+            </div>
+            <p class="bg-blue-700 text-white text-sm font-semibold inline-flex items-center p-1.5 rounded">8.7</p>
+        </div>
+        <p class="mb-2 text-gray-500 dark:text-gray-400">The flat was spotless, very comfortable, and the host was amazing. I highly recommend this accommodation for anyone visiting New York city centre. It's quite a while since we are no longer using hotel facilities but self contained places. And the main reason is poor cleanliness and staff not being trained properly. This place exceeded our expectation and will return for sure.</p>
+        <p class="mb-5 text-gray-500 dark:text-gray-400">It is obviously not the same build quality as those very expensive watches. But that is like comparing a Citroën to a Ferrari. This watch was well under £100! An absolute bargain.</p>
+        <aside class="flex items-center mt-3">
+            <a href="#" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                    <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
+                </svg>
+                Helpful
+            </a>
+            <a href="#" class="inline-flex items-center text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 group ms-5">
+                <svg class="w-3.5 h-3.5 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                    <path d="M11.955 2.117h-.114C9.732 1.535 6.941.5 4.356.5c-1.4 0-1.592.526-1.879 1.316l-2.355 7A2 2 0 0 0 2 11.5h3.956L4.4 16a1.779 1.779 0 0 0 3.332 1.061 24.8 24.8 0 0 1 4.226-5.36l-.003-9.584ZM15 11h2a1 1 0 0 0 1-1V2a2 2 0 1 0-4 0v8a1 1 0 0 0 1 1Z"/>
+                </svg>
+                Not helpful
+            </a>
+        </aside>
+    </div> */}
+
+<div className="container px-12 mx-auto mb-10 mt-10 bg-gray-50">
+<div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+  <h2 className="text-2xl font-bold tracking-tight text-gray-600 mb-8">Customers also purchased</h2>
 
   <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-    <div className="mr-8">
+    <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white">
       {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full" />
+        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
       {/* </div> */}
       <div className="mt-4 flex justify-between">
         <div>
@@ -117,9 +188,9 @@ export default function TestingPage() {
       </div>
     </div>
 
-    <div className="mr-8">
+    <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white">
       {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full" />
+        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
       {/* </div> */}
       <div className="mt-4 flex justify-between">
         <div>
@@ -134,9 +205,9 @@ export default function TestingPage() {
       </div>
     </div>
 
-    <div className="mr-8">
+    <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white">
       {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full" />
+        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
       {/* </div> */}
       <div className="mt-4 flex justify-between">
         <div>
@@ -152,9 +223,9 @@ export default function TestingPage() {
     </div>
 
 
-    <div className="mr-8">
+    <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white">
       {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full" />
+        <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
       {/* </div> */}
       <div className="mt-4 flex justify-between">
         <div>
@@ -172,6 +243,12 @@ export default function TestingPage() {
 </div>
 
 </div>
+
+</section>
+
+
+
+
 
 
   </>
