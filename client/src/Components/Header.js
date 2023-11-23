@@ -65,7 +65,7 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-lg hover:shadow-3xl bg-blue-400 transition duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -84,7 +84,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-md hover:shadow-2xl transition duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -134,7 +134,7 @@ export default function Header() {
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
               Best Seller
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">

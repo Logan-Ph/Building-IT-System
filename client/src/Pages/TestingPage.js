@@ -16,8 +16,8 @@ export default function TestingPage() {
   
 <div className="container py-12 px-12 mx-auto mt-10 bg-gray-50 ">
 
-  <div className="lg:w-4/5 mx-auto flex flex-wrap">
-    <img alt="ecommerce" className="lg:w-1/2  w-full lg:h-auto h-64 object-cover object-center rounded" src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" />
+  <div className="lg:w-5/5 px-14 mx-auto flex flex-wrap">
+    <img alt="ecommerce" className="lg:w-1/2  w-full lg:h-auto h-64 object-cover object-center rounded shadow-md hover:shadow-2xl transition duration-500" src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg"  />
     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
     <nav className="flex mb-5">
     <ol className="flex items-center">
@@ -46,6 +46,9 @@ export default function TestingPage() {
       </li>
     </ol>
   </nav>
+  <div>
+  </div>
+  <div className='px-3'>
       <h2 className="text-sm title-font text-gray-500 tracking-widest">VENDOR</h2>
       <h1 className="text-gray-900 text-3xl title-font font-medium mb-1 ">In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate .</h1>
       <div className="flex mb-4">
@@ -101,7 +104,10 @@ export default function TestingPage() {
       </div>
     </div>
   </div>
+  </div>
 </div>
+  
+
 </section>
 
 <section className="container mx-auto ">
