@@ -1,68 +1,126 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
-import React, { Component } from "react";
-import Slider from "react-slick";
+import { useState, useEffect, useCallback } from 'react'
+import React from "react";
 import { Carousel } from 'flowbite-react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import '../css/customStyles.css'; 
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import '../css/customStyles.css';
 
 export default function Homepage() {
     const [products, setProducts] = useState([])
     const [user, setUser] = useState()
+    const [error, setError] = useState('')
+    const [msg, setMsg] = useState('')
     const [isLoading, setIsLoading] = useState(true)
 
+    const notify = useCallback(() => {
+        if (error) {
+            toast.error(error, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+        }
+
+        if (msg) {
+            toast.success(msg, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+        }
+    }, [error, msg]);
+
     useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await axios.get("http://localhost:4000/", { withCredentials: true });
+                setProducts(res.data.product);
+            } catch (er) {
+                console.log(er);
+            }
+        }
+
+        const fetchUser = async () => {
+            try {
+                const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+                setUser(res.data.user);
+                setIsLoading(false);
+            } catch (er) {
+                console.log(er);
+                setIsLoading(false);
+            }
+        }
+
         fetchProduct();
-        fetchUser()
-    }, [])
+        fetchUser();
+    }, []);
 
-    const fetchProduct = async () => {
-        await axios.get("http://localhost:4000/", { withCredentials: true })
-            .then(res => {
-                setProducts(res.data.product)
-            })
-            .catch(er => console.log(er))
-    }
+    useEffect(() => {
+        if (error || msg) {
+            notify();
+        }
+    }, [error, msg, notify]);
 
-    const fetchUser = async () => {
-        await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-            .then(res => {
-                setUser(res.data.user)
-                setIsLoading(false)
-            })
-            .catch(er => {
-                console.log(er)
-                setIsLoading(false)
-            })
+    const addProduct = async (productId) => {
+        error && notify();
+        try {
+            const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { withCredentials: true });
+            setMsg(res.data.msg);
+            setError('');
+        } catch (er) {
+            setError(er.response.data.error);
+            setMsg('');
+        }
     }
 
     if (isLoading) {
         return <div>Loading....</div>
     }
 
-    console.log(products)
-
     return (
         <>
-            <div className="lg:my-6 xs:my-2 sm:my-2 md:my-4"> 
-                <Carousel> 
-                        <img 
-                            src={require("../Components/images/banner2.png")}  
-                            alt="..." 
-                            className='legend md-h-[50px]'
-                        /> 
-                         <img 
-                            src={require("../Components/images/banner2.png")}  
-                            alt="..." 
-                            className='legend'
-                        /> 
-                         <img 
-                            src={require("../Components/images/BIS-banner-1.png")}  
-                            alt="..." 
-                            className='legend'
-                        /> 
-                      
+            <ToastContainer
+                position="top-center"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
+            <div className="lg:my-6 xs:my-2 sm:my-2 md:my-4">
+                <Carousel>
+                    <img
+                        src={require("../Components/images/banner2.png")}
+                        alt="..."
+                        className='legend md-h-[50px]'
+                    />
+                    <img
+                        src={require("../Components/images/banner2.png")}
+                        alt="..."
+                        className='legend'
+                    />
+                    <img
+                        src={require("../Components/images/BIS-banner-1.png")}
+                        alt="..."
+                        className='legend'
+                    />
+
                 </Carousel>
 
             </div>
@@ -95,7 +153,7 @@ export default function Homepage() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <div className="mx-auto border border-[#FAC800] rounded-md px-2 py-3 flex items-center justify-around shadow-lg shadow-gray-100 hover:bg-[#fac800e1] transition w-3/4">
                                     <div className='w-12 h-12'>
@@ -107,7 +165,7 @@ export default function Homepage() {
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <div>
                                 <div className="mx-auto border border-[#FAC800] rounded-md px-2 py-3 flex  items-center justify-around shadow-lg shadow-gray-100 hover:bg-[#fac800e1] transition w-3/4">
@@ -119,7 +177,7 @@ export default function Homepage() {
                                         <p className="text-[#000054] text-sm">Customer support</p>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
 
@@ -165,7 +223,7 @@ export default function Homepage() {
                                         <div className="text-xs text-gray-500 block" >Rating {product.ratings}</div>
                                     </div>
                                 </div>
-                                <a href="#" className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</a>
+                                <span onClick={() => addProduct(product._id)} className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>
                             </div>
                         ))}
                     </div>

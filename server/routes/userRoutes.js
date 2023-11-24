@@ -13,6 +13,7 @@ function authenticateToken(req, res, next) {
         next()
     })
 }
+
 router.get('/user/:token/verify-email', userController.verifyEmail);
 router.get('/user/:token/forgot-password', userController.resetPassword);
 router.post('/user/:token/forgot-password', userController.postResetPassword);
@@ -49,7 +50,7 @@ router.get('/auth/google/callback', (req, res, next) => {
             res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
             return;
         }
-        
+
         // Authentication sucess
         req.logIn(user, (err) => {
             if (err) {
@@ -60,7 +61,7 @@ router.get('/auth/google/callback', (req, res, next) => {
         });
     })(req, res);
 });
-
+router.get('/add-product/:id', userController.addProduct)
 router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);

@@ -2,11 +2,11 @@ const User = require('../models/user')
 const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
+const Cart = require('../models/cart')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const passport = require('passport')
+const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
-const user = require('../models/user')
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
@@ -292,6 +292,30 @@ exports.verifyEmail = async (req, res) => {
     if (!foundUser) return res.status.json("error");
     return res.status(200).json("success")
   })
+}
+
+exports.addProduct = async (req, res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
+  }
+  const cart = await Cart.findOne({ userID: req.user._id })
+
+  if (!cart) {
+    const newCart = new Cart({
+      userID: new mongoose.Types.ObjectId(req.user._id),
+      products: [{
+        product: new mongoose.Types.ObjectId(req.params.id),
+        quantity: 1
+      }]
+    })
+    await newCart.save()
+  } else {
+    await cart.addProduct(
+      await Product.findById(req.params.id),
+      1
+    );
+  }
+  return res.status(200).json({ msg: "added to cart"})
 }
 
 exports.logout = (req, res) => {
