@@ -11,6 +11,8 @@ import ForgotPassword from '../Pages/ForgotPasswordPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
+import Chatbot from "./Chatbot";
+
 
 
 export default function Router() {
@@ -19,63 +21,68 @@ export default function Router() {
             <>
                 {header}
                 <Outlet />
+                <Chatbot/>
                 <Footer />
             </>
         )
     }
 
     const BrowserRoutes = createBrowserRouter([
-        {
-            path: "/register",
-            element: <>
-                <SignUpHeader />
-                <RegisterPage />
-                <Footer />
-            </>
-        },
-        {
-            path: "user/:token/verify-email",
-            element: <>
-                <VerifyEmailPage />
-            </>
-        },
-        {
+      {
+        path: "/register",
+        element: (
+          <>
+            <SignUpHeader />
+            <RegisterPage />
+            <Footer />
+          </>
+        ),
+      },
+      {
+        path: "user/:token/verify-email",
+        element: (
+          <>
+            <VerifyEmailPage />
+          </>
+        ),
+      },
+      {
+        path: "/",
+        element: <Layout header={<Header />} />,
+        children: [
+          {
             path: "/",
-            element: <Layout header={<Header />} />,
-            children: [
-                {
-                    path: "/",
-                    element: <Homepage />
-                },
-                {
-                    path: "/product/:id",
-                    element: <ProductPage />
-                },
-                {
-                    path: "/checkout",
-                    element: <CheckoutPage />
-                },
-            ]
-        },
-        {
-            path: "/",
-            element: <Layout header={<LogInHeader />} />,
-            children: [
-                {
-                    path: "/login",
-                    element: <LogInPage />
-                },
-                {
-                    path: "/forgot-password",
-                    element: <ForgotPassword />
-                },
-                {
-                    path: "/user/:token/forgot-password",
-                    element: <ResetPasswordPage />
-                },
-            ]
-        },
-    ])
+            element: <Homepage />,
+          },
+          {
+            path: "/product/:id",
+            element: <ProductPage />,
+          },
+          {
+            path: "/checkout",
+            element: <CheckoutPage />,
+          },
+        ],
+      },
+      {
+        path: "/",
+        element: <Layout header={<LogInHeader />} />,
+        children: [
+          {
+            path: "/login",
+            element: <LogInPage />,
+          },
+          {
+            path: "/forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "/user/:token/forgot-password",
+            element: <ResetPasswordPage />,
+          },
+        ],
+      },
+    ]);
 
     return (
         <RouterProvider router={BrowserRoutes} />

@@ -370,7 +370,8 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                               <div class="order-product-img">
-                                <img alt=""
+                                <img
+                                  alt=""
                                   src={require("../Components/images/logo1.png")}
                                 />
                               </div>
@@ -408,7 +409,8 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                               <div class="order-product-img">
-                                <img alt=""
+                                <img
+                                  alt=""
                                   src={require("../Components/images/house.jpg")}
                                 />
                               </div>
@@ -434,7 +436,8 @@ export default function CheckoutPage() {
                                 </div>
                               </div>
                               <div class="order-product-img">
-                                <img alt=""
+                                <img
+                                  alt=""
                                   src={require("../Components/images/devices.jpg")}
                                 />
                               </div>
@@ -517,6 +520,31 @@ export default function CheckoutPage() {
                         </p>
                       </div>
                     </div>
+                  </div>
+
+                  <div>
+                    <form class="w-full max-w-md mx-auto">
+                      <label
+                        for="default-email"
+                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                      >
+                        Email sign-up
+                      </label>
+                      <div class="relative">
+                        <input
+                          type="email"
+                          id="default-email"
+                          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Promotion code"
+                        />
+                        <button
+                          type="submit"
+                          class="text-white absolute end-2.5 bottom-2.5 bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 font-medium rounded-lg text-sm px-4 py-2"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    </form>
                   </div>
 
                   <hr class="h-px my-5 border-0 bg-gray-400" />
