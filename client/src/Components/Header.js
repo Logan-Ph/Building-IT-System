@@ -124,7 +124,7 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
+            <div className="ml-3 lg:flex hidden cursor-pointer rounded-lg border  h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
               <span className="text-md font-medium text-black">Sign in</span>
             </div>
           </div>
