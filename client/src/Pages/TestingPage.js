@@ -257,7 +257,7 @@ export default function TestingPage() {
       </section>
 
       <section className="lg:container md:container mx-auto ">
-        <div className="lg:container md:container px-9 mx-auto mt-10 bg-gray-50 flex">
+        <div className="lg:container md:container px-9 mx-auto mt-10 bg-gray-50 lg:flex md:flex">
           <div className="w-full py-12">
             <p className="lg:text-2xl md:text-2xl font-semibold mb-2">Customer reviews</p>
             <Rating className="mb-2 ">

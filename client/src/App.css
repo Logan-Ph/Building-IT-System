@@ -7059,6 +7059,14 @@ select {
   }
 }
 
+@media (min-width: 898px) and (max-width: 1199px) {
+  @media (min-width: 1200px) {
+    .md\:lg\:flex {
+      display: flex;
+    }
+  }
+}
+
 @media (min-width: 1259px) {
   .xl\:gap-x-8 {
     column-gap: 2rem;
