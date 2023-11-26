@@ -1,21 +1,12 @@
-'use client';
-
-
-import { useEffect } from 'react';
-import { initFlowbite } from 'flowbite-react';
 import { Rating } from 'flowbite-react';
-
+import RelatedProductCards from '../Components/RelatedProductCards';
 
 
 export default function TestingPage() {
   return (
     <>
-
-
       <section className="text-gray-600 body-font overflow-hidden ">
-
         <div className="container py-12 px-12 mx-auto mt-10 bg-gray-50 ">
-
           <div className="lg:w-5/5 px-14 mx-auto flex flex-wrap">
             <img alt="ecommerce" className="lg:w-1/2  w-full lg:h-auto h-64 object-cover object-center rounded-lg shadow-md hover:shadow-2xl transition duration-500" src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -69,27 +60,16 @@ export default function TestingPage() {
                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 text-[#222160]" viewBox="0 0 24 24">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                     </svg>
-
-
                     <div className="px-3 ps-4 text-md font-medium hover:underline ml-3">4 Reviews</div>
                     <a href="#" class="px-3 text-md font-medium  border-slate-500  border-s-[1px] md:mb-0 hover:underline ">14 Sold</a>
-
-
-
                   </span>
-
                 </div>
-                
                 <span className=" font-medium text-4xl text-slate-700">$58.00</span>
                 <hr class="my-4 w-full border-gray-300" />
                 <div className="text-lg font-bold mt-2">Product Description:</div>
                 <p className="leading-relaxed"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, accusantium.</p>
                 <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
-
-
-
                   <div>
-
                     <form class="max-w-xs mx-auto">
                       <label for="quantity-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose quantity:</label>
                       <div class="relative flex items-center max-w-[8rem]">
@@ -106,12 +86,9 @@ export default function TestingPage() {
                         </button>
                       </div>
                     </form>
-
-
                   </div>
                 </div>
                 <div className="flex">
-
                   <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Add to Cart</button>
                   <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Add to Cart</button>
                   <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
@@ -119,67 +96,51 @@ export default function TestingPage() {
                       <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                     </svg>
                   </button>
-
                 </div>
-
-
               </div>
             </div>
           </div>
         </div>
-
-
       </section>
-
       <section className="container mx-auto ">
-
-
-
         <div className='container px-9 mx-auto mt-10 bg-gray-50 flex'>
-          
           <div className='w-full py-12'>
-          <p className='text-2xl font-semibold mb-2'>Customer reviews</p>
-          <Rating className="mb-2 ">
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star filled={false} />
-            <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">4.95 out of 5</p>
-          </Rating>
-          <p className="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">1,745 global ratings</p>
-          <Rating.Advanced percentFilled={70} className="mb-2 ">
-            5 star
-          </Rating.Advanced>
-          <Rating.Advanced percentFilled={17} className="mb-2">
-            4 star
-          </Rating.Advanced>
-          <Rating.Advanced percentFilled={8} className="mb-2">
-            3 star
-          </Rating.Advanced>
-          <Rating.Advanced percentFilled={4} className="mb-2">
-            2 star
-          </Rating.Advanced>
-          <Rating.Advanced percentFilled={1}>1 star</Rating.Advanced>
+            <p className='text-2xl font-semibold mb-2'>Customer reviews</p>
+            <Rating className="mb-2 ">
+              <Rating.Star />
+              <Rating.Star />
+              <Rating.Star />
+              <Rating.Star />
+              <Rating.Star filled={false} />
+              <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">4.95 out of 5</p>
+            </Rating>
+            <p className="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">1,745 global ratings</p>
+            <Rating.Advanced percentFilled={70} className="mb-2 ">
+              5 star
+            </Rating.Advanced>
+            <Rating.Advanced percentFilled={17} className="mb-2">
+              4 star
+            </Rating.Advanced>
+            <Rating.Advanced percentFilled={8} className="mb-2">
+              3 star
+            </Rating.Advanced>
+            <Rating.Advanced percentFilled={4} className="mb-2">
+              2 star
+            </Rating.Advanced>
+            <Rating.Advanced percentFilled={1}>1 star</Rating.Advanced>
 
-          <hr class="my-6 w-4/5 border-gray-300" />
-          <div>
-          <p className='text-2xl font-semibold mb-1'>Review This Product</p>
-          <p className='text-md font-normal'>Share your thoughts with other customers</p>
-          <div className=" lg:flex cursor-pointer rounded-lg border border-slate-300 h-9 w-[300px] hover:bg-slate-200 items-center mt-3 bg-white">
-              <span className="text-sm font-medium text-black text-center mx-auto">Write a customer review</span>
+            <hr class="my-6 w-4/5 border-gray-300" />
+            <div>
+              <p className='text-2xl font-semibold mb-1'>Review This Product</p>
+              <p className='text-md font-normal'>Share your thoughts with other customers</p>
+              <div className=" lg:flex cursor-pointer rounded-lg border border-slate-300 h-9 w-[300px] hover:bg-slate-200 items-center mt-3 bg-white">
+                <span className="text-sm font-medium text-black text-center mx-auto">Write a customer review</span>
+              </div>
             </div>
           </div>
-          
-          </div>
-          
-
-
           {/* comment  */}
           <article className='py-12'>
             <div className='flex-col w-[800px]   bg-white border-b-2 border-r-2 border-gray-200 sm:px-4 sm:py-4 md:px-4 sm:rounded-lg sm:shadow-sm md:w-2/3 mb-6'>
-
-
               <div class="flex items-center mb-2">
                 <img class="object-cover w-12 h-12 border-2 border-gray-300 rounded-full" alt="customer's avatar"
                   src="https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&faces=1&faceindex=1&facepad=2.5&w=500&h=500&q=80" />
@@ -206,12 +167,8 @@ export default function TestingPage() {
                 </svg>
                 <div class="text-sm text-gray-500 px-4"><p>Reviewed in the United Kingdom on March 3, 2017</p></div>
               </div>
-
               <p class="flex-1  text-sm font-medium leading-relaxed text-gray-600">This is my third Invicta Pro Diver. They are just fantastic value for money. This one arrived yesterday and the first thing I did was set the time, popped on an identical strap from another Invicta and went in the shower with it to test the waterproofing.... No problems.</p>
-
-
               <aside>
-
                 <div class="flex items-center mt-2">
                   <a href="#" class="pe-4 text-sm font-medium text-gray-500 hover:underline border-gray-500 border-e  md:mb-0 ">19 people found this helpful</a>
                   <button class="inline-flex items-center px-1  ml-1 flex-column">
@@ -230,11 +187,8 @@ export default function TestingPage() {
                       </path>
                     </svg>
                   </button>
-
-
                 </div>
                 <hr class="my-4 w-full border-gray-300" />
-
                 {/* comment  */}
                 <div class="flex flex-row pt-1 md-10 md:ml-16 mt-2">
                   <img class="w-12 h-12 border-2 border-gray-300 rounded-full" alt="Vendor's avatar"
@@ -262,19 +216,9 @@ export default function TestingPage() {
                     </button>
                   </div>
                 </div>
-
-
               </aside>
-
-
-
             </div>
-
-
-
             <div className='flex-col w-[800px] py-4 mx-auto bg-white border-b-2 border-r-2 border-gray-200 sm:px-4 sm:py-4 md:px-4 sm:rounded-lg sm:shadow-sm md:w-2/3'>
-
-
               <div class="flex items-center mb-2">
                 <img class="object-cover w-12 h-12 border-2 border-gray-300 rounded-full" alt="Customer's avatar"
                   src="https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&faces=1&faceindex=1&facepad=2.5&w=500&h=500&q=80" />
@@ -301,12 +245,8 @@ export default function TestingPage() {
                 </svg>
                 <div class="text-sm text-gray-500 px-4"><p>Reviewed in the United Kingdom on March 3, 2017</p></div>
               </div>
-
               <p class="flex-1  text-sm font-medium leading-relaxed text-gray-600">This is my third Invicta Pro Diver. They are just fantastic value for money. This one arrived yesterday and the first thing I did was set the time, popped on an identical strap from another Invicta and went in the shower with it to test the waterproofing.... No problems.</p>
-
-
               <aside>
-
                 <div class="flex items-center mt-2">
                   <a href="#" class="pe-4 text-sm font-medium text-gray-500 hover:underline border-gray-500 border-e  md:mb-0 ">19 people found this helpful</a>
                   <button class="inline-flex items-center px-1  ml-1 flex-column">
@@ -325,11 +265,8 @@ export default function TestingPage() {
                       </path>
                     </svg>
                   </button>
-
-
                 </div>
                 <hr class="my-4 w-full border-gray-300" />
-
                 {/* comment  */}
                 <div class="flex flex-row pt-1 md-10 md:ml-16 mt-2">
                   <img class="w-12 h-12 border-2 border-gray-300 rounded-full" alt="Vendor's avatar"
@@ -357,22 +294,10 @@ export default function TestingPage() {
                     </button>
                   </div>
                 </div>
-
-
               </aside>
-
-
-
             </div>
           </article>
-
         </div>
-
-
-
-
-
-
         {/* 
 <div class="w-3/4 mx-auto">
         <div class="flex items-start mb-5">
@@ -401,92 +326,13 @@ export default function TestingPage() {
             </a>
         </aside>
     </div> */}
-
         <div className="container px-12 mx-auto mb-10 mt-10 bg-gray-50">
           <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
             <h2 className="text-xl font-bold text-gray-600 mb-8">Customers also purchased</h2>
-
-            <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white rounded-lg">
-                {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-                <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
-                {/* </div> */}
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-md font-semibold text-gray-700 line-clamp-1">
-                      <a href="#">
-                        Name
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-md text-gray-500">Reviews</p>
-                  </div>
-                  <p className="text-md font-medium text-gray-900">$35</p>
-                </div>
-              </div>
-
-              <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white rounded-lg">
-                {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-                <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
-                {/* </div> */}
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-md font-semibold text-gray-700 line-clamp-1">
-                      <a href="#">
-                        Name
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-md text-gray-500">Reviews</p>
-                  </div>
-                  <p className="text-md font-medium text-gray-900">$35</p>
-                </div>
-              </div>
-
-              <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white rounded-lg">
-                {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-                <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
-                {/* </div> */}
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-md font-semibold text-gray-700 line-clamp-1">
-                      <a href="#">
-                        Name
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-md text-gray-500">Reviews</p>
-                  </div>
-                  <p className="text-md font-medium text-gray-900">$35</p>
-                </div>
-              </div>
-
-
-              <div className=" px-6 py-6 shadow-lg hover:shadow-2xl transition duration-500 bg-white rounded-lg">
-                {/* <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-1/2"> */}
-                <img src="https://m.media-amazon.com/images/I/716mmFt0PGL._AC_UL320_.jpg" alt="" className="h-full w-full object-cover object-center lg:h-64 lg:w-full mt-2" />
-                {/* </div> */}
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-md font-semibold text-gray-700 line-clamp-1">
-                      <a href="#">
-                        Name
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-md text-gray-500">Reviews</p>
-                  </div>
-                  <p className="text-md font-medium text-gray-900">$35</p>
-                </div>
-              </div>
-            </div>
+            <RelatedProductCards />
           </div>
-
         </div>
-
       </section>
-
-
-
-
-
-
     </>
   )
 }

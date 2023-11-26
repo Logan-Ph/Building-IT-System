@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import 'react-toastify/dist/ReactToastify.css'
 import '../css/homepage.css'
+import ProductCard from '../Components/ProductCard';
 
 export default function Homepage() {
     const [products, setProducts] = useState([])
@@ -196,38 +197,7 @@ export default function Homepage() {
 
                     <div className="grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
                         {products.map((product) => (
-                            <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" key={product._id}>
-                                <div className="relative">
-                                    <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px]">
-                                        <img src={product.image_link} className="object-full h-full w-full" alt={product.product_name} />
-                                    </div>
-                                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition">
-                                        <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
-                                            <i className="fa-solid fa-magnifying-glass"></i>
-                                        </a>
-                                        <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
-                                            <i className="fa-regular fa-heart"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="pt-4 pb-3 px-4">
-                                    <a href={`/product/${product._id}`}>
-                                        <h4 className="capitalize font-medium text-md mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">{product.product_name}</h4>
-                                    </a>
-                                    <p className="text-lg text-red-500 font-semibold mb-2">${product.price}</p>
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex gap-1 text-xs text-[#FAC800]">
-                                            <span><i className="fa-solid fa-star"></i></span>
-                                            <span><i className="fa-solid fa-star"></i></span>
-                                            <span><i className="fa-solid fa-star"></i></span>
-                                            <span><i className="fa-solid fa-star"></i></span>
-                                            <span><i className="fa-solid fa-star"></i></span>
-                                        </div>
-                                        <div className="text-xs text-gray-500 block" >Rating {product.ratings}</div>
-                                    </div>
-                                </div>
-                                <span onClick={() => addProduct(product._id)} className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>
-                            </div>
+                            <ProductCard product={product}/>
                         ))}
                     </div>
                     <div className='flex flex-col items-center my-10'>
