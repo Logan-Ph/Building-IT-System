@@ -1,4 +1,15 @@
+import React, { useState } from 'react';
+import { useSearchBox } from 'react-instantsearch';
+
 export default function Header() {
+  const { query, refine } = useSearchBox();
+  const [inputValue, setInputValue] = useState(query);
+
+  function setQuery(newQuery) {
+    setInputValue(newQuery);
+
+    refine(newQuery);
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -44,6 +55,7 @@ export default function Header() {
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
+                onChange={(e) => setQuery(e.currentTarget.value)}
               />
             </div>
             <div className='flex items-center'>
@@ -104,7 +116,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <a href='/checkout' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -117,19 +129,20 @@ export default function Header() {
 
                     {/* <!-- number on the cart --> */}
                     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      10
+                      {/* {(cart.value > 99) ? '99+' : cart.value} */}
+                      0
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
                     Cart
                   </span>
-                </div>
+                </a>
               </div>
             </div>
             {/* if the user login this will disappear */}
-            <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
+            {/* {!user.value && <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
               <a href='\login' className="text-md font-medium text-black">Sign in</a>
-            </div>
+            </div>} */}
           </div>
         </div>
 
@@ -163,9 +176,9 @@ export default function Header() {
             </span>
           </div>
 
-          <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
-            Becoma a vendor
-          </a>
+          {/* {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+            Become a vendor
+          </a>} */}
         </div>
       </div>
 

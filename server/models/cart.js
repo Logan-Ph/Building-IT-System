@@ -36,5 +36,11 @@ cartSchema.methods.addProduct = function (product, quantity) {
     return this.save();
 }
 
+cartSchema.methods.getTotalProducts = function(){
+    return this.products.reduce((total, p) => {
+        return total + p.quantity;
+    }, 0);
+}
+
 
 module.exports = mongoose.model('Cart', cartSchema);

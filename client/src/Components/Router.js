@@ -1,3 +1,4 @@
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import Homepage from '../Pages/HomePage';
@@ -8,18 +9,24 @@ import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
+import algoliasearch from 'algoliasearch/lite';
+import {
+    InstantSearch,
+} from 'react-instantsearch';
 
+const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
 export default function Router() {
     const Layout = ({ header }) => {
         return (
             <>
-                {header}
-                <Outlet />
-                <Footer />
+                <InstantSearch searchClient={searchClient} indexName="rBuy">
+                    {header}
+                    <Outlet />
+                    <Footer />
+                </InstantSearch>
             </>
         )
     }

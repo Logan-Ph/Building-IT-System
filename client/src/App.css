@@ -6648,3 +6648,9 @@ input:checked + .toggle-bg {
 .\[\&\>\*\]\:last\:border-b-0:last-child>* {
   border-bottom-width: 0px;
 }
+
+@media (min-width: 1650px) {
+  .xl\:grid-cols-8 {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+}

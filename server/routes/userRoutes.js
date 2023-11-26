@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
@@ -20,7 +21,7 @@ router.post('/user/:token/forgot-password', userController.postResetPassword);
 router.post('/forgot-password', userController.forgotPassword);
 router.get('/login/success', userController.loginSuccess);
 router.get('/', userController.homePage);
-router.get('/product/:id', authenticateToken, userController.productPage);
+router.get('/product/:id', userController.productPage);
 router.get('/login', userController.loginPage);
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {

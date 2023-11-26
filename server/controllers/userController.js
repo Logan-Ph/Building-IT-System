@@ -56,20 +56,21 @@ function sendEmailVerification(userEmail) {
   transporter.sendMail(message)
 }
 
-exports.loginSuccess = (req, res) => {
+exports.loginSuccess = async (req, res) => {
   if (req.user) {
     const accessToken = generateAccessToken(req.user);
     res.cookie('accessToken', accessToken, { httpOnly: true });
-    res.json({ user: req.user });
+    const cart = await Cart.findOne({ userID: req.user._id })
+    res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
   } else {
-    res.json({ user: "" })
+    res.json({ user: "", length: 0 })
   }
 }
 
 exports.homePage = async (req, res) => {
   try {
     let product = await Product.find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1, ratings: 1 }).limit(10);
-    return res.json({ product: product, user: req.user })
+    return res.json({ product: product})
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -315,7 +316,7 @@ exports.addProduct = async (req, res) => {
       1
     );
   }
-  return res.status(200).json({ msg: "added to cart"})
+  return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
 }
 
 exports.logout = (req, res) => {

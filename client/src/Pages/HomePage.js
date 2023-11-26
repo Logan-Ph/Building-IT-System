@@ -1,15 +1,19 @@
 import axios from 'axios'
-import { useState, useEffect, useCallback } from 'react'
-import React from "react";
+import React, { useState, useEffect, useCallback } from 'react'
 import { Carousel } from 'flowbite-react';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { ToastContainer, toast } from 'react-toastify'
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import 'react-toastify/dist/ReactToastify.css'
-import '../css/customStyles.css';
+import '../css/homepage.css'
+import { signal } from '@preact/signals';
+
+export const cart = signal(0);
+const setCart = (length) => {
+    cart.value = length;
+}
 
 export default function Homepage() {
     const [products, setProducts] = useState([])
-    const [user, setUser] = useState()
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const [isLoading, setIsLoading] = useState(true)
@@ -42,27 +46,30 @@ export default function Homepage() {
         }
     }, [error, msg]);
 
+    const fetchProduct = async () => {
+        try {
+            const res = await axios.get("http://localhost:4000/", { withCredentials: true });
+            setProducts(res.data.product);
+            setIsLoading(false);
+        } catch (er) {
+            console.log(er);
+        }
+    }
+
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+            // user.value = res.data.user;
+            // setCart(res.data.length)
+            console.log(res.data.length)
+            // console.log(user.value);
+        } catch (er) {
+            console.log(er);
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const res = await axios.get("http://localhost:4000/", { withCredentials: true });
-                setProducts(res.data.product);
-            } catch (er) {
-                console.log(er);
-            }
-        }
-
-        const fetchUser = async () => {
-            try {
-                const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-                setUser(res.data.user);
-                setIsLoading(false);
-            } catch (er) {
-                console.log(er);
-                setIsLoading(false);
-            }
-        }
-
         fetchProduct();
         fetchUser();
     }, []);
@@ -75,8 +82,10 @@ export default function Homepage() {
 
     const addProduct = async (productId) => {
         error && notify();
+        msg && notify();
         try {
             const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { withCredentials: true });
+            // setCart(res.data.length)
             setMsg(res.data.msg);
             setError('');
         } catch (er) {
@@ -191,24 +200,24 @@ export default function Homepage() {
                     </div>
 
 
-                    <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
+                    <div className="grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
                         {products.map((product) => (
-                            <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" id={product._id}>
+                            <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" key={product._id}>
                                 <div className="relative">
                                     <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px]">
                                         <img src={product.image_link} className="object-full h-full w-full" alt={product.product_name} />
                                     </div>
                                     <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition">
-                                        <a href="#" className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                                        <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
                                             <i className="fa-solid fa-magnifying-glass"></i>
                                         </a>
-                                        <a href="" className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                                        <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
                                             <i className="fa-regular fa-heart"></i>
                                         </a>
                                     </div>
                                 </div>
                                 <div className="pt-4 pb-3 px-4">
-                                    <a href="#">
+                                    <a href={`/product/${product._id}`}>
                                         <h4 className="capitalize font-medium text-md mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">{product.product_name}</h4>
                                     </a>
                                     <p className="text-lg text-red-500 font-semibold mb-2">${product.price}</p>
