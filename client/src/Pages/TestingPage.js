@@ -71,7 +71,7 @@ export default function TestingPage() {
                 <h2 className="text-sm title-font text-gray-500 tracking-widest">
                   VENDOR
                 </h2>
-                <h1 className="text-gray-900 lg:text-3xl sm:text-sm title-font font-medium mb-3 ">
+                <h1 className="text-gray-900 lg:text-3xl sm:text-md xs:text-md title-font font-medium mb-3 ">
                 Havells Ambrose 1200mm Energy Saving with Remote Control 5 Star Decorative BLDC Ceiling Fan (Gold Mist Wood, Pack of 1)
                 </h1>
 
@@ -127,7 +127,7 @@ export default function TestingPage() {
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      className="lg:w-5 lg:h-5 xs:w-4 xs:h-4 text-[#222160]"
+                      className="w-5 h-5 xs:w-4 xs:h-4 text-[#222160]"
                       viewBox="0 0 24 24"
                     >
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
@@ -152,10 +152,10 @@ export default function TestingPage() {
                   $58.00
                 </span>
                 <hr class="my-4 w-full border-gray-300" />
-                <div className="text-lg font-bold mt-2">
+                <div className="text-xl xs:text-lg font-bold mt-2">
                   Product Description:
                 </div>
-                <p className="leading-relaxed">
+                <p className="leading-relaxed xs:text-sm ">
                   {" "}
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Voluptas, accusantium.
@@ -231,10 +231,10 @@ export default function TestingPage() {
                   </div>
                 </div>
                 <div className="flex">
-                  <button className="flex ml-auto text-white bg-[#EAB308] border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg">
+                  <button className="flex ml-auto text-black bg-[#EAB308] border-0 py-2 px-6 focus:outline-none hover:bg-[#EAA000] rounded-lg">
                     Add to Cart
                   </button>
-                  <button className="flex ml-auto text-white bg-orange border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg">
+                  <button className="flex ml-auto text-black bg-orange border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-lg">
                     Buy Now
                   </button>
                   <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
@@ -257,9 +257,9 @@ export default function TestingPage() {
       </section>
 
       <section className="lg:container md:container mx-auto ">
-        <div className="lg:container md:container px-9 mx-auto mt-10 bg-gray-50 lg:flex md:flex">
-          <div className="w-full py-12">
-            <p className="lg:text-2xl md:text-2xl font-semibold mb-2">Customer reviews</p>
+        <div className="lg:container md:container lg:px-9 md:px-9 sm:px-3 xs:px-4 mx-auto mt-10 bg-gray-50 lg:flex md:flex">
+          <div className="w-full lg:md:py-12 xs:py-3">
+            <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-2">Customer Reviews</p>
             <Rating className="mb-2 ">
               <Rating.Star />
               <Rating.Star />
@@ -289,8 +289,8 @@ export default function TestingPage() {
 
             <hr class="my-6 w-4/5 border-gray-300" />
             <div>
-              <p className="text-2xl font-semibold mb-1">Review This Product</p>
-              <p className="text-md font-normal">
+              <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-1 ">Review This Product</p>
+              <p className="text-md xs:text-sm font-normal">
                 Share your thoughts with other customers
               </p>
               <div className=" lg:flex cursor-pointer rounded-lg border border-slate-300 h-9 w-[300px] hover:bg-slate-200 items-center mt-3 bg-white">
@@ -303,8 +303,8 @@ export default function TestingPage() {
 
           {/* comment  */}
           <article className="py-12">
-            <div className="flex-col w-[800px]   bg-white border-b-2 border-r-2 border-gray-200 sm:px-4 sm:py-4 md:px-4 sm:rounded-lg sm:shadow-sm md:w-2/3 mb-6">
-              <div class="flex items-center mb-2">
+            <div className="flex-col lg:w-[800px] md:w-[800px]  bg-white border-b-2 border-r-2 border-gray-200 xs:px-0 sm:px-0 sm:py-4 md:px-4 rounded-lg sm:shadow-sm  mb-6">
+              <div class="flex items-center mb-2 xs:px-2 xs:pt-4">
                 <img
                   class="object-cover w-12 h-12 border-2 border-gray-300 rounded-full"
                   alt="customer's avatar"
@@ -322,10 +322,10 @@ export default function TestingPage() {
                   </p>
                 </div>
               </div>
-              <h3 class=" text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 class=" text-lg xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2">
                 Thinking to buy another one!
               </h3>
-              <div class="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
+              <div class="flex items-center mb-1 space-x-1 rtl:space-x-reverse xs:px-2">
                 <svg
                   class="w-4 h-4 text-yellow-300"
                   aria-hidden="true"
@@ -371,12 +371,12 @@ export default function TestingPage() {
                 >
                   <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
                 </svg>
-                <div class="text-sm text-gray-500 px-4">
-                  <p>Reviewed in the United Kingdom on March 3, 2017</p>
+                <div class="text-sm xs:text-xs text-gray-500 px-4">
+                  <p>Reviewed on March 3, 2017</p>
                 </div>
               </div>
 
-              <p class="flex-1  text-sm font-medium leading-relaxed text-gray-600">
+              <p class="flex-1  text-sm  font-medium leading-relaxed xs:leading-normal text-gray-600 xs:px-2">
                 This is my third Invicta Pro Diver. They are just fantastic
                 value for money. This one arrived yesterday and the first thing
                 I did was set the time, popped on an identical strap from
@@ -388,7 +388,7 @@ export default function TestingPage() {
                 <div class="flex items-center mt-2">
                   <a
                     href="#"
-                    class="pe-4 text-sm font-medium text-gray-500 hover:underline border-gray-500 border-e  md:mb-0 "
+                    class="pe-4 text-sm font-medium text-gray-500 hover:underline border-gray-500 border-e  md:mb-0 xs:px-2 "
                   >
                     19 people found this helpful
                   </a>
@@ -424,20 +424,20 @@ export default function TestingPage() {
                 <hr class="my-4 w-full border-gray-300" />
 
                 {/* comment  */}
-                <div class="flex flex-row pt-1 md-10 md:ml-16 mt-2">
+                <div class="flex flex-row pt-1 md-10 md:ml-16 mt-2 xs:pt-0 xs:mt-0  xs:px-2">
                   <img
                     class="w-12 h-12 border-2 border-gray-300 rounded-full"
                     alt="Vendor's avatar"
                     src="https://images.unsplash.com/photo-1581624657276-5807462d0a3a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&fit=facearea&faces=1&faceindex=1&facepad=2.5&w=500&h=500&q=80"
                   />
-                  <div class="flex-col mt-1">
+                  <div class="flex-col mt-1 xs:px-2">
                     <div class="flex items-center flex-1 px-4 font-bold leading-tight">
                       Vendor
                       <span class="ml-2 text-xs font-normal text-gray-500">
                         5 days ago
                       </span>
                     </div>
-                    <div class="flex-1 px-2 ml-2 text-sm font-medium leading-relaxed text-gray-600">
+                    <div class="flex-1 px-2 ml-2 text-sm font-medium leading-relaxed xs:leading-normal text-gray-600">
                       Thank you for your feedback!
                     </div>
                     <button class="inline-flex items-center px-1 pt-2 ml-1 flex-column">
@@ -685,7 +685,7 @@ export default function TestingPage() {
    
     <div className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
           <div className="lg:py-12 md:py-12 sm:py-8 xs:py-4">
-            <h2 className="lg:text-xl md:text-xl font-bold text-gray-600 mb-8 xs:mb-3 sm:mb-3 ">
+            <h2 className="lg:text-2xl md:text-2xl  sm:xs:text-xl font-bold text-gray-600 mb-8 xs:mb-3 sm:mb-3 ">
               Customers also purchased
             </h2>
             <Swiper
