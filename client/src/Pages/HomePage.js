@@ -5,12 +5,6 @@ import { ToastContainer, toast } from 'react-toastify'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import 'react-toastify/dist/ReactToastify.css'
 import '../css/homepage.css'
-import { signal } from '@preact/signals';
-
-export const cart = signal(0);
-const setCart = (length) => {
-    cart.value = length;
-}
 
 export default function Homepage() {
     const [products, setProducts] = useState([])
