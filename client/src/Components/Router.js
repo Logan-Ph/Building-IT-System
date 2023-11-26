@@ -11,6 +11,7 @@ import ForgotPassword from '../Pages/ForgotPasswordPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
+import UserProfile from '../Pages/UserProfile';
 
 
 export default function Router() {
