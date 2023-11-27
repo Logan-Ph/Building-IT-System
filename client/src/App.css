@@ -6978,6 +6978,11 @@ select {
     padding-bottom: 1rem;
   }
 
+  .sm\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
   .sm\:pr-8 {
     padding-right: 2rem;
   }
@@ -7180,6 +7185,11 @@ select {
   .md\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .md\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .md\:pl-64 {

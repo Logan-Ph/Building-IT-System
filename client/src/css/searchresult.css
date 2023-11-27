@@ -22,3 +22,12 @@
     border: 2px solid #E61E2A;;
     top: -1.5px;
 }
+
+input[type="radio"]{
+    display: none;
+}
+
+.star{
+    cursor: pointer;
+    transition: color 200ms;
+}

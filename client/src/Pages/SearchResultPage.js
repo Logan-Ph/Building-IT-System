@@ -41,21 +41,24 @@ const filters = [
       { value: 'Da Nang City', label: 'Da Nang City', checked: false },
     ],
   },
-  {
-    id: 'rating',
-    name: 'Rating',
-    options: [
-      { value: '5.0', label: 'Rating 5.0', checked: false },
-      { value: '4.5', label: 'Rating 4.5', checked: false },
-      { value: '4.0', label: 'Rating 4.0', checked: true },
-      { value: '3.5', label: 'Rating 3.5', checked: false },
-      { value: '3.0', label: 'Rating 3.0', checked: false },
-      { value: '2.5', label: 'Rating 2.5', checked: false },
-      { value: '2.0', label: 'Rating 2.0', checked: false },
-      { value: '1.5', label: 'Rating 1.5', checked: false },
-      { value: '1.0', label: 'Rating 1.0', checked: false },
-    ],
-  },
+  // {
+  //   id: 'rating',
+  //   name: 'Rating',
+  // //   options: [
+  // //     { value: '5.0', label: 'Rating 5.0', checked: false },
+  // //     { value: '4.5', label: 'Rating 4.5', checked: false },
+  // //     { value: '4.0', label: 'Rating 4.0', checked: true },
+  // //     { value: '3.5', label: 'Rating 3.5', checked: false },
+  // //     { value: '3.0', label: 'Rating 3.0', checked: false },
+  // //     { value: '2.5', label: 'Rating 2.5', checked: false },
+  // //     { value: '2.0', label: 'Rating 2.0', checked: false },
+  // //     { value: '1.5', label: 'Rating 1.5', checked: false },
+  // //     { value: '1.0', label: 'Rating 1.0', checked: false },
+  //   // ],
+  //   option : [
+  //     null
+  //   ]
+  // },
 ]
 
 function classNames(...classes) {
@@ -108,7 +111,8 @@ export default function Example() {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <SRPriceRange/>
+                    <SRPriceRange className="pt-6 px-4"/>
+                    <SRStarRating className="pt-6 px-4"/>
 
                     {filters.map((section) => (
                       <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
@@ -229,6 +233,8 @@ export default function Example() {
                 {/* Filters */}
                 <form className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange/>
+
+                  <SRStarRating/>
                   
                   {filters.map((section) => (
                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
@@ -288,7 +294,6 @@ export default function Example() {
           </section>
         </main>
       </div>
-      <SRStarRating/>
     </div>
   )
 }
