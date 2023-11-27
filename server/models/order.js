@@ -35,7 +35,12 @@ const orderSchema = new mongoose.Schema({
       Date: {
             type: Date,
             default: Date.now()
-        }
+        },
+        Status: {
+          type: String,
+          required: true,
+          enum: ["Active", "Delivered", "Canceled"]
+      },
     });
 
 module.exports = mongoose.model('Order', orderSchema)
