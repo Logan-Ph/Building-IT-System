@@ -1,7 +1,6 @@
 import '../css/profile.css'
 export default function UserProfile() {
     document.addEventListener('DOMContentLoaded', () => {
-
         const sidebarDropdown = document.querySelectorAll('.sidebar-dropdown')
         const sidebar = document.getElementById('sidebar')
         const toggleSidebar = document.querySelector('.toggle-sidebar')
@@ -32,8 +31,9 @@ export default function UserProfile() {
         // TAB
         const tabIndicator = document.querySelectorAll('[data-toggle="tab"]')
         const tabContent = document.querySelectorAll('.tab-content')
-
+        
         tabIndicator.forEach(item => {
+            console.log(item)
             item.addEventListener('click', function (e) {
                 e.preventDefault()
 
