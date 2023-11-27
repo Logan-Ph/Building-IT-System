@@ -1601,6 +1601,10 @@ select {
   margin-left: 0.25rem;
 }
 
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
 .ml-16 {
   margin-left: 4rem;
 }
@@ -1691,6 +1695,10 @@ select {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .mt-6 {
@@ -1946,6 +1954,10 @@ select {
   width: 80%;
 }
 
+.w-48 {
+  width: 12rem;
+}
+
 .w-5 {
   width: 1.25rem;
 }
@@ -1982,16 +1994,8 @@ select {
   width: 18px;
 }
 
-.w-\[300px\] {
-  width: 300px;
-}
-
 .w-\[40px\] {
   width: 40px;
-}
-
-.w-\[800px\] {
-  width: 800px;
 }
 
 .w-auto {
@@ -2849,6 +2853,11 @@ select {
 .bg-\[\#EAB308\] {
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#FF9209\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 146 9 / var(--tw-bg-opacity));
 }
 
 .bg-black {
@@ -4277,7 +4286,7 @@ select {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-@media (min-width: 898px) and (max-width: 1199px) {
+@media (min-width: 898px) {
   .md\:container {
     width: 100%;
   }
@@ -4524,6 +4533,11 @@ select {
   background-color: rgb(234 160 0 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-\[\#FF6C22\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 108 34 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-blue-800:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(30 66 159 / var(--tw-bg-opacity));
@@ -4577,11 +4591,6 @@ select {
 .hover\:bg-indigo-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(205 219 254 / var(--tw-bg-opacity));
-}
-
-.hover\:bg-indigo-600:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(88 80 236 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-lime-200:hover {
@@ -6569,7 +6578,7 @@ select {
   color: rgb(63 131 248 / var(--tw-text-opacity));
 }
 
-@media (min-width: 576px) and (max-width: 897px) {
+@media (min-width: 576px) {
   .sm\:mx-auto {
     margin-left: auto;
     margin-right: auto;
@@ -6637,10 +6646,6 @@ select {
 
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .sm\:rounded-lg {
-    border-radius: 0.5rem;
   }
 
   .sm\:px-0 {
@@ -6727,7 +6732,7 @@ select {
   }
 }
 
-@media (min-width: 898px) and (max-width: 1199px) {
+@media (min-width: 898px) {
   .md\:inset-0 {
     inset: 0px;
   }
@@ -6777,10 +6782,6 @@ select {
     width: 3rem;
   }
 
-  .md\:w-2\/3 {
-    width: 66.666667%;
-  }
-
   .md\:w-4\/12 {
     width: 33.333333%;
   }
@@ -6791,10 +6792,6 @@ select {
 
   .md\:w-\[280px\] {
     width: 280px;
-  }
-
-  .md\:w-\[800px\] {
-    width: 800px;
   }
 
   .md\:w-auto {
@@ -6873,6 +6870,10 @@ select {
     padding-bottom: 3rem;
   }
 
+  .md\:pr-2 {
+    padding-right: 0.5rem;
+  }
+
   .md\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
@@ -6891,11 +6892,6 @@ select {
   .md\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
-  }
-
-  .md\:text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
   }
 
   .md\:font-medium {
@@ -7074,12 +7070,15 @@ select {
     line-height: 1.75rem;
   }
 
-  .lg\:text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
+  @media (min-width: 898px) {
+    .lg\:md\:w-96 {
+      width: 24rem;
+    }
 
-  @media (min-width: 898px) and (max-width: 1199px) {
+    .lg\:md\:w-\[300px\] {
+      width: 300px;
+    }
+
     .lg\:md\:py-12 {
       padding-top: 3rem;
       padding-bottom: 3rem;
@@ -7100,18 +7099,6 @@ select {
 
   .xs\:mt-0 {
     margin-top: 0px;
-  }
-
-  .xs\:mb-1 {
-    margin-bottom: 0.25rem;
-  }
-
-  .xs\:mt-1 {
-    margin-top: 0.25rem;
-  }
-
-  .xs\:mt-12 {
-    margin-top: 3rem;
   }
 
   .xs\:hidden {
@@ -7166,31 +7153,26 @@ select {
     padding-right: 1rem;
   }
 
-  .xs\:py-4 {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
   .xs\:py-3 {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
   }
 
-  .xs\:px-1 {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-  }
-
-  .xs\:pt-4 {
+  .xs\:py-4 {
     padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
   .xs\:pt-0 {
     padding-top: 0px;
   }
 
-  .xs\:pt-2 {
-    padding-top: 0.5rem;
+  .xs\:pt-4 {
+    padding-top: 1rem;
+  }
+
+  .xs\:text-\[12\.5px\] {
+    font-size: 12.5px;
   }
 
   .xs\:text-lg {
@@ -7216,9 +7198,15 @@ select {
   .xs\:leading-normal {
     line-height: 1.5;
   }
+
+  @media (min-width: 576px) {
+    .xs\:sm\:w-auto {
+      width: auto;
+    }
+  }
 }
 
-@media (min-width: 576px) and (max-width: 897px) {
+@media (min-width: 576px) {
   @media (max-width: 575px) {
     .sm\:xs\:text-xl {
       font-size: 1.25rem;
