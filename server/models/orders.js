@@ -11,7 +11,6 @@ const orderSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        
     }],
         user: {
             type: String,
@@ -22,5 +21,4 @@ const orderSchema = new mongoose.Schema({
             default: Date.now()
         }
     });
-
-    module.exports = mongoose.model('Order', orderSchema)
+module.exports = mongoose.model('Order', orderSchema)

@@ -293,6 +293,10 @@ exports.verifyEmail = async (req, res) => {
     return res.status(200).json("success")
   })
 }
+exports.placeOrder = async (req, res) => {
+
+}
+
 
 exports.logout = (req, res) => {
   req.session.destroy();
