@@ -11,6 +11,7 @@ import ForgotPassword from '../Pages/ForgotPasswordPage';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
+import SearchResultPage from "../Pages/SearchResultPage";
 
 
 export default function Router() {
@@ -54,6 +55,10 @@ export default function Router() {
                 {
                     path: "/checkout",
                     element: <CheckoutPage />
+                },
+                {
+                    path: "/search-result",
+                    element: <SearchResultPage />
                 },
             ]
         },

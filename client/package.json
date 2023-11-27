@@ -5,6 +5,8 @@
   "dependencies": {
     "@algolia/recommend": "^4.20.0",
     "@algolia/recommend-react": "^1.10.0",
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "@preact/signals": "^1.2.1",
     "@preact/signals-core": "^1.5.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -50,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "tailwindcss": "^3.3.5"
   }
 }
