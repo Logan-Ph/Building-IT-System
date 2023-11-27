@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect, useCallback, useContext } from 'react'
-import { ToastContainer, toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import 'react-toastify/dist/ReactToastify.css'
 import '../css/homepage.css'

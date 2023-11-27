@@ -13,6 +13,7 @@ import TestingPage2 from '../Pages/TestingPage2';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
+import UserProfile from '../Pages/UserProfile';
 import algoliasearch from 'algoliasearch/lite';
 import {
     InstantSearch,
@@ -73,7 +74,11 @@ export default function Router() {
                 {
                     path: "/test2",
                     element: <TestingPage2 />
-                }
+                },
+                {
+                    path: "/profile",
+                    element: <UserProfile />
+                },
             ]
         },
         {
