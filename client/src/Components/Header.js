@@ -1,6 +1,5 @@
 export default function Header() {
-
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const burger = document.querySelectorAll(".navbar-burger");
     const menu = document.querySelectorAll(".navbar-menu");
 
@@ -28,7 +27,7 @@ export default function Header() {
             {/* <!-- logo --> */}
             <div className="flex items-center lg:ml-10 ">
               <img
-                src={require('./images/logo1.png')}
+                src={require("./images/logo1.png")}
                 className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
                 alt="logo"
               />
@@ -43,10 +42,25 @@ export default function Header() {
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
               />
+              <div class="grid place-items-center h-full w-12 text-gray-300">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
             </div>
-            <div className='flex items-center'>
 
-
+            <div className="flex items-center">
               <div className="ml-2 flex">
                 <div className="mr-2 flex">
                   <div className="lg:hidden flex items-center">
@@ -114,8 +128,8 @@ export default function Header() {
                     </svg>
 
                     {/* <!-- number on the cart --> */}
-                    <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      10
+                    <span className="absolute  -top-3 -right-3 flex h-[19px] w-[19px] items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
+                      99+
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
@@ -182,7 +196,7 @@ export default function Header() {
                 >
                   <img
                     alt="Logo"
-                    src={require('./images/logo1.png')}
+                    src={require("./images/logo1.png")}
                     className="inline xs:w-8 sm:w-10 md:w-12 mb-2 "
                   />
                   <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
@@ -349,21 +363,21 @@ export default function Header() {
                       </a>
                     </span>
                   </div>
-                  
                 </div>
-                
               </div>
-              
+
               <div className="mt-20">
-              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
-              <span className="text-md font-medium text-black">Sign in</span>
+                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+                  <span className="text-md font-medium text-black">
+                    Sign in
+                  </span>
+                </div>
+                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
+                  <span className="text-md font-medium text-black">
+                    Become a vendor
+                  </span>
+                </div>
               </div>
-              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
-              <span className="text-md font-medium text-black">Become a vendor</span>
-            </div>
-              </div>
-             
-            
             </aside>
           </div>
         </div>
@@ -371,4 +385,3 @@ export default function Header() {
     </>
   );
 }
-

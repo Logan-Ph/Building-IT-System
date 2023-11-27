@@ -312,8 +312,7 @@ export default function TestingPage() {
               <div className="lg:md:w-96 mt-5 ">
                 <div className="">
                   <div className="hidden mt-2" id="customer_review">
-                    <Textarea 
-                    
+                    <Textarea
                       id="comment"
                       placeholder="Leave a review..."
                       required
@@ -327,12 +326,10 @@ export default function TestingPage() {
 
           {/* comment  */}
           <div className="flex flex-col">
-          <CustomerReview />
-          <CustomerReview />
-          <CustomerReview />
+            <CustomerReview />
+            <CustomerReview />
+            <CustomerReview />
           </div>
-
-            
         </div>
 
         {/* 
