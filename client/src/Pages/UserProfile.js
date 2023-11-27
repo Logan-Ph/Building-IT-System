@@ -1,6 +1,52 @@
+import '../css/profile.css'
 export default function UserProfile() {
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const sidebarDropdown = document.querySelectorAll('.sidebar-dropdown')
+        const sidebar = document.getElementById('sidebar')
+        const toggleSidebar = document.querySelector('.toggle-sidebar')
+
+        sidebarDropdown.forEach(item => {
+            const toggle = item.previousElementSibling
+
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault()
+
+                sidebar.classList.remove('sidebar-collapse')
+
+                item.classList.toggle('hidden')
+                this.classList.toggle('active')
+            })
+        })
+
+        toggleSidebar.addEventListener('click', function () {
+            sidebar.classList.toggle('sidebar-collapse')
+
+            sidebarDropdown.forEach(item => {
+                const toggle = item.previousElementSibling
+                item.classList.add('hidden')
+                toggle.classList.remove('active')
+            })
+        })
+
+        // TAB
+        const tabIndicator = document.querySelectorAll('[data-toggle="tab"]')
+        const tabContent = document.querySelectorAll('.tab-content')
+
+        tabIndicator.forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.preventDefault()
+
+                tabIndicator.forEach(i => i.classList.remove('active'))
+                tabContent.forEach(i => i.classList.add('hidden'))
+
+                this.classList.add('active')
+                document.querySelector(this.dataset.target).classList.remove('hidden')
+            })
+        })
+    })
+
     return (
-        // <p>Hi</p>
         <>
             <body className="font-outfit">
                 {/* <!-- NAVBAR --> */}
@@ -115,7 +161,7 @@ export default function UserProfile() {
                                         <div className="col-span-full">
                                             <label for="photo" className="block text-sm font-medium leading-6 text-gray-900">Avatar picture</label>
                                             <div className="mt-2 flex items-center gap-x-3">
-                                                <input type="file" id="fileUpload" name="photo" accept="image/*"  />
+                                                <input type="file" id="fileUpload" name="photo" accept="image/*" />
                                                 <svg onclick="document.getElementById('fileUpload').click()" className="h-12 w-12 text-gray-300 cursor-pointer" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                                     <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
                                                 </svg>

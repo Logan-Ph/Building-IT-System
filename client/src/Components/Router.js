@@ -20,8 +20,11 @@ import {
 } from 'react-instantsearch';
 import { CartProvider } from '../Context/CartContext';
 import { UserProvider } from '../Context/UserContext';
+import Chatbot from "./Chatbot";
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
+
+
 
 export default function Router() {
     const Layout = ({ header }) => {
@@ -30,6 +33,7 @@ export default function Router() {
                 <InstantSearch searchClient={searchClient} indexName="rBuy">
                     {header}
                     <Outlet />
+                    <Chatbot />
                     <Footer />
                 </InstantSearch>
             </>
