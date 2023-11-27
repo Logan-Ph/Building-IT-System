@@ -5,7 +5,7 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import '../css/customStyles.css'; 
 import Slider from 'react-slider';
 
-const MIN = 100;
+const MIN = 0;
 const MAX = 12000;
 
 const sortOptions = [
@@ -294,7 +294,7 @@ export default function Example() {
                   ))}
 
                   <div className="border-b border-gray-200">
-                  <Component/>
+                  <PriceRange/>
                   </div>
                 </form>
               </div>
@@ -370,14 +370,14 @@ function Pagination() {
 
 
 
-function Component() {
+function PriceRange() {
   const [values, setValues] = useState([MIN, MAX])
 
   console.log('values: ', values)
   return (
     <div className='flex justify-center items-center mb-3'>
       <div className='w-full'>
-        <h3 className='font-medium mb-5 mt-3'>Price <span className='font-light'>Range</span></h3>
+        <h3 className='font-medium mb-2 mt-3'>Price <span className='font-medium'>Range</span></h3>
         <div className={"values"}>${values[0]}- ${values[1]}</div>
         <small className='font-light mt-2 block text-gray-500'>
           Current Range: ${values[1] - values[0]}
