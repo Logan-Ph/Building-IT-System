@@ -9,6 +9,8 @@ import TestingPage from '../Pages/TestingPage';
 import TestingPage2 from '../Pages/TestingPage2';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
+import DashboardPage from '../Pages/DashboardPage';
+
 
 export default function Router() {
     const Layout = () => {
@@ -57,7 +59,12 @@ export default function Router() {
                 {
                     path:"/test2",
                     element: <TestingPage2 />
+                },
+                {
+                    path:"/dashboard",
+                    element: <DashboardPage/>
                 }
+                
             ]
         }
     ])
