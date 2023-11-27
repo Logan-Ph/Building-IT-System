@@ -2,7 +2,11 @@ import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import '../css/customStyles.css'; 
+import Slider from 'react-slider';
+
+const MIN = 100;
+const MAX = 12000;
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -19,11 +23,6 @@ const subCategories = [
   { name: 'Dress', href: '#' },
 ]
 
-const items = [
-  { id: 1, title: 'Back End Developer', department: 'Engineering', type: 'Full-time', location: 'Remote' },
-  { id: 2, title: 'Front End Developer', department: 'Engineering', type: 'Full-time', location: 'Remote' },
-  { id: 3, title: 'User Interface Designer', department: 'Design', type: 'Full-time', location: 'Remote' },
-]
 
 const filters = [
   {
@@ -293,6 +292,10 @@ export default function Example() {
                       )}
                     </Disclosure>
                   ))}
+
+                  <div className="border-b border-gray-200">
+                  <Component/>
+                  </div>
                 </form>
               </div>
 
@@ -363,4 +366,32 @@ function Pagination() {
       </div>
     </div>
   )
+}
+
+
+
+function Component() {
+  const [values, setValues] = useState([MIN, MAX])
+
+  console.log('values: ', values)
+  return (
+    <div className='flex justify-center items-center mb-3'>
+      <div className='w-full'>
+        <h3 className='font-medium mb-5 mt-3'>Price <span className='font-light'>Range</span></h3>
+        <div className={"values"}>${values[0]}- ${values[1]}</div>
+        <small className='font-light mt-2 block text-gray-500'>
+          Current Range: ${values[1] - values[0]}
+        </small>
+
+        <Slider className={"slider"} 
+                onChange={setValues} 
+                value ={values} 
+                min={MIN} 
+                max={MAX}/>
+      </div>
+    </div>
+
+
+    
+  );
 }
