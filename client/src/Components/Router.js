@@ -9,10 +9,22 @@ import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
 import TestingPage from '../Pages/TestingPage';
+import SearchResultPage from '../Pages/SearchResultPage';
 import TestingPage2 from '../Pages/TestingPage2';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
+import UserProfile from '../Pages/UserProfile';
+import algoliasearch from 'algoliasearch/lite';
+import {
+    InstantSearch,
+} from 'react-instantsearch';
+import { CartProvider } from '../Context/CartContext';
+import { UserProvider } from '../Context/UserContext';
+import Chatbot from "./Chatbot";
+
+const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
+
 
 
 export default function Router() {
@@ -59,6 +71,22 @@ export default function Router() {
                 {
                     path: "/checkout",
                     element: <CheckoutPage />
+                },
+                {
+                    path: "/test",
+                    element: <TestingPage />
+                },
+                {
+                    path: "/test2",
+                    element: <TestingPage2 />
+                },
+                {
+                    path: "/profile",
+                    element: <UserProfile />
+                },
+                {
+                    path: "/search",
+                    element: <SearchResultPage />
                 },
             ]
         },

@@ -2,11 +2,14 @@ import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import '../css/customStyles.css'; 
-import Slider from 'react-slider';
+import '../css/searchresult.css'; 
+import SRProductCard from '../Components/SRProductCard'
+import SRPagination from '../Components/SRPagination'
+import SRPriceRange from '../Components/SRPriceRange'
+import SRStarRating from '../Components/SRStarRating'
 
-const MIN = 0;
-const MAX = 12000;
+
+
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -105,7 +108,7 @@ export default function Example() {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <PriceRange/>
+                    <SRPriceRange/>
 
                     {filters.map((section) => (
                       <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
@@ -225,7 +228,7 @@ export default function Example() {
               <div className='w-[35%] md:pr-16 lg:pr-20'>
                 {/* Filters */}
                 <form className="xs:hidden sm:hidden lg:block wi">
-                  <PriceRange/>
+                  <SRPriceRange/>
                   
                   {filters.map((section) => (
                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
@@ -274,94 +277,20 @@ export default function Example() {
 
               <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
                  {/* Product grid */}
-                <SearchResultPage mai="Hello"/> 
-                <SearchResultPage mai="Hello"/> 
-                <SearchResultPage mai="Hello"/> 
-                <SearchResultPage mai="Hello"/> 
-                <SearchResultPage mai="Hello"/> 
-                <SearchResultPage mai="Hello"/> 
+                <SRProductCard/>
+                <SRProductCard/>
+                <SRProductCard/>
+                <SRProductCard/>
+                <SRProductCard/>
               </div> 
             </div>
-            <Pagination/>
+            <SRPagination/>
           </section>
         </main>
       </div>
-    </div>
-  )
-}
-
-function SearchResultPage(props) 
-{ 
-  const {value, mai}=props
-  return <>
-    <div className="bg-white shadow-md p-4">
-      <div className="group relative">
-        <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-          <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg" alt="Front of men&#039;s Basic Tee in black." className="h-full w-full object-cover object-center lg:h-full lg:w-full"/>
-        </div>
-        <hr className='border border-gray-200 mt-4'></hr>
-        <div className="mt-4 flex justify-between items-center">
-          <div>
-            <h3 className="text-md text-gray-900 line-clamp-1">
-              <a href="#">
-                <span aria-hidden="true" className="absolute inset-0"></span>
-                Basic Tee
-              </a>
-            </h3>
-            <p className="mt-1 text-md font-bold text-[#E61E2A]">$35</p>
-            <p className="mt-1 text-sm font-light text-gray-700">Fashion</p>
-          </div>
-          <p className="text-xs font-light text-gray-500">Rating: 4.9</p>
-        </div>
-      </div>
-    </div>
-
-  </>
-}
-
-function Pagination() {
-  return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 mt-6">
-      <div className="flex flex-1 justify-between sm:hidden">
-        <a
-          href="#"
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          <i class="fa-solid fa-chevron-left"></i>
-        </a>
-        <a
-          href="#"
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          <i class="fa-solid fa-angle-right"></i>
-        </a>
-      </div>
+      <SRStarRating/>
     </div>
   )
 }
 
 
-
-function PriceRange() {
-  const [values, setValues] = useState([MIN, MAX])
-  return (
-    <div className='flex mb-3 border-b border-gray-200 pb-6'>
-      <div className='w-full xs::w-1/2'>
-        <h3 className='font-medium mb-2 mt-3'>Price <span className='font-medium'>Range</span></h3>
-        <div className={"values"}>${values[0]}- ${values[1]}</div>
-        <small className='font-light mt-2 block text-gray-500'>
-          Current Range: ${values[1] - values[0]}
-        </small>
-
-        <Slider className={"slider"} 
-                onChange={setValues} 
-                value ={values} 
-                min={MIN} 
-                max={MAX}/>
-      </div>
-    </div>
-
-
-    
-  );
-}
