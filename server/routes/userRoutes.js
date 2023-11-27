@@ -15,6 +15,11 @@ function authenticateToken(req, res, next) {
     })
 }
 
+function generateAccessToken(user) {
+    const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
+    return accessToken
+}
+
 router.get('/user/:token/verify-email', userController.verifyEmail);
 router.get('/user/:token/forgot-password', userController.resetPassword);
 router.post('/user/:token/forgot-password', userController.postResetPassword);
@@ -38,6 +43,8 @@ router.post('/login', (req, res, next) => {
             if (err) {
                 return next(err);
             }
+            const accessToken = generateAccessToken(user);
+            res.cookie('accessToken', accessToken, { httpOnly: true });
             return res.json({ user: user, message: info.message });
         });
     })(req, res, next);
@@ -58,6 +65,8 @@ router.get('/auth/google/callback', (req, res, next) => {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
                 return;
             }
+            const accessToken = generateAccessToken(user);
+            res.cookie('accessToken', accessToken, { httpOnly: true });
             res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);
         });
     })(req, res);

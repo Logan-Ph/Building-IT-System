@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useSearchBox } from 'react-instantsearch';
+import { useContext } from 'react';
+import { CartContext } from '../Context/CartContext';
+import { UserContext } from '../Context/UserContext';
 
 export default function Header() {
+
+  const {cart} = useContext(CartContext)
+  const {user} = useContext(UserContext)
   const { query, refine } = useSearchBox();
   const [inputValue, setInputValue] = useState(query);
 
@@ -129,8 +135,7 @@ export default function Header() {
 
                     {/* <!-- number on the cart --> */}
                     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      {/* {(cart.value > 99) ? '99+' : cart.value} */}
-                      0
+                      {(cart > 99) ? '99+' : cart}
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
@@ -140,9 +145,9 @@ export default function Header() {
               </div>
             </div>
             {/* if the user login this will disappear */}
-            {/* {!user.value && <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
+            {!user && <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
               <a href='\login' className="text-md font-medium text-black">Sign in</a>
-            </div>} */}
+            </div>}
           </div>
         </div>
 
@@ -176,9 +181,9 @@ export default function Header() {
             </span>
           </div>
 
-          {/* {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+          {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
             Become a vendor
-          </a>} */}
+          </a>}
         </div>
       </div>
 

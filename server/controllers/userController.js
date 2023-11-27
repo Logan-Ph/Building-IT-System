@@ -10,11 +10,6 @@ const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
-function generateAccessToken(user) {
-  const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
-  return accessToken
-}
-
 function sendEmailVerification(userEmail) {
   let config = {
     service: 'gmail',
@@ -58,8 +53,6 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
-    const accessToken = generateAccessToken(req.user);
-    res.cookie('accessToken', accessToken, { httpOnly: true });
     const cart = await Cart.findOne({ userID: req.user._id })
     res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
   } else {

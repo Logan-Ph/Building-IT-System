@@ -1,4 +1,62 @@
-export default function ProductCard({product}) {
+import axios from "axios";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { CartContext } from "../Context/CartContext";
+
+export default function ProductCard({ product }) {
+    const {cart, setCart} = useContext(CartContext)
+    const [error, setError] = useState('')
+    const [msg, setMsg] = useState('')
+
+    const notify = useCallback(() => {
+        if (error) {
+            toast.error(error, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+        }
+
+        if (msg) {
+            toast.success(msg, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+        }
+    }, [error, msg]);
+
+    useEffect(() => {
+        if (error || msg) {
+            notify();
+        }
+    }, [error, msg, notify]);
+
+
+    const addProduct = async (productId) => {
+        error && notify();
+        msg && notify();
+        try {
+            const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { withCredentials: true });
+            setCart(res.data.length)
+            setMsg(res.data.msg);
+            setError('');
+        } catch (er) {
+            setError(er.response.data.error);
+            setMsg('');
+        }
+    }
+
     return (<div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" key={product._id}>
         <div className="relative">
             <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px]">
@@ -29,6 +87,6 @@ export default function ProductCard({product}) {
                 <div className="text-xs text-gray-500 block" >Rating {product.ratings}</div>
             </div>
         </div>
-        <span className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>
+        <span onClick={() => addProduct(product._id)} className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>
     </div>)
 }

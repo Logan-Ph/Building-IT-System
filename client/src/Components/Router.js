@@ -17,6 +17,8 @@ import algoliasearch from 'algoliasearch/lite';
 import {
     InstantSearch,
 } from 'react-instantsearch';
+import { CartProvider } from '../Context/CartContext';
+import { UserProvider } from '../Context/UserContext';
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
@@ -95,6 +97,10 @@ export default function Router() {
     ])
 
     return (
-        <RouterProvider router={BrowserRoutes} />
+        <CartProvider>
+            <UserProvider>
+                <RouterProvider router={BrowserRoutes} />
+            </UserProvider>
+        </CartProvider>
     )
 }
