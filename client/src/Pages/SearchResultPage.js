@@ -15,49 +15,42 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ]
-const subCategories = [
-  { name: 'Shirt', href: '#' },
-  { name: 'Jeans', href: '#' },
-  { name: 'Pants', href: '#' },
-  { name: 'Jacket', href: '#' },
-  { name: 'Dress', href: '#' },
-]
 
 
 const filters = [
   {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
-  },
-  {
     id: 'category',
     name: 'Category',
     options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
+      { value: 'househole appliances', label: 'Househole Appliances', checked: false },
+      { value: 'electronics', label: 'Electronics', checked: false },
+      { value: 'fashion', label: 'Fashon', checked: true },
+      { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
+      { value: 'baby toys', label: 'Baby Toys', checked: false },
     ],
   },
   {
-    id: 'size',
-    name: 'Size',
+    id: 'location',
+    name: 'Location',
     options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
+      { value: 'Ha Noi Capital City', label: 'Ha Noi Capital City', checked: false },
+      { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City', checked: false },
+      { value: 'Da Nang City', label: 'Da Nang City', checked: false },
+    ],
+  },
+  {
+    id: 'rating',
+    name: 'Rating',
+    options: [
+      { value: '5.0', label: 'Rating 5.0', checked: false },
+      { value: '4.5', label: 'Rating 4.5', checked: false },
+      { value: '4.0', label: 'Rating 4.0', checked: true },
+      { value: '3.5', label: 'Rating 3.5', checked: false },
+      { value: '3.0', label: 'Rating 3.0', checked: false },
+      { value: '2.5', label: 'Rating 2.5', checked: false },
+      { value: '2.0', label: 'Rating 2.0', checked: false },
+      { value: '1.5', label: 'Rating 1.5', checked: false },
+      { value: '1.0', label: 'Rating 1.0', checked: false },
     ],
   },
 ]
@@ -229,7 +222,7 @@ export default function Example() {
             </h2>
 
             <div className="flex">
-              <div className='w-[35%] md:20px lg:pr-24'>
+              <div className='w-[35%] md:pr-16 lg:pr-20'>
                 {/* Filters */}
                 <form className="xs:hidden sm:hidden lg:block wi">
                   <PriceRange/>
@@ -279,7 +272,7 @@ export default function Example() {
                 </form>
               </div>
 
-              <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-8'>
+              <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
                  {/* Product grid */}
                 <SearchResultPage mai="Hello"/> 
                 <SearchResultPage mai="Hello"/> 
@@ -289,7 +282,6 @@ export default function Example() {
                 <SearchResultPage mai="Hello"/> 
               </div> 
             </div>
-
             <Pagination/>
           </section>
         </main>
@@ -353,8 +345,8 @@ function Pagination() {
 function PriceRange() {
   const [values, setValues] = useState([MIN, MAX])
   return (
-    <div className='flex justify-center items-center mb-3 border-b border-gray-200 pt-3 py-6'>
-      <div className='w-full'>
+    <div className='flex mb-3 border-b border-gray-200 pb-6'>
+      <div className='w-full xs::w-1/2'>
         <h3 className='font-medium mb-2 mt-3'>Price <span className='font-medium'>Range</span></h3>
         <div className={"values"}>${values[0]}- ${values[1]}</div>
         <small className='font-light mt-2 block text-gray-500'>
