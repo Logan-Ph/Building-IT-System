@@ -112,16 +112,7 @@ export default function Example() {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <h3 className="sr-only">Categories</h3>
-                    <ul role="list" className="px-2 py-3 font-medium text-gray-900">
-                      {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                    <PriceRange/>
 
                     {filters.map((section) => (
                       <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
@@ -238,18 +229,11 @@ export default function Example() {
             </h2>
 
             <div className="flex">
-              <div className='md:pr-20 lg:pr-24 divide-x'>
-              {/* Filters */}
-                <form className="xs:hidden sm:hidden lg:block">
-                  <h3 className="sr-only">Categories</h3>
-                  <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 md:pr-20 pr-24 text-md font-medium text-gray-900">
-                    {subCategories.map((category) => (
-                      <li key={category.name}>
-                        <a href={category.href}>{category.name}</a>
-                      </li>
-                    ))}
-                  </ul>
-
+              <div className='w-[35%] md:20px lg:pr-24'>
+                {/* Filters */}
+                <form className="xs:hidden sm:hidden lg:block wi">
+                  <PriceRange/>
+                  
                   {filters.map((section) => (
                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                       {({ open }) => (
@@ -292,10 +276,6 @@ export default function Example() {
                       )}
                     </Disclosure>
                   ))}
-
-                  <div className="border-b border-gray-200">
-                  <PriceRange/>
-                  </div>
                 </form>
               </div>
 
@@ -372,10 +352,8 @@ function Pagination() {
 
 function PriceRange() {
   const [values, setValues] = useState([MIN, MAX])
-
-  console.log('values: ', values)
   return (
-    <div className='flex justify-center items-center mb-3'>
+    <div className='flex justify-center items-center mb-3 border-b border-gray-200 pt-3 py-6'>
       <div className='w-full'>
         <h3 className='font-medium mb-2 mt-3'>Price <span className='font-medium'>Range</span></h3>
         <div className={"values"}>${values[0]}- ${values[1]}</div>

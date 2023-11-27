@@ -1713,6 +1713,10 @@ select {
   margin-top: auto;
 }
 
+.mr-20 {
+  margin-right: 5rem;
+}
+
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
@@ -2013,6 +2017,22 @@ select {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[100px\] {
+  width: 100px;
+}
+
+.w-\[500px\] {
+  width: 500px;
+}
+
+.w-\[5000px\] {
+  width: 5000px;
+}
+
+.w-\[35\%\] {
+  width: 35%;
 }
 
 .min-w-0 {
@@ -3624,6 +3644,10 @@ select {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.pt-3 {
+  padding-top: 0.75rem;
 }
 
 .text-left {
