@@ -1,4 +1,21 @@
+import React, { useState } from 'react';
+import { useSearchBox } from 'react-instantsearch';
+import { useContext } from 'react';
+import { CartContext } from '../Context/CartContext';
+import { UserContext } from '../Context/UserContext';
+
 export default function Header() {
+
+  const {cart} = useContext(CartContext)
+  const {user} = useContext(UserContext)
+  const { query, refine } = useSearchBox();
+  const [inputValue, setInputValue] = useState(query);
+
+  function setQuery(newQuery) {
+    setInputValue(newQuery);
+
+    refine(newQuery);
+  }
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -44,6 +61,7 @@ export default function Header() {
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
+                onChange={(e) => setQuery(e.currentTarget.value)}
               />
             </div>
             <div className='flex items-center'>
@@ -67,7 +85,7 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-lg hover:shadow-3xl bg-blue-400 transition duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -86,7 +104,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-md hover:shadow-2xl transition duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -104,7 +122,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <a href='/checkout' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -117,19 +135,19 @@ export default function Header() {
 
                     {/* <!-- number on the cart --> */}
                     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      10
+                      {(cart > 99) ? '99+' : cart}
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
                     Cart
                   </span>
-                </div>
+                </a>
               </div>
             </div>
             {/* if the user login this will disappear */}
-            <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
+            {!user && <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
               <a href='\login' className="text-md font-medium text-black">Sign in</a>
-            </div>
+            </div>}
           </div>
         </div>
 
@@ -137,8 +155,8 @@ export default function Header() {
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Best seller
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
+              Best Seller
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
@@ -163,9 +181,9 @@ export default function Header() {
             </span>
           </div>
 
-          <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
-            Becoma a vendor
-          </a>
+          {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+            Become a vendor
+          </a>}
         </div>
       </div>
 
@@ -175,7 +193,7 @@ export default function Header() {
         <div className="">
           <div className="container flex flex-col mx-auto bg-white ">
             <aside
-              className="group/sidebar flex flex-col shrink-0 lg:w-[250px] w-[200px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-[#222160] border-r border-r-dashed border-r-neutral-200 sidenav fixed-start loopple-fixed-start"
+              className="group/sidebar flex flex-col shrink-0 lg:w-[280px] md:w-[280px]  sm:w-[280px] xs:w-[200px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-[#222160] border-r border-r-dashed border-r-neutral-200 sidenav fixed-start loopple-fixed-start"
               id="sidenav-main"
             >
               <div className="flex shrink-0 px-8 items-center justify-between h-[96px]">
@@ -256,13 +274,13 @@ export default function Header() {
               <div className="hidden border-b border-dashed lg:block  border-neutral-200"></div>
 
               <div className="relative pl-3 my-5 ">
-                <div className="flex flex-col w-full font-medium text-[12.5px]">
+                <div className="flex flex-col w-full font-medium text-[12.5px] ">
                   {/* <!-- menu item --> */}
                   <div>
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Best seller
                       </a>
@@ -274,7 +292,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         New Releases
                       </a>
@@ -283,10 +301,10 @@ export default function Header() {
 
                   {/* <!-- menu item --> */}
                   <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem] ">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Electronics
                       </a>
@@ -298,7 +316,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Beauty & Personal Care
                       </a>
@@ -310,7 +328,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Household Appliances
                       </a>
@@ -322,7 +340,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Fashion
                       </a>
@@ -334,7 +352,7 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Entertainment
                       </a>
@@ -346,14 +364,27 @@ export default function Header() {
                     <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
                       <a
                         href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
+                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
                       >
                         Toys & Games
                       </a>
                     </span>
                   </div>
+                  
                 </div>
+                
               </div>
+              
+              <div className="mt-20">
+              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+              <span className="text-md font-medium text-black">Sign in</span>
+              </div>
+              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
+              <span className="text-md font-medium text-black">Become a vendor</span>
+            </div>
+              </div>
+             
+            
             </aside>
           </div>
         </div>
@@ -362,4 +393,3 @@ export default function Header() {
   );
 }
 
-// Burger menus

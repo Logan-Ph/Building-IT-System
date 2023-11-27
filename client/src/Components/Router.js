@@ -1,3 +1,4 @@
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import Homepage from '../Pages/HomePage';
@@ -7,20 +8,23 @@ import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
+import TestingPage from '../Pages/TestingPage';
+import TestingPage2 from '../Pages/TestingPage2';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
-import SearchResultPage from "../Pages/SearchResultPage";
 
 
 export default function Router() {
     const Layout = ({ header }) => {
         return (
             <>
-                {header}
-                <Outlet />
-                <Footer />
+                <InstantSearch searchClient={searchClient} indexName="rBuy">
+                    {header}
+                    <Outlet />
+                    <Chatbot />
+                    <Footer />
+                </InstantSearch>
             </>
         )
     }
@@ -56,10 +60,6 @@ export default function Router() {
                     path: "/checkout",
                     element: <CheckoutPage />
                 },
-                {
-                    path: "/search-result",
-                    element: <SearchResultPage />
-                },
             ]
         },
         {
@@ -83,6 +83,10 @@ export default function Router() {
     ])
 
     return (
-        <RouterProvider router={BrowserRoutes} />
+        <CartProvider>
+            <UserProvider>
+                <RouterProvider router={BrowserRoutes} />
+            </UserProvider>
+        </CartProvider>
     )
 }
