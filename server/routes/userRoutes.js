@@ -61,6 +61,7 @@ router.get('/auth/google/callback', (req, res, next) => {
     })(req, res);
 });
 router.post('/checkout', userController.placeOrder);
+router.get('/add-product/:id', userController.addProduct)
 router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);

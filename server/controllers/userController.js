@@ -2,11 +2,12 @@ const User = require('../models/user')
 const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
+const Cart = require('../models/cart')
+const Order = require('../models/order')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const passport = require('passport')
+const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
-const user = require('../models/user')
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
@@ -293,10 +294,76 @@ exports.verifyEmail = async (req, res) => {
     return res.status(200).json("success")
   })
 }
+
+// Place the Order
 exports.placeOrder = async (req, res) => {
+  try {
+    const { userID } = req.body;
 
+    // Find the user's cart
+    const userCart = await Cart.findOne({ userID }).populate('products.product');
+
+    if (!userCart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+
+    // Create an order based on the user's cart
+    const order = new Order({
+      cart: userCart._id,
+      customerInfo: {
+        name: req.body.customerName,
+        email: req.body.customerEmail,
+        address: req.body.customerAddress,
+        phone: req.body.customerPhone
+      },
+      products: userCart.products.map((cartItem) => ({
+        product: cartItem.product._id,
+        quantity: cartItem.quantity,
+        vendorInfo: {
+          name: cartItem.product.owner.businessName || '',
+          email: cartItem.product.owner.email || '',
+          phone: cartItem.product.owner.phoneNumber ||''
+        },
+      })),
+    });
+
+    await order.save();
+
+  
+    await userCart.clearCart();
+
+    res.json({ success: true, message: 'Order placed successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error placing order' });
+  }
+};
+
+
+
+exports.addProduct = async (req, res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
+  }
+  const cart = await Cart.findOne({ userID: req.user._id })
+
+  if (!cart) {
+    const newCart = new Cart({
+      userID: new mongoose.Types.ObjectId(req.user._id),
+      products: [{
+        product: new mongoose.Types.ObjectId(req.params.id),
+        quantity: 1
+      }]
+    })
+    await newCart.save()
+  } else {
+    await cart.addProduct(
+      await Product.findById(req.params.id),
+      1
+    );
+  }
+  return res.status(200).json({ msg: "added to cart"})
 }
-
 
 exports.logout = (req, res) => {
   req.session.destroy();

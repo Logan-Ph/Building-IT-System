@@ -5,12 +5,6 @@ import 'react-toastify/dist/ReactToastify.css'
     
 export default function CheckoutPage() {
 
-
-
-
-
-
-
   return (
     <>
       <section>

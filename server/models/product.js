@@ -2,10 +2,11 @@ const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema({
     owner: {
-        type: String,
-        require: true,
-    },
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vendor',
+        required: true,
+      },
+      
     product_name: {
         type: String,
         require: true,
