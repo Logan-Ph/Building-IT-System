@@ -3,6 +3,7 @@ const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
+const Order = require('../models/order')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
@@ -311,6 +312,50 @@ exports.addProduct = async (req, res) => {
   }
   return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
 }
+
+//  Place the Order
+exports.placeOrder = async (req, res) => {
+  try {
+    const { userID } = req.body;
+
+    // Find the user's cart
+    const userCart = await Cart.findOne({ userID }).populate('products.product');
+
+    if (!userCart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+
+    // Create an order based on the user's cart
+    const order = new Order({
+      cart: userCart._id,
+      customerInfo: {
+        name: req.body.customerName,
+        email: req.body.customerEmail,
+        address: req.body.customerAddress,
+        phone: req.body.customerPhone
+      },
+      products: userCart.products.map((cartItem) => ({
+        product: cartItem.product._id,
+        quantity: cartItem.quantity,
+        vendorInfo: {
+          name: cartItem.product.owner.businessName || '',
+          email: cartItem.product.owner.email || '',
+          phone: cartItem.product.owner.phoneNumber ||''
+        },
+      })),
+    });
+
+    await order.save();
+
+  
+    await userCart.clearCart();
+
+    res.json({ success: true, message: 'Order placed successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error placing order' });
+  }
+};
 
 exports.logout = (req, res) => {
   req.session.destroy();
