@@ -6,8 +6,8 @@ import { UserContext } from '../Context/UserContext';
 
 export default function Header() {
 
-  const {cart} = useContext(CartContext)
-  const {user} = useContext(UserContext)
+  const { cart } = useContext(CartContext)
+  const { user } = useContext(UserContext)
   const { query, refine } = useSearchBox();
   const [inputValue, setInputValue] = useState(query);
 
@@ -43,18 +43,16 @@ export default function Header() {
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
             {/* <!-- logo --> */}
-            <div className="flex items-center lg:ml-10 ">
-              <a href='\'>
-                <img
-                  src={require('./images/logo1.png')}
-                  className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
-                  alt="logo"
-                />
-              </a>
-              <a href='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
+            <a className="flex items-center lg:ml-10 " href='\'>
+              <img
+                src={require("./images/logo1.png")}
+                className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
+                alt="logo"
+              />
+              <span href='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
                 rBuy
-              </a>
-            </div>
+              </span>
+            </a>
 
             <div className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
               <input
@@ -63,10 +61,25 @@ export default function Header() {
                 placeholder="Enter "
                 onChange={(e) => setQuery(e.currentTarget.value)}
               />
+              <div class="grid place-items-center h-full w-12 text-gray-300">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
             </div>
-            <div className='flex items-center'>
 
-
+            <div className="flex items-center">
               <div className="ml-2 flex">
                 <div className="mr-2 flex">
                   <div className="lg:hidden flex items-center">
@@ -203,7 +216,7 @@ export default function Header() {
                 >
                   <img
                     alt="Logo"
-                    src={require('./images/logo1.png')}
+                    src={require("./images/logo1.png")}
                     className="inline xs:w-8 sm:w-10 md:w-12 mb-2 "
                   />
                   <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
@@ -370,21 +383,21 @@ export default function Header() {
                       </a>
                     </span>
                   </div>
-                  
                 </div>
-                
               </div>
-              
+
               <div className="mt-20">
-              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
-              <span className="text-md font-medium text-black">Sign in</span>
+                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+                  <span className="text-md font-medium text-black">
+                    Sign in
+                  </span>
+                </div>
+                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
+                  <span className="text-md font-medium text-black">
+                    Become a vendor
+                  </span>
+                </div>
               </div>
-              <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
-              <span className="text-md font-medium text-black">Become a vendor</span>
-            </div>
-              </div>
-             
-            
             </aside>
           </div>
         </div>
@@ -392,4 +405,3 @@ export default function Header() {
     </section>
   );
 }
-

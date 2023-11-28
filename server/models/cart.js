@@ -24,19 +24,19 @@ cartSchema.methods.addProduct = function (product, quantity) {
     const productIndex = this.products.findIndex(p => {
         return p.product._id.equals(product._id);
     });
-
+    const parsedQuantity = Number(quantity);
     if (productIndex >= 0) {
         // product exists in cart, update quantity
-        this.products[productIndex].quantity += quantity;
+        this.products[productIndex].quantity += parsedQuantity;
     } else {
         // new product, add to cart    
-        this.products.push({ product, quantity });
+        this.products.push({ product, parsedQuantity });
     }
 
     return this.save();
 }
 
-cartSchema.methods.getTotalProducts = function(){
+cartSchema.methods.getTotalProducts = function () {
     return this.products.reduce((total, p) => {
         return total + p.quantity;
     }, 0);
