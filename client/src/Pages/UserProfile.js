@@ -1,50 +1,23 @@
 import '../css/profile.css'
+import { useState } from 'react'
 export default function UserProfile() {
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebarDropdown = document.querySelectorAll('.sidebar-dropdown')
-        const sidebar = document.getElementById('sidebar')
-        const toggleSidebar = document.querySelector('.toggle-sidebar')
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState(null);
+    const [activeTab, setActiveTab] = useState("profile");
+    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled'];
 
-        sidebarDropdown.forEach(item => {
-            const toggle = item.previousElementSibling
+    const handleSidebarToggle = () => {
+        setIsSidebarCollapsed(!isSidebarCollapsed);
+        setActiveDropdown(null); // Hide dropdown when sidebar is toggled
+    };
 
-            toggle.addEventListener('click', function (e) {
-                e.preventDefault()
+    const handleTabClick = (tab) => {
+        setActiveTab(tab);
+    };
 
-                sidebar.classList.remove('sidebar-collapse')
-
-                item.classList.toggle('hidden')
-                this.classList.toggle('active')
-            })
-        })
-
-        toggleSidebar.addEventListener('click', function () {
-            sidebar.classList.toggle('sidebar-collapse')
-
-            sidebarDropdown.forEach(item => {
-                const toggle = item.previousElementSibling
-                item.classList.add('hidden')
-                toggle.classList.remove('active')
-            })
-        })
-
-        // TAB
-        const tabIndicator = document.querySelectorAll('[data-toggle="tab"]')
-        const tabContent = document.querySelectorAll('.tab-content')
-        
-        tabIndicator.forEach(item => {
-            console.log(item)
-            item.addEventListener('click', function (e) {
-                e.preventDefault()
-
-                tabIndicator.forEach(i => i.classList.remove('active'))
-                tabContent.forEach(i => i.classList.add('hidden'))
-
-                this.classList.add('active')
-                document.querySelector(this.dataset.target).classList.remove('hidden')
-            })
-        })
-    })
+    const handleDropdownToggle = (index) => {
+        setActiveDropdown(activeDropdown === index ? null : index);
+    };
 
     return (
         <>
@@ -54,15 +27,14 @@ export default function UserProfile() {
                     <div className="flex items-center h-full gap-12">
 
                         {/* <!-- Add this Toggle-bar to the nav-bar when completed --> */}
-                        <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar'></i>
+                        <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar' onClick={handleSidebarToggle}></i>
 
                     </div>
                 </nav>
                 {/* <!-- NAVBAR --> */}
 
                 {/* <!-- SIDEBAR --> */}
-                <div className="fixed top-16 transition-all overflow-hidden left-0 w-64 bg-white border-r border-gray-200 bottom-0 sidebar-collapse z-40" id="sidebar">
-
+                <div className={`fixed top-16 transition-all overflow-hidden left-0 w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
                     <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
                         <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
@@ -80,29 +52,16 @@ export default function UserProfile() {
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="#" onClick={() => handleDropdownToggle(0)}>
                                     <i className='bx bx-receipt sidebar-menu-icon'></i>
                                     Order
                                 </a>
-                                <ul className="sidebar-dropdown hidden ml-4 border-l border-blue-600">
-                                    <li>
-                                        <a href="#">All</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Waiting For Payment</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Processing</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Being Delivered</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Completed</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Cancelled</a>
-                                    </li>
+                                <ul className={`sidebar-dropdown ${activeDropdown === 0 ? '' : 'hidden'} ml-4 border-l border-blue-600`}>
+                                    {dropdownItems.map((item, index) => (
+                                        <li key={index} className={index === 0 ? 'active' : ''}>
+                                            <a href="#">{item}</a>
+                                        </li>
+                                    ))}
                                 </ul>
                             </li>
                             <li>
@@ -137,19 +96,19 @@ export default function UserProfile() {
                                 <h2 className="text-2xl font-semibold mb-2">Ninh Pho</h2>
                                 <span className="text-lg text-gray-500">_ninhcute2023_</span>
                             </div>
-                            <a href="#" className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto hidden">
+                            <a href="#" className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
                                 <i className='bx bx-edit-alt' ></i>
                                 Save changes
                             </a>
                         </div>
                         <div className="mt-4">
                             <div className="flex items-center gap-8 tab-indicator border-b border-gray-200">
-                                <span data-toggle="tab" data-target="#profile" className="active">Profile</span>
-                                <span data-toggle="tab" data-target="#addresses">Addresses</span>
-                                <span data-toggle="tab" data-target="#changepassword">Password</span>
-                                <span data-toggle="tab" data-target="#notisetting">Notifications</span>
+                                <span onClick={() => handleTabClick("profile")} className={activeTab === "profile" ? "active" : ""}>Profile</span>
+                                <span onClick={() => handleTabClick("addresses")} className={activeTab === "addresses" ? "active" : ""}>Addresses</span>
+                                <span onClick={() => handleTabClick("changepassword")} className={activeTab === "changepassword" ? "active" : ""}>Password</span>
+                                <span onClick={() => handleTabClick("notisetting")} className={activeTab === "notisetting" ? "active" : ""}>Notifications</span>
                             </div>
-                            <div className="tab-content mt-4" id="profile">
+                            {activeTab === "profile" && <div className="tab-content mt-4" id="profile">
                                 <h2 className="text-2xl font-semibold">My Profile</h2>
                                 <div className="border-b border-gray-900/10 pb-12">
                                     <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
@@ -169,7 +128,7 @@ export default function UserProfile() {
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-4">
+                                        <div className="sm:col-span-3">
                                             <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                             <div className="mt-2">
                                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
@@ -224,13 +183,11 @@ export default function UserProfile() {
                                                 <input id="dob" name="dob" type="date" autocomplete="bday" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
+                            </div>}
 
-                            </div>
-
-                            <div className="tab-content mt-4 hidden" id="addresses">
+                            {activeTab === "addresses" && <div className="tab-content mt-4" id="addresses">
                                 <h2 className="text-2xl font-semibold">My Addresses</h2>
                                 <div className="border-b border-gray-900/10 pb-12">
                                     <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
@@ -278,9 +235,9 @@ export default function UserProfile() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
 
-                            <div className="tab-content mt-4 hidden" id="changepassword">
+                            {activeTab === "changepassword" && <div className="tab-content mt-4" id="changepassword">
                                 <h2 className="text-2xl font-semibold">My Password</h2>
                                 <div className="border-b border-gray-900/10 pb-12">
                                     <h2 className="text-base font-semibold leading-7 text-gray-900">Set Password</h2>
@@ -307,7 +264,8 @@ export default function UserProfile() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="tab-content mt-4" id="notisetting">
+                            }
+                            {activeTab === "notisetting" && <div className="tab-content mt-4" id="notisetting">
                                 <h2 className="text-2xl font-semibold">Notification Settings</h2>
                                 <div className="border-b border-gray-900/10 pb-12">
                                     <h2 className="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
@@ -386,6 +344,7 @@ export default function UserProfile() {
                                     </div>
                                 </div>
                             </div>
+                            }
                         </div>
                     </div>
                 </div>
