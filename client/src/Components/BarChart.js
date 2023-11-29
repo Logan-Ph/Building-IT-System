@@ -4,9 +4,11 @@ import 'chart.js/auto' //khong duoc xoa
 
 
 export default function BarChart() {
+  
   return (
     <div>
       <Line
+      
         data={{
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
           datasets: [
