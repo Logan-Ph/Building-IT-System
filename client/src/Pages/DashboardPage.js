@@ -9,13 +9,12 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div className="flex ">
+      <div className="flex">
         <Sidebar />
 
-        <div class=" bg-white w-full px-20  text-slate-300 relative py-4">
+        <div class=" bg-white h-auto w-full px-20  text-slate-300 relative py-4 ">
           <div class="">
-            <div id="content" class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto"
-            >
+            <div id="content" class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto">
               <div id="24h">
                 <h1 class="font-bold  p-4 uppercase text-black text-2xl">Business Insight</h1>
                 <div class="flex flex-wrap ">
@@ -38,9 +37,10 @@ export default function DashboardPage() {
                             </div>
                           </div>
                         </div>
-                        <p class="text-sm text-gray-400 mt-4">
-                          <span class="text-emerald-500 mr-2">
-                            <i class="fas fa-arrow-up"></i> 2,99%{" "}
+                        <hr class="mt-4 mb-2 w-full border-gray-300" />
+                        <p class="text-sm text-gray-400 ">
+                          <span class="text-emerald-500 ">
+                     
                           </span>
                           <span class="whitespace-nowrap">
                             {" "}
@@ -65,13 +65,13 @@ export default function DashboardPage() {
                           </div>
                           <div class="relative w-auto pl-4 flex-initial">
                             <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-pink-500">
-                              <i class="fas fa-chart-pie"></i>
-                            </div>
+                            <i class="fa-solid fa-money-bill-wave"></i>                            </div>
                           </div>
                         </div>
-                        <p class="text-sm text-gray-400 mt-4">
-                          <span class="text-red-500 mr-2">
-                            <i class="fas fa-arrow-down"></i> 4,01%
+                        <hr class="mt-4 mb-2 w-full border-gray-300" />
+                        <p class="text-sm text-gray-400">
+                          <span class="text-red-500">
+                         
                           </span>
                           <span class="whitespace-nowrap">
                             {" "}
@@ -88,7 +88,7 @@ export default function DashboardPage() {
                         <div class="flex flex-wrap">
                           <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
                             <h5 class="text-gray-400 uppercase font-bold text-xs">
-                              Sales
+                              Followers
                             </h5>
                             <span class="font-semibold text-xl text-gray-700">
                               901
@@ -100,13 +100,12 @@ export default function DashboardPage() {
                             </div>
                           </div>
                         </div>
-                        <p class="text-sm text-gray-400 mt-4">
-                          <span class="text-red-500 mr-2">
-                            <i class="fas fa-arrow-down"></i> 1,25%{" "}
-                          </span>
+                        <hr class="mt-4 mb-2 w-full border-gray-300" />
+                        <p class="text-sm text-gray-400 ">
+        
                           <span class="whitespace-nowrap">
-                            {" "}
-                            Since yesterday{" "}
+                            
+                            Since yesterday
                           </span>
                         </p>
                       </div>
@@ -119,8 +118,9 @@ export default function DashboardPage() {
                         <div class="flex flex-wrap">
                           <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
                             <h5 class="text-gray-400 uppercase font-bold text-xs">
-                              Performance
+                            Profit
                             </h5>
+                            
                             <span class="font-semibold text-xl text-gray-700">
                               51.02%{" "}
                             </span>
@@ -131,9 +131,10 @@ export default function DashboardPage() {
                             </div>
                           </div>
                         </div>
-                        <p class="text-sm text-gray-400 mt-4">
-                          <span class="text-emerald-500 mr-2">
-                            <i class="fas fa-arrow-up"></i> 12%{" "}
+                        <hr class="mt-4 mb-2 w-full border-gray-300" />
+                        <p class="text-sm text-gray-400">
+                          <span class="text-emerald-500">
+                            
                           </span>
                           <span class="whitespace-nowrap">
                             {" "}

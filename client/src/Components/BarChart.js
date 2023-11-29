@@ -1,6 +1,6 @@
 import React from 'react'
 import { Line, defaults } from 'react-chartjs-2'
-import Chart from 'chart.js/auto' //khong duoc xoa
+import 'chart.js/auto' //khong duoc xoa
 
 
 export default function BarChart() {

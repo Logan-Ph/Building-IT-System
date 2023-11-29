@@ -34,7 +34,7 @@ export default function Sidebar() {
     };
     return (
         <>
-                <Card className="h-screen w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-slate-200">
+                <Card className="h-screen w-full max-w-[20rem] px-4 shadow-xl shadow-blue-gray-900/5 bg-slate-200">
           <div className="mb-2 flex items-center gap-4 p-4">
             <img
               src="https://docs.material-tailwind.com/img/logo-ct-dark.png"
