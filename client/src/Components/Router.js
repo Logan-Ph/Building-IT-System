@@ -8,6 +8,7 @@ import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
+import SearchResultPage from '../Pages/SearchResultPage';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
@@ -76,8 +77,11 @@ export default function Router() {
                     path: "/dashboard",
                     element: <DashboardPage />
                 },
-
-            ]
+                {
+                    path: "/search",
+                    element: <SearchResultPage />
+                }
+            ],
         },
         {
             path: "/",
