@@ -12,7 +12,7 @@ export default function ToDoList() {
                           <span class="font-bold text-xl text-blue-700">
                               334,100
                             </span>
-                            <h5 class="text-black uppercase font-bold text-xs">
+                            <h5 class="text-black uppercase font-semibold text-sm">
                               {" "}
                               Unpaid
                             </h5>
@@ -33,7 +33,7 @@ export default function ToDoList() {
                           <span class="font-bold text-xl text-blue-700">
                               334,100
                             </span>
-                            <h5 class="text-black uppercase font-bold text-xs">
+                            <h5 class="text-black uppercase font-semibold text-sm">
                               {" "}
                               TO-PROCESS SHIPMENT 
                             </h5>
@@ -54,7 +54,7 @@ export default function ToDoList() {
                           <span class="font-bold text-xl text-blue-700">
                               334,100
                             </span>
-                            <h5 class="text-black uppercase font-bold text-xs">
+                            <h5 class="text-black uppercase font-semibold text-sm">
                               {" "}
                               PROCESS SHIPMENT
                             </h5>
@@ -75,7 +75,7 @@ export default function ToDoList() {
                           <span class="font-bold text-xl text-blue-700">
                               334,100
                             </span>
-                            <h5 class="text-black uppercase font-bold text-xs">
+                            <h5 class="text-black uppercase font-semibold text-sm">
                               {" "}
                               PENDING CANCELLATION
                             </h5>
@@ -100,7 +100,7 @@ export default function ToDoList() {
                           <span class="font-bold text-xl text-blue-700">
                               334,100
                             </span>
-                            <h5 class="text-black uppercase font-bold text-xs">
+                            <h5 class="text-black uppercase font-semibold text-sm">
                               {" "}
                               SOLD OUT PRODUCTS
                             </h5>

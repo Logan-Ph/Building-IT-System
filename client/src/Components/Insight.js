@@ -9,7 +9,7 @@ export default function Insight() {
                       <div class="flex-auto p-4">
                         <div class="flex flex-wrap">
                           <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 class="text-gray-400 uppercase font-bold text-xs">
+                            <h5 class="text-gray-400 uppercase font-bold text-sm">
                               {" "}
                               Total Sales
                             </h5>
@@ -42,7 +42,7 @@ export default function Insight() {
                       <div class="flex-auto p-4">
                         <div class="flex flex-wrap">
                           <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 class="text-gray-400 uppercase font-bold text-xs">
+                            <h5 class="text-gray-400 uppercase font-bold text-sm">
                               Total Income
                             </h5>
                             <span class="font-semibold text-xl text-gray-700">
@@ -73,7 +73,7 @@ export default function Insight() {
                       <div class="flex-auto p-4">
                         <div class="flex flex-wrap">
                           <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 class="text-gray-400 uppercase font-bold text-xs">
+                            <h5 class="text-gray-400 uppercase font-bold text-sm">
                               Followers
                             </h5>
                             <span class="font-semibold text-xl text-gray-700">
@@ -103,7 +103,7 @@ export default function Insight() {
                       <div class="flex-auto p-4">
                         <div class="flex flex-wrap">
                           <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-                            <h5 class="text-gray-400 uppercase font-bold text-xs">
+                            <h5 class="text-gray-400 uppercase font-bold text-sm">
                             Profit
                             </h5>
                             
