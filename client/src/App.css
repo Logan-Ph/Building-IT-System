@@ -1680,6 +1680,10 @@ select {
   margin-right: 1.25rem;
 }
 
+.mr-auto {
+  margin-right: auto;
+}
+
 .ms-2 {
   margin-inline-start: 0.5rem;
 }
@@ -1734,10 +1738,6 @@ select {
 
 .mt-auto {
   margin-top: auto;
-}
-
-.mr-auto {
-  margin-right: auto;
 }
 
 .line-clamp-1 {
@@ -2004,10 +2004,6 @@ select {
   width: 80%;
 }
 
-.w-40 {
-  width: 10rem;
-}
-
 .w-48 {
   width: 12rem;
 }
@@ -2048,6 +2044,10 @@ select {
   width: 18px;
 }
 
+.w-\[400px\] {
+  width: 400px;
+}
+
 .w-\[40px\] {
   width: 40px;
 }
@@ -2068,18 +2068,6 @@ select {
 
 .w-full {
   width: 100%;
-}
-
-.w-24 {
-  width: 6rem;
-}
-
-.w-\[200px\] {
-  width: 200px;
-}
-
-.w-\[400px\] {
-  width: 400px;
 }
 
 .min-w-0 {
@@ -2110,6 +2098,10 @@ select {
   max-width: 80rem;
 }
 
+.max-w-\[20rem\] {
+  max-width: 20rem;
+}
+
 .max-w-\[8rem\] {
   max-width: 8rem;
 }
@@ -2135,10 +2127,6 @@ select {
 }
 
 .max-w-xs {
-  max-width: 20rem;
-}
-
-.max-w-\[20rem\] {
   max-width: 20rem;
 }
 
@@ -2373,10 +2361,6 @@ select {
 
 .justify-around {
   justify-content: space-around;
-}
-
-.justify-items-center {
-  justify-items: center;
 }
 
 .gap-1 {
@@ -3840,6 +3824,10 @@ select {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.pl-5 {
+  padding-left: 1.25rem;
 }
 
 .text-left {
@@ -7723,10 +7711,6 @@ select {
   @media (max-width: 575px) {
     .sm\:xs\:flex {
       display: flex;
-    }
-
-    .sm\:xs\:hidden {
-      display: none;
     }
   }
 }
