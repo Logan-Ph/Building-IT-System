@@ -15,6 +15,7 @@ import ForgotPassword from '../Pages/ForgotPasswordPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
 import UserProfile from '../Pages/UserProfile';
+import ManageOrderPage from '../Pages/ManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
 import {
     InstantSearch,
@@ -87,6 +88,10 @@ export default function Router() {
                 {
                     path: "/search",
                     element: <SearchResultPage />
+                },
+                {
+                    path: "/manage-order",
+                    element: <ManageOrderPage />
                 },
             ]
         },
