@@ -12,8 +12,6 @@ import ProductDetailCard from "../Components/ProductDetailCard";
 import ProductDetailComment from "../Components/ProductDetailComment";
 import { ToastContainer } from "react-toastify";
 
-// import { Hits } from 'react-instantsearch';
-// import Hit from '../Components/HitsTemplate';
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
 

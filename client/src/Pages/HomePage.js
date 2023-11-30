@@ -64,7 +64,7 @@ export default function Homepage() {
                 <Slider />
             </div>
 
-            <section className="ml-10 mr-10" >
+            <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col justify-around pb-32 w-full ">
                     {/* Top banner */}
                     <Banner />
@@ -76,16 +76,17 @@ export default function Homepage() {
                         <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
                     </div>
 
-                    <div className="grid xl:grid-cols-8 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
+                    <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
                         {products.map((product) => (
                             <ProductCard product={product} />
                         ))}
                     </div>
                     <div className='flex flex-col items-center my-10'>
-                        <button type="button" class="border-[#FAC800] text-white bg-[#FAC800]   bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
+                        <button type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
                     </div>
                 </div>
-            </section>
+            </main>
+            {/* <SimpleSlider/> */}
         </>
     )
 }

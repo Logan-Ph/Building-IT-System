@@ -101,7 +101,7 @@ export default function ProductDetailCard({ product }) {
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
                                     <a
-                                        href="/product"
+                                        href="\search\query=?"
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                     >
                                         {" "}

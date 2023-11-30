@@ -1,0 +1,33 @@
+.values {
+    margin:0;
+    font-weight: 500;
+    color: #E61E2A;;
+    font-size: 15px;
+}
+
+.slider{
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+    height: 5px;
+    background-color:#FAC800;
+    
+}
+
+.slider .thumb {
+    width: 11px;
+    height: 11px;
+    cursor: grab;
+    background-color: #E61E2A;;
+    border: 2px solid #E61E2A;;
+    top: -1.5px;
+}
+
+input[type="radio"]{
+    display: none;
+}
+
+.star{
+    cursor: pointer;
+    transition: color 200ms;
+}

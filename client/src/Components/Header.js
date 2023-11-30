@@ -3,19 +3,22 @@ import { useSearchBox } from 'react-instantsearch';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { UserContext } from '../Context/UserContext';
+import { Navigate } from 'react-router-dom';
 
 export default function Header() {
-
   const { cart } = useContext(CartContext)
   const { user } = useContext(UserContext)
-  const { query, refine } = useSearchBox();
-  const [inputValue, setInputValue] = useState(query);
+  const { refine } = useSearchBox();
+  const [inputValue, setInputValue] = useState("");
+  const [navigateTo, setNavigateTo] = useState("")
 
-  function setQuery(newQuery) {
-    setInputValue(newQuery);
-
-    refine(newQuery);
+  function submitSearch(e){
+    e.preventDefault();
+    setNavigateTo(`/search/query=${inputValue}`);
+    refine(inputValue)
+    setInputValue("")
   }
+
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -39,6 +42,7 @@ export default function Header() {
 
   return (
     <section>
+      {navigateTo && <Navigate to={navigateTo} replace={true}/>}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
@@ -54,12 +58,13 @@ export default function Header() {
               </span>
             </a>
 
-            <div className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
+            <form onSubmit={submitSearch} className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
               <input
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
-                onChange={(e) => setQuery(e.currentTarget.value)}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.currentTarget.value)}
               />
               <div class="grid place-items-center h-full w-12 text-gray-300">
                 <svg
@@ -77,7 +82,7 @@ export default function Header() {
                   />
                 </svg>
               </div>
-            </div>
+            </form>
 
             <div className="flex items-center">
               <div className="ml-2 flex">

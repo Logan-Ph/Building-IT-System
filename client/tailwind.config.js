@@ -16,7 +16,7 @@ module.exports = {
     ],
     enabled: true
   },
-
+  
   theme: {
     extend: {
       screens: {

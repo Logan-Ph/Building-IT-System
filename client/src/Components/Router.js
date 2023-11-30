@@ -8,6 +8,7 @@ import ProductPage from '../Pages/ProductPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
 import LogInPage from '../Pages/LogInPage';
+import SearchResultPage from '../Pages/SearchResultPage';
 import ForgotPassword from '../Pages/ForgotPasswordPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
@@ -15,7 +16,7 @@ import UserProfile from '../Pages/UserProfile';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/DashboardPage';
 import {
-    InstantSearch,
+    InstantSearch, SortBy,
 } from 'react-instantsearch';
 import { CartProvider } from '../Context/CartContext';
 import { UserProvider } from '../Context/UserContext';
@@ -28,8 +29,15 @@ export default function Router() {
         return (
             <>
                 <InstantSearch searchClient={searchClient} indexName="rBuy">
-                    {header}
-                    <Outlet />
+                    <SortBy items={[
+                        { label: 'Featured', value: 'instant_search' },
+                        { label: 'Price (asc)', value: 'instant_search_price_asc' },
+                        { label: 'Price (desc)', value: 'instant_search_price_desc' },
+                    ]}>
+
+                        {header}
+                        <Outlet />
+                    </SortBy>
                     <Chatbot />
                     <Footer />
                 </InstantSearch>
@@ -76,7 +84,10 @@ export default function Router() {
                     path: "/dashboard",
                     element: <DashboardPage />
                 },
-
+                {
+                    path: '/search/:query',
+                    element: <SearchResultPage />
+                }
             ]
         },
         {
