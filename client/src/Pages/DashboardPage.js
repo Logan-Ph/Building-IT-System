@@ -116,7 +116,7 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div className="flex  ">
+      <div className="flex ">
       <Sidebar>
                 <a href=""> 
             <SidebarItem icon={<Settings size={20} />} text="Dashboard"  />
