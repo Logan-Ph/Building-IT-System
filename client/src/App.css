@@ -1940,6 +1940,10 @@ select {
   max-height: 100%;
 }
 
+.min-h-screen {
+  min-height: 100vh;
+}
+
 .w-0 {
   width: 0px;
 }
@@ -3631,11 +3635,6 @@ select {
 .px-2\.5 {
   padding-left: 0.625rem;
   padding-right: 0.625rem;
-}
-
-.px-20 {
-  padding-left: 5rem;
-  padding-right: 5rem;
 }
 
 .px-3 {
@@ -7195,16 +7194,16 @@ select {
     margin-left: 4rem;
   }
 
+  .md\:mr-32 {
+    margin-right: 8rem;
+  }
+
   .md\:mr-6 {
     margin-right: 1.5rem;
   }
 
   .md\:mt-0 {
     margin-top: 0px;
-  }
-
-  .md\:mr-32 {
-    margin-right: 8rem;
   }
 
   .md\:block {
@@ -7353,49 +7352,12 @@ select {
     padding-bottom: 3rem;
   }
 
-  .md\:px-10 {
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-  }
-
-  .md\:px-8 {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-
-  .md\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
-  .md\:px-14 {
-    padding-left: 3.5rem;
-    padding-right: 3.5rem;
-  }
-
-  .md\:px-20 {
-    padding-left: 5rem;
-    padding-right: 5rem;
-  }
-
   .md\:pl-64 {
     padding-left: 16rem;
   }
 
   .md\:pr-2 {
     padding-right: 0.5rem;
-  }
-
-  .md\:pl-14 {
-    padding-left: 3.5rem;
-  }
-
-  .md\:pl-20 {
-    padding-left: 5rem;
-  }
-
-  .md\:pr-20 {
-    padding-right: 5rem;
   }
 
   .md\:text-2xl {
@@ -7456,6 +7418,11 @@ select {
     grid-column: span 2 / span 2;
   }
 
+  .lg\:mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .lg\:my-6 {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -7464,11 +7431,6 @@ select {
   .lg\:my-8 {
     margin-top: 2rem;
     margin-bottom: 2rem;
-  }
-
-  .lg\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .lg\:mb-0 {
@@ -7569,6 +7531,11 @@ select {
     padding-right: 3.5rem;
   }
 
+  .lg\:px-20 {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
   .lg\:px-9 {
     padding-left: 2.25rem;
     padding-right: 2.25rem;
@@ -7592,11 +7559,6 @@ select {
   .lg\:py-6 {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
-  }
-
-  .lg\:px-20 {
-    padding-left: 5rem;
-    padding-right: 5rem;
   }
 
   .lg\:pl-10 {
