@@ -1940,10 +1940,6 @@ select {
   max-height: 100%;
 }
 
-.min-h-screen {
-  min-height: 100vh;
-}
-
 .w-0 {
   width: 0px;
 }
@@ -2174,13 +2170,13 @@ select {
   transform-origin: 0;
 }
 
-.-translate-x-1\/2 {
-  --tw-translate-x: -50%;
+.-translate-x-1 {
+  --tw-translate-x: -0.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.-translate-x-3 {
-  --tw-translate-x: -0.75rem;
+.-translate-x-1\/2 {
+  --tw-translate-x: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -3700,6 +3696,11 @@ select {
 .py-2\.5 {
   padding-top: 0.625rem;
   padding-bottom: 0.625rem;
+}
+
+.py-20 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 .py-3 {
@@ -7418,11 +7419,6 @@ select {
     grid-column: span 2 / span 2;
   }
 
-  .lg\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .lg\:my-6 {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -7585,6 +7581,10 @@ select {
   }
 
   @media (min-width: 898px) {
+    .lg\:md\:ml-3 {
+      margin-left: 0.75rem;
+    }
+
     .lg\:md\:flex {
       display: flex;
     }
@@ -7608,6 +7608,30 @@ select {
     .lg\:md\:py-12 {
       padding-top: 3rem;
       padding-bottom: 3rem;
+    }
+
+    .lg\:md\:pt-1 {
+      padding-top: 0.25rem;
+    }
+
+    .lg\:md\:text-2xl {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    .lg\:md\:text-lg {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+    .lg\:md\:text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    .lg\:md\:text-base {
+      font-size: 1rem;
+      line-height: 1.5rem;
     }
   }
 }
@@ -7769,6 +7793,10 @@ select {
 
 @media (min-width: 576px) {
   @media (max-width: 575px) {
+    .sm\:xs\:ml-0 {
+      margin-left: 0px;
+    }
+
     .sm\:xs\:flex {
       display: flex;
     }
@@ -7789,9 +7817,19 @@ select {
       flex-direction: column;
     }
 
+    .sm\:xs\:text-sm {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
     .sm\:xs\:text-xl {
       font-size: 1.25rem;
       line-height: 1.75rem;
+    }
+
+    .sm\:xs\:text-xs {
+      font-size: 0.75rem;
+      line-height: 1rem;
     }
   }
 }
