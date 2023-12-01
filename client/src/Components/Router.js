@@ -16,7 +16,7 @@ import UserProfile from '../Pages/UserProfile';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/DashboardPage';
 import {
-    InstantSearch, SortBy,
+    InstantSearch,
 } from 'react-instantsearch';
 import { CartProvider } from '../Context/CartContext';
 import { UserProvider } from '../Context/UserContext';
@@ -29,15 +29,8 @@ export default function Router() {
         return (
             <>
                 <InstantSearch searchClient={searchClient} indexName="rBuy">
-                    <SortBy items={[
-                        { label: 'Featured', value: 'instant_search' },
-                        { label: 'Price (asc)', value: 'instant_search_price_asc' },
-                        { label: 'Price (desc)', value: 'instant_search_price_desc' },
-                    ]}>
-
-                        {header}
-                        <Outlet />
-                    </SortBy>
+                    {header}
+                    <Outlet />
                     <Chatbot />
                     <Footer />
                 </InstantSearch>

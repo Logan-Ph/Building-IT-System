@@ -1,22 +1,15 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import '../css/searchresult.css';
 import SRProductCard from '../Components/SRProductCard'
 import SRPagination from '../Components/SRPagination'
 import SRPriceRange from '../Components/SRPriceRange'
 import SRStarRating from '../Components/SRStarRating'
-import { useHits, Pagination, useSortBy } from 'react-instantsearch';
+import { useHits, useSortBy } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
-
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
+import CustomRefinementList from '../Components/CustomeRefinementList';
 
 
 const filters = [
@@ -31,15 +24,15 @@ const filters = [
       { value: 'baby toys', label: 'Baby Toys', checked: false },
     ],
   },
-  {
-    id: 'location',
-    name: 'Location',
-    options: [
-      { value: 'Ha Noi Capital City', label: 'Ha Noi Capital City', checked: false },
-      { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City', checked: false },
-      { value: 'Da Nang City', label: 'Da Nang City', checked: false },
-    ],
-  },
+  // {
+  //   id: 'location',
+  //   name: 'Location',
+  //   options: [
+  //     { value: 'Ha Noi Capital City', label: 'Ha Noi Capital City', checked: false },
+  //     { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City', checked: false },
+  //     { value: 'Da Nang City', label: 'Da Nang City', checked: false },
+  //   ],
+  // },
 ]
 
 function classNames(...classes) {
@@ -47,12 +40,31 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+  const [sortOptions, setSortOptions] = useState([
+    { name: 'Most Popular', current: true, value: 'rBuy_relavant_sort' },
+    { name: 'Price: Low to High', current: false, value: 'rBuy_price_asc' },
+    { name: 'Price: High to Low', current: false, value: 'rBuy_price_desc' },
+  ]);
   const { query } = useParams();
   const [searchQuery, setSearchQuery] = useState((query.split('='))[1]);
-  const {hits} = useHits();
+  const { hits } = useHits();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const { refine } = useSortBy({
+    items: [
+      { label: 'Price: Low to High', value: 'rBuy_price_asc', current: false },
+      { label: 'Price: High to Low', value: 'rBuy_price_desc', current: false },
+      { label: 'Most Popular', value: 'rBuy_relavant_sort', current: true },
+    ],
+  })
 
-  const { currentRefinement, options, refine } = useSortBy();
+  const handleSortOptionClick = (selectedOption) => {
+    setSortOptions(sortOptions.map(option =>
+      option.name === selectedOption.name
+        ? { ...option, current: true }
+        : { ...option, current: false }
+    ));
+    refine(selectedOption.value);
+  };
 
   useEffect(() => {
     setSearchQuery((query.split('='))[1]);
@@ -61,6 +73,7 @@ export default function Example() {
   return (
     <div className="bg-white">
       <div>
+        {/* <RefinementList attribute='ratings' operator='and' /> */}
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 " onClose={setMobileFiltersOpen}>
@@ -122,24 +135,7 @@ export default function Example() {
                             </h3>
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
-                                {section.options.map((option, optionIdx) => (
-                                  <div key={option.value} className="flex items-center">
-                                    <input
-                                      id={`filter-mobile-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
-                                      defaultValue={option.value}
-                                      type="checkbox"
-                                      defaultChecked={option.checked}
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
-                                    <label
-                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                      className="ml-3 min-w-0 flex-1 text-gray-500"
-                                    >
-                                      {option.label}
-                                    </label>
-                                  </div>
-                                ))}
+                                <CustomRefinementList />
                               </div>
                             </Disclosure.Panel>
                           </>
@@ -183,16 +179,16 @@ export default function Example() {
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
+                            <span
                               className={classNames(
                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm'
                               )}
+                              onClick={(e) => { handleSortOptionClick(option) }}
                             >
                               {option.name}
-                            </a>
+                            </span>
                           )}
                         </Menu.Item>
                       ))}
@@ -221,11 +217,9 @@ export default function Example() {
             <div className="flex">
               <div className='w-[35%] md:pr-16 lg:pr-20'>
                 {/* Filters */}
-                <form className="xs:hidden sm:hidden lg:block wi">
+                <div className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange />
-
                   <SRStarRating />
-
                   {filters.map((section) => (
                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                       {({ open }) => (
@@ -244,37 +238,20 @@ export default function Example() {
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-4">
-                              {section.options.map((option, optionIdx) => (
-                                <div key={option.value} className="flex items-center">
-                                  <input
-                                    id={`filter-${section.id}-${optionIdx}`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    defaultChecked={option.checked}
-                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                  />
-                                  <label
-                                    htmlFor={`filter-${section.id}-${optionIdx}`}
-                                    className="ml-3 text-sm text-gray-600"
-                                  >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              ))}
+                              <CustomRefinementList />
                             </div>
                           </Disclosure.Panel>
                         </>
                       )}
                     </Disclosure>
                   ))}
-                </form>
+                </div>
               </div>
 
               <div className='grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
                 {/* Product grid */}
-                {hits.map(hit=>(
-                  <SRProductCard hit={hit}/>
+                {hits.map(hit => (
+                  <SRProductCard hit={hit} />
                 ))}
               </div>
             </div>

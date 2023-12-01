@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchBox } from 'react-instantsearch';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { UserContext } from '../Context/UserContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 export default function Header() {
   const { cart } = useContext(CartContext)
@@ -11,14 +11,19 @@ export default function Header() {
   const { refine } = useSearchBox();
   const [inputValue, setInputValue] = useState("");
   const [navigateTo, setNavigateTo] = useState("")
+  const { query } = useParams();
+  const [searchQuery] = useState(query && (query.split('='))[1]);
 
-  function submitSearch(e){
+  function submitSearch(e) {
     e.preventDefault();
     setNavigateTo(`/search/query=${inputValue}`);
     refine(inputValue)
     setInputValue("")
   }
 
+  useEffect(() => {
+    searchQuery && refine(searchQuery)
+  }, [searchQuery, refine]);
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -42,7 +47,7 @@ export default function Header() {
 
   return (
     <section>
-      {navigateTo && <Navigate to={navigateTo} replace={true}/>}
+      {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
