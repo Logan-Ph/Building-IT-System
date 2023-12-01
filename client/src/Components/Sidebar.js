@@ -5,21 +5,40 @@ import {useEffect} from 'react';
 const SidebarContext = createContext()
 
 export default function Sidebar({ children }) {
+  const [width, setWidth] = useState(window.innerWidth);
   const [expanded, setExpanded] = useState(true);
 
+
+  function getSize() {
+    setWidth(window.innerWidth)
+  }
+  
   // This function will run whenever the window size changes
   useEffect(() => {
+    
+    window.addEventListener('resize', getSize)
     // Get the current window width
-    const width = window.innerWidth;
+    getSize()
 
     // Set the expanded state to false if the width is less than 768 pixels
-    if (width <1000) {
-      setExpanded(false);
-    } else {
-      // Otherwise, set it to true
+    // if (width < 768) {
+    //   setExpanded(false);
+
+    // } 
+    if (width > 898) {
       setExpanded(true);
     }
-  }, []);
+    else {
+      setExpanded(false);
+    }
+    // else {
+    //   // Otherwise, set it to true
+    //   setExpanded(false);
+    // }
+    return() => {
+      window.removeEventListener('resize', getSize)
+    }
+  }, [width]);
   
   
   return (
@@ -35,7 +54,7 @@ export default function Sidebar({ children }) {
           />
           <button
             onClick={() => setExpanded((curr) => !curr)}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 lg:hidden"
+            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 "
           >
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
