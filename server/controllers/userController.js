@@ -3,6 +3,7 @@ const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
+const Order = require('../models/order')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
@@ -62,7 +63,7 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product.find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1, ratings: 1 }).limit(32);
+    let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -282,11 +283,57 @@ exports.postResetPassword = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   jwt.verify(req.params.token, process.env.VERIFY_EMAIL, async (err, user) => {
     if (err) return res.status(500).json("error");
-    const foundUser = await User.findOneAndUpdate({ email: user.user }, { verify: true })
+    const foundUser = (await User.findOneAndUpdate({ email: user.user }, { verify: true })) || (await Vendor.findOneAndUpdate({ email: user.user }, { verify: true })) || (await Shipper.findOneAndUpdate({ email: user.user }, { verify: true }))
     if (!foundUser) return res.status.json("error");
     return res.status(200).json("success")
   })
 }
+
+// Place the Order
+exports.placeOrder = async (req, res) => {
+  try {
+    const userID = req.user._id;
+    // Find the user's cart
+    const userCart = await Cart.findOne({ userID }).populate('products.product');
+    if (!userCart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+
+    // Group products by owner
+    const productsByOwner = userCart.products.reduce((groups, cartItem) => {
+      const ownerID = cartItem.product.owner.toString();
+      if (!groups[ownerID]) {
+        groups[ownerID] = [];
+      }
+      groups[ownerID].push(cartItem);
+      return groups;
+    }, {});
+
+    // Create an order for each owner
+    for (const ownerID in productsByOwner) {
+      const order = new Order({
+        userId: userID,
+        vendorID: ownerID,
+        products: productsByOwner[ownerID].map((cartItem) => ({
+          productId: cartItem.product._id,
+          quantity: cartItem.quantity,
+        })),
+      });
+
+      await order.save();
+    }
+
+    // Clear the user's cart
+    await userCart.clearCart();
+
+    res.status(200).json({ message: 'Orders placed successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error placing order' });
+  }
+};
+
+
 
 exports.addProduct = async (req, res) => {
   if (!req.user) {
@@ -294,12 +341,18 @@ exports.addProduct = async (req, res) => {
   }
   const cart = await Cart.findOne({ userID: req.user._id })
 
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    return res.status(500).json({ error: "Cannot find the product." })
+  }
+
   if (!cart) {
     const newCart = new Cart({
       userID: new mongoose.Types.ObjectId(req.user._id),
       products: [{
-        product: new mongoose.Types.ObjectId(req.params.id),
-        quantity: (req.query.quantity) ? req.query.quantity : 1
+        product: product._id,
+        quantity: (req.query.quantity) ? req.query.quantity : 1,
+        owner: product.owner,
       }]
     })
     await newCart.save()
@@ -310,6 +363,25 @@ exports.addProduct = async (req, res) => {
     );
   }
   return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
+}
+
+exports.getOrder = async (req, res) => {
+  const orderId = req.body.orderId;
+  const orderStatus = req.body.orderStatus;
+  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId, status: orderStatus });
+  if (!order) {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
+
+  return res.status(200).json({ order: order });
+}
+
+exports.vendorDashboard = async (req, res) => {
+  return res.status(200).json("hahah");
+}
+
+exports.checkout = async (req, res) => {
+  return res.status(200).json("hahah");
 }
 
 exports.logout = (req, res) => {

@@ -1,9 +1,13 @@
 const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
+
     owner: {
         type: String,
-        require: true,
+        required: true,
     },
 
     product_name: {
@@ -35,13 +39,13 @@ const productSchema = new mongoose.Schema({
         contentType: String,
     },
 
-    ratings:{
-        type:Number,
+    ratings: {
+        type: Number,
         require: true,
     },
 
-    no_of_ratings:{
-        type:Number,
+    no_of_ratings: {
+        type: Number,
         require: true,
     }
 });

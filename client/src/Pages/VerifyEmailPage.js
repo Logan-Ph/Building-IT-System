@@ -5,12 +5,10 @@ import { Navigate, useParams } from 'react-router-dom'
 
 export default function VerifyEmailPage() {
     const params = useParams();
-    const [msg, setMsg] = useState('')
     const [error, setError] = useState('')
 
     const fetchData = useCallback(async () => {
         await axios.get(`http://localhost:4000/user/${params.token}/verify-email`, { withCredentials: true })
-            .then(res => setMsg(res.data))
             .catch(er => setError(er))
     }, [params.token])
 
@@ -20,7 +18,6 @@ export default function VerifyEmailPage() {
 
     return <>
         {error && <Navigate to={'/login'} replace={true} />}
-        {msg && <Navigate to={'/'} replace={true} />}
         <section className="bg-white">
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <div className="flex flex-col items-center bg-gray-50 py-10 border-gray-50 shadow-md">
