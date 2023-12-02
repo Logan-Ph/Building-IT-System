@@ -173,41 +173,6 @@ export default function Header() {
             </div>}
           </div>
         </div>
-
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex gap-x-2 py-1 px-2"></div>
-
-          <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
-              Best Seller
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              New Releases
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Electronics
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Beauty & Personal Care
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Household Appliances
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Fashion
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Entertainment
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Toys & Games
-            </span>
-          </div>
-
-          {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
-            Become a vendor
-          </a>}
-        </div>
       </div>
 
       <div className="navbar-menu relative z-50 sm:w-1 hidden">
@@ -272,11 +237,12 @@ export default function Header() {
                 </div>
               </div>
 
-              <div className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 mr-3 ml-3 h-10">
+              <form onSubmit={submitSearch} className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 mr-3 ml-3 h-10">
                 <input
                   type="text"
                   className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-xs text-gray-600 focus:outline-none"
                   placeholder="Search"
+                  onChange={(e) => setInputValue(e.currentTarget.value)}
                 />
                 <button className="rounded-tr-md rounded-br-md px-2 py-3 hidden md:block text-white">
                   <svg
@@ -292,120 +258,14 @@ export default function Header() {
                     ></path>
                   </svg>
                 </button>
-              </div>
+              </form>
 
               <div className="hidden border-b border-dashed lg:block  border-neutral-200"></div>
-
-              <div className="relative pl-3 my-5 ">
-                <div className="flex flex-col w-full font-medium text-[12.5px] ">
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Best seller
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        New Releases
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem] ">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Electronics
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Beauty & Personal Care
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Household Appliances
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Fashion
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Entertainment
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Toys & Games
-                      </a>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-20">
-                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
-                  <span className="text-md font-medium text-black">
-                    Sign in
-                  </span>
-                </div>
-                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
-                  <span className="text-md font-medium text-black">
-                    Become a vendor
-                  </span>
+              <div className="mt-5">
+                <div className="mt-40 flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+                  <a className="text-md font-medium text-black" href={user ? "/logout" : "/login"} >
+                    {user ? "logout" : "Sign in"}
+                  </a>
                 </div>
               </div>
             </aside>

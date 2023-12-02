@@ -7,6 +7,7 @@ export default function CustomRefinementList() {
     const handleItemClick = (value) => {
         refine(value);
     };
+
     return (
         <>
             {items.map((item) => (

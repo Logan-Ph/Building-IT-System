@@ -15,7 +15,7 @@ import SRPriceRange from "../Components/SRPriceRange";
 import SRStarRating from "../Components/SRStarRating";
 import { useHits, useSortBy } from "react-instantsearch";
 import { useParams } from "react-router-dom";
-import CustomRefinementList from "../Components/CustomeRefinementList";
+import CustomRefinementList from "../Components/CustomRefinementList";
 
 const filters = [
   {
@@ -53,40 +53,40 @@ function classNames(...classes) {
 }
 
 export default function VendorProductPage() {
-    const [sortOptions, setSortOptions] = useState([
-      { name: "Most Popular", current: true, value: "rBuy_relavant_sort" },
-      { name: "Price: Low to High", current: false, value: "rBuy_price_asc" },
-      { name: "Price: High to Low", current: false, value: "rBuy_price_desc" },
-    ]);
-    const { query } = useParams();
-    const { hits } = useHits();
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    const { refine } = useSortBy({
-      items: [
-        {
-          label: "Price: Low to High",
-          value: "rBuy_price_asc",
-          current: false,
-        },
-        {
-          label: "Price: High to Low",
-          value: "rBuy_price_desc",
-          current: false,
-        },
-        { label: "Most Popular", value: "rBuy_relavant_sort", current: true },
-      ],
-    });
+  const [sortOptions, setSortOptions] = useState([
+    { name: "Most Popular", current: true, value: "rBuy_relavant_sort" },
+    { name: "Price: Low to High", current: false, value: "rBuy_price_asc" },
+    { name: "Price: High to Low", current: false, value: "rBuy_price_desc" },
+  ]);
+  const { query } = useParams();
+  const { hits } = useHits();
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const { refine } = useSortBy({
+    items: [
+      {
+        label: "Price: Low to High",
+        value: "rBuy_price_asc",
+        current: false,
+      },
+      {
+        label: "Price: High to Low",
+        value: "rBuy_price_desc",
+        current: false,
+      },
+      { label: "Most Popular", value: "rBuy_relavant_sort", current: true },
+    ],
+  });
 
-    const handleSortOptionClick = (selectedOption) => {
-      setSortOptions(
-        sortOptions.map((option) =>
-          option.name === selectedOption.name
-            ? { ...option, current: true }
-            : { ...option, current: false }
-        )
-      );
-      refine(selectedOption.value);
-    };
+  const handleSortOptionClick = (selectedOption) => {
+    setSortOptions(
+      sortOptions.map((option) =>
+        option.name === selectedOption.name
+          ? { ...option, current: true }
+          : { ...option, current: false }
+      )
+    );
+    refine(selectedOption.value);
+  };
 
   return (
     <>

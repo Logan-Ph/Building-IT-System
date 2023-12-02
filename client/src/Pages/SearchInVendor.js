@@ -15,7 +15,7 @@ import SRPriceRange from "../Components/SRPriceRange";
 import SRStarRating from "../Components/SRStarRating";
 import { useHits, useSortBy } from "react-instantsearch";
 import { useParams } from "react-router-dom";
-import CustomRefinementList from "../Components/CustomeRefinementList";
+import CustomRefinementList from "../Components/CustomRefinementList";
 
 const filters = [
   {
