@@ -55,7 +55,7 @@ export default function TestingPage() {
         theme="light"
       />
       <section className="text-gray-600 body-font overflow-hidden ">
-        <div className="lg:container md:container py-12 px-12 mx-auto mt-10 bg-gray-50 ">
+        <div className="lg:container md:container py-12 px-12 mx-auto mt-10 bg-slate-50 ">
           {/* product card */}
           <ProductDetailCard product={product} />
         </div>

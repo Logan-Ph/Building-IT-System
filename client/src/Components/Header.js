@@ -177,7 +177,7 @@ export default function Header() {
         <div className="mt-2 flex items-center justify-between">
           <div className="flex gap-x-2 py-1 px-2"></div>
 
-          <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
+          <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
               Best Seller
             </span>
