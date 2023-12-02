@@ -243,3 +243,8 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Vendor hompage */
+.vendor-avatar {
+  width: 30% !important; 
+}

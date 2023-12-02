@@ -15,6 +15,11 @@ import CheckoutPage from "../Pages/CheckoutPage";
 import UserProfile from '../Pages/UserProfile';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/DashboardPage';
+import VendorHomePage from '../Pages/VendorHomePage';
+import VendorProductPage from "../Pages/VendorProductPage";
+import SearchInVendor from "../Pages/SearchInVendor";
+
+
 import {
     InstantSearch,
 } from 'react-instantsearch';
@@ -39,69 +44,85 @@ export default function Router() {
     }
 
     const BrowserRoutes = createBrowserRouter([
-        {
-            path: "/register",
-            element: <>
-                <SignUpHeader />
-                <RegisterPage />
-                <Footer />
-            </>
-        },
-        {
-            path: "user/:token/verify-email",
-            element: <>
-                <VerifyEmailPage />
-            </>
-        },
-        {
+      {
+        path: "/register",
+        element: (
+          <>
+            <SignUpHeader />
+            <RegisterPage />
+            <Footer />
+          </>
+        ),
+      },
+      {
+        path: "user/:token/verify-email",
+        element: (
+          <>
+            <VerifyEmailPage />
+          </>
+        ),
+      },
+      {
+        path: "/",
+        element: <Layout header={<Header />} />,
+        children: [
+          {
             path: "/",
-            element: <Layout header={<Header />} />,
-            children: [
-                {
-                    path: "/",
-                    element: <Homepage />
-                },
-                {
-                    path: "/checkout",
-                    element: <CheckoutPage />
-                },
-                {
-                    path: "/product/:id",
-                    element: <ProductPage />
-                },
-                {
-                    path: "/profile",
-                    element: <UserProfile />
-                },
-                {
-                    path: "/dashboard",
-                    element: <DashboardPage />
-                },
-                {
-                    path: '/search/:query',
-                    element: <SearchResultPage />
-                }
-            ]
-        },
-        {
-            path: "/",
-            element: <Layout header={<LogInHeader />} />,
-            children: [
-                {
-                    path: "/login",
-                    element: <LogInPage />
-                },
-                {
-                    path: "/forgot-password",
-                    element: <ForgotPassword />
-                },
-                {
-                    path: "/user/:token/forgot-password",
-                    element: <ResetPasswordPage />
-                },
-            ]
-        },
-    ])
+            element: <Homepage />,
+          },
+          {
+            path: "/checkout",
+            element: <CheckoutPage />,
+          },
+          {
+            path: "/product/:id",
+            element: <ProductPage />,
+          },
+          {
+            path: "/profile",
+            element: <UserProfile />,
+          },
+          {
+            path: "/dashboard",
+            element: <DashboardPage />,
+          },
+          {
+            path: "/vendorproduct",
+            element: <VendorProductPage />,
+          },
+          {
+            path: "/vendor",
+            element: <VendorHomePage />,
+          },
+          {
+            path: "/vendorSearch",
+            element: <SearchInVendor />,
+          },
+          {
+            path: "/search/:query",
+            element: <SearchResultPage />,
+          },
+        ],
+      },
+      {
+        path: "/",
+        element: <Layout header={<LogInHeader />} />,
+        children: [
+          {
+            path: "/login",
+            element: <LogInPage />,
+          },
+          {
+            path: "/forgot-password",
+            element: <ForgotPassword />,
+          },
+          {
+            path: "/user/:token/forgot-password",
+            element: <ResetPasswordPage />,
+          },
+        ],
+      },
+    ]);
 
     return (
         <CartProvider>
