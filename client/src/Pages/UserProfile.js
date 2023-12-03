@@ -22,19 +22,8 @@ export default function UserProfile() {
     return (
         <>
             <body className="font-outfit">
-                {/* <!-- NAVBAR --> */}
-                <nav className="h-16 py-1 px-4 bg-white shadow-md sticky top-0 left-0 z-50">
-                    <div className="flex items-center h-full gap-12">
-
-                        {/* <!-- Add this Toggle-bar to the nav-bar when completed --> */}
-                        <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar' onClick={handleSidebarToggle}></i>
-
-                    </div>
-                </nav>
-                {/* <!-- NAVBAR --> */}
-
                 {/* <!-- SIDEBAR --> */}
-                <div className={`fixed top-16 transition-all overflow-hidden left-0 w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
+                <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
                     <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
                         <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
