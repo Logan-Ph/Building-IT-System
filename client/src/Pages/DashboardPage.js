@@ -5,8 +5,50 @@ import Insight from "../Components/Insight";
 import ToDoList from "../Components/ToDoList";
 import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Navigate } from "react-router-dom";
+import LogInPage from "./LogInPage";
 
 export default function DashboardPage() {
+  const [user, setUser] = useState();
+  const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(true)
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
+      setUser(res.data.user);
+      setIsLoading(false)
+    }
+    catch (er) {
+      setError(er)
+    }
+  }
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
+      console.log(res.data);
+    }
+    catch (er) {
+      console.log(er);
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+    fetchData();
+  }, [])
+
+  if (error) {
+    return <Navigate to={'/login'} />
+  }
+
+  if (isLoading) {
+    return <LogInPage />
+  }
+
   return (
     <>
       {/* <div class="sm:xs:flex sm:xs:flex-col items-center w-16 h-full  text-gray-700 bg-gray-200 rounded lg:md:hidden">
@@ -119,58 +161,39 @@ export default function DashboardPage() {
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
       <div className="flex  ">
-
-
         <Sidebar>
-   
-
-
-
-
-       
-            
-              
-        <SidebarItem icon={<Settings size={20} />} text="Product"
+          <SidebarItem icon={<Settings size={20} />} text="Product"
             subitems={[
               { text: "My Products" },
-              { text: "Add Product", href: "https://www.google.com/"},
+              { text: "Add Product", href: "https://www.google.com/" },
               { text: "Delete Product" },
               // Add more subitems as needed
             ]} />
-              
-           
-         
 
-         
-            <SidebarItem icon={<Settings size={20} />} text="Order"
+          <SidebarItem icon={<Settings size={20} />} text="Order"
             subitems={[
-              { text: "My Orders", href: "https://www.google.com/"},
+              { text: "My Orders", href: "https://www.google.com/" },
               { text: "Ship Orders" },
               // Add more subitems as needed
             ]} />
-         
-
-        
-         <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-            subitems={[
-              { text: "Subitem 1", href: "https://www.google.com/"},
-              { text: "Subitem 2" },
-              // Add more subitems as needed
-            ]} />
-            
-
-         
-            <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-            subitems={[
-              { text: "Subitem 1", href: "https://www.google.com/"},
-              { text: "Subitem 2" },
-              // Add more subitems as needed
-            ]} />
-          
 
           <SidebarItem icon={<Settings size={20} />} text="Dashboard"
             subitems={[
-              { text: "Subitem 1", href: "https://www.google.com/"},
+              { text: "Subitem 1", href: "https://www.google.com/" },
+              { text: "Subitem 2" },
+              // Add more subitems as needed
+            ]} />
+
+          <SidebarItem icon={<Settings size={20} />} text="Dashboard"
+            subitems={[
+              { text: "Subitem 1", href: "https://www.google.com/" },
+              { text: "Subitem 2" },
+              // Add more subitems as needed
+            ]} />
+
+          <SidebarItem icon={<Settings size={20} />} text="Dashboard"
+            subitems={[
+              { text: "Subitem 1", href: "https://www.google.com/" },
               { text: "Subitem 2" },
               // Add more subitems as needed
             ]} />
@@ -198,9 +221,9 @@ export default function DashboardPage() {
                 Business Insight
               </h1>
               <h1 class="font-medium  lg:md:pt-1 pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
-              Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
-            </h1>
-              
+                Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
+              </h1>
+
               <Insight />
               <div className="mt-4">
                 <h1 class="font-bold  pl-5 py-4 uppercase text-black lg:md:text-2xl text-lg">

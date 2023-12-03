@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
 import { UserContext } from "../Context/UserContext";
 
-export default function ProductDetailCard({ product }) {
+export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
     const { setCart } = useContext(CartContext)
     const { setUser } = useContext(UserContext)
@@ -116,12 +116,12 @@ export default function ProductDetailCard({ product }) {
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
                                     <a
-                                        href="\product\category"
+                                        href={`/vendor/${product.owner}`}
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                         aria-current="page"
                                     >
                                         {" "}
-                                        {product.category}{" "}
+                                        {vendorName}{" "}
                                     </a>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@ export default function ProductDetailCard({ product }) {
                 <div></div>
                 <div className="">
                     <h2 className="text-sm title-font text-gray-500 tracking-widest">
-                        {product.owner}
+                        {vendorName}
                     </h2>
                     <h1 className="text-gray-900 lg:text-3xl sm:text-md xs:text-md title-font font-medium mb-3 ">
                         {product.product_name}

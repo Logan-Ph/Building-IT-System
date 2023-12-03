@@ -18,6 +18,7 @@ const indexName = 'rBuy';
 export default function TestingPage() {
   const params = useParams()
   const [product, setProduct] = useState([])
+  const [vendorName, setVendorName] = useState("")
   const [error, setError] = useState()
 
   const { recommendations } = useRelatedProducts({
@@ -31,6 +32,7 @@ export default function TestingPage() {
     try {
       const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
+      setVendorName(res.data.vendorName);
     } catch (error) {
       setError(error);
     }
@@ -57,7 +59,7 @@ export default function TestingPage() {
       <section className="text-gray-600 body-font overflow-hidden ">
         <div className="lg:container md:container py-12 px-12 mx-auto mt-10 bg-slate-50 ">
           {/* product card */}
-          <ProductDetailCard product={product} />
+          <ProductDetailCard product={product} vendorName={vendorName} />
         </div>
       </section>
 

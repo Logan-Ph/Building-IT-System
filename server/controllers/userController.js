@@ -48,8 +48,12 @@ function sendEmailVerification(userEmail) {
     subject: "Forgot password verification",
     html: mail
   }
-
-  transporter.sendMail(message)
+  try {
+    transporter.sendMail(message)
+  }
+  catch {
+    console.log("error when send Email")
+  }
 }
 
 exports.loginSuccess = async (req, res) => {
@@ -73,7 +77,8 @@ exports.homePage = async (req, res) => {
 exports.productPage = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-    res.json({ product: product });
+    let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
+    res.json({ product: product, vendorName: vendorName.businessName });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -376,8 +381,30 @@ exports.getOrder = async (req, res) => {
   return res.status(200).json({ order: order });
 }
 
-exports.vendorDashboard = async (req, res) => {
+exports.vendorHomepage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.vendorProductPage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.getVendorDashboard = async (req, res) => {
   return res.status(200).json("hahah");
+}
+
+exports.postVendorDashboard = async (req, res) => {
+
 }
 
 exports.checkout = async (req, res) => {

@@ -2,12 +2,11 @@ import React from 'react';
 import { useRefinementList } from 'react-instantsearch';
 
 export default function CustomRefinementList() {
-    const { items, refine } = useRefinementList({ attribute: 'category', operator: 'or' });
+    const { items, refine } = useRefinementList({ attribute: 'category', operator: 'and' });
 
     const handleItemClick = (value) => {
         refine(value);
     };
-
     return (
         <>
             {items.map((item) => (

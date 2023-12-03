@@ -1,10 +1,37 @@
+import { useCallback, useEffect, useState } from "react";
 import VendorNav from "../Components/VendorNav";
-export default function CheckoutPage() {
+import axios from "axios";
+import { Navigate, useParams } from "react-router-dom";
+export default function VendorHomePage() {
+  const params = useParams()
+  const [vendor, setVendor] = useState()
+  const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:4000/vendor/${params.id}`, { withCredentials: true })
+      setVendor(res.data.vendor)
+      setIsLoading(false)
+    } catch (error) {
+      setError(error)
+    }
+  }, [params.id])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  if (isLoading){
+    return <div>....is loading</div>
+  }
+
   return (
     <>
+      {error && <Navigate to={"/"} replace />}
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav />
+        <VendorNav vendor={vendor} />
 
         {/*  */}
         {/* Top Product */}
@@ -21,7 +48,7 @@ export default function CheckoutPage() {
                     <img
                       class="p-8 rounded-t-lg"
                       src="/docs/images/products/apple-watch.png"
-                      alt="product image"
+                      alt="product"
                     />
                   </a>
                   <div class="px-5 pb-5">
