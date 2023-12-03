@@ -1,10 +1,22 @@
-import { Pagination, usePagination } from 'react-instantsearch';
+//import { Pagination, usePagination } from 'react-instantsearch';
+import { Pagination } from 'flowbite-reat';
+import { useState } from 'react';
+
+
 
 export default function SRPagination() {
-  const { pages, refine } = usePagination({ padding: 4 });
+  const [currentPage, setCurrentPage] = useState(1);
+  const onPageChange = (page: number) => setCurrentPage(page);
+
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 mt-6">
-      <div className="flex flex-1 justify-between ">
+    <div className="flex overflow-x-auto sm:justify-center">
+      <Pagination currentPage={currentPage} totalPages={100} onPageChange={onPageChange} />
+    </div>
+  );
+}
+  // const { pages, refine } = usePagination({ padding: 4 });
+  // return (
+      // <div>
         {/* <a
             href="#"
             className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -32,12 +44,10 @@ export default function SRPagination() {
             </li>
           ))}
         </ul> */}
-        <Pagination
-          currentPage={1}
-          onPageChange={2}
-          totalPages={100}
-        />
-      </div>
-    </div>
-  )
-}
+      //   <Pagination
+      //     currentPage={1}
+      //     onPageChange={2}
+      //     totalPages={100}
+      //   />
+      // </div>
+  //)

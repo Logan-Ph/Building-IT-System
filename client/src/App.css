@@ -4013,6 +4013,10 @@ select {
   padding-top: 2rem;
 }
 
+.pr-5 {
+  padding-right: 1.25rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -4527,6 +4531,10 @@ select {
 .text-yellow-900 {
   --tw-text-opacity: 1;
   color: rgb(99 49 18 / var(--tw-text-opacity));
+}
+
+.text-\[\#fac800f1\] {
+  color: #fac800f1;
 }
 
 .underline {
@@ -7912,6 +7920,10 @@ select {
 
   .xs\:h-auto {
     height: auto;
+  }
+
+  .xs\:w-1\/2 {
+    width: 50%;
   }
 
   .xs\:w-4 {

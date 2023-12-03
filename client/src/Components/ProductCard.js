@@ -59,8 +59,8 @@ export default function ProductCard({ product }) {
 
     return (<div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" key={product._id}>
         <div className="relative">
-            <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px]">
-                <img src={product.image_link} className="object-full h-full w-full" alt={product.product_name} />
+            <div className="w">
+                <img src={product.image_link} className="object-full h-full w-full xs:w-1/2" alt={product.product_name} />
             </div>
             <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition">
                 <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">

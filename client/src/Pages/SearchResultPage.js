@@ -10,36 +10,69 @@ import SRStarRating from '../Components/SRStarRating'
 import { useHits, useSortBy } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
 import CustomRefinementList from '../Components/CustomeRefinementList';
+import { Checkbox } from "@material-tailwind/react";
 
 
-const filters = [
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'househole appliances', label: 'Househole Appliances', checked: false },
-      { value: 'electronics', label: 'Electronics', checked: false },
-      { value: 'fashion', label: 'Fashon', checked: true },
-      { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
-      { value: 'baby toys', label: 'Baby Toys', checked: false },
-    ],
-  },
-  // {
-  //   id: 'location',
-  //   name: 'Location',
-  //   options: [
-  //     { value: 'Ha Noi Capital City', label: 'Ha Noi Capital City', checked: false },
-  //     { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City', checked: false },
-  //     { value: 'Da Nang City', label: 'Da Nang City', checked: false },
-  //   ],
-  // },
-]
+// const filters = [
+//   {
+//     id: 'category',
+//     name: 'Category',
+//     options: [
+//       { value: 'househole appliances', label: 'Househole Appliances', checked: false },
+//       { value: 'electronics', label: 'Electronics', checked: false },
+//       { value: 'fashion', label: 'Fashon', checked: true },
+//       { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
+//       { value: 'baby toys', label: 'Baby Toys', checked: false },
+//     ],
+//   },
+//   // {
+//   //   id: 'location',
+//   //   name: 'Location',
+//   //   options: [
+//   //     { value: 'Ha Noi Capital City', label: 'Ha Noi Capital City', checked: false },
+//   //     { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City', checked: false },
+//   //     { value: 'Da Nang City', label: 'Da Nang City', checked: false },
+//   //   ],
+//   // },
+// ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Example() {
+  const [filters, setFilter] = useState([{
+    id: 'category',
+    name: 'Category',
+    options: [
+      { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
+      { value: 'househole appliances', label: 'Househole Appliances', checked: false },
+      { value: 'electronics', label: 'Electronics', checked: false },
+      { value: 'fashion', label: 'Fashon', checked: true }, 
+      { value: 'baby toys', label: 'Baby Toys', checked: false },
+    ],
+  },])
+
+  const [valueFilter, setValueFilter] = useState("")
+  console.log("valueFilter", valueFilter)
+  useEffect(() => { 
+    const updatedItems = filters.map(item => { 
+      if (item?.options?.find(item => item?.label === valueFilter)) {
+        return { ...item, options:  [
+        { value: 'fashion', label: 'Fashon', checked: true }, 
+        { value: 'househole appliances', label: 'Househole Appliances', checked: false },
+        { value: 'beauty & personal care', label: 'Beauty & Care', checked: false }, 
+        { value: 'electronics', label: 'Electronics', checked: false }, 
+        { value: 'baby toys', label: 'Baby Toys', checked: false }] }; // Update the 'name' for the item with id 2
+      }
+      return item; // Return the unchanged item for other items
+    });
+    setFilter(updatedItems)
+    console.log("updatedItems", updatedItems) 
+    
+  }, [valueFilter])
+ 
+   
   const [sortOptions, setSortOptions] = useState([
     { name: 'Most Popular', current: true, value: 'rBuy_relavant_sort' },
     { name: 'Price: Low to High', current: false, value: 'rBuy_price_asc' },
@@ -58,6 +91,7 @@ export default function Example() {
   })
 
   const handleSortOptionClick = (selectedOption) => {
+    console.log("selectedOption", selectedOption)
     setSortOptions(sortOptions.map(option =>
       option.name === selectedOption.name
         ? { ...option, current: true }
@@ -69,7 +103,7 @@ export default function Example() {
   useEffect(() => {
     setSearchQuery((query.split('='))[1]);
   }, [query]);
-
+  
   return (
     <div className="bg-white">
       <div>
@@ -116,12 +150,14 @@ export default function Example() {
                   <form className="mt-4 border-t border-gray-200">
                     <SRPriceRange className="pt-6 px-4" />
                     <SRStarRating className="pt-6 px-4" />
+                    <CheckboxLable className="pt-6 px-4 " />
 
-                    {filters.map((section) => (
+
+                    {filters?.map((section) => (
                       <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
                         {({ open }) => (
                           <>
-                            <h3 className="-mx-2 -my-3 flow-root">
+                            {/* <h3 className="-mx-2 -my-3 flow-root">
                               <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
                                 <span className="font-medium text-gray-900">{section.name}</span>
                                 <span className="ml-6 flex items-center">
@@ -132,7 +168,7 @@ export default function Example() {
                                   )}
                                 </span>
                               </Disclosure.Button>
-                            </h3>
+                            </h3> */}
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 <CustomRefinementList />
@@ -185,7 +221,7 @@ export default function Example() {
                                 active ? 'bg-gray-100' : '',
                                 'block px-4 py-2 text-sm'
                               )}
-                              onClick={(e) => { handleSortOptionClick(option) }}
+                               onClick={(e) => { handleSortOptionClick(option) }}
                             >
                               {option.name}
                             </span>
@@ -220,7 +256,8 @@ export default function Example() {
                 <div className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange />
                   <SRStarRating />
-                  {filters.map((section) => (
+                  <CheckboxLable />
+                  {/* {filters?.map((section) => (
                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                       {({ open }) => (
                         <>
@@ -238,13 +275,13 @@ export default function Example() {
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-4">
-                              <CustomRefinementList />
+                              <CustomRefinementList setFilter={setValueFilter}/>
                             </div>
                           </Disclosure.Panel>
                         </>
                       )}
-                    </Disclosure>
-                  ))}
+                    </Disclosure> */}
+                  {/* ))} */}
                 </div>
               </div>
 
@@ -259,8 +296,43 @@ export default function Example() {
           </section>
         </main>
       </div>
+
+
     </div>
+
+    
   )
+}
+
+function CheckboxLable(){
+   return <>
+    <div className='flex mb-3 pb-6 xs:px-4 sm:px-4'>
+      <div className='w-full'>
+      <h3 className='font-medium mb-2 mt-3'>Categories</h3>
+  <div className='mb-2 flex items-center'>
+    <input type="checkbox" className='rounded-md'/> 
+    <span className='ml-2 text-md'>Home Appliances</span>
+  </div>
+  <div className='mb-2 flex items-center'>
+    <input type="checkbox" className='rounded-md'/> 
+    <span className='ml-2 text-md'>Electronics</span>
+  </div>
+  <div className='mb-2 flex items-center'>
+    <input type="checkbox" className='rounded-md'/> 
+    <span className='ml-2 text-md'>Fashion</span>
+  </div>
+  <div className='mb-2 flex items-center'>
+    <input type="checkbox" className='rounded-md'/> 
+    <span className='ml-2 text-md'>Beauty & Care</span>
+  </div>
+  <div className='mb-2 flex items-center'>
+    <input type="checkbox" className='rounded-md'/> 
+    <span className='ml-2 text-md'>Baby Toys</span>
+  </div>
+      </div>
+    </div>
+ 
+  </>
 }
 
 
