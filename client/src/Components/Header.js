@@ -164,10 +164,8 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between ">
-          
+        <div className="mt-2 flex items-center justify-between">
           <div className="flex gap-x-2 py-1 px-2"></div>
-          
 
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
@@ -195,12 +193,10 @@ export default function Header() {
               Toys & Games
             </span>
           </div>
-          {/* cai div nay de no can bang 2 ben nen dung xoa' */}
-          <div>
+
           {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
             Become a vendor
           </a>}
-          </div>
         </div>
       </div>
 
