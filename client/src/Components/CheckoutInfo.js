@@ -1,4 +1,5 @@
 export default function CheckoutInfo() {
+    
     return (
         <div
             id="accordion-open"
