@@ -22,19 +22,8 @@ export default function UserProfile() {
     return (
         <>
             <body className="font-outfit">
-                {/* <!-- NAVBAR --> */}
-                <nav className="h-16 py-1 px-4 bg-white shadow-md sticky top-0 left-0 z-50">
-                    <div className="flex items-center h-full gap-12">
-
-                        {/* <!-- Add this Toggle-bar to the nav-bar when completed --> */}
-                        <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar' onClick={handleSidebarToggle}></i>
-
-                    </div>
-                </nav>
-                {/* <!-- NAVBAR --> */}
-
                 {/* <!-- SIDEBAR --> */}
-                <div className={`fixed top-16 transition-all overflow-hidden left-0 w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
+                <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
                     <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
                         <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
@@ -121,14 +110,11 @@ export default function UserProfile() {
                                             <label for="photo" className="block text-sm font-medium leading-6 text-gray-900">Avatar picture</label>
                                             <div className="mt-2 flex items-center gap-x-3">
                                                 <input type="file" id="fileUpload" name="photo" accept="image/*" />
-                                                <svg onclick="document.getElementById('fileUpload').click()" className="h-12 w-12 text-gray-300 cursor-pointer" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-                                                </svg>
-                                                <button type="button" onclick="document.getElementById('fileUpload').click()" className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
+                                               
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-3">
+                                        <div className="sm:col-span-4">
                                             <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
                                             <div className="mt-2">
                                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">

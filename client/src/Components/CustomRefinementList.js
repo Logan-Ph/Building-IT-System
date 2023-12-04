@@ -1,10 +1,12 @@
 import React from 'react';
 import { useRefinementList } from 'react-instantsearch';
 
-export default function CustomRefinementList() {
+export default function CustomRefinementList(props) {
+     
     const { items, refine } = useRefinementList({ attribute: 'category', operator: 'and' });
 
     const handleItemClick = (value) => {
+        props.setFilter(value)
         refine(value);
     };
     return (

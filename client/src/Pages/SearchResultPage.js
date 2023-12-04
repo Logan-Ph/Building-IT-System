@@ -28,6 +28,40 @@ const filters = [
 
 
 export default function Example() {
+  const [filters, setFilter] = useState([{
+    id: 'category',
+    name: 'Category',
+    options: [
+      { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
+      { value: 'househole appliances', label: 'Househole Appliances', checked: false },
+      { value: 'electronics', label: 'Electronics', checked: false },
+      { value: 'fashion', label: 'Fashon', checked: true },
+      { value: 'baby toys', label: 'Baby Toys', checked: false },
+    ],
+  },])
+
+  const [valueFilter, setValueFilter] = useState("")
+  console.log("valueFilter", valueFilter)
+  useEffect(() => {
+    const updatedItems = filters.map(item => {
+      if (item?.options?.find(item => item?.label === valueFilter)) {
+        return {
+          ...item, options: [
+            { value: 'fashion', label: 'Fashon', checked: true },
+            { value: 'househole appliances', label: 'Househole Appliances', checked: false },
+            { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
+            { value: 'electronics', label: 'Electronics', checked: false },
+            { value: 'baby toys', label: 'Baby Toys', checked: false }]
+        }; // Update the 'name' for the item with id 2
+      }
+      return item; // Return the unchanged item for other items
+    });
+    setFilter(updatedItems)
+    console.log("updatedItems", updatedItems)
+
+  }, [valueFilter])
+
+
   const [sortOptions, setSortOptions] = useState([
     { name: 'Most Popular', current: true, value: 'rBuy_relavant_sort' },
     { name: 'Price: Low to High', current: false, value: 'rBuy_price_asc' },
@@ -89,11 +123,11 @@ export default function Example() {
                     <SRPriceRange className="pt-6 px-4" />
                     <SRStarRating className="pt-6 px-4" />
 
-                    {filters.map((section) => (
+                    {filters?.map((section) => (
                       <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
                         {({ open }) => (
                           <>
-                            <h3 className="-mx-2 -my-3 flow-root">
+                            {/* <h3 className="-mx-2 -my-3 flow-root">
                               <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
                                 <span className="font-medium text-gray-900">{section.name}</span>
                                 <span className="ml-6 flex items-center">
@@ -104,7 +138,7 @@ export default function Example() {
                                   )}
                                 </span>
                               </Disclosure.Button>
-                            </h3>
+                            </h3> */}
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 <CustomRefinementList />
@@ -127,6 +161,7 @@ export default function Example() {
 
             <div className="flex items-center">
               <SortOptions sortOptions={sortOptions} setSortOptions={setSortOptions} />
+
               <button
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
@@ -149,7 +184,7 @@ export default function Example() {
                 <div className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange />
                   <SRStarRating />
-                  {filters.map((section) => (
+                  {/* {filters?.map((section) => (
                     <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                       {({ open }) => (
                         <>
@@ -167,13 +202,13 @@ export default function Example() {
                           </h3>
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-4">
-                              <CustomRefinementList />
+                              <CustomRefinementList setFilter={setValueFilter}/>
                             </div>
                           </Disclosure.Panel>
                         </>
                       )}
-                    </Disclosure>
-                  ))}
+                    </Disclosure> */}
+                  {/* ))} */}
                 </div>
               </div>
 
