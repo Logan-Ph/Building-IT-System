@@ -45,11 +45,9 @@ export default function ManageOrderPage(){
                     </div>
                 </div> */}
             </div>
+                       
+            <Component/>
 
-            <div>                        
-                <Component />
-
-            </div>
 
             {/* <div className='border border-gray my-1 py-32'>
                 <div className='flex flex-col justify-center items-center'>
@@ -120,10 +118,7 @@ function Component(){
                 </div>   
             </Tabs.Item>
             <Tabs.Item title="Unpaid">
-                <div className='my-10'>
                     <TableComponent />
-                </div>    
-
             </Tabs.Item>
             <Tabs.Item title="To Ship">
                 This is <span className="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</span>.
