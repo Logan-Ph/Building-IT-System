@@ -1,10 +1,20 @@
 import '../css/profile.css'
-import { useState } from 'react'
+import axios from 'axios'
+import { useState, useCallback, useContext, useEffect } from 'react'
+import { UserContext } from '../Context/UserContext';
+import { ToastContainer, toast } from 'react-toastify'
+
+
 export default function UserProfile() {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState(null);
-    const [activeTab, setActiveTab] = useState("profile");
-    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled'];
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+    const [activeDropdown, setActiveDropdown] = useState(null)
+    const [activeTab, setActiveTab] = useState("profile")
+    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
+
+    const [error, setError] = useState('')
+    const [msg, setMsg] = useState('')
+    const {user, setUser } = useContext(UserContext)    
+    const [isLoading, setIsLoading] = useState(true)
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -19,6 +29,99 @@ export default function UserProfile() {
         setActiveDropdown(activeDropdown === index ? null : index);
     };
 
+    useEffect(() => {
+        error && notify(error)
+        msg && success(msg)
+    }, [error, msg]);
+
+    const notify = (error) => {
+        toast.error(error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
+    const success = (error) => {
+        toast.success(error, {
+            position: "top-center",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
+    const fetchUser = useCallback(async () => {
+        try {
+            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+            setUser(res.data.user);
+            setIsLoading(false);
+        } catch (er) {
+            console.log(er);
+            setIsLoading(false);
+        }
+    }, [setUser])
+
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [address, setAddress] = useState('')
+    const [name, setName] = useState('')
+    const email = user.email;
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setFile(file);
+    };
+
+    const data = {
+        email: email,
+        name: name,
+        phoneNumber: phoneNumber,
+        address: address,
+        file: file,
+    }
+
+    async function axiosPostData() {
+        try { 
+            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, 
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }, })
+            .then(res => {
+                setMsg(res.data)
+                setError('')
+            })
+            .catch(er => {setError(er.response.data); setMsg()});
+        } catch (error) {
+            console.error('Failed to update.', error);
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axiosPostData();
+        if (error) {
+            notify(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser]);
+
+    if (isLoading) {
+        return <div>Loading....</div>
+    }
+
     return (
         <>
             <body className="font-outfit">
@@ -27,7 +130,7 @@ export default function UserProfile() {
                     <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
                         <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
-                            <h3 className="text-lg font-semibold mb-1">Ninh Pho</h3>
+                            <h3 className="text-lg font-semibold mb-1"></h3>
                             <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
                         </div>
                     </a>
@@ -82,8 +185,7 @@ export default function UserProfile() {
                         <div className="flex items-center gap-4 mt-4">
                             <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
-                                <h2 className="text-2xl font-semibold mb-2">Ninh Pho</h2>
-                                <span className="text-lg text-gray-500">_ninhcute2023_</span>
+                                <h2 className="text-2xl font-semibold mb-2">{user.name}</h2>
                             </div>
                             <a href="#" className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
                                 <i className='bx bx-edit-alt' ></i>
@@ -109,65 +211,34 @@ export default function UserProfile() {
                                         <div className="col-span-full">
                                             <label for="photo" className="block text-sm font-medium leading-6 text-gray-900">Avatar picture</label>
                                             <div className="mt-2 flex items-center gap-x-3">
-                                                <input type="file" id="fileUpload" name="photo" accept="image/*" />
+                                                <input type="file" id="fileUpload" name="photo" onChange={handleFileChange} accept="image/*" />
                                                
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-4">
-                                            <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                                        <div className="sm:col-span-3">
+                                            <label for="first-name" className="block text-sm font-medium leading-6 text-gray-900">Name</label>
                                             <div className="mt-2">
-                                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                                    <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">rBuy.com/</span>
-                                                    <input type="text" name="username" id="username" autocomplete="username" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith" />
-                                                </div>
+                                                <input type="text" name="first-name" id="first-name" onChange={(e) => {setName(e.target.value)}} autocomplete="given-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-3">
-                                            <label for="first-name" className="block text-sm font-medium leading-6 text-gray-900">First name</label>
+                                            <label for="address" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                             <div className="mt-2">
-                                                <input type="text" name="first-name" id="first-name" autocomplete="given-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-3">
-                                            <label for="last-name" className="block text-sm font-medium leading-6 text-gray-900">Last name</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="last-name" id="last-name" autocomplete="family-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input type="text" name="address" id="address" onChange={(e) => {setName(e.target.value)}} autocomplete="given-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
-                                            <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-                                            <div className="mt-2">
-                                                <input id="email" name="email" type="email" autocomplete="email" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-4">
-                                            <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
+                                            <label for="phone" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
                                             <div className="mt-2">
                                                 <input id="phone" name="phone" type="phone" autocomplete="email" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-3">
-                                            <label for="country" className="block text-sm font-medium leading-6 text-gray-900">Sex</label>
-                                            <div className="mt-2">
-                                                <select id="country" name="country" autocomplete="country-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                                    <option>Male</option>
-                                                    <option>Female</option>
-                                                    <option>Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-4">
-                                            <label for="dob" className="block text-sm font-medium leading-6 text-gray-900">Date of Birth</label>
-                                            <div className="mt-2">
-                                                <input id="dob" name="dob" type="date" autocomplete="bday" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
-                                            </div>
+                                        <div>
+                                            <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Save changes</button>
                                         </div>
                                     </div>
                                 </div>

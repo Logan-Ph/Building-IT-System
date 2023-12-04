@@ -400,9 +400,12 @@ exports.updateUser = async (req, res) => {
       };
       user.img = image; 
     }
-    if (req.body.name) {user.name = req.body.name}
-    if (req.body.address) {user.address = req.body.address}
-
+    if (req.body.name) {
+      user.name = req.body.name
+    }
+    if (req.body.address) {
+      user.address = req.body.address
+    }
     if (req.body.phoneNumber) {
       const phoneNumber = req.body.phoneNumber;
       const checkPhone =
@@ -491,4 +494,8 @@ exports.updateShipper = async (req, res) => {
   } catch(error){
     res.status(500).send({ message: error.message || "Error Occured" });   
   }
+}
+
+exports.userProfile = async (req, res) => {
+  return res.status(200).json("profile page");
 }

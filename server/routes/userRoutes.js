@@ -3,7 +3,17 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
+const multer = require('multer');
+
 require('dotenv').config
+
+const storage = multer.diskStorage({
+    destination: "uploads",
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    },
+});
+const upload = multer({ storage: storage });
 
 /**
  *  App routes
@@ -106,4 +116,5 @@ router.post('/dashboard', authenticateToken, authorizeVendor, userController.ven
 router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);
+router.post('/update-user', upload.single("img", {name:"file"}), userController.updateUser);
 module.exports = router;
