@@ -1,7 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { Pagination, usePagination } from 'react-instantsearch';
 
-
 export default function Example() {
   const {
     pages,
