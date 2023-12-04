@@ -14,6 +14,7 @@ import CheckoutPage from "../Pages/CheckoutPage";
 import UserProfile from '../Pages/UserProfile';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/DashboardPage';
+import AdminDashboardPage from '../Pages/AdminDashboardPage';
 import {
     InstantSearch,
 } from 'react-instantsearch';
@@ -76,6 +77,10 @@ export default function Router() {
                     path: "/dashboard",
                     element: <DashboardPage />
                 },
+                {
+                    path: "/AdminDashboard",
+                    element: <AdminDashboardPage />
+                },
 
             ]
         },
@@ -95,6 +100,8 @@ export default function Router() {
                     path: "/user/:token/forgot-password",
                     element: <ResetPasswordPage />
                 },
+                
+                
             ]
         },
     ])
