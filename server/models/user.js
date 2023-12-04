@@ -20,19 +20,27 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
     },
-
-    address: {
-        type: String,
-    },
-
     name: {
         type: String,
     },
+    streetAddress: {
+        type: String,
+    },
+    
+    ward: {
+        type: String,
+    },
+    district: {
+    type: String,
 
+    },
+    city: {
+        type: String,
+    },
     phoneNumber: {
         type: String,
     },
-
+    
     img: {
         data: Buffer,
         contentType: String,
@@ -43,6 +51,11 @@ const userSchema = new mongoose.Schema({
         default: false,
     },
 
+    remembered: {
+        type: Boolean,
+    }
+
 });
+
 
 module.exports = mongoose.model('User',userSchema)

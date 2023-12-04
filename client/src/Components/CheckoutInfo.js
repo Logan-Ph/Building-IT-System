@@ -1,4 +1,25 @@
-export default function CheckoutInfo() {
+
+import React, { useState, useEffect } from 'react';
+
+const CheckoutInformation = ({ cart, onCheckout }) => {
+  const [shippingAddress, setShippingAddress] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('Credit Card'); // Default payment method
+  const [deliveryOption, setDeliveryOption] = useState('normal'); // Default delivery option
+
+  useEffect(() => {
+  }, [cart]);
+
+  const handleCheckout = () => {
+    const checkoutData = {
+      shippingAddress,
+      paymentMethod,
+      deliveryOption,
+      cart,
+    };
+
+    onCheckout(checkoutData);
+  };
+      
     return (
         <div
             id="accordion-open"
@@ -446,3 +467,4 @@ export default function CheckoutInfo() {
         </div>
     )
 }
+export default CheckoutInformation

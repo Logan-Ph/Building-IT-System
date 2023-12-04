@@ -313,18 +313,18 @@ exports.addProduct = async (req, res) => {
   return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
 }
 
-//  Place the Order
 exports.placeOrder = async (req, res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "Please log in or create an account to place your order." })
+  }
   try {
     const { userID } = req.body;
-
     // Find the user's cart
     const userCart = await Cart.findOne({ userID }).populate('products.product');
 
     if (!userCart) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
-
     // Create an order based on the user's cart
     const order = new Order({
       cart: userCart._id,
@@ -344,19 +344,39 @@ exports.placeOrder = async (req, res) => {
         },
       })),
     });
-
     await order.save();
-
-  
     await userCart.clearCart();
-
     res.json({ success: true, message: 'Order placed successfully!' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error placing order' });
   }
 };
-
+exports.updateStatus = async (req, res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "This properties belong to the vendor. Please log in to continue!!" })
+  }
+  // Display Active Orders
+  let order = null
+    const orderID = req.params.id
+    Order.findOne({ _id: orderID }).populate('products.product')
+    .then(results => {
+        order = results
+        console.log("Active order to be displayed ", results)
+    })
+    .catch(err => {
+        console.error(err)
+    })
+    const newStatus = req.body.status 
+    Order.findByIdAndUpdate(orderID, {status: newStatus}, { new: true })
+    .then(updatedOrder => {
+        console.log(updatedOrder)
+        res.redirect(`/vendor/active-order/${orderID}`)
+    })
+    .catch(err => {
+        console.error(err)
+    })
+};
 exports.logout = (req, res) => {
   req.session.destroy();
   res.redirect("http://localhost:3000/");

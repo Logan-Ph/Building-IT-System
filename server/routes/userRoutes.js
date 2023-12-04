@@ -59,7 +59,7 @@ router.get('/auth/google/callback', (req, res, next) => {
             return;
         }
 
-        // Authentication sucess
+        // Authentication success
         req.logIn(user, (err) => {
             if (err) {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
@@ -73,7 +73,8 @@ router.get('/auth/google/callback', (req, res, next) => {
 });
 
 
-router.get('/placeOrder', userController.getPlaceOrder);
+router.get('/placeOrder', userController.placeOrder);
+router.get('/active-order/:id', userController.updateStatus);
 router.get('/add-product/:id', userController.addProduct);
 router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
