@@ -388,3 +388,107 @@ exports.logout = (req, res) => {
   req.session.destroy();
   res.redirect("http://localhost:3000/");
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      user.img = image; 
+    }
+    if (req.body.name) {user.name = req.body.name}
+    if (req.body.address) {user.address = req.body.address}
+
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.status(500).json("Phone number already exists.")
+      } else {
+        user.phoneNumber = phoneNumber;
+      }
+    }
+    await user.save();
+    return res.json('Profile has been updated!')
+  } catch(error){
+    res.status(500).send({ message: error.message || "Error Occured" });   
+  }
+}
+
+exports.updateVendor = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({email: req.body.email});
+
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      vendor.img = image; 
+    }
+
+    if (req.body.address) {vendor.address = req.body.address;}
+    if (req.body.businessName) {
+      const checkBusinessName = (await Vendor.findOne({ businessName: req.body.businessName }));
+      if (checkBusinessName(req.body.businessName)) {
+        return res.status(500).json("Business name has already existed.")
+      } else {
+        vendor.businessName = req.body.businessName;
+      }
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.json("Phone number has already existed.");
+      } else {vendor.phoneNumber = req.body.phoneNumber;}
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch(error){
+    res.status(500).send({ message: error.message || "Error Occured" });   
+  }
+}
+
+exports.updateShipper = async (req, res) => {
+  try {
+    const shipper = await Shipper.findOne({email: req.body.email});
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      shipper.img = image; 
+    }
+    if (req.body.name) {
+      shipper.name = req.body.name;
+    }
+    if (req.body.address) {
+      shipper.address = req.body.address;
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        shipper.phoneNumber = req.body.phoneNumber;
+      }
+    }
+    await shipper.save();
+    return res.json('Profile has been updated!')
+  } catch(error){
+    res.status(500).send({ message: error.message || "Error Occured" });   
+  }
+}
