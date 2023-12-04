@@ -7619,6 +7619,11 @@ select {
       line-height: 2rem;
     }
 
+    .lg\:md\:text-base {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+
     .lg\:md\:text-lg {
       font-size: 1.125rem;
       line-height: 1.75rem;
@@ -7627,11 +7632,6 @@ select {
     .lg\:md\:text-sm {
       font-size: 0.875rem;
       line-height: 1.25rem;
-    }
-
-    .lg\:md\:text-base {
-      font-size: 1rem;
-      line-height: 1.5rem;
     }
   }
 }
@@ -7815,11 +7815,6 @@ select {
   @media (max-width: 575px) {
     .sm\:xs\:flex-col {
       flex-direction: column;
-    }
-
-    .sm\:xs\:text-sm {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
     }
 
     .sm\:xs\:text-xl {
