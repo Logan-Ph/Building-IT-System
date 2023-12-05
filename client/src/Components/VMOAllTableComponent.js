@@ -174,7 +174,7 @@ function MoreDetailOrdID({ order }) {
 function CompletedMoreDetailOrdID() {
     const [openModal, setOpenModal] = useState(false);
     return <>
-        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
+        <a href="#" className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
             More
         </a>
         <Modal show={openModal} onClose={() => setOpenModal(false)}>
