@@ -2,18 +2,14 @@ const User = require('../models/user')
 const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
+const Cart = require('../models/cart')
+const Order = require('../models/order')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const passport = require('passport')
+const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
-const user = require('../models/user')
 const nodemailer = require('nodemailer')
 require('dotenv').config()
-
-function generateAccessToken(user) {
-  const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '20s' });
-  return accessToken
-}
 
 function sendEmailVerification(userEmail) {
   let config = {
@@ -52,24 +48,27 @@ function sendEmailVerification(userEmail) {
     subject: "Forgot password verification",
     html: mail
   }
-
-  transporter.sendMail(message)
+  try {
+    transporter.sendMail(message)
+  }
+  catch {
+    console.log("error when send Email")
+  }
 }
 
-exports.loginSuccess = (req, res) => {
+exports.loginSuccess = async (req, res) => {
   if (req.user) {
-    const accessToken = generateAccessToken(req.user);
-    res.cookie('accessToken', accessToken, { httpOnly: true });
-    res.json({ user: req.user });
+    const cart = await Cart.findOne({ userID: req.user._id })
+    res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
   } else {
-    res.json({ user: "" })
+    res.json({ user: "", length: 0 })
   }
 }
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product.find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1, ratings: 1 }).limit(10);
-    return res.json({ product: product, user: req.user })
+    let product = await Product.find({}).limit(32);
+    return res.json({ product: product })
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -78,7 +77,8 @@ exports.homePage = async (req, res) => {
 exports.productPage = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-    res.json({ product: product });
+    let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
+    res.json({ product: product, vendorName: vendorName.businessName });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -288,10 +288,127 @@ exports.postResetPassword = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   jwt.verify(req.params.token, process.env.VERIFY_EMAIL, async (err, user) => {
     if (err) return res.status(500).json("error");
-    const foundUser = await User.findOneAndUpdate({ email: user.user }, { verify: true })
+    const foundUser = (await User.findOneAndUpdate({ email: user.user }, { verify: true })) || (await Vendor.findOneAndUpdate({ email: user.user }, { verify: true })) || (await Shipper.findOneAndUpdate({ email: user.user }, { verify: true }))
     if (!foundUser) return res.status.json("error");
     return res.status(200).json("success")
   })
+}
+
+// Place the Order
+exports.placeOrder = async (req, res) => {
+  try {
+    const userID = req.user._id;
+    // Find the user's cart
+    const userCart = await Cart.findOne({ userID }).populate('products.product');
+    if (!userCart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+
+    // Group products by owner
+    const productsByOwner = userCart.products.reduce((groups, cartItem) => {
+      const ownerID = cartItem.product.owner.toString();
+      if (!groups[ownerID]) {
+        groups[ownerID] = [];
+      }
+      groups[ownerID].push(cartItem);
+      return groups;
+    }, {});
+
+    // Create an order for each owner
+    for (const ownerID in productsByOwner) {
+      const order = new Order({
+        userId: userID,
+        vendorID: ownerID,
+        products: productsByOwner[ownerID].map((cartItem) => ({
+          productId: cartItem.product._id,
+          quantity: cartItem.quantity,
+        })),
+      });
+
+      await order.save();
+    }
+
+    // Clear the user's cart
+    await userCart.clearCart();
+
+    res.status(200).json({ message: 'Orders placed successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error placing order' });
+  }
+};
+
+
+
+exports.addProduct = async (req, res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
+  }
+  const cart = await Cart.findOne({ userID: req.user._id })
+
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    return res.status(500).json({ error: "Cannot find the product." })
+  }
+
+  if (!cart) {
+    const newCart = new Cart({
+      userID: new mongoose.Types.ObjectId(req.user._id),
+      products: [{
+        product: product._id,
+        quantity: (req.query.quantity) ? req.query.quantity : 1,
+        owner: product.owner,
+      }]
+    })
+    await newCart.save()
+  } else {
+    await cart.addProduct(
+      await Product.findById(req.params.id),
+      (req.query.quantity) ? req.query.quantity : 1
+    );
+  }
+  return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
+}
+
+exports.getOrder = async (req, res) => {
+  const orderId = req.body.orderId;
+  const orderStatus = req.body.orderStatus;
+  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId, status: orderStatus });
+  if (!order) {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
+
+  return res.status(200).json({ order: order });
+}
+
+exports.vendorHomepage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.vendorProductPage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.getVendorDashboard = async (req, res) => {
+  return res.status(200).json("hahah");
+}
+
+exports.postVendorDashboard = async (req, res) => {
+
+}
+
+exports.checkout = async (req, res) => {
+  return res.status(200).json("hahah");
 }
 
 exports.logout = (req, res) => {

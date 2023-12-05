@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
 
-    facebookId:{
+    facebookId: {
         type: String,
     },
 
@@ -38,7 +38,12 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    role: {
+        type: String,
+        require: true,
+        default: "User",
+    }
 
 });
 
-module.exports = mongoose.model('User',userSchema)
+module.exports = mongoose.model('User', userSchema)

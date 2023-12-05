@@ -39,6 +39,12 @@ const shipperSchema = new mongoose.Schema({
         default: false,
     },
 
+    role: {
+        type: String,
+        require: true,
+        default: "Shipper",
+    }
+
 });
 
 module.exports = mongoose.model('Shipper', shipperSchema)
