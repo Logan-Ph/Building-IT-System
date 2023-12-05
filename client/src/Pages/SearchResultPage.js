@@ -1,75 +1,35 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Disclosure, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { FunnelIcon } from '@heroicons/react/20/solid'
 import '../css/searchresult.css';
 import SRProductCard from '../Components/SRProductCard'
 import SRPagination from '../Components/SRPagination'
 import SRPriceRange from '../Components/SRPriceRange'
 import SRStarRating from '../Components/SRStarRating'
-import { useHits } from 'react-instantsearch';
+import { useHits, useRefinementList } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
-import CustomRefinementList from '../Components/CustomRefinementList';
 import SortOptions from '../Components/SortOptions';
-
-const filters = [
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'househole appliances', label: 'Househole Appliances', checked: false },
-      { value: 'electronics', label: 'Electronics', checked: false },
-      { value: 'fashion', label: 'Fashon', checked: true },
-      { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
-      { value: 'baby toys', label: 'Baby Toys', checked: false },
-    ],
-  },
-]
 
 
 export default function Example() {
-  const [filters, setFilter] = useState([{
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
-      { value: 'househole appliances', label: 'Househole Appliances', checked: false },
-      { value: 'electronics', label: 'Electronics', checked: false },
-      { value: 'fashion', label: 'Fashon', checked: true },
-      { value: 'baby toys', label: 'Baby Toys', checked: false },
-    ],
-  },])
-
-  const [valueFilter, setValueFilter] = useState("")
-  console.log("valueFilter", valueFilter)
-  useEffect(() => {
-    const updatedItems = filters.map(item => {
-      if (item?.options?.find(item => item?.label === valueFilter)) {
-        return {
-          ...item, options: [
-            { value: 'fashion', label: 'Fashon', checked: true },
-            { value: 'househole appliances', label: 'Househole Appliances', checked: false },
-            { value: 'beauty & personal care', label: 'Beauty & Care', checked: false },
-            { value: 'electronics', label: 'Electronics', checked: false },
-            { value: 'baby toys', label: 'Baby Toys', checked: false }]
-        }; // Update the 'name' for the item with id 2
-      }
-      return item; // Return the unchanged item for other items
-    });
-    setFilter(updatedItems)
-    console.log("updatedItems", updatedItems)
-
-  }, [valueFilter])
-
+  const { hits } = useHits();
+  const [valueFilter, setValueFilter] = useState([
+    { value: 'household appliances', label: 'Household Appliances', isRefined: false },
+    { value: 'electronics', label: 'Electronics', isRefined: false },
+    { value: 'fashion', label: 'Fashion', isRefined: false },
+    { value: 'beauty & personal care', label: 'Beauty & Care', isRefined: false },
+    { value: 'baby toys', label: 'Baby Toys', isRefined: false },
+  ]);
+  const { refine } = useRefinementList({ attribute: 'category', operator: 'and' });
 
   const [sortOptions, setSortOptions] = useState([
-    { name: 'Most Popular', current: true, value: 'rBuy_relavant_sort' },
-    { name: 'Price: Low to High', current: false, value: 'rBuy_price_asc' },
-    { name: 'Price: High to Low', current: false, value: 'rBuy_price_desc' },
+    { label: 'Most Popular', value: 'rBuy_relavant_sort', current: false },
+    { label: 'Price: Low to High', value: 'rBuy_price_asc', current: false },
+    { label: 'Price: High to Low', value: 'rBuy_price_desc', current: false },
   ]);
   const { query } = useParams();
   const [searchQuery, setSearchQuery] = useState((query.split('='))[1]);
-  const { hits } = useHits();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   useEffect(() => {
@@ -79,7 +39,6 @@ export default function Example() {
   return (
     <div className="bg-white">
       <div>
-        {/* <RefinementList attribute='ratings' operator='and' /> */}
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 " onClose={setMobileFiltersOpen}>
@@ -119,36 +78,11 @@ export default function Example() {
                   </div>
 
                   {/* Filters */}
-                  <form className="mt-4 border-t border-gray-200">
+                  <span className="mt-4 border-t border-gray-200">
                     <SRPriceRange className="pt-6 px-4" />
                     <SRStarRating className="pt-6 px-4" />
-
-                    {filters?.map((section) => (
-                      <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
-                        {({ open }) => (
-                          <>
-                            {/* <h3 className="-mx-2 -my-3 flow-root">
-                              <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                <span className="font-medium text-gray-900">{section.name}</span>
-                                <span className="ml-6 flex items-center">
-                                  {open ? (
-                                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
-                                  ) : (
-                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                                  )}
-                                </span>
-                              </Disclosure.Button>
-                            </h3> */}
-                            <Disclosure.Panel className="pt-6">
-                              <div className="space-y-6">
-                                <CustomRefinementList />
-                              </div>
-                            </Disclosure.Panel>
-                          </>
-                        )}
-                      </Disclosure>
-                    ))}
-                  </form>
+                    <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} />
+                  </span>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -184,31 +118,7 @@ export default function Example() {
                 <div className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange />
                   <SRStarRating />
-                  {/* {filters?.map((section) => (
-                    <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
-                      {({ open }) => (
-                        <>
-                          <h3 className="-my-3 flow-root">
-                            <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-md text-gray-400 hover:text-gray-500">
-                              <span className="font-medium text-gray-900">{section.name}</span>
-                              <span className="ml-6 flex items-center">
-                                {open ? (
-                                  <MinusIcon className="h-5 w-5" aria-hidden="true" />
-                                ) : (
-                                  <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                                )}
-                              </span>
-                            </Disclosure.Button>
-                          </h3>
-                          <Disclosure.Panel className="pt-6">
-                            <div className="space-y-4">
-                              <CustomRefinementList setFilter={setValueFilter}/>
-                            </div>
-                          </Disclosure.Panel>
-                        </>
-                      )}
-                    </Disclosure> */}
-                  {/* ))} */}
+                  <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} />
                 </div>
               </div>
 
@@ -225,4 +135,25 @@ export default function Example() {
       </div>
     </div>
   )
+}
+
+function CheckboxLabel({ setValueFilter, valueFilter, refine }) {
+  const handleItemClick = (value) => {
+    refine(value)
+    setValueFilter(valueFilter.map(option => option.value === value ? { ...option, isRefined: !option.isRefined } : option));
+  }
+
+  return (
+    <div className='flex mb-3 pb-6 xs:px-4 sm:px-4'>
+      <div className='w-full'>
+        <h3 className='font-medium mb-2 mt-3'>Categories</h3>
+        {valueFilter.map(option => (
+          <div className='mb-2 flex items-center'>
+            <input type="checkbox" className='rounded-md' onClick={() => handleItemClick(option.value)} checked={option.isRefined} />
+            <span className='ml-2 text-md'>{option.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

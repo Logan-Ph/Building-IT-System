@@ -9,16 +9,15 @@ function classNames(...classes) {
 }
 export default function SortOptions({ sortOptions, setSortOptions }) {
     const { refine } = useSortBy({
-        items: [
-            { label: 'Price: Low to High', value: 'rBuy_price_asc', current: false },
-            { label: 'Price: High to Low', value: 'rBuy_price_desc', current: false },
-            { label: 'Most Popular', value: 'rBuy_relavant_sort', current: true },
-        ],
+        items: sortOptions.map(option => ({
+            label: option.name,
+            value: option.value,
+        })),
     })
 
     const handleSortOptionClick = (selectedOption) => {
         setSortOptions(sortOptions.map(option =>
-            option.name === selectedOption.name
+            option.label === selectedOption.label
                 ? { ...option, current: true }
                 : { ...option, current: false }
         ));
@@ -49,7 +48,7 @@ export default function SortOptions({ sortOptions, setSortOptions }) {
                 <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {sortOptions.map((option) => (
-                            <Menu.Item key={option.name}>
+                            <Menu.Item key={option.label}>
                                 {({ active }) => (
                                     <span
                                         className={classNames(
@@ -59,7 +58,7 @@ export default function SortOptions({ sortOptions, setSortOptions }) {
                                         )}
                                         onClick={(e) => { handleSortOptionClick(option) }}
                                     >
-                                        {option.name}
+                                        {option.label}
                                     </span>
                                 )}
                             </Menu.Item>
