@@ -1,9 +1,7 @@
 import VendorNav from "../../Components/VendorNav";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useCallback, useEffect, useState } from "react";
+import { Disclosure } from "@headlessui/react";
 import {
-  ChevronDownIcon,
   FunnelIcon,
   MinusIcon,
   PlusIcon,

@@ -12,7 +12,7 @@ import ForgotPassword from '../Pages/User/ForgotPasswordPage';
 import RegisterPage from '../Pages/User/RegisterPage';
 import CheckoutPage from "../Pages/User/CheckoutPage";
 import UserProfile from '../Pages/User/UserProfile';
-import ManageOrderPage from '../Pages/Vendor/ManageOrderPage';
+import ManageOrderPage from '../Pages/Vendor/VendorManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/Vendor/DashboardPage';
 import VendorHomePage from '../Pages/User/VendorHomePage';
