@@ -13,12 +13,13 @@ import ForgotPassword from '../Pages/ForgotPasswordPage';
 import RegisterPage from '../Pages/RegisterPage';
 import CheckoutPage from "../Pages/CheckoutPage";
 import UserProfile from '../Pages/UserProfile';
-import ManageOrderPage from '../Pages/ManageOrderPage';
+import ManageOrderPage from '../Pages/VendorManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/DashboardPage';
 import VendorHomePage from '../Pages/VendorHomePage';
 import VendorProductPage from "../Pages/VendorProductPage";
 import SearchInVendor from "../Pages/SearchInVendor";
+import AdminManageProductPage from "../Pages/AdminManageProductPage";
 
 
 import {
@@ -114,8 +115,12 @@ export default function Router() {
           element: <VendorPostingProduct />
         },
         {
-          path: "/manage-order",
+          path: "/vendor/manage-order",
           element: <ManageOrderPage />
+        },
+        {
+          path: "/admin/manageProduct",
+          element: <AdminManageProductPage />
         },
       ],
     },

@@ -1,9 +1,7 @@
 import VendorNav from "../Components/VendorNav";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
-  ChevronDownIcon,
   FunnelIcon,
   MinusIcon,
   PlusIcon,
@@ -13,7 +11,7 @@ import SRProductCard from "../Components/SRProductCard";
 import SRPagination from "../Components/SRPagination";
 import SRPriceRange from "../Components/SRPriceRange";
 import SRStarRating from "../Components/SRStarRating";
-import { useHits, useRefinementList, useSortBy } from "react-instantsearch";
+import { useHits, useRefinementList } from "react-instantsearch";
 import { useParams } from "react-router-dom";
 import CustomRefinementList from "../Components/CustomRefinementList";
 import axios from "axios";
