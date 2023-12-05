@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { UserContext } from "../Context/UserContext";
-import { CartContext } from "../Context/CartContext";
+import { UserContext } from "../../Context/UserContext";
+import { CartContext } from "../../Context/CartContext";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
-import CheckoutInfo from "../Components/CheckoutInfo"
-import OrderSummary from "../Components/OrderSummary";
+import CheckoutInfo from "../../Components/CheckoutInfo"
+import OrderSummary from "../../Components/OrderSummary";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function CheckoutPage() {

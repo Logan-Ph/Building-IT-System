@@ -1,4 +1,4 @@
-import '../css/profile.css'
+import '../../css/profile.css'
 import { useState } from 'react'
 export default function UserProfile() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);

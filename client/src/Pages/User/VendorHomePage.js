@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import VendorNav from "../Components/VendorNav";
+import VendorNav from "../../Components/VendorNav";
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 export default function VendorHomePage() {
@@ -133,28 +133,28 @@ export default function VendorHomePage() {
           <div class="col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../Components/images/banner1.jpg")}
+              src={require("../../Components/images/banner1.jpg")}
               alt=""
             />
           </div>
           <div class="md:col-span-2 col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../Components/images/banner2.webp")}
+              src={require("../../Components/images/banner2.webp")}
               alt=""
             />
           </div>
           <div class="md:col-span-2 col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../Components/images/banner3.jpeg")}
+              src={require("../../Components/images/banner3.jpeg")}
               alt=""
             />
           </div>
           <div class="col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../Components/images/banner1.jpg")}
+              src={require("../../Components/images/banner1.jpg")}
               alt=""
             />
           </div>
