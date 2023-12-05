@@ -6,8 +6,9 @@ const productSchema = new mongoose.Schema({
     },
 
     owner: {
-        type: String,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vendor',
+        required: true
     },
 
     product_name: {
