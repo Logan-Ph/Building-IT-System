@@ -30,7 +30,7 @@ export default function ManageOrderPage() {
     }
 
     return <>
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5">
+        <main className="max-w-8xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
             <div className="flex items-center py-10">
                 <div className="flex flex-row items-center">
                     <input type="text" name="search" placeholder="Search orders here.... "
@@ -72,6 +72,9 @@ function Component() {
                 <UnpaidTableComponent />
             </Tabs.Item>
             <Tabs.Item title="Failed Delivery">
+                <UnpaidTableComponent />
+
+            {/* <div className="overflow-x-auto">
                 <div className='border border-gray my-1 py-32'>
                     <div className='flex flex-col justify-center items-center'>
                         <div className='w-[100px] h-[80px]'>
@@ -81,6 +84,7 @@ function Component() {
                         <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
                     </div>
                 </div>
+            </div> */}
             </Tabs.Item>
         </Tabs>
     )
