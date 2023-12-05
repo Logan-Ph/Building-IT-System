@@ -193,10 +193,13 @@ export default function Header() {
               Toys & Games
             </span>
           </div>
+<div>
+
 
           {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
             Become a vendor
           </a>}
+          </div>
         </div>
       </div>
 
