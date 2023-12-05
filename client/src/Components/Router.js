@@ -6,19 +6,18 @@ import ResetPasswordPage from '../Pages/User/ResetPasswordPage';
 import VerifyEmailPage from '../Pages/User/VerifyEmailPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
-import LogInPage from '../Pages/LogInPage';
-import SearchResultPage from '../Pages/SearchResultPage';
-import ForgotPassword from '../Pages/ForgotPasswordPage';
-import RegisterPage from '../Pages/RegisterPage';
-import CheckoutPage from "../Pages/CheckoutPage";
-import UserProfile from '../Pages/UserProfile';
-import ManageOrderPage from '../Pages/ManageOrderPage';
+import LogInPage from '../Pages/User/LogInPage';
+import SearchResultPage from '../Pages/User/SearchResultPage';
+import ForgotPassword from '../Pages/User/ForgotPasswordPage';
+import RegisterPage from '../Pages/User/RegisterPage';
+import CheckoutPage from "../Pages/User/CheckoutPage";
+import UserProfile from '../Pages/User/UserProfile';
+import ManageOrderPage from '../Pages/Vendor/VendorManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
-import DashboardPage from '../Pages/DashboardPage';
-import VendorHomePage from '../Pages/VendorHomePage';
-import VendorProductPage from "../Pages/VendorProductPage";
-import SearchInVendor from "../Pages/SearchInVendor";
-
+import DashboardPage from '../Pages/Vendor/DashboardPage';
+import VendorHomePage from '../Pages/User/VendorHomePage';
+import VendorProductPage from "../Pages/User/VendorProductPage";
+import ProductPage from '../Pages/User/ProductPage'
 
 import {
   InstantSearch,
@@ -125,8 +124,12 @@ export default function Router() {
           element: <VendorPostingProduct />
         },
         {
-          path: "/vendor/manage-order",
+          path: "/manage-order",
           element: <ManageOrderPage />
+        },
+        {
+          path: "/manage-product",
+          element: <VendorMyProduct />
         },
       ],
     },

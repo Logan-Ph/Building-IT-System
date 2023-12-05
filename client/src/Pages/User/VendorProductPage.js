@@ -1,23 +1,21 @@
-import VendorNav from "../Components/VendorNav";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import VendorNav from "../../Components/VendorNav";
+import { useCallback, useEffect, useState } from "react";
+import { Disclosure } from "@headlessui/react";
 import {
-  ChevronDownIcon,
   FunnelIcon,
   MinusIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
-import "../css/searchresult.css";
-import SRProductCard from "../Components/SRProductCard";
-import SRPagination from "../Components/SRPagination";
-import SRPriceRange from "../Components/SRPriceRange";
-import SRStarRating from "../Components/SRStarRating";
+import "../../css/searchresult.css";
+import SRProductCard from "../../Components/SRProductCard";
+import SRPagination from "../../Components/SRPagination";
+import SRPriceRange from "../../Components/SRPriceRange";
+import SRStarRating from "../../Components/SRStarRating";
 import { useHits, useRefinementList, useSortBy } from "react-instantsearch";
 import { useParams } from "react-router-dom";
-import CustomRefinementList from "../Components/CustomRefinementList";
+import CustomRefinementList from "../../Components/CustomRefinementList";
 import axios from "axios";
-import SortOptions from "../Components/SortOptions";
+import SortOptions from "../../Components/SortOptions";
 
 const filters = [
   {
