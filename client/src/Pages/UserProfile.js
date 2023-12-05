@@ -78,8 +78,7 @@ export default function UserProfile() {
     const [file, setFile] = useState(null);
 
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        setFile(file);
+        setFile(event.target.files[0]);
     };
 
     const data = {
@@ -92,10 +91,7 @@ export default function UserProfile() {
 
     async function axiosPostData() {
         try { 
-            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, 
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }, })
+            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true })
             .then(res => {
                 setMsg(res.data)
                 setError('')
@@ -211,8 +207,7 @@ export default function UserProfile() {
                                         <div className="col-span-full">
                                             <label for="photo" className="block text-sm font-medium leading-6 text-gray-900">Avatar picture</label>
                                             <div className="mt-2 flex items-center gap-x-3">
-                                                <input type="file" id="fileUpload" name="photo" onChange={handleFileChange} accept="image/*" />
-                                               
+                                                <input type="file" id="photo" name="photo" onChange={handleFileChange} accept="image/*" />
                                             </div>
                                         </div>
 
