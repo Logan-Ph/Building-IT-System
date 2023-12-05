@@ -2,14 +2,14 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FunnelIcon } from '@heroicons/react/20/solid'
-import '../css/searchresult.css';
-import SRProductCard from '../Components/SRProductCard'
-import SRPagination from '../Components/SRPagination'
-import SRPriceRange from '../Components/SRPriceRange'
-import SRStarRating from '../Components/SRStarRating'
+import '../../css/searchresult.css';
+import SRProductCard from '../../Components/SRProductCard'
+import SRPagination from '../../Components/SRPagination'
+import SRPriceRange from '../../Components/SRPriceRange'
+import SRStarRating from '../../Components/SRStarRating'
 import { useHits, useRefinementList } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
-import SortOptions from '../Components/SortOptions';
+import SortOptions from '../../Components/SortOptions';
 
 
 export default function Example() {

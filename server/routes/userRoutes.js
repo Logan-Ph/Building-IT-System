@@ -83,7 +83,7 @@ router.get('/checkout', authenticateToken, authorizeUser, userController.checkou
 router.post('/checkout', authenticateToken, authorizeUser, userController.placeOrder);
 
 // user add to cart route
-router.get('/add-product/:id', authenticateToken, authorizeUser, userController.addProduct);
+router.get('/add-product/:id', userController.addProduct);
 
 // vendor homepage (user side)
 router.get('/vendor/:id', userController.vendorHomepage)
@@ -92,7 +92,8 @@ router.get('/vendor/:id', userController.vendorHomepage)
 router.get('/vendor/:id/product', userController.vendorProductPage);
 
 //vendor manage order (vendor side)
-router.post('/dashboard/get-order', userController.getOrder);
+router.post('/search-order', userController.searchOrder);
+router.get('/manage-order', userController.manageOrder);
 
 // vendor dashboard route (vendor side)
 router.post('/dashboard', authenticateToken, authorizeVendor, userController.postVendorDashboard);

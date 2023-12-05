@@ -1,5 +1,5 @@
-import VendorNav from "../Components/VendorNav";
-import { Fragment, useEffect, useState } from "react";
+import VendorNav from "../../Components/VendorNav";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -8,14 +8,16 @@ import {
   MinusIcon,
   PlusIcon,
 } from "@heroicons/react/20/solid";
-import "../css/searchresult.css";
-import SRProductCard from "../Components/SRProductCard";
-import SRPagination from "../Components/SRPagination";
-import SRPriceRange from "../Components/SRPriceRange";
-import SRStarRating from "../Components/SRStarRating";
-import { useHits, useSortBy } from "react-instantsearch";
+import "../../css/searchresult.css";
+import SRProductCard from "../../Components/SRProductCard";
+import SRPagination from "../../Components/SRPagination";
+import SRPriceRange from "../../Components/SRPriceRange";
+import SRStarRating from "../../Components/SRStarRating";
+import { useHits, useRefinementList, useSortBy } from "react-instantsearch";
 import { useParams } from "react-router-dom";
-import CustomRefinementList from "../Components/CustomRefinementList";
+import CustomRefinementList from "../../Components/CustomRefinementList";
+import axios from "axios";
+import SortOptions from "../../Components/SortOptions";
 
 const filters = [
   {
@@ -37,120 +39,56 @@ const filters = [
       { value: "baby toys", label: "Baby Toys", checked: false },
     ],
   },
-  // {
-  //   id: 'location',
-  //   name: 'Location',
-  //   options: [
-  //     { value: 'Ha Noi Capital City', label: 'Ha Noi Capital City', checked: false },
-  //     { value: 'Ho Chi Minh City', label: 'Ho Chi Minh City', checked: false },
-  //     { value: 'Da Nang City', label: 'Da Nang City', checked: false },
-  //   ],
-  // },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export default function SearchInVendor() {
+export default function VendorProductPage() {
   const [sortOptions, setSortOptions] = useState([
     { name: "Most Popular", current: true, value: "rBuy_relavant_sort" },
     { name: "Price: Low to High", current: false, value: "rBuy_price_asc" },
     { name: "Price: High to Low", current: false, value: "rBuy_price_desc" },
   ]);
-  const { query } = useParams();
+  const { refine } = useRefinementList({ attribute: 'owner' });
+  const params = useParams()
   const { hits } = useHits();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const { refine } = useSortBy({
-    items: [
-      {
-        label: "Price: Low to High",
-        value: "rBuy_price_asc",
-        current: false,
-      },
-      {
-        label: "Price: High to Low",
-        value: "rBuy_price_desc",
-        current: false,
-      },
-      { label: "Most Popular", value: "rBuy_relavant_sort", current: true },
-    ],
-  });
+  const [vendor, setVendor] = useState()
+  const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
-  const handleSortOptionClick = (selectedOption) => {
-    setSortOptions(
-      sortOptions.map((option) =>
-        option.name === selectedOption.name
-          ? { ...option, current: true }
-          : { ...option, current: false }
-      )
-    );
-    refine(selectedOption.value);
-  };
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await axios.get(`http://localhost:4000/vendor/${params.id}/product`, { withCredentials: true })
+      setVendor(res.data.vendor)
+      setIsLoading(false)
+    } catch (error) {
+      setError(error)
+    }
+  }, [params.id])
+
+  useEffect(() => {
+    fetchData()
+    if (vendor) {
+      refine(vendor.businessName);
+    }
+  }, [fetchData, refine, vendor?.businessName])
+
+  if (isLoading) {
+    return <div>....is loading</div>
+  }
 
   return (
     <>
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        {/* <VendorNav /> */}
-
+        <VendorNav vendor={vendor} />
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
-            <h1 className="text-3xl font-semibold tracking-tight text-gray-900">Search result for <span className='text-[#E61E2A] font-light'>"Corgi"</span> in Jellycat</h1>
-
-            {/* or Category */}
-            {/* <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
-              Category 1 <span class="text-lg">(90)</span>
-            </h1> */}
+            <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
+              All Products <span class="text-lg">(90)</span>
+            </h1>
 
             <div className="flex items-center">
-              <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    Sort
-                    <ChevronDownIcon
-                      className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
-                    />
-                  </Menu.Button>
-                </div>
-
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                      {sortOptions.map((option) => (
-                        <Menu.Item key={option.name}>
-                          {({ active }) => (
-                            <span
-                              className={classNames(
-                                option.current
-                                  ? "font-medium text-gray-900"
-                                  : "text-gray-500",
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm"
-                              )}
-                              onClick={(e) => {
-                                handleSortOptionClick(option);
-                              }}
-                            >
-                              {option.name}
-                            </span>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-
+              <SortOptions sortOptions={sortOptions} setSortOptions={setSortOptions} />
               <button
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"

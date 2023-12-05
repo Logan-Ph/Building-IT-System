@@ -1,25 +1,23 @@
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import Homepage from '../Pages/HomePage';
-import ResetPasswordPage from '../Pages/ResetPasswordPage';
-import VerifyEmailPage from '../Pages/VerifyEmailPage';
-import ProductPage from '../Pages/ProductPage';
+import Homepage from '../Pages/User/HomePage';
+import ResetPasswordPage from '../Pages/User/ResetPasswordPage';
+import VerifyEmailPage from '../Pages/User/VerifyEmailPage';
 import LogInHeader from './LogInHeader';
 import SignUpHeader from './SignUpHeader';
-import LogInPage from '../Pages/LogInPage';
-import SearchResultPage from '../Pages/SearchResultPage';
-import ForgotPassword from '../Pages/ForgotPasswordPage';
-import RegisterPage from '../Pages/RegisterPage';
-import CheckoutPage from "../Pages/CheckoutPage";
-import UserProfile from '../Pages/UserProfile';
-import ManageOrderPage from '../Pages/ManageOrderPage';
+import LogInPage from '../Pages/User/LogInPage';
+import SearchResultPage from '../Pages/User/SearchResultPage';
+import ForgotPassword from '../Pages/User/ForgotPasswordPage';
+import RegisterPage from '../Pages/User/RegisterPage';
+import CheckoutPage from "../Pages/User/CheckoutPage";
+import UserProfile from '../Pages/User/UserProfile';
+import ManageOrderPage from '../Pages/Vendor/ManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
-import DashboardPage from '../Pages/DashboardPage';
-import VendorHomePage from '../Pages/VendorHomePage';
-import VendorProductPage from "../Pages/VendorProductPage";
-import SearchInVendor from "../Pages/SearchInVendor";
-
+import DashboardPage from '../Pages/Vendor/DashboardPage';
+import VendorHomePage from '../Pages/User/VendorHomePage';
+import VendorProductPage from "../Pages/User/VendorProductPage";
+import ProductPage from '../Pages/User/ProductPage'
 
 import {
   InstantSearch,
@@ -27,13 +25,14 @@ import {
 import { CartProvider } from '../Context/CartContext';
 import { UserProvider } from '../Context/UserContext';
 import Chatbot from "./Chatbot";
-import VendorMyProduct from '../Pages/VendorMyProduct';
-import VendorPostingProduct from '../Pages/VendorPostingProduct';
+import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
+import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
+import VendorSidebar from '../Components/VendorSidebar';
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
 export default function Router() {
-  const Layout = ({ header }) => {
+  const UserLayout = ({ header }) => {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
@@ -41,6 +40,19 @@ export default function Router() {
           <Outlet />
           <Chatbot />
           <Footer />
+        </InstantSearch>
+      </>
+    )
+  }
+
+  const VendorLayout = () => {
+    return (
+      <>
+        <InstantSearch searchClient={searchClient} indexName="rBuy">
+          <div className="flex  ">
+            <VendorSidebar />
+            <Outlet />
+          </div>
         </InstantSearch>
       </>
     )
@@ -67,7 +79,7 @@ export default function Router() {
     },
     {
       path: "/",
-      element: <Layout header={<Header />} />,
+      element: <UserLayout header={<Header />} />,
       children: [
         {
           path: "/",
@@ -86,10 +98,6 @@ export default function Router() {
           element: <UserProfile />,
         },
         {
-          path: "/dashboard",
-          element: <DashboardPage />,
-        },
-        {
           path: "/vendor/:id/product",
           element: <VendorProductPage />,
         },
@@ -98,30 +106,36 @@ export default function Router() {
           element: <VendorHomePage />,
         },
         {
-          path: "/vendorSearch",
-          element: <SearchInVendor />,
-        },
-        {
           path: "/search/:query",
           element: <SearchResultPage />,
         },
+      ],
+    },
+    {
+      path: "/",
+      element: <VendorLayout />,
+      children: [
         {
-          path: "/vendor/myProduct",
-          element: <VendorMyProduct />
+          path: "/dashboard",
+          element: <DashboardPage />,
         },
         {
-          path: "/vendor/postProduct",
+          path: "/add-product",
           element: <VendorPostingProduct />
         },
         {
           path: "/manage-order",
           element: <ManageOrderPage />
         },
+        {
+          path: "/manage-product",
+          element: <VendorMyProduct />
+        },
       ],
     },
     {
       path: "/",
-      element: <Layout header={<LogInHeader />} />,
+      element: <UserLayout header={<LogInHeader />} />,
       children: [
         {
           path: "/login",

@@ -11,7 +11,18 @@ const orderSchema = new mongoose.Schema({
       quantity: {
         type: Number,
         required: true
-      }
+      },
+      image_link: {
+        type: String,
+      },
+      price: {
+        type: Number,
+        require: true,
+      },
+      product_name: {
+        type: String,
+        require: true,
+      },
     }
   ],
   userId: {
@@ -20,11 +31,11 @@ const orderSchema = new mongoose.Schema({
     require: true,
   },
   vendorID: {
-    type: String,
-    require: true,
+    type: mongoose.Types.ObjectId,
     ref: "Vendor",
+    require: true,
   },
-  productName: {
+  userName: {
     type: String,
     require: true,
   },

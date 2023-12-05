@@ -18,9 +18,21 @@ const cartSchema = new mongoose.Schema({
             default: 1
         },
         owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Vendor',
+            required: true
+        },
+        image_link: {
+            type: String,
+        },
+        price: {
+            type: Number,
+            require: true,
+        },
+        product_name: {
             type: String,
             require: true,
-        }
+        },
     }],
 });
 
