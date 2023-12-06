@@ -30,7 +30,7 @@ export default function ManageOrderPage() {
     }
 
     return <>
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5">
+        <main className="mx-auto max-w-9xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5">
             <div className="flex items-center py-10">
                 <div className="flex flex-row items-center">
                     <input type="text" name="search" placeholder="Search orders here.... "

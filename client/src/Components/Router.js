@@ -14,16 +14,14 @@ import CheckoutPage from "../Pages/User/CheckoutPage";
 import UserProfile from '../Pages/User/UserProfile';
 import ManageOrderPage from '../Pages/Vendor/ManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
-<<<<<<< HEAD
-import DashboardPage from '../Pages/DashboardPage';
-import AdminDashboardPage from '../Pages/AdminDashboardPage';
-=======
+
 import DashboardPage from '../Pages/Vendor/DashboardPage';
+import AdminDashboardPage from '../Pages/Admin/AdminDashboardPage';
+
 import VendorHomePage from '../Pages/User/VendorHomePage';
 import VendorProductPage from "../Pages/User/VendorProductPage";
-import ProductPage from '../Pages/User/ProductPage'
+import ProductPage from '../Pages/User/ProductPage';
 
->>>>>>> 85a68914b54f6652982b82ab825ff8b49a04aa7f
 import {
   InstantSearch,
 } from 'react-instantsearch';
@@ -114,6 +112,11 @@ export default function Router() {
           path: "/search/:query",
           element: <SearchResultPage />,
         },
+        {
+          path: "/AdminDashboard",
+          element: <AdminDashboardPage />,
+        },
+        
       ],
     },
     {

@@ -1,8 +1,8 @@
-import Sidebar from "../Components/Sidebar";
-import { SidebarItem } from "../Components/Sidebar";
-import BarChart from "../Components/BarChart";
-import AdminInsight from "../Components/AdminInsight";
-import ToDoList from "../Components/ToDoList";
+import Sidebar from "../../Components/Sidebar";
+import { SidebarItem } from "../../Components/Sidebar";
+import BarChart from "../../Components/BarChart";
+import AdminInsight from "../../Components/AdminInsight";
+import ToDoList from "../../Components/ToDoList";
 import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
 
 
@@ -213,6 +213,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      
     </>
   );
 }
