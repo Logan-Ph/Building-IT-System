@@ -9,6 +9,8 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
+
+const fs = require("fs");
 require('dotenv').config()
 
 function sendEmailVerification(userEmail) {
@@ -54,8 +56,15 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
+    const user = await User.findById(req.user._id);
+    let userImage;
+    if (user.img){
+      userImage = Buffer.from(
+        user.img.data
+      ).toString("base64");
+    }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
+    res.json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
   } else {
     res.json({ user: "", length: 0 })
   }
@@ -392,11 +401,9 @@ exports.logout = (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-
     if (req.file) {
       const image = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
+        data: fs.readFileSync("uploads/" + req.file.filename),
       };
       user.img = image; 
     }
@@ -431,8 +438,7 @@ exports.updateVendor = async (req, res) => {
 
     if (req.file) {
       const image = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
+        data: fs.readFileSync("uploads/" + req.file.filename),
       };
       vendor.img = image; 
     }
@@ -498,4 +504,20 @@ exports.updateShipper = async (req, res) => {
 
 exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
+}
+
+exports.updateVendorWallpaper = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({email: req.body.email});
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.wallpaper = image; 
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch(error){
+    res.status(500).send({ message: error.message || "Error Occured" });   
+  }
 }

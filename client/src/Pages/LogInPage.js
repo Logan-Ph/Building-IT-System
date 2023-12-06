@@ -35,7 +35,7 @@ export default function LogInPage() {
         }
 
         await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
-            .then(res => { setUser(res.data.user); setError(res.data.message) })
+            .then(res => { setUser(res.data.user); setError(res.data.message); console.log(res.data) })
             .catch(er => {
                 console.log(er);
             });

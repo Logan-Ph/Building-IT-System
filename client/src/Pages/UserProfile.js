@@ -9,6 +9,7 @@ export default function UserProfile() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
+    const [userImage, setUserImage] = useState()
     const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
 
     const [error, setError] = useState('')
@@ -64,6 +65,7 @@ export default function UserProfile() {
         try {
             const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
             setUser(res.data.user);
+            setUserImage(res.data.userImage)
             setIsLoading(false);
         } catch (er) {
             console.log(er);
@@ -75,9 +77,12 @@ export default function UserProfile() {
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
     const email = user.email;
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState();
 
     const handleFileChange = (event) => {
+        event.preventDefault()
+        //console.log(event.target.files);
+        console.log(event.target)
         setFile(event.target.files[0]);
     };
 
@@ -91,7 +96,7 @@ export default function UserProfile() {
 
     async function axiosPostData() {
         try { 
-            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true })
+            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers:{'Content-Type': 'multipart/form-data'}  })
             .then(res => {
                 setMsg(res.data)
                 setError('')
@@ -124,7 +129,7 @@ export default function UserProfile() {
                 {/* <!-- SIDEBAR --> */}
                 <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
                     <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
-                        <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
+                        <img src={`data:image/jpeg;base64,${userImage}`} className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
                             <h3 className="text-lg font-semibold mb-1"></h3>
                             <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
@@ -179,14 +184,15 @@ export default function UserProfile() {
                 <div className="pl-0 md:pl-64 transition-all" id="main">
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
-                            <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-28 h-28 object-cover rounded-full" alt="" />
+                            <img src={`data:image/jpeg;base64,${userImage}`} className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
                                 <h2 className="text-2xl font-semibold mb-2">{user.name}</h2>
+                                <span className="text-lg text-gray-500">{user.email}</span>
                             </div>
-                            <a href="#" className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
+                            <button onClick={handleSubmit} className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
                                 <i className='bx bx-edit-alt' ></i>
                                 Save changes
-                            </a>
+                            </button>
                         </div>
                         <div className="mt-4">
                             <div className="flex items-center gap-8 tab-indicator border-b border-gray-200">
@@ -195,12 +201,7 @@ export default function UserProfile() {
                                 <span onClick={() => handleTabClick("notisetting")} className={activeTab === "notisetting" ? "active" : ""}>Notifications</span>
                             </div>
                             {activeTab === "profile" && <div className="tab-content mt-4" id="profile">
-                                <h2 className="text-2xl font-semibold">My Profile</h2>
                                 <div className="border-b border-gray-900/10 pb-12">
-                                    <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                                    <p className="mt-1 text-sm leading-6 text-gray-600">Manage and protect your account
-                                    </p>
-
                                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                                         <div className="col-span-full">
@@ -213,28 +214,23 @@ export default function UserProfile() {
                                         <div className="sm:col-span-3">
                                             <label for="name" className="block text-sm font-medium leading-6 text-gray-900">Full name</label>
                                             <div className="mt-2">
-                                                <input type="name" name="name" id="name" autocomplete="name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setName(e.target.value)} placeholder={user.name} type="name" name="name" id="name" autocomplete="name" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
                                             <label for="street-address" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                             <div className="mt-2">
-                                                <input type="text" name="street-address" id="street-address" autocomplete="street-address" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setAddress(e.target.value)} placeholder={user.address} type="text" name="street-address" id="street-address" autocomplete="street-address" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
                                             <label for="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
                                             <div className="mt-2">
-                                                <input id="phoneNumber" name="phoneNumber" type="phoneNumber" autocomplete="phoneNumber" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user.phoneNumber} id="phoneNumber" name="phoneNumber" type="phoneNumber" autocomplete="phoneNumber" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
-
-                                        <div className="sm:col-span-4">
-                                            <p for="name" className="block text-sm font-medium leading-6 text-gray-900">Email:</p>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>}

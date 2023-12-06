@@ -27,7 +27,10 @@ const vendorSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
+    },
+
+    wallpaper: {
+        data: Buffer,
     },
 
     verify: {

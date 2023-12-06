@@ -4,17 +4,20 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
 const multer = require('multer');
+const path = require('path');
 
 require('dotenv').config
 
 const storage = multer.diskStorage({
-    destination: "uploads",
-    filename: (req, file, cb) => {
-        cb(null, file.originalname);
+    destination: function(req, file, cb) {
+      cb(null, 'uploads') // specify the path to save files
     },
+    filename: function(req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // specify the filename
+    }
 });
-const upload = multer({ storage: storage });
 
+const upload = multer({ storage });
 /**
  *  App routes
 */
@@ -116,5 +119,5 @@ router.post('/dashboard', authenticateToken, authorizeVendor, userController.ven
 router.get('/logout', userController.logout);
 router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);
-router.post('/update-user', upload.single("img", {name:"file"}), userController.updateUser);
+router.post('/update-user', upload.single('file'), userController.updateUser);
 module.exports = router;
