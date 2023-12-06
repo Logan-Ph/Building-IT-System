@@ -55,7 +55,7 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div class=" bg-white h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 text-slate-300 relative py-20 ">
+        <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32 text-slate-300 relative py-20 ">
         <div
           id="content"
           class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-12 "
