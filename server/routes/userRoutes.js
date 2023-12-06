@@ -3,8 +3,21 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
+const multer = require('multer');
+const path = require('path');
+
 require('dotenv').config
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, 'uploads') // specify the path to save files
+    },
+    filename: function(req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // specify the filename
+    }
+});
+
+const upload = multer({ storage });
 /**
  *  App routes
 */
@@ -155,4 +168,5 @@ router.get('/auth/google/callback', (req, res, next) => {
         });
     })(req, res);
 });
+router.post('/update-user', upload.single('file'), userController.updateUser);
 module.exports = router;
