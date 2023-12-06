@@ -382,9 +382,14 @@ exports.searchOrder = async (req, res) => {
   try {
     const orderId = req.body.orderId;
     const orderStatus = req.body.orderStatus
+    let order;
     console.log(orderStatus)
-    const order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
-    console.log(order)
+    if (orderStatus) {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
+    } else {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId });
+    }
+
     if (!order) {
       return res.status(500).json({ error: "Cannot find order. " })
     }

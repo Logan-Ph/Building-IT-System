@@ -29,9 +29,27 @@ export default function ManageOrderPage() {
     }, [])
 
     const postData = async () => {
+        let statusValue;
         try {
-            console.log(status)
-            const res = await axios.post('http://localhost:4000/search-order', { orderId: orderId, orderStatus: status }, { withCredentials: true })
+            switch (status) {
+                case 1:
+                    statusValue = "Unpaid";
+                    break;
+                case 2:
+                    statusValue = "To Ship";
+                    break;
+                case 3:
+                    statusValue = "Shipping";
+                    break;
+                case 4:
+                    statusValue = "Completed";
+                    break;
+                case 5:
+                    statusValue = "Failed Delivery";
+                    break;
+                default:
+            }
+            const res = await axios.post('http://localhost:4000/search-order', { orderId: orderId, orderStatus: statusValue }, { withCredentials: true })
             setFoundOrder(res.data.order)
         } catch (error) {
             setFoundOrder(null)
@@ -107,12 +125,16 @@ function Component({ foundOrder, orders, setStatus }) {
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders]);
 
+    const handlClickEvent = () => {
+        console.log("asdads")
+    }
+
     return (
-        <Tabs aria-label="Tabs with icons" style="underline">
-            <Tabs.Item active title="All" onClick={() => setStatus("")}>
+        <Tabs aria-label="Tabs with icons" style="underline" onActiveTabChange={(tab) => setStatus(tab)}>
+            <Tabs.Item active title="All" >
                 <AllTableComponent foundOrder={foundOrder} orders={orders} />
             </Tabs.Item>
-            <Tabs.Item title="Unpaid" onClick={() => setStatus("Unpaid")}>
+            <Tabs.Item title="Unpaid" onClickCapture={handlClickEvent}>
                 {!categorizedOrder["Unpaid"] && <div className="overflow-x-auto">
                     <div className='border border-gray my-1 py-32'>
                         <div className='flex flex-col justify-center items-center'>
