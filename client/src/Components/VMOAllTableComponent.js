@@ -59,7 +59,7 @@ export default function AllTableComponent() {
                             </Table.Row>
                         )
                     })}
-                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"></Table.Row>
+                    {/* <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"></Table.Row>
                     <Table.Cell>#1234-abcd</Table.Cell>
                     <Table.Cell>5</Table.Cell>
                     <Table.Cell>22/12/2022</Table.Cell>
@@ -72,7 +72,7 @@ export default function AllTableComponent() {
 
                         <CompletedMoreDetailOrdID />
 
-                    </Table.Cell>
+                    </Table.Cell> */}
                 </Table.Body>
             </Table>
         </div>
@@ -117,21 +117,21 @@ function MoreDetailOrdID({ order }) {
                 <div className='space-y-6'>
                     {order.products.map((product) => (
                         <div className='flex'>
-                            <div className='w-[80px] h-[80px]'>
-                                <img src={product.image_link} alt="product_img" className='object-fit w-full h-full' />
+                            <div className='w-[50px] h-[70px] overflow-hidden'>
+                                <img src={product.image_link} alt="product_img" className='object-fill w-full h-full' />
                             </div>
-                            <div>
-                                <div className='ml-10'>
-                                    <p className="text-md leading-relaxed text-gray-900 line-clamp-1">
-                                        {product.product_name}
-                                    </p>
-                                </div>
-                                <div className='my-2 ml-10 flex justify-between'>
-                                    <p className="text-sm leading-relaxed text-gray-500">
-                                    </p>
-                                    <div className='flex flex-col'>
-                                        <p className="text-sm leading-relaxed text-gray-500 ml-20 xs:ml-16">x{product.quantity}</p>
-                                        <p className='ml-20 xs:ml-16 text-[#E61E2A] font-bold mt-2'>${product.price}</p>
+
+                            <div className="flex flex-col justify-between flex-1">
+                                <p className="text-md leading-relaxed text-gray-900 line-clamp-1 ml-8">
+                                    {product.product_name}
+                                </p>
+  
+                                <div className="flex flex-col justify-between items-end">
+                                    <div>
+                                        x{product.quantity}
+                                    </div>
+                                    <div>
+                                        <p className='text-[#E61E2A] font-bold mt-2'>${product.price}</p>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +152,20 @@ function MoreDetailOrdID({ order }) {
             </Modal.Footer>
 
             <Modal.Footer>
-                <p className='font-light text-md text-gray-900'>Order Payment Method: <span className='ml-2 font-light text-gray-500'>Cash On Delivery - COD</span></p>
+                <div className='flex items-center justify-between w-full'>
+                    <div>
+                        <p className='font-light text-md text-gray-900'>Order Payment Method: <span className='ml-2 font-light text-gray-500'>Cash On Delivery - COD</span></p>
+                    </div>
+                    <div className='flex items-center'>
+                        <p className='font-light text-md text-gray-900'>Status</p>
+                        <button className="ml-2 bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg">Unpaid</button>
+                    </div>
+                </div>
+            </Modal.Footer>
+            <Modal.Footer>
+                <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Confirm</button>
+                <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
+
             </Modal.Footer>
         </Modal>
     </>)
@@ -161,7 +174,7 @@ function MoreDetailOrdID({ order }) {
 function CompletedMoreDetailOrdID() {
     const [openModal, setOpenModal] = useState(false);
     return <>
-        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
+        <a href="#" className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
             More
         </a>
         <Modal show={openModal} onClose={() => setOpenModal(false)}>

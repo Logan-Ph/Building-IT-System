@@ -4,6 +4,8 @@ import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { UserContext } from '../Context/UserContext';
 import { Navigate, useParams } from 'react-router-dom';
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
 
 export default function Header() {
   const { cart } = useContext(CartContext)
@@ -165,6 +167,13 @@ export default function Header() {
                     Cart
                   </span>
                 </a>
+
+                {/* if user login this will appear: avatar icon*/}
+                <div className='flex items-center'>
+                  {/* avatar icon */}
+                  <DropdownAva/>
+                  <p className='xs:hidden font-light text-white ml-2 xl:text-lg lg:text-md md:text-sm sm:text-xs'>nnthmai</p>
+                </div>
               </div>
             </div>
             {/* if the user login this will disappear */}
@@ -312,4 +321,73 @@ export default function Header() {
       </div>
     </section>
   );
+}
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+function DropdownAva() {
+  return (
+    <Menu as="div" className="relative inline-block text-left ml-2">
+      <div>
+        <Menu.Button className="flex">
+            <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBvcnRyYWl0JTIwZ2lybCUyMGNhcnRvb258ZW58MHx8MHx8fDA%3D"
+            alt="avatar_img"/>
+
+          {/* Cái đang comment là nếu ko có ava thì để nó đó, ý là vậy */}
+          {/* <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+              <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+          </div> */}
+
+        </Menu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-[-10px] z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="py-1">
+            <Menu.Item>
+                  {({ active }) => (
+                  <a
+                      href="#"
+                      className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block px-4 py-2 text-sm'
+                      )}>   
+                      <i class="fas fa-user-circle mr-1"></i>
+                      My profile
+                  </a>
+                  )}
+            </Menu.Item>
+
+            <form method="POST" action="#">
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    type="submit"
+                    className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block w-full px-4 py-2 text-left text-sm'
+                    )}
+                  >
+                  <i className="fas fa-sign-out-alt mr-1"></i>
+                    Log Out
+                  </button>
+                )}
+              </Menu.Item>
+            </form>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  )
 }
