@@ -47,7 +47,6 @@ function classNames(...classes) {
 
 function DropdownAva() {
     return (
-
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="flex -space-x-2 overflow-hidden">
