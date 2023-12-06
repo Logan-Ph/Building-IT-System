@@ -1,7 +1,7 @@
-import '../css/profile.css'
+import '../../css/profile.css'
 import axios from 'axios'
 import { useState, useCallback, useContext, useEffect } from 'react'
-import { UserContext } from '../Context/UserContext';
+import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
 
 

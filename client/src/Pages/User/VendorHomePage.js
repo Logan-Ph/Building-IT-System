@@ -22,7 +22,7 @@ export default function VendorHomePage() {
     fetchData()
   }, [fetchData])
 
-  if (isLoading){
+  if (isLoading) {
     return <div>....is loading</div>
   }
 
@@ -31,7 +31,7 @@ export default function VendorHomePage() {
       {error && <Navigate to={"/"} replace />}
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav vendor={vendor} />
+        <VendorNav vendor={vendor} activeTab={"HOME"} />
 
         {/*  */}
         {/* Top Product */}

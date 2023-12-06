@@ -108,7 +108,7 @@ export default function Router() {
           element: <VendorProductPage />,
         },
         {
-          path: "/vendor/:id",
+          path: "/vendor/:id/home",
           element: <VendorHomePage />,
         },
         {
