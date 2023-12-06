@@ -5,21 +5,20 @@ import axios from "axios"
 import recommend from '@algolia/recommend';
 import { useRelatedProducts } from '@algolia/recommend-react'
 import { Navigate } from 'react-router-dom'
-import RelatedProduct from "../Components/RelatedProduct";
-import CustomerReview from "../Components/CustomerReview";
+import RelatedProduct from "../../Components/RelatedProduct";
+import CustomerReview from "../../Components/CustomerReview";
 import { Swiper, SwiperSlide } from "swiper/react";
-import ProductDetailCard from "../Components/ProductDetailCard";
-import ProductDetailComment from "../Components/ProductDetailComment";
+import ProductDetailCard from "../../Components/ProductDetailCard";
+import ProductDetailComment from "../../Components/ProductDetailComment";
 import { ToastContainer } from "react-toastify";
 
-// import { Hits } from 'react-instantsearch';
-// import Hit from '../Components/HitsTemplate';
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
 
 export default function TestingPage() {
   const params = useParams()
   const [product, setProduct] = useState([])
+  const [vendorName, setVendorName] = useState("")
   const [error, setError] = useState()
 
   const { recommendations } = useRelatedProducts({
@@ -33,6 +32,7 @@ export default function TestingPage() {
     try {
       const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
+      setVendorName(res.data.vendorName);
     } catch (error) {
       setError(error);
     }
@@ -59,7 +59,7 @@ export default function TestingPage() {
       <section className="text-gray-600 body-font overflow-hidden ">
         <div className="lg:container md:container py-12 px-12 mx-auto mt-10 bg-slate-50 ">
           {/* product card */}
-          <ProductDetailCard product={product} />
+          <ProductDetailCard product={product} vendorName={vendorName} />
         </div>
       </section>
 

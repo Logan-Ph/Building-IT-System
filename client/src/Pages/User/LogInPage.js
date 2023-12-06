@@ -47,7 +47,7 @@ export default function LogInPage() {
 
         window.addEventListener('message', (event) => {
             if (event.origin !== "http://localhost:4000") return;
-            
+
             const { data } = event;
             if (data.user) {
                 setUser(data.user);
@@ -81,7 +81,8 @@ export default function LogInPage() {
                 pauseOnHover={false}
                 theme="light"
             />
-            {user && <Navigate to="/" replace={true} />}
+            {user && user.role === "User" && <Navigate to="/" replace={true} />}
+            {user && user.role === "Vendor" && <Navigate to="/dashboard" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign In</h2>

@@ -34,6 +34,12 @@ const vendorSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+
+    role: {
+        type: String,
+        require: true,
+        default: "Vendor",
+    }
 });
 
 module.exports = mongoose.model('Vendor', vendorSchema)

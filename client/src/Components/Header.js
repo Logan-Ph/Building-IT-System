@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchBox } from 'react-instantsearch';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { UserContext } from '../Context/UserContext';
+import { Navigate, useParams } from 'react-router-dom';
 
 export default function Header() {
-
   const { cart } = useContext(CartContext)
   const { user } = useContext(UserContext)
-  const { query, refine } = useSearchBox();
-  const [inputValue, setInputValue] = useState(query);
+  const { refine } = useSearchBox();
+  const [inputValue, setInputValue] = useState("");
+  const [navigateTo, setNavigateTo] = useState("")
+  const { query } = useParams();
+  const [searchQuery] = useState(query && (query.split('='))[1]);
 
-  function setQuery(newQuery) {
-    setInputValue(newQuery);
-
-    refine(newQuery);
+  function submitSearch(e) {
+    e.preventDefault();
+    setNavigateTo(`/search/query=${inputValue}`);
+    refine(inputValue)
+    setInputValue("")
   }
+
+  useEffect(() => {
+    searchQuery && refine(searchQuery)
+  }, [searchQuery, refine]);
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -39,6 +47,7 @@ export default function Header() {
 
   return (
     <section>
+      {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
@@ -54,12 +63,13 @@ export default function Header() {
               </span>
             </a>
 
-            <div className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
+            <form onSubmit={submitSearch} className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
               <input
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
-                onChange={(e) => setQuery(e.currentTarget.value)}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.currentTarget.value)}
               />
               <div class="grid place-items-center h-full w-12 text-gray-300">
                 <svg
@@ -77,7 +87,7 @@ export default function Header() {
                   />
                 </svg>
               </div>
-            </div>
+            </form>
 
             <div className="flex items-center">
               <div className="ml-2 flex">
@@ -265,11 +275,12 @@ export default function Header() {
                 </div>
               </div>
 
-              <div className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 mr-3 ml-3 h-10">
+              <form onSubmit={submitSearch} className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 mr-3 ml-3 h-10">
                 <input
                   type="text"
                   className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-xs text-gray-600 focus:outline-none"
                   placeholder="Search"
+                  onChange={(e) => setInputValue(e.currentTarget.value)}
                 />
                 <button className="rounded-tr-md rounded-br-md px-2 py-3 hidden md:block text-white">
                   <svg
@@ -285,120 +296,14 @@ export default function Header() {
                     ></path>
                   </svg>
                 </button>
-              </div>
+              </form>
 
               <div className="hidden border-b border-dashed lg:block  border-neutral-200"></div>
-
-              <div className="relative pl-3 my-5 ">
-                <div className="flex flex-col w-full font-medium text-[12.5px] ">
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Best seller
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        New Releases
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem] ">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Electronics
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Beauty & Personal Care
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Household Appliances
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Fashion
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Entertainment
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark md:text-lg"
-                      >
-                        Toys & Games
-                      </a>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-20">
-                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
-                  <span className="text-md font-medium text-black">
-                    Sign in
-                  </span>
-                </div>
-                <div className="flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white">
-                  <span className="text-md font-medium text-black">
-                    Become a vendor
-                  </span>
+              <div className="mt-5">
+                <div className="mt-40 flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+                  <a className="text-md font-medium text-black" href={user ? "/logout" : "/login"} >
+                    {user ? "logout" : "Sign in"}
+                  </a>
                 </div>
               </div>
             </aside>
