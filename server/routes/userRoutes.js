@@ -93,6 +93,7 @@ router.get('/vendor/:id/product', userController.vendorProductPage);
 
 //vendor manage order (vendor side)
 router.post('/search-order', userController.searchOrder);
+router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 
 // vendor dashboard route (vendor side)

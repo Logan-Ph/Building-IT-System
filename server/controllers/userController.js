@@ -379,13 +379,20 @@ exports.addProduct = async (req, res) => {
 }
 
 exports.searchOrder = async (req, res) => {
-  const orderId = req.body.orderId;
-  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId });
-  if (!order) {
+  try {
+    const orderId = req.body.orderId;
+    const orderStatus = req.body.orderStatus
+    console.log(orderStatus)
+    const order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
+    console.log(order)
+    if (!order) {
+      return res.status(500).json({ error: "Cannot find order. " })
+    }
+
+    return res.status(200).json({ order: order });
+  } catch {
     return res.status(500).json({ error: "Cannot find order. " })
   }
-
-  return res.status(200).json({ order: order });
 }
 
 exports.manageOrder = async (req, res) => {
@@ -409,6 +416,13 @@ exports.vendorProductPage = async (req, res) => {
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
+}
+
+exports.confirmOrder = async (req, res) => {
+  const orderId = req.body.orderId;
+  await Order.findByIdAndUpdate(orderId, { status: "To Ship" });
+  return res.status(200).json({ msg: "Order confirmed" });
+
 }
 
 exports.getVendorDashboard = async (req, res) => {

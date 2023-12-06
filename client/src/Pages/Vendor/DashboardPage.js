@@ -3,21 +3,19 @@ import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
 import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import LogInPage from "../User/LogInPage";
+import { UserContext } from "../../Context/UserContext";
 
 export default function DashboardPage() {
-  const [user, setUser] = useState();
+  const { setUser } = useContext(UserContext)
   const [error, setError] = useState();
-  const [isLoading, setIsLoading] = useState(true)
-
   const fetchUser = async () => {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
       setUser(res.data.user);
-      setIsLoading(false)
     }
     catch (er) {
       setError(er)
@@ -41,10 +39,6 @@ export default function DashboardPage() {
 
   if (error) {
     return <Navigate to={'/login'} />
-  }
-
-  if (isLoading) {
-    return <LogInPage />
   }
 
   return (
