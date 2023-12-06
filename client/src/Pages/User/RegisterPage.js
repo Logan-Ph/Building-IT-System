@@ -70,7 +70,7 @@ export default function RegisterPage() {
                             setMsg(res.data)
                             setError('')
                         })
-                        .catch(er => {setError(er.response.data); setMsg()});
+                        .catch(er => { setError(er.response.data); setMsg() });
                     break;
                 case 'business':
                     data.businessName = businessName;
@@ -84,7 +84,7 @@ export default function RegisterPage() {
                             setMsg(res.data)
                             setError('')
                         })
-                        .catch(er => {setError(er.response.data); setMsg()});
+                        .catch(er => { setError(er.response.data); setMsg() });
                     break;
                 case 'shipper':
                     data.name = name;
@@ -99,7 +99,7 @@ export default function RegisterPage() {
                             setMsg(res.data)
                             setError('')
                         })
-                        .catch(er => {setError(er.response.data); setMsg()});
+                        .catch(er => { setError(er.response.data); setMsg() });
                     break;
                 default:
                     break;
@@ -150,22 +150,23 @@ export default function RegisterPage() {
                     <p class="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Already have account?
                         <a href="\login" class="font-semibold leading-6 text-[#222160] hover:text-[#000053]"> Sign In</a>
                     </p>
-                    <div class="mb-4 border-b border-gray-200">
-                        <ul class="text-lg flex justify-center flex-wrap -mb-px font-medium text-center " id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
-                            <li class="me-2" role="presentation">
-                                <button onClick={() => { setFormType('customer') }} class="inline-block p-4 border-b-2 rounded-t-lg" id="customer-tab" data-tabs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="false">Personal Account</button>
+                    <div className="mb-4 border-b border-gray-200">
+                        <ul className="text-lg flex justify-center flex-wrap -mb-px font-medium text-center " role="tablist">
+                            <li className="me-2" role="presentation">
+                                <button onClick={() => setFormType('customer')} className={`inline-block p-4 border-b-2 rounded-t-lg ${formType === 'customer' ? 'border-[#222160] bg-gray-50' : 'hover:text-gray-600 hover:border-gray-300'}`} role="tab" aria-selected={formType === 'customer'}>Personal Account</button>
                             </li>
-                            <li class="me-2" role="presentation">
-                                <button onClick={() => { setFormType('business') }} class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="business-tab" data-tabs-target="#business" type="button" role="tab" aria-controls="business" aria-selected="false">Business Account</button>
+                            <li className="me-2" role="presentation">
+                                <button onClick={() => setFormType('business')} className={`inline-block p-4 border-b-2 rounded-t-lg ${formType === 'business' ? 'border-[#222160] bg-gray-50' : 'hover:text-gray-600 hover:border-gray-300'}`} role="tab" aria-selected={formType === 'business'}>Business Account</button>
                             </li>
                             <li role="presentation">
-                                <button onClick={() => { setFormType('shipper') }} class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="shipper-tab" data-tabs-target="#shipper" type="button" role="tab" aria-controls="shipper" aria-selected="false">Shipper</button>
+                                <button onClick={() => setFormType('shipper')} className={`inline-block p-4 border-b-2 rounded-t-lg ${formType === 'shipper' ? 'border-[#222160] bg-gray-50' : 'hover:text-gray-600 hover:border-gray-300'}`} role="tab" aria-selected={formType === 'shipper'}>Shipper</button>
                             </li>
                         </ul>
                     </div>
                     {/* <!-- Form of Customer --> */}
                     <div id="default-tab-content">
-                        <div class="hidden p-4 rounded-lg bg-gray-50" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+                    {formType === 'customer' && (
+                        <div class=" p-4 rounded-lg bg-gray-50" id="customer" role="tabpanel" aria-labelledby="customer-tab">
                             {/* <!-- Sign up form of customer, name="signup-customer" --> */}
                             <form name="signup-customer" class="space-y-6">
                                 <div>
@@ -242,9 +243,12 @@ export default function RegisterPage() {
                                 </div>
                             </form>
                         </div>
+)}
+
 
                         {/* <!-- Form of Bussiness --> */}
-                        <div class="hidden p-4 rounded-lg bg-gray-50" id="business" role="tabpanel" aria-labelledby="business-tab">
+                        {formType === 'business' && (
+                        <div class=" p-4 rounded-lg bg-gray-50" id="business" role="tabpanel" aria-labelledby="business-tab">
                             {/* <!-- Sign up form of business, name="signup-business" --> */}
                             <form name="signup-business" class="space-y-6">
                                 <div>
@@ -335,9 +339,11 @@ export default function RegisterPage() {
                                 </div>
                             </form>
                         </div>
-
+)}
                         {/* <!-- Form of Shipper --> */}
-                        <div class="hidden p-4 rounded-lg bg-gray-50" id="shipper" role="tabpanel" aria-labelledby="shipper-tab">
+
+                        {formType === 'shipper' && (
+                        <div class=" p-4 rounded-lg bg-gray-50" id="shipper" role="tabpanel" aria-labelledby="shipper-tab">
                             {/* <!-- Sign up form of shipper, name="signup-shipper" --> */}
                             <form name="signup-shipper" class="space-y-6">
                                 <div>
@@ -430,7 +436,9 @@ export default function RegisterPage() {
                             </form>
 
                         </div>
+                        )}
                     </div>
+                    
                 </div>
             </section>
         </>

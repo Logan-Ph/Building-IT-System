@@ -173,6 +173,44 @@ export default function Header() {
             </div>}
           </div>
         </div>
+
+        <div className="mt-2 flex items-center justify-between">
+          <div className="flex gap-x-2 py-1 px-2"></div>
+
+          <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
+              Best Seller
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              New Releases
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              Electronics
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              Beauty & Personal Care
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              Household Appliances
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              Fashion
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              Entertainment
+            </span>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+              Toys & Games
+            </span>
+          </div>
+<div>
+
+
+          {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+            Become a vendor
+          </a>}
+          </div>
+        </div>
       </div>
 
       <div className="navbar-menu relative z-50 sm:w-1 hidden">

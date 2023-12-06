@@ -7,15 +7,7 @@ module.exports = {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
 
   ],
-  purge: {
-    content: [
-      "./src/**/*.{js,jsx,ts,tsx}",
-      "./src/**/*.{js,jsx,ts,tsx}",
-      "./src/**/**/*.{js,jsx,ts,tsx}",
-      'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
-    ],
-    enabled: true
-  },
+  
 
   theme: {
     extend: {
@@ -31,8 +23,13 @@ module.exports = {
     },
   },
   plugins: [
-    require('flowbite/plugin'),
     require('@tailwindcss/forms'),
+    require('flowbite/plugin'),
+     {
+      tailwindcss: {},
+      autoprefixer: {},
+      ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})
+    },
     require('tailwind-accent-color'),
   ],
 }

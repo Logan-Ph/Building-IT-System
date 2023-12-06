@@ -14,7 +14,10 @@ import CheckoutPage from "../Pages/User/CheckoutPage";
 import UserProfile from '../Pages/User/UserProfile';
 import ManageOrderPage from '../Pages/Vendor/VendorManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
+
 import DashboardPage from '../Pages/Vendor/DashboardPage';
+import AdminDashboardPage from '../Pages/Admin/AdminDashboardPage';
+
 import VendorHomePage from '../Pages/User/VendorHomePage';
 import VendorProductPage from "../Pages/User/VendorProductPage";
 import ProductPage from '../Pages/User/ProductPage';
@@ -112,6 +115,10 @@ export default function Router() {
           path: "/search/:query",
           element: <SearchResultPage />,
         },
+        {
+          path: "/AdminDashboard",
+          element: <AdminDashboardPage />,
+        },
       ],
     },
     {
@@ -146,8 +153,6 @@ export default function Router() {
         },
       ],
     },
-
-
     {
       path: "/",
       element: <UserLayout header={<LogInHeader />} />,
