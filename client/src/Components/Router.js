@@ -14,10 +14,8 @@ import CheckoutPage from "../Pages/User/CheckoutPage";
 import UserProfile from '../Pages/User/UserProfile';
 import ManageOrderPage from '../Pages/Vendor/VendorManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
-
 import DashboardPage from '../Pages/Vendor/DashboardPage';
 import AdminDashboardPage from '../Pages/Admin/AdminDashboardPage';
-
 import VendorHomePage from '../Pages/User/VendorHomePage';
 import VendorProductPage from "../Pages/User/VendorProductPage";
 import ProductPage from '../Pages/User/ProductPage';
@@ -32,8 +30,11 @@ import Chatbot from "./Chatbot";
 import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorSidebar from '../Components/VendorSidebar';
+import VendorHeader from '../Components/VendorHeader';
+
 
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
+import { UserImageProvider } from '../Context/UserImageContext';
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
@@ -55,6 +56,7 @@ export default function Router() {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
+          <VendorHeader />
           <div className="flex  ">
             <VendorSidebar />
             <Outlet />
@@ -176,7 +178,9 @@ export default function Router() {
   return (
     <CartProvider>
       <UserProvider>
-        <RouterProvider router={BrowserRoutes} />
+        <UserImageProvider>
+          <RouterProvider router={BrowserRoutes} />
+        </UserImageProvider>
       </UserProvider>
     </CartProvider>
   )

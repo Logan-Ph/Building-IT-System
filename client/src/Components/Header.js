@@ -4,10 +4,14 @@ import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { UserContext } from '../Context/UserContext';
 import { Navigate, useParams } from 'react-router-dom';
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import { UserImageContext } from '../Context/UserImageContext';
 
 export default function Header() {
   const { cart } = useContext(CartContext)
   const { user } = useContext(UserContext)
+  const { userImage } = useContext(UserImageContext)
   const { refine } = useSearchBox();
   const [inputValue, setInputValue] = useState("");
   const [navigateTo, setNavigateTo] = useState("")
@@ -165,6 +169,13 @@ export default function Header() {
                     Cart
                   </span>
                 </a>
+
+                {/* if user login this will appear: avatar icon*/}
+                <div className='flex items-center'>
+                  {/* avatar icon */}
+                  <DropdownAva userImage={userImage} user={user} />
+                  <p className='xs:hidden font-light text-white ml-2 xl:text-lg lg:text-md md:text-sm sm:text-xs'>{user && user.name}</p>
+                </div>
               </div>
             </div>
             {/* if the user login this will disappear */}
@@ -203,12 +214,10 @@ export default function Header() {
               Toys & Games
             </span>
           </div>
-<div>
-
-
-          {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
-            Become a vendor
-          </a>}
+          <div>
+            {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+              Become a vendor
+            </a>}
           </div>
         </div>
       </div>
@@ -260,17 +269,17 @@ export default function Header() {
                 <div className="flex items-center mr-5">
                   <div className="mr-5">
                     <div className="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
-                      <img
+                      {user && <img
                         className="w-[40px] h-[40px] shrink-0 inline-block rounded-[.95rem]"
-                        src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
+                        src={`data:image/jpeg;base64,${userImage}`}
                         alt="avatar"
-                      />
+                      />}
                     </div>
                   </div>
                   <div className="mr-2 ">
-                    <div className=" text-white hover:text-primary transition-colors duration-200 ease-in-out text-[1.075rem] font-medium  text-secondary-inverse">
-                      User
-                    </div>
+                    {user && <div className=" text-white hover:text-primary transition-colors duration-200 ease-in-out text-[1.075rem] font-medium  text-secondary-inverse">
+                      {user.name}
+                    </div>}
                   </div>
                 </div>
               </div>
@@ -312,4 +321,69 @@ export default function Header() {
       </div>
     </section>
   );
+}
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+function DropdownAva({ user, userImage }) {
+  return (
+    <Menu as="div" className="relative inline-block text-left ml-2">
+      <div>
+        <Menu.Button className="flex">
+          {user && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+            src={`data:image/jpeg;base64,${userImage}`}
+            alt="avatar_img" />
+          }
+
+        </Menu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-[-10px] z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  href="/profile"
+                  className={classNames(
+                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    'block px-4 py-2 text-sm'
+                  )}>
+                  <i class="fas fa-user-circle mr-1"></i>
+                  My profile
+                </a>
+              )}
+            </Menu.Item>
+
+            <div>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    type="submit"
+                    className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block w-full px-4 py-2 text-left text-sm'
+                    )}
+                  >
+                    <i className="fas fa-sign-out-alt mr-1"></i>
+                    Log Out
+                  </button>
+                )}
+              </Menu.Item>
+            </div>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  )
 }

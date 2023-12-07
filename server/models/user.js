@@ -41,7 +41,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         default: "User",
-    }
+    },
+    banEndDate: {
+        type: Date,
+    },
 
 });
 

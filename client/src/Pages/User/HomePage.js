@@ -10,9 +10,11 @@ import { UserContext } from '../../Context/UserContext';
 import { CartContext } from '../../Context/CartContext';
 import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
+import { UserImageContext } from '../../Context/UserImageContext';
 
 export default function Homepage() {
     const { user, setUser } = useContext(UserContext)
+    const { setUserImage } = useContext(UserImageContext)
     const { setCart } = useContext(CartContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -31,6 +33,7 @@ export default function Homepage() {
             const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
             setUser(res.data.user);
             setCart(res.data.length)
+            setUserImage(res.data.userImage)
             setIsLoading(false);
         } catch (er) {
             console.log(er);
@@ -49,7 +52,7 @@ export default function Homepage() {
 
     return (
         <>
-            {user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+            {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}

@@ -559,6 +559,41 @@ exports.updateShipper = async (req, res) => {
   }
 }
 
+exports.banUser = async (req, res) => {
+  const userId = req.body.userId;
+  const banDuration = req.body.banDate; // This should be in days or months
+
+  let endDate;
+
+  if (banDuration === '1 month') {
+    endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+  } else {
+    const banDays = parseInt(banDuration); // Convert the ban duration to integer
+    endDate = new Date(Date.now() + banDays * 24 * 60 * 60 * 1000); // Add the ban duration to the current date
+  }
+
+  try {
+    const user = await User.findById(userId);
+    const vendor = await Vendor.findById(userId);
+    const shipper = await Shipper.findById(userId);
+
+    if (user) {
+      await User.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (vendor) {
+      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (shipper) {
+      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else {
+      throw new Error('User does not exist!');
+    }
+
+    return res.status(200).json("Banned user successfully");
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
 exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
 }

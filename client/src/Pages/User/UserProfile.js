@@ -3,18 +3,20 @@ import axios from 'axios'
 import { useState, useCallback, useContext, useEffect } from 'react'
 import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
+import { UserImageContext } from '../../Context/UserImageContext';
+import { Navigate } from 'react-router';
 
 
 export default function UserProfile() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
-    const [userImage, setUserImage] = useState()
+    const { userImage, setUserImage } = useContext(UserImageContext)
     const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
 
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
-    const {user, setUser } = useContext(UserContext)    
+    const { user, setUser } = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(true)
 
     const handleSidebarToggle = () => {
@@ -76,13 +78,11 @@ export default function UserProfile() {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
-    const email = user.email;
+    const email = user && user.email;
     const [file, setFile] = useState();
 
     const handleFileChange = (event) => {
         event.preventDefault()
-        //console.log(event.target.files);
-        console.log(event.target)
         setFile(event.target.files[0]);
     };
 
@@ -95,13 +95,13 @@ export default function UserProfile() {
     }
 
     async function axiosPostData() {
-        try { 
-            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers:{'Content-Type': 'multipart/form-data'}  })
-            .then(res => {
-                setMsg(res.data)
-                setError('')
-            })
-            .catch(er => {setError(er.response.data); setMsg()});
+        try {
+            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+                .then(res => {
+                    setMsg(res.data)
+                    setError('')
+                })
+                .catch(er => { setError(er.response.data); setMsg() });
         } catch (error) {
             console.error('Failed to update.', error);
         }
@@ -125,6 +125,7 @@ export default function UserProfile() {
 
     return (
         <>
+            {!user && <Navigate to={'/login'} replace />}
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
                 <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">

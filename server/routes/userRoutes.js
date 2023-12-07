@@ -122,6 +122,9 @@ router.post('/user-register', userController.userRegister);
 // vendor register route
 router.post('/vendor-register', userController.vendorRegister);
 
+// admin ban user route
+router.post("/ban-user",userController.banUser);
+
 // authentication route via login function
 router.get('/login', userController.loginPage);
 router.post('/login', (req, res, next) => {
