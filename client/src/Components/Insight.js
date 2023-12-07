@@ -44,7 +44,7 @@ export default function Insight() {
                 <div class="flex flex-wrap">
                   <div class=" w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 class="text-gray-400 uppercase font-bold lg:md:text-sm text-xs">
-                      Total Income
+                      Income
                     </h5>
                     <span class="font-semibold text-xl text-gray-700">
                       2,999

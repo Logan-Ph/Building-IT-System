@@ -4,10 +4,10 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"
     , "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
-    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
-    'node_modules/preline/preline.js'
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
+
   ],
-  
+
   purge: {
     content: [
       "./src/**/*.{js,jsx,ts,tsx}",
@@ -36,7 +36,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('flowbite/plugin'),
-     {
+    {
       tailwindcss: {},
       autoprefixer: {},
       ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})

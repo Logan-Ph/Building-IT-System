@@ -19,8 +19,6 @@ import AdminDashboardPage from '../Pages/Admin/AdminDashboardPage';
 import VendorHomePage from '../Pages/User/VendorHomePage';
 import VendorProductPage from "../Pages/User/VendorProductPage";
 import ProductPage from '../Pages/User/ProductPage';
-
-
 import {
   InstantSearch,
 } from 'react-instantsearch';
@@ -31,8 +29,6 @@ import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
-
-
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import { UserImageProvider } from '../Context/UserImageContext';
 
