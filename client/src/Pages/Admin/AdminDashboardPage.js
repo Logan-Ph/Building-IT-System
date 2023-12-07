@@ -4,6 +4,7 @@ import BarChart from "../../Components/BarChart";
 import AdminInsight from "../../Components/AdminInsight";
 import ToDoList from "../../Components/ToDoList";
 import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
+import AddImageHomePage from "../../Components/AddImageHomePage";
 
 
 export default function DashboardPage() {
@@ -176,13 +177,18 @@ export default function DashboardPage() {
             ]} />
         </Sidebar>
 
-        <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32 text-slate-300 relative py-20 ">
-          
+        <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32  relative py-20 ">
+          <div
+              class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-6">
+              < AddImageHomePage/>
+            </div>
           <div class="">
+            
+
+
             <div
               id="content"
-              class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto"
-            >
+              class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto">
               <h1 class="font-bold  pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
                 Business Insight
               </h1>

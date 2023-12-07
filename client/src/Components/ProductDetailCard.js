@@ -78,7 +78,7 @@ export default function ProductDetailCard({ product, vendorName }) {
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
             <img
                 alt="ecommerce"
-                className="lg:w-[500px] lg:h-auto md:h-auto sm:h-auto xs:h-auto  rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
+                className="lg:w-[550px] lg:h-[510px] md:h-auto sm:h-auto xs:h-auto  rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
                 src={product.image_link}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
