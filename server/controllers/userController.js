@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
+const order = require('../models/order')
 require('dotenv').config()
 
 function sendEmailVerification(userEmail) {
@@ -48,8 +49,12 @@ function sendEmailVerification(userEmail) {
     subject: "Forgot password verification",
     html: mail
   }
-
-  transporter.sendMail(message)
+  try {
+    transporter.sendMail(message)
+  }
+  catch {
+    console.log("error when send Email")
+  }
 }
 
 exports.loginSuccess = async (req, res) => {
@@ -73,7 +78,8 @@ exports.homePage = async (req, res) => {
 exports.productPage = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-    res.json({ product: product });
+    let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
+    res.json({ product: product, vendorName: vendorName.businessName });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -317,7 +323,11 @@ exports.placeOrder = async (req, res) => {
         products: productsByOwner[ownerID].map((cartItem) => ({
           productId: cartItem.product._id,
           quantity: cartItem.quantity,
+          image_link: cartItem.product.image_link,
+          price: cartItem.product.price,
+          product_name: cartItem.product.product_name
         })),
+        userName: req.user.name,
       });
 
       await order.save();
@@ -352,7 +362,10 @@ exports.addProduct = async (req, res) => {
       products: [{
         product: product._id,
         quantity: (req.query.quantity) ? req.query.quantity : 1,
-        owner: product.owner,
+        owner: new mongoose.Types.ObjectId(product.owner),
+        image_link: product.image_link,
+        price: product.price,
+        product_name: product.product_name,
       }]
     })
     await newCart.save()
@@ -365,10 +378,9 @@ exports.addProduct = async (req, res) => {
   return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
 }
 
-exports.getOrder = async (req, res) => {
+exports.searchOrder = async (req, res) => {
   const orderId = req.body.orderId;
-  const orderStatus = req.body.orderStatus;
-  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId, status: orderStatus });
+  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId });
   if (!order) {
     return res.status(500).json({ error: "Cannot find order. " })
   }
@@ -376,8 +388,35 @@ exports.getOrder = async (req, res) => {
   return res.status(200).json({ order: order });
 }
 
-exports.vendorDashboard = async (req, res) => {
+exports.manageOrder = async (req, res) => {
+  const orders = await Order.find({ vendorID: req.user._id })
+  return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+}
+
+exports.vendorHomepage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.vendorProductPage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.getVendorDashboard = async (req, res) => {
   return res.status(200).json("hahah");
+}
+
+exports.postVendorDashboard = async (req, res) => {
+
 }
 
 exports.checkout = async (req, res) => {

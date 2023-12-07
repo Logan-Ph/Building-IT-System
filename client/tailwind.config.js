@@ -16,7 +16,7 @@ module.exports = {
     ],
     enabled: true
   },
-  
+
   theme: {
     extend: {
       screens: {
@@ -33,6 +33,6 @@ module.exports = {
   plugins: [
     require('flowbite/plugin'),
     require('@tailwindcss/forms'),
-    require('tailwind-accent-color')
+    require('tailwind-accent-color'),
   ],
 }
