@@ -195,7 +195,7 @@ export default function DashboardPage() {
               Upload real, high resolution, clear product images. You should choose images with 1:1 resolution
             </h1>
 
-            <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-10 pl-10 mb-6 ">Carousel Images</label>
+            <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-10 lg:pl-10 mb-6 ">Carousel Images</label>
             <div
               class="flex flex-wrap justify-center gap-16 pb-20 ">
 
