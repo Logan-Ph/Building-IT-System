@@ -8,9 +8,6 @@ import SRPagination from '../Components/SRPagination'
 import SRPriceRange from '../Components/SRPriceRange'
 import SRStarRating from '../Components/SRStarRating'
 
-
-
-
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
