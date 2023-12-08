@@ -21,7 +21,6 @@ import VendorProductPage from "../Pages/User/VendorProductPage";
 import ProductPage from '../Pages/User/ProductPage';
 import ManageUserPage from "../Pages/Admin/ManageUserPage";
 import ReportInfoPage from "../Pages/Admin/ReportInfoPage";
-import newNav from './newnavbar';
 import {
   InstantSearch,
 } from 'react-instantsearch';
@@ -69,7 +68,6 @@ export default function Router() {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
-          <newNav />
           <div className="flex  ">
             <VendorSidebar />
             <Outlet />
@@ -130,10 +128,6 @@ export default function Router() {
           path: "/search/:query",
           element: <SearchResultPage />,
         },
-        {
-          path: "/AdminDashboard",
-          element: <AdminDashboardPage />,
-        },
       ],
     },
     {
@@ -160,16 +154,6 @@ export default function Router() {
     },
     {
       path: "/",
-      element: <VendorLayout />,
-      children: [
-        {
-          path: "/admin/manage-order",
-          element: <AdminManageVendorProduct />,
-        },
-      ],
-    },
-    {
-      path: "/",
       element: <UserLayout header={<LogInHeader />} />,
       children: [
         {
@@ -191,12 +175,20 @@ export default function Router() {
       element: <AdminLayout />,
       children: [
         {
-          path: "/manage-user",
+          path: "/admin/manage-user",
           element: <ManageUserPage />,
         },
         {
-          path: "/report",
+          path: "/admin/report",
           element: <ReportInfoPage />,
+        },
+        {
+          path: "/admin/manage-order",
+          element: <AdminManageVendorProduct />,
+        },
+        {
+          path: "/admin/dashboard",
+          element: <AdminDashboardPage />,
         },
       ],
     },

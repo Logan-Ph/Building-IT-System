@@ -30,8 +30,8 @@ export default function VendorHeader() {
             </div>
             <div className='flex items-center'>
               {/* avatar icon */}
-              <DropdownAva />
-              <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>nnthmai</p>
+              <DropdownAva user={user} userImage={userImage} />
+              <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
             </div>
 
           </div>
@@ -46,21 +46,20 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function DropdownAva() {
+function DropdownAva({ user, userImage }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex -space-x-2 overflow-hidden">
           <div className='w-10 h-10 rounded-full'>
-            <img className="inline-block w-full h-full rounded-full object-fit ring-2 ring-white"
-              src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBvcnRyYWl0JTIwZ2lybCUyMGNhcnRvb258ZW58MHx8MHx8fDA%3D"
+            {user && userImage && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+              src={`data:image/jpeg;base64,${userImage}`}
               alt="avatar_img" />
+            }
+            {user && !userImage && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+              <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            </div>}
           </div>
-          {/* Cái đang comment là nếu ko có ava thì để nó đó, ý là vậy */}
-          {/* <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-            </div> */}
-
         </Menu.Button>
       </div>
 

@@ -8,16 +8,20 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import LogInPage from "../User/LogInPage";
 import { UserContext } from "../../Context/UserContext";
+import { UserImageContext } from "../../Context/UserImageContext";
 
 
 
 export default function DashboardPage() {
   const { setUser } = useContext(UserContext)
+  const { setUserImage } = useContext(UserImageContext)
+  const [ordersByStatus, setOrdersByStatus] = useState({})
   const [error, setError] = useState();
   const fetchUser = async () => {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
       setUser(res.data.user);
+      setUserImage(res.data.userImage);
     }
     catch (er) {
       setError(er)
@@ -27,7 +31,8 @@ export default function DashboardPage() {
   const fetchData = async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
-      console.log(res.data);
+      console.log(res.data.ordersByStatus)
+      setOrdersByStatus(res.data.ordersByStatus);
     }
     catch (er) {
       console.log(er);
@@ -40,16 +45,16 @@ export default function DashboardPage() {
   }, [])
 
   if (error) {
-    return <Navigate to={'/login'} />
   }
 
   return (
     <>
+      {error && <Navigate to={'/login'} />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32 text-slate-300 relative py-20 ">
+      <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32  relative py-20 ">
         <div
           id="content"
           class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-12 "
@@ -60,7 +65,7 @@ export default function DashboardPage() {
           <h1 class="font-medium  lg:md:pt-1 pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
             Things your business need to deal with
           </h1>
-          <ToDoList />
+          <ToDoList ordersByStatus={ordersByStatus} />
         </div>
         <div class="">
           <div
