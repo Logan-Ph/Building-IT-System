@@ -27,12 +27,24 @@ const vendorSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
+    },
+
+    wallpaper: {
+        data: Buffer,
     },
 
     verify: {
         type: Boolean,
         default: false,
+    },
+
+    role: {
+        type: String,
+        require: true,
+        default: "Vendor",
+    },
+    banEndDate: {
+        type: Date,
     },
 });
 

@@ -16,7 +16,23 @@ const cartSchema = new mongoose.Schema({
             required: true,
             min: 1,
             default: 1
-        }
+        },
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Vendor',
+            required: true
+        },
+        image_link: {
+            type: String,
+        },
+        price: {
+            type: Number,
+            require: true,
+        },
+        product_name: {
+            type: String,
+            require: true,
+        },
     }],
 });
 
@@ -30,7 +46,7 @@ cartSchema.methods.addProduct = function (product, quantity) {
         this.products[productIndex].quantity += parsedQuantity;
     } else {
         // new product, add to cart    
-        this.products.push({ product, parsedQuantity });
+        this.products.push({ product, quantity: parsedQuantity, owner: product.owner });
     }
 
     return this.save();
@@ -42,5 +58,9 @@ cartSchema.methods.getTotalProducts = function () {
     }, 0);
 }
 
+cartSchema.methods.clearCart = function () {
+    this.products = [];
+    return this.save();
+}
 
 module.exports = mongoose.model('Cart', cartSchema);

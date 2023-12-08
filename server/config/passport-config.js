@@ -2,8 +2,9 @@ const LocalStrategy = require('passport-local').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
-const passport = require('passport')
+const passport = require('passport');
+const Vendor = require('../models/vendor');
+const Shipper = require('../models/shipper');
 require('dotenv').config()
 
 passport.use(new GoogleStrategy({
@@ -13,12 +14,13 @@ passport.use(new GoogleStrategy({
   scope: ['profile', 'email'],
 },
   async function verify(accessToken, refreshToken, profile, cb) {
-    let user = (await User.find({ googleId: profile.id }))[0]
+    let user = (await User.find({ googleId: profile.id }, { _id: 1, banEndDate: 1 }))[0]
+    if (user && user.banEndDate > new Date()) return cb(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
     if (user) {
       return cb(null, user)
     } else {
-      let otherUser = (await User.find({ email: profile.emails[0].value }))[0]
-      if (otherUser) return cb(null, false, {message: "The email already exists"})
+      let otherUser = (await User.find({ email: profile.emails[0].value }, { name: 1 }))[0]
+      if (otherUser) return cb(null, false, { message: "The email already exists" })
 
       let newUser = new User({
         googleId: profile.id,
@@ -32,20 +34,20 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, async function verify(email, password, done) {
-  const user = (await User.find({ email: email }))[0]
-
-  if (!user) return done(null, false, {message: "Please check the email and password again"}) // check if the user did not exist
-  if (!user.password) return done(null,false, {message: "Please check the email and password again"}) // check if the account is gmail account 
+  const user = (await User.find({ email: email }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1, banEndDate: 1 }))[0] || (await Vendor.find({ email: email }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1, banEndDate: 1 }))[0] || (await Shipper.find({ email: email }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1, banEndDate: 1 }))[0]
+  if (!user) return done(null, false, { message: "Please check the email and password again" }) // check if the user did not exist
+  if (!user.password) return done(null, false, { message: "Please check the email and password again" }) // check if the account is gmail account 
   if (!user.verify) return done(null, false, { message: "You need to verify your account with gmail" }) // check if the user email is verify
+  if (user.banEndDate && user.banEndDate >= new Date()) return done(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
 
   try {
     if (await bcrypt.compare(password, user.password)) {
-      return done(null, user, {message: ""})
+      return done(null, user, { message: "" })
     } else {
-      return done(null, false, {message: "Please check the email and password again"})
+      return done(null, false, { message: "Please check the email and password again" })
     }
-  } catch{
-    return done(null, false, {message: "Please check the email and password again"})
+  } catch {
+    return done(null, false, { message: "Please check the email and password again" })
   }
 }))
 
@@ -53,6 +55,6 @@ passport.serializeUser((user, done) => {
   done(null, user._id)
 })
 passport.deserializeUser(async (id, done) => {
-  const user = (await User.findById(id))
+  const user = (await User.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1 }))[0] || (await Vendor.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, businessName: 1, address: 1 }))[0] || (await Shipper.find(id))[0];
   done(null, user)
 })

@@ -3,11 +3,14 @@ const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
+const Order = require('../models/order')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
+
+const fs = require("fs");
 require('dotenv').config()
 
 function sendEmailVerification(userEmail) {
@@ -47,14 +50,25 @@ function sendEmailVerification(userEmail) {
     subject: "Forgot password verification",
     html: mail
   }
-
-  transporter.sendMail(message)
+  try {
+    transporter.sendMail(message)
+  }
+  catch {
+    console.log("error when send Email")
+  }
 }
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
+    const user = (await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id));
+    let userImage;
+    if (user.img.data) {
+      userImage = Buffer.from(
+        user.img.data
+      ).toString("base64");
+    }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
+    res.json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
   } else {
     res.json({ user: "", length: 0 })
   }
@@ -62,7 +76,7 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product.find({}, { img: 1, product_name: 1, category: 1, price: 1, _id: 1, image_link: 1, ratings: 1 }).limit(32);
+    let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -72,7 +86,8 @@ exports.homePage = async (req, res) => {
 exports.productPage = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
-    res.json({ product: product });
+    let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
+    res.json({ product: product, vendorName: vendorName.businessName });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -282,11 +297,61 @@ exports.postResetPassword = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   jwt.verify(req.params.token, process.env.VERIFY_EMAIL, async (err, user) => {
     if (err) return res.status(500).json("error");
-    const foundUser = await User.findOneAndUpdate({ email: user.user }, { verify: true })
+    const foundUser = (await User.findOneAndUpdate({ email: user.user }, { verify: true })) || (await Vendor.findOneAndUpdate({ email: user.user }, { verify: true })) || (await Shipper.findOneAndUpdate({ email: user.user }, { verify: true }))
     if (!foundUser) return res.status.json("error");
     return res.status(200).json("success")
   })
 }
+
+// Place the Order
+exports.placeOrder = async (req, res) => {
+  try {
+    const userID = req.user._id;
+    // Find the user's cart
+    const userCart = await Cart.findOne({ userID }).populate('products.product');
+    if (!userCart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+
+    // Group products by owner
+    const productsByOwner = userCart.products.reduce((groups, cartItem) => {
+      const ownerID = cartItem.product.owner.toString();
+      if (!groups[ownerID]) {
+        groups[ownerID] = [];
+      }
+      groups[ownerID].push(cartItem);
+      return groups;
+    }, {});
+
+    // Create an order for each owner
+    for (const ownerID in productsByOwner) {
+      const order = new Order({
+        userId: userID,
+        vendorID: ownerID,
+        products: productsByOwner[ownerID].map((cartItem) => ({
+          productId: cartItem.product._id,
+          quantity: cartItem.quantity,
+          image_link: cartItem.product.image_link,
+          price: cartItem.product.price,
+          product_name: cartItem.product.product_name
+        })),
+        userName: req.user.name,
+      });
+
+      await order.save();
+    }
+
+    // Clear the user's cart
+    await userCart.clearCart();
+
+    res.status(200).json({ message: 'Orders placed successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error placing order' });
+  }
+};
+
+
 
 exports.addProduct = async (req, res) => {
   if (!req.user) {
@@ -294,12 +359,21 @@ exports.addProduct = async (req, res) => {
   }
   const cart = await Cart.findOne({ userID: req.user._id })
 
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    return res.status(500).json({ error: "Cannot find the product." })
+  }
+
   if (!cart) {
     const newCart = new Cart({
       userID: new mongoose.Types.ObjectId(req.user._id),
       products: [{
-        product: new mongoose.Types.ObjectId(req.params.id),
-        quantity: (req.query.quantity) ? req.query.quantity : 1
+        product: product._id,
+        quantity: (req.query.quantity) ? req.query.quantity : 1,
+        owner: new mongoose.Types.ObjectId(product.owner),
+        image_link: product.image_link,
+        price: product.price,
+        product_name: product.product_name,
       }]
     })
     await newCart.save()
@@ -312,7 +386,230 @@ exports.addProduct = async (req, res) => {
   return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
 }
 
+exports.searchOrder = async (req, res) => {
+  try {
+    const orderId = req.body.orderId;
+    const orderStatus = req.body.orderStatus
+    let order;
+    console.log(orderStatus)
+    if (orderStatus) {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
+    } else {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId });
+    }
+
+    if (!order) {
+      return res.status(500).json({ error: "Cannot find order. " })
+    }
+
+    return res.status(200).json({ order: order });
+  } catch {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
+}
+
+exports.manageOrder = async (req, res) => {
+  const orders = await Order.find({ vendorID: req.user._id })
+  return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+}
+
+exports.vendorHomepage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.vendorProductPage = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.params.id);
+    return res.status(200).json({ vendor: vendor });
+  } catch {
+    return res.status(500).json({ error: "Vendor not found" })
+  }
+}
+
+exports.confirmOrder = async (req, res) => {
+  const orderId = req.body.orderId;
+  await Order.findByIdAndUpdate(orderId, { status: "To Ship" });
+  return res.status(200).json({ msg: "Order confirmed" });
+
+}
+
+exports.getVendorDashboard = async (req, res) => {
+  return res.status(200).json("hahah");
+}
+
+exports.postVendorDashboard = async (req, res) => {
+
+}
+
+exports.checkout = async (req, res) => {
+  return res.status(200).json("hahah");
+}
+
 exports.logout = (req, res) => {
   req.session.destroy();
   res.redirect("http://localhost:3000/");
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      user.img = image;
+    }
+    if (req.body.name) {
+      user.name = req.body.name
+    }
+    if (req.body.address) {
+      user.address = req.body.address
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.status(500).json("Phone number already exists.")
+      } else {
+        user.phoneNumber = phoneNumber;
+      }
+    }
+    await user.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateVendor = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ email: req.body.email });
+
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.img = image;
+    }
+
+    if (req.body.address) { vendor.address = req.body.address; }
+    if (req.body.businessName) {
+      const checkBusinessName = (await Vendor.findOne({ businessName: req.body.businessName }));
+      if (checkBusinessName(req.body.businessName)) {
+        return res.status(500).json("Business name has already existed.")
+      } else {
+        vendor.businessName = req.body.businessName;
+      }
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.json("Phone number has already existed.");
+      } else { vendor.phoneNumber = req.body.phoneNumber; }
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateShipper = async (req, res) => {
+  try {
+    const shipper = await Shipper.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      shipper.img = image;
+    }
+    if (req.body.name) {
+      shipper.name = req.body.name;
+    }
+    if (req.body.address) {
+      shipper.address = req.body.address;
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        shipper.phoneNumber = req.body.phoneNumber;
+      }
+    }
+    await shipper.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.banUser = async (req, res) => {
+  const userId = req.body.userId;
+  const banDuration = req.body.banDate; // This should be in days or months
+
+  let endDate;
+
+  if (banDuration === '1 month') {
+    endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+  } else {
+    const banDays = parseInt(banDuration); // Convert the ban duration to integer
+    endDate = new Date(Date.now() + banDays * 24 * 60 * 60 * 1000); // Add the ban duration to the current date
+  }
+
+  try {
+    const user = await User.findById(userId);
+    const vendor = await Vendor.findById(userId);
+    const shipper = await Shipper.findById(userId);
+
+    if (user) {
+      await User.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (vendor) {
+      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (shipper) {
+      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else {
+      throw new Error('User does not exist!');
+    }
+
+    return res.status(200).json("Banned user successfully");
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
+exports.userProfile = async (req, res) => {
+  return res.status(200).json("profile page");
+}
+
+exports.updateVendorWallpaper = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.wallpaper = image;
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}

@@ -35,7 +35,7 @@ export default function LogInPage() {
         }
 
         await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
-            .then(res => { setUser(res.data.user); setError(res.data.message) })
+            .then(res => { setUser(res.data.user); setError(res.data.message); console.log(user) })
             .catch(er => {
                 console.log(er);
             });
@@ -47,14 +47,13 @@ export default function LogInPage() {
 
         window.addEventListener('message', (event) => {
             if (event.origin !== "http://localhost:4000") return;
-            
+
             const { data } = event;
             if (data.user) {
                 setUser(data.user);
             } else if (data.error) {
                 setError(data.error);
             }
-
             loginWindow.close();
         });
     }
@@ -81,6 +80,8 @@ export default function LogInPage() {
                 pauseOnHover={false}
                 theme="light"
             />
+            {user && user.role === "Vendor" && <Navigate to="/dashboard" replace={true} />}
+            {user && user.role === "User" && <Navigate to="/" replace={true} />}
             {user && <Navigate to="/" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">

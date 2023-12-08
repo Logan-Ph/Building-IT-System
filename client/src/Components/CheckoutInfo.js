@@ -1,4 +1,11 @@
+import React, { useState } from 'react';
+
 export default function CheckoutInfo() {
+    const [openSection, setOpenSection] = useState(1);
+
+  const toggleAccordion = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
     return (
         <div
             id="accordion-open"
@@ -9,10 +16,13 @@ export default function CheckoutInfo() {
             <h2 id="accordion-open-heading-1">
                 <button
                     type="button"
+                    onClick={() => toggleAccordion(1)}
+                    aria-expanded={openSection === 1}
                     class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b-2 border-gray-400 gap-3"
                     data-accordion-target="#accordion-open-body-1"
-                    aria-expanded="true"
+                  
                     aria-controls="accordion-open-body-1"
+                    
                 >
                     <span class="text-xl font-bold">Shipping address</span>
                     <svg
@@ -34,6 +44,7 @@ export default function CheckoutInfo() {
                 </button>
             </h2>
             <div
+                style={{ display: openSection === 1 ? 'block' : 'none' }}
                 id="accordion-open-body-1"
                 class="hidden"
                 aria-labelledby="accordion-open-heading-1"
@@ -153,9 +164,11 @@ export default function CheckoutInfo() {
             <h2 id="accordion-open-heading-2">
                 <button
                     type="button"
+                    onClick={() => toggleAccordion(2)}
+                    aria-expanded={openSection === 2}
                     class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b-2 border-gray-400"
                     data-accordion-target="#accordion-open-body-2"
-                    aria-expanded="false"
+                    
                     aria-controls="accordion-open-body-2"
                 >
                     <span class="text-xl font-bold">Payment method</span>
@@ -178,6 +191,7 @@ export default function CheckoutInfo() {
                 </button>
             </h2>
             <div
+            style={{ display: openSection === 2 ? 'block' : 'none' }}
                 id="accordion-open-body-2"
                 class="hidden"
                 aria-labelledby="accordion-open-heading-2"
@@ -306,10 +320,12 @@ export default function CheckoutInfo() {
             </div>
             <h2 id="accordion-open-heading-3">
                 <button
-                    type="button"
+                     type="button"
+                     onClick={() => toggleAccordion(3)}
+                     aria-expanded={openSection === 3}
                     class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b-2 border-gray-400 gap-3"
                     data-accordion-target="#accordion-open-body-3"
-                    aria-expanded="false"
+                    
                     aria-controls="accordion-open-body-3"
                 >
                     <span class="text-xl font-bold">Review your order</span>
@@ -332,6 +348,7 @@ export default function CheckoutInfo() {
                 </button>
             </h2>
             <div
+            style={{ display: openSection === 3 ? 'block' : 'none' }}
                 id="accordion-open-body-3"
                 class="hidden"
                 aria-labelledby="accordion-open-heading-3"

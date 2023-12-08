@@ -1,4 +1,62 @@
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 export default function OrderSummary() {
+    const [msg, setMsg] = useState('')
+    const [error, setError] = useState('')
+
+    const notify = useCallback(() => {
+        if (error) {
+            toast.error(error, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+        }
+
+        if (msg) {
+            toast.success(msg, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+        }
+    }, [error, msg]);
+
+    const postData = async () => {
+        try {
+            const data = {}
+            const res = await axios.post("http://localhost:4000/checkout", data, { withCredentials: true });
+            setMsg(res.data.msg);
+            setError("")
+        } catch (er) {
+            setError(er)
+            setMsg();
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        postData();
+    }
+
+
+    useEffect(() => {
+        if (error || msg) {
+            notify();
+        }
+    }, [error, msg, notify]);
     return (<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
         <div class="container mb-3">
             <div class="text-3xl font-semibold my-3">Order Summary</div>
@@ -80,6 +138,7 @@ export default function OrderSummary() {
                 <button
                     type="submit"
                     class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-lg font-medium leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]"
+                    onClick={handleSubmit}
                 >
                     Place Your Order
                 </button>

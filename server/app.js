@@ -1,7 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
-const fileUpload = require('express-fileupload');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('express-flash');
@@ -30,7 +29,6 @@ app.use(session({
   resave: false
 }));
 app.use(flash());
-app.use(fileUpload());
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))

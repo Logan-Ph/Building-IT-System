@@ -1,10 +1,23 @@
-import '../css/profile.css'
-import { useState } from 'react'
+import '../../css/profile.css'
+import axios from 'axios'
+import { useState, useCallback, useContext, useEffect } from 'react'
+import { UserContext } from '../../Context/UserContext';
+import { ToastContainer, toast } from 'react-toastify'
+import { UserImageContext } from '../../Context/UserImageContext';
+import { Navigate } from 'react-router';
+
+
 export default function UserProfile() {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState(null);
-    const [activeTab, setActiveTab] = useState("profile");
-    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled'];
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+    const [activeDropdown, setActiveDropdown] = useState(null)
+    const [activeTab, setActiveTab] = useState("profile")
+    const { userImage, setUserImage } = useContext(UserImageContext)
+    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
+
+    const [error, setError] = useState('')
+    const [msg, setMsg] = useState('')
+    const { user, setUser } = useContext(UserContext)
+    const [isLoading, setIsLoading] = useState(true)
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -19,68 +32,159 @@ export default function UserProfile() {
         setActiveDropdown(activeDropdown === index ? null : index);
     };
 
+    useEffect(() => {
+        error && notify(error)
+        msg && success(msg)
+    }, [error, msg]);
+
+    const notify = (error) => {
+        toast.error(error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
+    const success = (success) => {
+        toast.success(success, {
+            position: "top-center",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            pauseOnHover: false,
+            theme: "light",
+        });
+    }
+
+    const fetchUser = useCallback(async () => {
+        try {
+            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+            setUser(res.data.user);
+            setUserImage(res.data.userImage)
+            setIsLoading(false);
+        } catch (er) {
+            setIsLoading(false);
+        }
+    }, [setUser])
+
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [address, setAddress] = useState('')
+    const [name, setName] = useState('')
+    const email = user && user.email;
+    const [file, setFile] = useState();
+
+    const handleFileChange = (event) => {
+        event.preventDefault()
+        setFile(event.target.files[0]);
+    };
+
+    const data = {
+        email: email,
+        name: name,
+        phoneNumber: phoneNumber,
+        address: address,
+        file: file,
+    }
+
+    async function axiosPostData() {
+        try {
+            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+                .then(res => {
+                    setMsg(res.data)
+                    setError('')
+                })
+                .catch(er => { setError(er.response.data); setMsg() });
+        } catch (error) {
+            console.error('Failed to update.', error);
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        axiosPostData();
+        if (error) {
+            notify(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser]);
+
+    if (isLoading) {
+        return <div>Loading....</div>
+    }
+
     return (
         <>
+            {!user && <Navigate to={'/login'} replace />}
+            <ToastContainer
+                position="top-center"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
             <body className="font-outfit">
-                {/* <!-- NAVBAR --> */}
-                <nav className="h-16 py-1 px-4 bg-white shadow-md sticky top-0 left-0 z-50">
-                    <div className="flex items-center h-full gap-12">
-
-                        {/* <!-- Add this Toggle-bar to the nav-bar when completed --> */}
-                        <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar' onClick={handleSidebarToggle}></i>
-
-                    </div>
-                </nav>
-                {/* <!-- NAVBAR --> */}
-
                 {/* <!-- SIDEBAR --> */}
-                <div className={`fixed top-16 transition-all overflow-hidden left-0 w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
-                    <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
-                        <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
+                <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
+                    <span href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50" onClick={handleSidebarToggle}>
+                        <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
-                            <h3 className="text-lg font-semibold mb-1">Ninh Pho</h3>
                             <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
                         </div>
-                    </a>
+                    </span>
                     <div className="py-4">
                         <span className="text-sm text-gray-500 uppercase ml-4 inline-block mb-2 sidebar-menu-title">Menu</span>
                         <ul className="sidebar-menu">
                             <li>
-                                <a href="#" className="active">
+                                <span href="#" className="active">
                                     <i className='bx bx-user-circle sidebar-menu-icon' ></i>
                                     Account
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a href="#" onClick={() => handleDropdownToggle(0)}>
+                                <span href="#" onClick={() => handleDropdownToggle(0)}>
                                     <i className='bx bx-receipt sidebar-menu-icon'></i>
                                     Order
-                                </a>
+                                </span>
                                 <ul className={`sidebar-dropdown ${activeDropdown === 0 ? '' : 'hidden'} ml-4 border-l border-blue-600`}>
                                     {dropdownItems.map((item, index) => (
                                         <li key={index} className={index === 0 ? 'active' : ''}>
-                                            <a href="#">{item}</a>
+                                            <span href="#">{item}</span>
                                         </li>
                                     ))}
                                 </ul>
                             </li>
                             <li>
-                                <a href="#">
+                                <span href="#">
                                     <i className='bx bx-bell sidebar-menu-icon'></i>
                                     Notifications
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a href="#">
+                                <span href="#">
                                     <i className='bx bx-heart sidebar-menu-icon' ></i>
                                     Wishlist
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a href="#">
+                                <span href="#">
                                     <i className='bx bx-question-mark sidebar-menu-icon' ></i>
                                     Help
-                                </a>
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -91,146 +195,51 @@ export default function UserProfile() {
                 <div className="pl-0 md:pl-64 transition-all" id="main">
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
-                            <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-28 h-28 object-cover rounded-full" alt="" />
+                            <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
-                                <h2 className="text-2xl font-semibold mb-2">Ninh Pho</h2>
-                                <span className="text-lg text-gray-500">_ninhcute2023_</span>
+                                <h2 className="text-2xl font-semibold mb-2">{user.name}</h2>
+                                <span className="text-lg text-gray-500">{user.email}</span>
                             </div>
-                            <a href="#" className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
+                            <button onClick={handleSubmit} className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
                                 <i className='bx bx-edit-alt' ></i>
                                 Save changes
-                            </a>
+                            </button>
                         </div>
                         <div className="mt-4">
                             <div className="flex items-center gap-8 tab-indicator border-b border-gray-200">
                                 <span onClick={() => handleTabClick("profile")} className={activeTab === "profile" ? "active" : ""}>Profile</span>
-                                <span onClick={() => handleTabClick("addresses")} className={activeTab === "addresses" ? "active" : ""}>Addresses</span>
                                 <span onClick={() => handleTabClick("changepassword")} className={activeTab === "changepassword" ? "active" : ""}>Password</span>
                                 <span onClick={() => handleTabClick("notisetting")} className={activeTab === "notisetting" ? "active" : ""}>Notifications</span>
                             </div>
                             {activeTab === "profile" && <div className="tab-content mt-4" id="profile">
-                                <h2 className="text-2xl font-semibold">My Profile</h2>
                                 <div className="border-b border-gray-900/10 pb-12">
-                                    <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                                    <p className="mt-1 text-sm leading-6 text-gray-600">Manage and protect your account
-                                    </p>
-
                                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                                         <div className="col-span-full">
                                             <label for="photo" className="block text-sm font-medium leading-6 text-gray-900">Avatar picture</label>
                                             <div className="mt-2 flex items-center gap-x-3">
-                                                <input type="file" id="fileUpload" name="photo" accept="image/*" />
-                                                <svg onclick="document.getElementById('fileUpload').click()" className="h-12 w-12 text-gray-300 cursor-pointer" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-                                                </svg>
-                                                <button type="button" onclick="document.getElementById('fileUpload').click()" className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
+                                                <input type="file" id="photo" name="photo" onChange={handleFileChange} accept="image/*" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-3">
-                                            <label for="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
+                                            <label for="name" className="block text-sm font-medium leading-6 text-gray-900">Full name</label>
                                             <div className="mt-2">
-                                                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                                    <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">rBuy.com/</span>
-                                                    <input type="text" name="username" id="username" autocomplete="username" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-3">
-                                            <label for="first-name" className="block text-sm font-medium leading-6 text-gray-900">First name</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="first-name" id="first-name" autocomplete="given-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-3">
-                                            <label for="last-name" className="block text-sm font-medium leading-6 text-gray-900">Last name</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="last-name" id="last-name" autocomplete="family-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setName(e.target.value)} placeholder={user.name} type="name" name="name" id="name" autocomplete="name" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
-                                            <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                                            <label for="street-address" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                             <div className="mt-2">
-                                                <input id="email" name="email" type="email" autocomplete="email" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setAddress(e.target.value)} placeholder={user.address} type="text" name="street-address" id="street-address" autocomplete="street-address" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
-                                            <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
+                                            <label for="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
                                             <div className="mt-2">
-                                                <input id="phone" name="phone" type="phone" autocomplete="email" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-3">
-                                            <label for="country" className="block text-sm font-medium leading-6 text-gray-900">Sex</label>
-                                            <div className="mt-2">
-                                                <select id="country" name="country" autocomplete="country-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                                    <option>Male</option>
-                                                    <option>Female</option>
-                                                    <option>Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-4">
-                                            <label for="dob" className="block text-sm font-medium leading-6 text-gray-900">Date of Birth</label>
-                                            <div className="mt-2">
-                                                <input id="dob" name="dob" type="date" autocomplete="bday" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>}
-
-                            {activeTab === "addresses" && <div className="tab-content mt-4" id="addresses">
-                                <h2 className="text-2xl font-semibold">My Addresses</h2>
-                                <div className="border-b border-gray-900/10 pb-12">
-                                    <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                                    <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
-                                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-                                        <div className="sm:col-span-3">
-                                            <label for="country" className="block text-sm font-medium leading-6 text-gray-900">Country</label>
-                                            <div className="mt-2">
-                                                <select id="country" name="country" autocomplete="country-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                                    <option>Vietnam</option>
-                                                    <option>Australia</option>
-                                                    <option>United States</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div className="col-span-full">
-                                            <label for="street-address" className="block text-sm font-medium leading-6 text-gray-900">Street address</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="street-address" id="street-address" autocomplete="street-address" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-2 sm:col-start-1">
-                                            <label for="city" className="block text-sm font-medium leading-6 text-gray-900">City</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="city" id="city" autocomplete="address-level2" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-2">
-                                            <label for="region" className="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="region" id="region" autocomplete="address-level1" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-2">
-                                            <label for="postal-code" className="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
-                                            <div className="mt-2">
-                                                <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user.phoneNumber} id="phoneNumber" name="phoneNumber" type="phoneNumber" autocomplete="phoneNumber" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
                                     </div>

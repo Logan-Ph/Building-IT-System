@@ -3,11 +3,13 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
 import { UserContext } from "../Context/UserContext";
+import { UserImageContext } from "../Context/UserImageContext";
 
-export default function ProductDetailCard({ product }) {
+export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
     const { setCart } = useContext(CartContext)
     const { setUser } = useContext(UserContext)
+    const { setUserImage } = useContext(UserImageContext)
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
 
@@ -44,6 +46,7 @@ export default function ProductDetailCard({ product }) {
             const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
             setUser(res.data.user);
             setCart(res.data.length)
+            setUserImage(res.data.userImage)
         } catch (er) {
             console.log(er);
         }
@@ -78,7 +81,7 @@ export default function ProductDetailCard({ product }) {
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
             <img
                 alt="ecommerce"
-                className="lg:w-1/2 w-auto lg:h-auto md:h-auto sm:h-auto xs:h-auto object-cover object-center rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
+                className="lg:w-[550px] lg:h-[510px] md:h-auto sm:h-auto xs:h-auto  rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
                 src={product.image_link}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -101,7 +104,7 @@ export default function ProductDetailCard({ product }) {
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
                                     <a
-                                        href="/product"
+                                        href="\search\query=?"
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                     >
                                         {" "}
@@ -116,12 +119,12 @@ export default function ProductDetailCard({ product }) {
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
                                     <a
-                                        href="\product\category"
+                                        href={`/vendor/${product.owner}/home`}
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                         aria-current="page"
                                     >
                                         {" "}
-                                        {product.category}{" "}
+                                        {vendorName}{" "}
                                     </a>
                                 </div>
                             </div>
@@ -131,7 +134,7 @@ export default function ProductDetailCard({ product }) {
                 <div></div>
                 <div className="">
                     <h2 className="text-sm title-font text-gray-500 tracking-widest">
-                        {product.owner}
+                        {vendorName}
                     </h2>
                     <h1 className="text-gray-900 lg:text-3xl sm:text-md xs:text-md title-font font-medium mb-3 ">
                         {product.product_name}

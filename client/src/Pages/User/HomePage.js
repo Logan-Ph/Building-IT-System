@@ -3,15 +3,18 @@ import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { ToastContainer } from 'react-toastify'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import 'react-toastify/dist/ReactToastify.css'
-import '../css/homepage.css'
-import ProductCard from '../Components/ProductCard';
-import Slider from '../Components/Slider';
-import Banner from '../Components/Banner';
-import { UserContext } from '../Context/UserContext';
-import { CartContext } from '../Context/CartContext';
+import '../../css/homepage.css'
+import Slider from '../../Components/Slider';
+import Banner from '../../Components/Banner';
+import { UserContext } from '../../Context/UserContext';
+import { CartContext } from '../../Context/CartContext';
+import ProductCard from '../../Components/ProductCard';
+import { Navigate } from 'react-router-dom';
+import { UserImageContext } from '../../Context/UserImageContext';
 
 export default function Homepage() {
-    const { setUser } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
+    const { setUserImage } = useContext(UserImageContext)
     const { setCart } = useContext(CartContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -20,7 +23,6 @@ export default function Homepage() {
         try {
             const res = await axios.get("http://localhost:4000/", { withCredentials: true });
             setProducts(res.data.product);
-            setIsLoading(false);
         } catch (er) {
             console.log(er);
         }
@@ -31,6 +33,8 @@ export default function Homepage() {
             const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
             setUser(res.data.user);
             setCart(res.data.length)
+            setUserImage(res.data.userImage)
+            setIsLoading(false);
         } catch (er) {
             console.log(er);
             setIsLoading(false);
@@ -48,6 +52,7 @@ export default function Homepage() {
 
     return (
         <>
+            {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -71,7 +76,7 @@ export default function Homepage() {
                     {/* Trending Product */}
                     <div className="flex flex-row items-center my-6">
                         <div className='w-8 h-8'>
-                            <img src={require("../Components/images/trending.png")} className="object-cover" />
+                            <img src={require("../../Components/images/trending.png")} className="object-cover" />
                         </div>
                         <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
                     </div>

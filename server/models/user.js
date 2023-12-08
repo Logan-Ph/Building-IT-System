@@ -1,15 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    _id:{
-        type: mongoose.Schema.Types.ObjectId,
-    },
-
     googleId: {
         type: String,
     },
 
-    facebookId:{
+    facebookId: {
         type: String,
     },
 
@@ -35,14 +31,21 @@ const userSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
     },
 
     verify: {
         type: Boolean,
         default: false,
     },
+    role: {
+        type: String,
+        require: true,
+        default: "User",
+    },
+    banEndDate: {
+        type: Date,
+    },
 
 });
 
-module.exports = mongoose.model('User',userSchema)
+module.exports = mongoose.model('User', userSchema)
