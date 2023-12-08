@@ -12,12 +12,15 @@ import ForgotPassword from '../Pages/User/ForgotPasswordPage';
 import RegisterPage from '../Pages/User/RegisterPage';
 import CheckoutPage from "../Pages/User/CheckoutPage";
 import UserProfile from '../Pages/User/UserProfile';
-import ManageOrderPage from '../Pages/Vendor/ManageOrderPage';
+import ManageOrderPage from '../Pages/Vendor/VendorManageOrderPage';
 import algoliasearch from 'algoliasearch/lite';
 import DashboardPage from '../Pages/Vendor/DashboardPage';
+import AdminDashboardPage from '../Pages/Admin/AdminDashboardPage';
 import VendorHomePage from '../Pages/User/VendorHomePage';
 import VendorProductPage from "../Pages/User/VendorProductPage";
-import ProductPage from '../Pages/User/ProductPage'
+import ProductPage from '../Pages/User/ProductPage';
+import ManageUserPage from "../Pages/Admin/ManageUserPage";
+import ReportInfoPage from "../Pages/Admin/ReportInfoPage";
 
 import {
   InstantSearch,
@@ -28,6 +31,9 @@ import Chatbot from "./Chatbot";
 import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorSidebar from '../Components/VendorSidebar';
+import VendorHeader from '../Components/VendorHeader';
+import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
+import { UserImageProvider } from '../Context/UserImageContext';
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
@@ -49,6 +55,7 @@ export default function Router() {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
+          <VendorHeader />
           <div className="flex  ">
             <VendorSidebar />
             <Outlet />
@@ -102,12 +109,16 @@ export default function Router() {
           element: <VendorProductPage />,
         },
         {
-          path: "/vendor/:id",
+          path: "/vendor/:id/home",
           element: <VendorHomePage />,
         },
         {
           path: "/search/:query",
           element: <SearchResultPage />,
+        },
+        {
+          path: "/AdminDashboard",
+          element: <AdminDashboardPage />,
         },
       ],
     },
@@ -121,15 +132,25 @@ export default function Router() {
         },
         {
           path: "/add-product",
-          element: <VendorPostingProduct />
+          element: <VendorPostingProduct />,
         },
         {
           path: "/manage-order",
-          element: <ManageOrderPage />
+          element: <ManageOrderPage />,
         },
         {
           path: "/manage-product",
-          element: <VendorMyProduct />
+          element: <VendorMyProduct />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      element: <VendorLayout />,
+      children: [
+        {
+          path: "/admin/manage-order",
+          element: <AdminManageVendorProduct />,
         },
       ],
     },
@@ -151,12 +172,27 @@ export default function Router() {
         },
       ],
     },
+    {
+      path: "/",
+      children: [
+        {
+          path: "/manage-user",
+          element: <ManageUserPage />,
+        },
+        {
+          path: "/report",
+          element: <ReportInfoPage />,
+        },
+      ],
+    },
   ]);
 
   return (
     <CartProvider>
       <UserProvider>
-        <RouterProvider router={BrowserRoutes} />
+        <UserImageProvider>
+          <RouterProvider router={BrowserRoutes} />
+        </UserImageProvider>
       </UserProvider>
     </CartProvider>
   )

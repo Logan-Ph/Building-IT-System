@@ -43,8 +43,10 @@ const shipperSchema = new mongoose.Schema({
         type: String,
         require: true,
         default: "Shipper",
-    }
-
+    },
+    banEndDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model('Shipper', shipperSchema)

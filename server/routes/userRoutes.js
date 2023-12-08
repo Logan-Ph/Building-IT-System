@@ -3,8 +3,21 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
+const multer = require('multer');
+const path = require('path');
+
 require('dotenv').config
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, 'uploads') // specify the path to save files
+    },
+    filename: function(req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // specify the filename
+    }
+});
+
+const upload = multer({ storage });
 /**
  *  App routes
 */
@@ -93,6 +106,7 @@ router.get('/vendor/:id/product', userController.vendorProductPage);
 
 //vendor manage order (vendor side)
 router.post('/search-order', userController.searchOrder);
+router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 
 // vendor dashboard route (vendor side)
@@ -107,6 +121,9 @@ router.post('/user-register', userController.userRegister);
 
 // vendor register route
 router.post('/vendor-register', userController.vendorRegister);
+
+// admin ban user route
+router.post("/ban-user",userController.banUser);
 
 // authentication route via login function
 router.get('/login', userController.loginPage);
@@ -154,4 +171,5 @@ router.get('/auth/google/callback', (req, res, next) => {
         });
     })(req, res);
 });
+router.post('/update-user', upload.single('file'), userController.updateUser);
 module.exports = router;

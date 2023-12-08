@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
-const order = require('../models/order')
+
+const fs = require("fs");
 require('dotenv').config()
 
 function sendEmailVerification(userEmail) {
@@ -59,8 +60,15 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
+    const user = (await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id));
+    let userImage;
+    if (user.img.data) {
+      userImage = Buffer.from(
+        user.img.data
+      ).toString("base64");
+    }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
+    res.json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
   } else {
     res.json({ user: "", length: 0 })
   }
@@ -379,13 +387,25 @@ exports.addProduct = async (req, res) => {
 }
 
 exports.searchOrder = async (req, res) => {
-  const orderId = req.body.orderId;
-  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId });
-  if (!order) {
+  try {
+    const orderId = req.body.orderId;
+    const orderStatus = req.body.orderStatus
+    let order;
+    console.log(orderStatus)
+    if (orderStatus) {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
+    } else {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId });
+    }
+
+    if (!order) {
+      return res.status(500).json({ error: "Cannot find order. " })
+    }
+
+    return res.status(200).json({ order: order });
+  } catch {
     return res.status(500).json({ error: "Cannot find order. " })
   }
-
-  return res.status(200).json({ order: order });
 }
 
 exports.manageOrder = async (req, res) => {
@@ -411,6 +431,13 @@ exports.vendorProductPage = async (req, res) => {
   }
 }
 
+exports.confirmOrder = async (req, res) => {
+  const orderId = req.body.orderId;
+  await Order.findByIdAndUpdate(orderId, { status: "To Ship" });
+  return res.status(200).json({ msg: "Order confirmed" });
+
+}
+
 exports.getVendorDashboard = async (req, res) => {
   return res.status(200).json("hahah");
 }
@@ -427,3 +454,162 @@ exports.logout = (req, res) => {
   req.session.destroy();
   res.redirect("http://localhost:3000/");
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      user.img = image;
+    }
+    if (req.body.name) {
+      user.name = req.body.name
+    }
+    if (req.body.address) {
+      user.address = req.body.address
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.status(500).json("Phone number already exists.")
+      } else {
+        user.phoneNumber = phoneNumber;
+      }
+    }
+    await user.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateVendor = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ email: req.body.email });
+
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.img = image;
+    }
+
+    if (req.body.address) { vendor.address = req.body.address; }
+    if (req.body.businessName) {
+      const checkBusinessName = (await Vendor.findOne({ businessName: req.body.businessName }));
+      if (checkBusinessName(req.body.businessName)) {
+        return res.status(500).json("Business name has already existed.")
+      } else {
+        vendor.businessName = req.body.businessName;
+      }
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.json("Phone number has already existed.");
+      } else { vendor.phoneNumber = req.body.phoneNumber; }
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateShipper = async (req, res) => {
+  try {
+    const shipper = await Shipper.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      shipper.img = image;
+    }
+    if (req.body.name) {
+      shipper.name = req.body.name;
+    }
+    if (req.body.address) {
+      shipper.address = req.body.address;
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        shipper.phoneNumber = req.body.phoneNumber;
+      }
+    }
+    await shipper.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.banUser = async (req, res) => {
+  const userId = req.body.userId;
+  const banDuration = req.body.banDate; // This should be in days or months
+
+  let endDate;
+
+  if (banDuration === '1 month') {
+    endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+  } else {
+    const banDays = parseInt(banDuration); // Convert the ban duration to integer
+    endDate = new Date(Date.now() + banDays * 24 * 60 * 60 * 1000); // Add the ban duration to the current date
+  }
+
+  try {
+    const user = await User.findById(userId);
+    const vendor = await Vendor.findById(userId);
+    const shipper = await Shipper.findById(userId);
+
+    if (user) {
+      await User.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (vendor) {
+      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (shipper) {
+      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else {
+      throw new Error('User does not exist!');
+    }
+
+    return res.status(200).json("Banned user successfully");
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
+exports.userProfile = async (req, res) => {
+  return res.status(200).json("profile page");
+}
+
+exports.updateVendorWallpaper = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.wallpaper = image;
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}

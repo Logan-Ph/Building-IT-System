@@ -4,9 +4,8 @@ import { useState, useEffect, useCallback } from 'react'
 import axios from "axios"
 import recommend from '@algolia/recommend';
 import { useRelatedProducts } from '@algolia/recommend-react'
-import { Navigate } from 'react-router-dom'
 import RelatedProduct from "../../Components/RelatedProduct";
-import CustomerReview from "../../Components/CustomerReview";
+import CustomerReview from '../../Components/CustomerReview';
 import { Swiper, SwiperSlide } from "swiper/react";
 import ProductDetailCard from "../../Components/ProductDetailCard";
 import ProductDetailComment from "../../Components/ProductDetailComment";
@@ -37,6 +36,18 @@ export default function TestingPage() {
       setError(error);
     }
   }, [params.id])
+
+  // const fetchUser = useCallback(async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+  //     setUser(res.data.user);
+  //     setUserImage(res.data.userImage)
+  //     setIsLoading(false);
+  //   } catch (er) {
+  //     console.log(er);
+  //     setIsLoading(false);
+  //   }
+  // }, [setUser])
 
   useEffect(() => {
     fetchData()

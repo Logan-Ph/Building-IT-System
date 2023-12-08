@@ -31,7 +31,6 @@ const userSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
     },
 
     verify: {
@@ -42,7 +41,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         default: "User",
-    }
+    },
+    banEndDate: {
+        type: Date,
+    },
 
 });
 

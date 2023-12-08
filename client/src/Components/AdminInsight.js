@@ -1,8 +1,5 @@
 
-
-
-
-export default function Insight() {
+export default function AdminInsight() {
   return (
     <>
       <div id="24h">
@@ -14,7 +11,7 @@ export default function Insight() {
                   <div class=" w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 class="text-gray-400 uppercase font-bold lg:md:text-sm text-xs ">
                       {" "}
-                      Total Sales
+                      Total Account
                     </h5>
                     <span class="font-semibold text-xl text-gray-700">
                       334,100
@@ -29,6 +26,7 @@ export default function Insight() {
                 <hr class="mt-4 mb-2 w-full border-gray-300" />
                 <p class="text-sm text-gray-400 ">
                   <span class="text-emerald-500 ">
+
                   </span>
                   <span class="whitespace-nowrap">
                     {" "}
@@ -38,13 +36,14 @@ export default function Insight() {
               </div>
             </div>
           </div>
+
           <div class=" mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-4 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                   <div class=" w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 class="text-gray-400 uppercase font-bold lg:md:text-sm text-xs">
-                      Income
+                      Total Customer
                     </h5>
                     <span class="font-semibold text-xl text-gray-700">
                       2,999
@@ -58,6 +57,7 @@ export default function Insight() {
                 <hr class="mt-4 mb-2 w-full border-gray-300" />
                 <p class="text-sm text-gray-400">
                   <span class="text-red-500">
+
                   </span>
                   <span class="whitespace-nowrap">
                     {" "}
@@ -67,13 +67,14 @@ export default function Insight() {
               </div>
             </div>
           </div>
+
           <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                   <div class=" w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 class="text-gray-400 uppercase font-bold lg:md:text-sm text-xs">
-                      Followers
+                      Total Vendor
                     </h5>
                     <span class="font-semibold text-xl text-gray-700">
                       901
@@ -87,21 +88,25 @@ export default function Insight() {
                 </div>
                 <hr class="mt-4 mb-2 w-full border-gray-300" />
                 <p class="text-sm text-gray-400 ">
+
                   <span class="whitespace-nowrap">
+
                     Since yesterday
                   </span>
                 </p>
               </div>
             </div>
           </div>
+
           <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
                   <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
                     <h5 class="text-gray-400 uppercase font-bold lg:md:text-sm text-xs">
-                      Profit
+                      Total Product
                     </h5>
+
                     <span class="font-semibold text-xl text-gray-700">
                       51.02%{" "}
                     </span>
@@ -115,6 +120,7 @@ export default function Insight() {
                 <hr class="mt-4 mb-2 w-full border-gray-300" />
                 <p class="text-sm text-gray-400">
                   <span class="text-emerald-500">
+
                   </span>
                   <span class="whitespace-nowrap">
                     {" "}
