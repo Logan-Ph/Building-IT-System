@@ -177,9 +177,9 @@ export default function DashboardPage() {
             ]} />
         </Sidebar>
 
-        <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32  relative py-20 ">
+        <div class=" max-w-8xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 lg:md:w-full w-3/4 lg:mx-0 mx-auto">
           <div
-              class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-6">
+              class="">
               < AddImageHomePage/>
             </div>
           <div class="">
@@ -188,9 +188,9 @@ export default function DashboardPage() {
 
             <div
               id="content"
-              class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto">
+              class="">
               <h1 class="font-bold  pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
-                Business Insight
+                Admin Insight
               </h1>
               <h1 class="font-medium  lg:md:pt-1 pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
               Critical business priorities encompass operational efficiency, market dynamics, and customer engagement

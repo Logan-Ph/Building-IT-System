@@ -55,10 +55,10 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-        <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32 text-slate-300 relative py-20 ">
+        <div class="max-w-8xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 lg:md:w-full w-3/4 lg:mx-0 mx-auto">
         <div
           id="content"
-          class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-12 "
+          class=" "
         >
           <h1 class="font-bold  pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
             To Do List
@@ -71,7 +71,7 @@ export default function DashboardPage() {
         <div class="">
           <div
             id="content"
-            class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto"
+            class=""
           >
             <h1 class="font-bold  pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
               Business Insight

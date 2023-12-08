@@ -125,6 +125,8 @@ export default function Insight() {
             </div>
           </div>
         </div>
-      </div></>
+      </div>
+      
+      </>
   )
 }

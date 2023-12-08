@@ -10,7 +10,7 @@ export default function AddImageHomePage() {
                 <div className="flex flex-col items-center mx-auto justify-center">
 
 
-                    <section class="container w-full mx-auto items-center py-4">
+                    <section class="c">
                         <div class="max-w-sm  ">
                             <div class="px-4 py-6">
                                 <div id="image-preview" class="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">
