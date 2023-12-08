@@ -391,7 +391,6 @@ exports.searchOrder = async (req, res) => {
     const orderId = req.body.orderId;
     const orderStatus = req.body.orderStatus
     let order;
-    console.log(orderStatus)
     if (orderStatus) {
       order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
     } else {
