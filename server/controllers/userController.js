@@ -9,6 +9,18 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
+const algoliasearch = require('algoliasearch')
+const ImageKit = require("imagekit")
+
+// Connect and authenticate with your Algolia app
+const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
+const index = client.initIndex('rBuy')
+
+const imagekit = new ImageKit({
+  publicKey : "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
+  privateKey : "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
+  urlEndpoint : "https://ik.imagekit.io/cnhlinh"
+});
 
 const fs = require("fs");
 require('dotenv').config()
@@ -611,5 +623,101 @@ exports.updateVendorWallpaper = async (req, res) => {
     return res.json('Profile has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.addNewProduct = async (req, res) => {
+  try {
+    const id = new mongoose.Types.ObjectId();
+    const newProduct = new Product({
+      _id: id,
+      owner: req.user._id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description,
+      img: {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      },
+    });
+    await newProduct.save()
+    .then(()=>res.json("Product added."))
+    .catch(err=>console.log(err));
+
+    const uploadImage = async () => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + req.file.filename),
+          fileName: id + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    
+    const imageURL = await uploadImage();
+
+    const object = {
+      objectID: id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      owner: req.user.businessName,
+      price: parseInt(req.body.price,10),
+      description: req.body.description,
+      image_link: imageURL,
+    };
+
+    index.saveObject(object).wait()
+    .then(()=>console.log("updated to algolia: " + imageURL))
+    .catch(err=>console.log(err));
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
+
+// Function to delete a product
+exports.deleteProduct = async (req, res) => {
+  try {
+    const productId = req.body.id;
+    const productToDelete = await Product.findById(productId);
+    if (!productToDelete) {
+      return res.status(404).json('Product not found');
+    }
+    await Product.findByIdAndDelete(productId);
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateProduct = async (req, res) => {
+  try {
+    const productId = req.body.id;
+    const productToUpdate = await Product.findById(productId);
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      productToUpdate.img = image; 
+    }
+    if (req.body.productName) {
+      productToUpdate.product_name = req.body.productName;
+    }
+    if (req.body.price) {
+      productToUpdate.price = req.body.price;
+    }
+    if (req.body.category) {
+      productToUpdate.category = req.body.category;
+    }
+    if (req.body.description) {
+      productToUpdate.description = req.body.description;
+    }
+    await productToUpdate.save();
+    return res.json('Profile has been updated!')
+  } catch(error){
+    res.status(500).send({ message: error.message || "Error Occured" });   
   }
 }

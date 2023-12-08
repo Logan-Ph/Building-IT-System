@@ -172,4 +172,7 @@ router.get('/auth/google/callback', (req, res, next) => {
     })(req, res);
 });
 router.post('/update-user', upload.single('file'), userController.updateUser);
+
+// vendor add new product route
+router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 module.exports = router;
