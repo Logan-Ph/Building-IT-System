@@ -19,6 +19,9 @@ import AdminDashboardPage from '../Pages/Admin/AdminDashboardPage';
 import VendorHomePage from '../Pages/User/VendorHomePage';
 import VendorProductPage from "../Pages/User/VendorProductPage";
 import ProductPage from '../Pages/User/ProductPage';
+import ManageUserPage from "../Pages/Admin/ManageUserPage";
+import ReportInfoPage from "../Pages/Admin/ReportInfoPage";
+
 import {
   InstantSearch,
 } from 'react-instantsearch';
@@ -129,15 +132,15 @@ export default function Router() {
         },
         {
           path: "/add-product",
-          element: <VendorPostingProduct />
+          element: <VendorPostingProduct />,
         },
         {
           path: "/manage-order",
-          element: <ManageOrderPage />
+          element: <ManageOrderPage />,
         },
         {
           path: "/manage-product",
-          element: <VendorMyProduct />
+          element: <VendorMyProduct />,
         },
       ],
     },
@@ -166,6 +169,19 @@ export default function Router() {
         {
           path: "/user/:token/forgot-password",
           element: <ResetPasswordPage />,
+        },
+      ],
+    },
+    {
+      path: "/",
+      children: [
+        {
+          path: "/manage-user",
+          element: <ManageUserPage />,
+        },
+        {
+          path: "/report",
+          element: <ReportInfoPage />,
         },
       ],
     },

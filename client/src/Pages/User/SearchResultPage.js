@@ -14,15 +14,8 @@ import SortOptions from '../../Components/SortOptions';
 
 export default function Example() {
   const { hits } = useHits();
-  const [valueFilter, setValueFilter] = useState([
-    { value: 'household appliances', label: 'Household Appliances', isRefined: false },
-    { value: 'electronics', label: 'Electronics', isRefined: false },
-    { value: 'fashion', label: 'Fashion', isRefined: false },
-    { value: 'beauty & personal care', label: 'Beauty & Care', isRefined: false },
-    { value: 'baby toys', label: 'Baby Toys', isRefined: false },
-  ]);
-  const { refine } = useRefinementList({ attribute: 'category', operator: 'and' });
-
+  const { refine, items } = useRefinementList({ attribute: 'category', operator: 'or' });
+  const [valueFilter, setValueFilter] = useState([]);
   const [sortOptions, setSortOptions] = useState([
     { label: 'Most Popular', value: 'rBuy_relavant_sort', current: false },
     { label: 'Price: Low to High', value: 'rBuy_price_asc', current: false },
@@ -34,7 +27,14 @@ export default function Example() {
 
   useEffect(() => {
     setSearchQuery((query.split('='))[1]);
-  }, [query]);
+    if (items.length > 0) {
+      setValueFilter(items.map(item => ({
+        value: item.label,
+        label: item.label,
+        isRefined: item.isRefined,
+      })));
+    }
+  }, [query, items]);
 
   return (
     <div className="bg-white">

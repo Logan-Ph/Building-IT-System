@@ -50,8 +50,8 @@ export default function UserProfile() {
         });
     }
 
-    const success = (error) => {
-        toast.success(error, {
+    const success = (success) => {
+        toast.success(success, {
             position: "top-center",
             autoClose: 10000,
             hideProgressBar: false,
@@ -70,7 +70,6 @@ export default function UserProfile() {
             setUserImage(res.data.userImage)
             setIsLoading(false);
         } catch (er) {
-            console.log(er);
             setIsLoading(false);
         }
     }, [setUser])
@@ -126,55 +125,66 @@ export default function UserProfile() {
     return (
         <>
             {!user && <Navigate to={'/login'} replace />}
+            <ToastContainer
+                position="top-center"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
                 <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
-                    <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
-                        <img src={`data:image/jpeg;base64,${userImage}`} className="w-16 aspect-square object-cover rounded" alt="" />
+                    <span href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50" onClick={handleSidebarToggle}>
+                        <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
-                            <h3 className="text-lg font-semibold mb-1"></h3>
                             <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
                         </div>
-                    </a>
+                    </span>
                     <div className="py-4">
                         <span className="text-sm text-gray-500 uppercase ml-4 inline-block mb-2 sidebar-menu-title">Menu</span>
                         <ul className="sidebar-menu">
                             <li>
-                                <a href="#" className="active">
+                                <span href="#" className="active">
                                     <i className='bx bx-user-circle sidebar-menu-icon' ></i>
                                     Account
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a href="#" onClick={() => handleDropdownToggle(0)}>
+                                <span href="#" onClick={() => handleDropdownToggle(0)}>
                                     <i className='bx bx-receipt sidebar-menu-icon'></i>
                                     Order
-                                </a>
+                                </span>
                                 <ul className={`sidebar-dropdown ${activeDropdown === 0 ? '' : 'hidden'} ml-4 border-l border-blue-600`}>
                                     {dropdownItems.map((item, index) => (
                                         <li key={index} className={index === 0 ? 'active' : ''}>
-                                            <a href="#">{item}</a>
+                                            <span href="#">{item}</span>
                                         </li>
                                     ))}
                                 </ul>
                             </li>
                             <li>
-                                <a href="#">
+                                <span href="#">
                                     <i className='bx bx-bell sidebar-menu-icon'></i>
                                     Notifications
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a href="#">
+                                <span href="#">
                                     <i className='bx bx-heart sidebar-menu-icon' ></i>
                                     Wishlist
-                                </a>
+                                </span>
                             </li>
                             <li>
-                                <a href="#">
+                                <span href="#">
                                     <i className='bx bx-question-mark sidebar-menu-icon' ></i>
                                     Help
-                                </a>
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -185,7 +195,7 @@ export default function UserProfile() {
                 <div className="pl-0 md:pl-64 transition-all" id="main">
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
-                            <img src={`data:image/jpeg;base64,${userImage}`} className="w-28 h-28 object-cover rounded-full" alt="" />
+                            <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
                                 <h2 className="text-2xl font-semibold mb-2">{user.name}</h2>
                                 <span className="text-lg text-gray-500">{user.email}</span>

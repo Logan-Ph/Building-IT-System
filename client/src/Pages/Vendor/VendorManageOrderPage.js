@@ -132,7 +132,19 @@ function Component({ foundOrder, orders, setStatus }) {
     return (
         <Tabs aria-label="Tabs with icons" style="underline" onActiveTabChange={(tab) => setStatus(tab)}>
             <Tabs.Item active title="All" >
-                <AllTableComponent foundOrder={foundOrder} orders={orders} />
+                {console.log(orders)}
+                {orders.length === 0 && <div className="overflow-x-auto">
+                    <div className='border border-gray my-1 py-32'>
+                        <div className='flex flex-col justify-center items-center'>
+                            <div className='w-[100px] h-[80px]'>
+                                <img src={require("../../Components/images/noorder.png")}
+                                    alt="No Order" className='w-full h-full' />
+                            </div>
+                            <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
+                        </div>
+                    </div>
+                </div>}
+                {orders.length !== 0 && <AllTableComponent foundOrder={foundOrder} orders={orders} />}
             </Tabs.Item>
             <Tabs.Item title="Unpaid" onClickCapture={handlClickEvent}>
                 {!categorizedOrder["Unpaid"] && <div className="overflow-x-auto">
