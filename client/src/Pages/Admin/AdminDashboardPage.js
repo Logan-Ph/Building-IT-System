@@ -15,40 +15,6 @@ export default function DashboardPage() {
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
       <div className="flex  ">
-        <div className=" flex">
-          <Sidebar>
-            <SidebarItem icon={<Settings size={20} />} text="Product"
-              subitems={[
-                { text: "My Products" },
-                { text: "Add Product", href: "https://www.google.com/" },
-                { text: "Delete Product" },
-                // Add more subitems as needed
-              ]} />
-            <SidebarItem icon={<Settings size={20} />} text="Order"
-              subitems={[
-                { text: "My Orders", href: "https://www.google.com/" },
-                { text: "Ship Orders" },
-                // Add more subitems as needed
-              ]} />
-            <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-              subitems={[
-                { text: "Subitem 1", href: "https://www.google.com/" },
-                { text: "Subitem 2" },
-                // Add more subitems as needed
-              ]} />
-            <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-              subitems={[
-                { text: "Subitem 1", href: "https://www.google.com/" },
-                { text: "Subitem 2" },
-                // Add more subitems as needed
-              ]} />
-            <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-              subitems={[
-                { text: "Subitem 1", href: "https://www.google.com/" },
-                { text: "Subitem 2" },
-                // Add more subitems as needed
-              ]} />
-          </Sidebar>
           <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32  relative py-20 ">
             <div
               class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-6">
@@ -76,7 +42,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
     </>
   )
 }

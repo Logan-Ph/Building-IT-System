@@ -6,9 +6,13 @@ import AllTableComponent from '../../Components/VMOAllTableComponent';
 import { UserContext } from '../../Context/UserContext';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { UserImageContext } from '../../Context/UserImageContext';
+import { Navigate } from 'react-router-dom';
 
 export default function ManageOrderPage() {
-    const { user, setUser } = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
+    const { setUserImage } = useContext(UserImageContext)
+    const [error, setError] = useState();
     const [status, setStatus] = useState("")
     const [orderId, setOrderId] = useState("")
     const [foundOrder, setFoundOrder] = useState()
@@ -23,9 +27,20 @@ export default function ManageOrderPage() {
         }
     }, [orders])
 
+    const fetchUser = async () => {
+        try {
+            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
+            setUser(res.data.user);
+            setUserImage(res.data.userImage);
+        }
+        catch (er) {
+            setError(er)
+        }
+    }
 
     useEffect(() => {
         getOrders();
+        fetchUser();
     }, [])
 
     const postData = async () => {
@@ -77,6 +92,7 @@ export default function ManageOrderPage() {
 
     return (
         <>
+            {error && <Navigate to={'/login'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
