@@ -1,4 +1,56 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+
 export default function OrderSummary() {
+
+   
+    const OrderSummaryPage = ({ match }) => {
+      const [order, setOrder] = useState(null);
+      const [loading, setLoading] = useState(true);
+    
+      useEffect(() => {
+        const fetchOrderDetails = async () => {
+          try {
+            const backendUrl = 'http://localhost:3001'; 
+            const orderId = match.params.orderId; 
+    
+            const response = await axios.get(`${backendUrl}/order/${orderId}`);
+    
+            // Handle the response as needed
+            if (response.data.success) {
+              setOrder(response.data.order);
+            } else {
+              console.error('Error fetching order details:', response.data.error);
+              // Handle error, show a message to the user, etc.
+            }
+          } catch (error) {
+            console.error('Error fetching order details:', error);
+            // Handle error, show a message to the user, etc.
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        fetchOrderDetails();
+      }, [match.params.orderId]);
+    
+      if (loading) {
+        return <p>Loading...</p>;
+      }
+    
+      if (!order) {
+        return <p>Error loading order details</p>;
+      }
+
+
+
+
+
+
+
+
+
     return (<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
         <div class="container mb-3">
             <div class="text-3xl font-semibold my-3">Order Summary</div>
