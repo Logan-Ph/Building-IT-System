@@ -438,7 +438,27 @@ exports.confirmOrder = async (req, res) => {
 }
 
 exports.getVendorDashboard = async (req, res) => {
-  return res.status(200).json("hahah");
+  try {
+    const orders = await Order.aggregate([
+      {
+        $match: { vendorID: new mongoose.Types.ObjectId(req.user._id) }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const ordersCountByStatus = {};
+    orders.forEach(orderGroup => {
+      ordersCountByStatus[orderGroup._id] = orderGroup.count;
+    });
+    res.status(200).json({ordersByStatus: ordersCountByStatus});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 exports.postVendorDashboard = async (req, res) => {

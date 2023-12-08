@@ -1,5 +1,30 @@
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../Context/UserContext";
+import { UserImageContext } from "../../Context/UserImageContext";
+import axios from "axios";
+import { Navigate } from "react-router-dom";
+
 export default function VendorPostingProduct() {
-  {/* <script>
+  const { setUser } = useContext(UserContext)
+  const { setUserImage } = useContext(UserImageContext)
+  const [error, setError] = useState();
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
+      setUser(res.data.user);
+      setUserImage(res.data.userImage);
+    }
+    catch (er) {
+      setError(er)
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, [])
+
+  /* <script>
   const uploadInput = document.getElementById('upload');
   const filenameLabel = document.getElementById('filename');
   const imagePreview = document.getElementById('image-preview');
@@ -47,11 +72,12 @@ export default function VendorPostingProduct() {
   uploadInput.addEventListener('click', (event) => {
     event.stopPropagation();
   });
-  </script> */}
+  </script> */
 
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
+      {error && <Navigate to={'/login'} replace />}
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">
