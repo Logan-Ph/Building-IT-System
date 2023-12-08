@@ -6,7 +6,7 @@ import { FiAlertTriangle } from "react-icons/fi";
 
 export default function AdminManageVendorProduct(){
     return <>
-    <main className="max-w-9xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
+    <main className="max-w-9xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full ">
 
         <div className="flex items-center py-10">
             <div className="flex flex-row items-center">

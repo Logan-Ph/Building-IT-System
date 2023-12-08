@@ -55,15 +55,15 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-        <div class="max-w-8xl mb-10 pb-5 lg:md:w-full w-5/6 ">
+        <div class="max-w-8xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 lg:md:w-full w-3/4 lg:mx-0 mx-auto">
         <div
           id="content"
-          class="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4"
+          class=" "
         >
-          <h1 class="font-bold  lg:pl-5 pt-4 uppercase text-black lg:md:text-2xl text-xl">
+          <h1 class="font-bold  pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
             To Do List
           </h1>
-          <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base lg:mb-3">
+          <h1 class="font-medium  lg:md:pt-1 pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
             Things your business need to deal with
           </h1>
           <ToDoList />
@@ -71,18 +71,18 @@ export default function DashboardPage() {
         <div class="">
           <div
             id="content"
-            class="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 px-4 "
+            class=""
           >
-            <h1 class="font-bold  lg:pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
+            <h1 class="font-bold  pl-5 pt-4 uppercase text-black lg:md:text-2xl text-lg">
               Business Insight
             </h1>
-            <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
+            <h1 class="font-medium  lg:md:pt-1 pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
               Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
             </h1>
 
             <Insight />
             <div className="mt-4">
-              <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black lg:md:text-2xl text-lg">
+              <h1 class="font-bold  pl-5 py-4 uppercase text-black lg:md:text-2xl text-lg">
                 Last Month Incomes
               </h1>
               <BarChart />
