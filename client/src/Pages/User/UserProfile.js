@@ -23,7 +23,16 @@ export default function UserProfile() {
         <>
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
-                <div className={`absolute left-0 top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
+                
+                <div className={`absolute left-0 top-20 md:top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
+                {/* <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar' onClick={handleSidebarToggle}></i> */}
+                <div class="relative p-4 pb-2 flex justify-between items-center">
+                    <img src="" class="overflow-hidden transition-all w-32" alt=""></img>
+                        <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-first cursor-pointer toggle-sidebar " onClick={handleSidebarToggle}><path d="m17 18-6-6 6-6"></path>
+                            <path d="M7 6v12"></path></svg>
+                        </button>
+                    </div>
                     <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
                         <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
@@ -78,6 +87,16 @@ export default function UserProfile() {
 
                 {/* <!-- MAIN --> */}
                 <div className="pl-0 md:pl-64 transition-all" id="main">
+
+                    <div class="p-4 pb-2 flex justify-between items-center visible md:hidden">
+                        <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-last cursor-pointer toggle-sidebar " onClick={handleSidebarToggle}>
+                            <path d="m7 18 6-6-6-6"></path> 
+                            <path d="M17 6v12"></path>                           
+                            </svg>
+                        </button>
+                    </div>
+
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
                             <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-28 h-28 object-cover rounded-full" alt="" />
