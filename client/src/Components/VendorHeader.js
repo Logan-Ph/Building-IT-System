@@ -24,13 +24,13 @@ export default function VendorHeader() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               {/* <!-- logo --> */}
-              <a className="flex items-center lg:ml-10 " href='\'>
+              <a className="flex items-center lg:ml-10 " href='\dashboard'>
                 <img
                   src={require("./images/logo1.png")}
                   className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
                   alt="logo" />
 
-                <span href='\' className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
+                <span className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
                 </span>
               </a>
 
