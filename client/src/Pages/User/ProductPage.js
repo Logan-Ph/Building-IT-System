@@ -32,6 +32,7 @@ export default function TestingPage() {
       const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
       setVendorName(res.data.vendorName);
+      console.log(res.data.product)
     } catch (error) {
       setError(error);
     }

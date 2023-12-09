@@ -7,6 +7,7 @@
     "@algolia/recommend": "^4.20.0",
     "@algolia/recommend-react": "^1.10.0",
     "@canvasjs/charts": "^3.7.29",
+    "@chatscope/chat-ui-kit-react": "^1.10.1",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@material-tailwind/react": "^2.1.5",

@@ -17,9 +17,9 @@ const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
 const index = client.initIndex('rBuy')
 
 const imagekit = new ImageKit({
-  publicKey : "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
-  privateKey : "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
-  urlEndpoint : "https://ik.imagekit.io/cnhlinh"
+  publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
+  privateKey: "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
+  urlEndpoint: "https://ik.imagekit.io/cnhlinh"
 });
 
 const fs = require("fs");
@@ -437,7 +437,13 @@ exports.manageOrder = async (req, res) => {
 exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    return res.status(200).json({ vendor: vendor });
+    let vendorImage;
+    if (vendor.img.data) {
+      vendorImage = Buffer.from(
+        vendor.img.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -446,7 +452,13 @@ exports.vendorHomepage = async (req, res) => {
 exports.vendorProductPage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    return res.status(200).json({ vendor: vendor });
+    let vendorImage;
+    if (vendor.img.data) {
+      vendorImage = Buffer.from(
+        vendor.img.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -667,22 +679,6 @@ exports.updateVendorWallpaper = async (req, res) => {
 exports.addNewProduct = async (req, res) => {
   try {
     const id = new mongoose.Types.ObjectId();
-    const newProduct = new Product({
-      _id: id,
-      owner: req.user._id,
-      product_name: req.body.productName,
-      category: req.body.category,
-      price: req.body.price,
-      description: req.body.description,
-      img: {
-        data: fs.readFileSync("uploads/" + req.file.filename),
-      },
-    });
-    
-    await newProduct.save()
-    .then(()=>res.json("Product added."))
-    .catch(err=>console.log(err));
-
     const uploadImage = async () => {
       try {
         const response = await imagekit.upload({
@@ -695,22 +691,40 @@ exports.addNewProduct = async (req, res) => {
         return null;
       }
     };
-    
+
     const imageURL = await uploadImage();
+
+    const newProduct = new Product({
+      _id: id,
+      owner: req.user._id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description,
+      image_link: imageURL,
+      no_of_ratings: 0,
+      ratings: 0.0,
+    });
+
+    await newProduct.save()
+      .then(() => res.json("Product added."))
+      .catch(err => console.log(err));
 
     const object = {
       objectID: id,
       product_name: req.body.productName,
       category: req.body.category,
       owner: req.user.businessName,
-      price: parseInt(req.body.price,10),
+      price: parseInt(req.body.price, 10),
       description: req.body.description,
       image_link: imageURL,
+      no_of_ratings: 0,
+      ratings: 0.0,
     };
 
     index.saveObject(object).wait()
-    .then(()=>console.log("updated to algolia: " + imageURL))
-    .catch(err=>console.log(err));
+      .then(() => console.log("updated to algolia: " + imageURL))
+      .catch(err => console.log(err));
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -727,9 +741,9 @@ exports.deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(productId);
     console.log(productID);
     index.deleteObject(productID)
-    .then(()=>{})
-    .catch(err=>res.json(err));
-    return res.json('Product deleted successfully' );
+      .then(() => { })
+      .catch(err => res.json(err));
+    return res.json('Product deleted successfully');
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -740,7 +754,7 @@ exports.updateProduct = async (req, res) => {
     const productID = req.body.id;
     const productToUpdate = await Product.findById(productID);
 
-    let object = {objectID: productID};
+    let object = { objectID: productID };
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),
@@ -774,7 +788,7 @@ exports.updateProduct = async (req, res) => {
     }
     if (req.body.price) {
       productToUpdate.price = req.body.price;
-      object.price = parseInt(req.body.price,10);
+      object.price = parseInt(req.body.price, 10);
     }
     if (req.body.category) {
       productToUpdate.category = req.body.category;
@@ -789,7 +803,7 @@ exports.updateProduct = async (req, res) => {
       console.log(objectID);
     });
     return res.json('Profile has been updated!')
-  } catch(error){
-    res.status(500).send({ message: error.message || "Error Occured" });   
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
 }

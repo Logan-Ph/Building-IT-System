@@ -5,6 +5,7 @@ import { Navigate, useParams } from "react-router-dom";
 export default function VendorHomePage() {
   const params = useParams()
   const [vendor, setVendor] = useState()
+  const [vendorImage, setVendorImage] = useState()
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
@@ -12,6 +13,7 @@ export default function VendorHomePage() {
     try {
       const res = await axios.get(`http://localhost:4000/vendor/${params.id}`, { withCredentials: true })
       setVendor(res.data.vendor)
+      setVendorImage(res.data.vendorImage)
       setIsLoading(false)
     } catch (error) {
       setError(error)
@@ -31,7 +33,7 @@ export default function VendorHomePage() {
       {error && <Navigate to={"/"} replace />}
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav vendor={vendor} activeTab={"HOME"} />
+        <VendorNav vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} />
 
         {/*  */}
         {/* Top Product */}

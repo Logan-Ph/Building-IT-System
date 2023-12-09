@@ -50,6 +50,7 @@ export default function VendorProductPage() {
   const { hits } = useHits();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [vendor, setVendor] = useState()
+  const [vendorImage, setVendorImage] = useState()
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
@@ -57,6 +58,7 @@ export default function VendorProductPage() {
     try {
       const res = await axios.get(`http://localhost:4000/vendor/${params.id}/product`, { withCredentials: true })
       setVendor(res.data.vendor)
+      setVendorImage(res.data.vendorImage)
       setIsLoading(false)
     } catch (error) {
       setError(error)
@@ -78,7 +80,7 @@ export default function VendorProductPage() {
     <>
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav vendor={vendor} activeTab={"PRODUCTS"} />
+        <VendorNav vendor={vendor} activeTab={"PRODUCTS"} vendorImage={vendorImage}/>
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
