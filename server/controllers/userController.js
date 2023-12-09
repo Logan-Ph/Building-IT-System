@@ -640,6 +640,7 @@ exports.addNewProduct = async (req, res) => {
         data: fs.readFileSync("uploads/" + req.file.filename),
       },
     });
+    
     await newProduct.save()
     .then(()=>res.json("Product added."))
     .catch(err=>console.log(err));
@@ -680,13 +681,17 @@ exports.addNewProduct = async (req, res) => {
 // Function to delete a product
 exports.deleteProduct = async (req, res) => {
   try {
-    const productId = req.body.id;
+    const productID = req.query.id;
     const productToDelete = await Product.findById(productId);
     if (!productToDelete) {
       return res.status(404).json('Product not found');
     }
     await Product.findByIdAndDelete(productId);
-    res.json({ message: 'Product deleted successfully' });
+    console.log(productID);
+    index.deleteObject(productID)
+    .then(()=>{})
+    .catch(err=>res.json(err));
+    return res.json('Product deleted successfully' );
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -694,28 +699,57 @@ exports.deleteProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const productId = req.body.id;
-    const productToUpdate = await Product.findById(productId);
+    const productID = req.body.id;
+    const productToUpdate = await Product.findById(productID);
+
+    let object = {objectID: productID};
     if (req.file) {
       const image = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype,
+        data: fs.readFileSync("uploads/" + req.file.filename),
       };
-      productToUpdate.img = image; 
+      productToUpdate.img = image;
+
+      const uploadImage = async () => {
+        try {
+          const response = await imagekit.upload({
+            file: fs.readFileSync("uploads/" + req.file.filename),
+            fileName: productID + ".jpg",
+          });
+          console.log(response.url);
+          return response.url;
+        } catch (err) {
+          console.log("Error uploading image:", err);
+          return null;
+        }
+      };
+      const imageURL = await uploadImage();
+      index.partialUpdateObject({
+        image_link: imageURL,
+        objectID: productID
+      }).then(({ objectID }) => {
+        console.log(objectID);
+      });
     }
     if (req.body.productName) {
       productToUpdate.product_name = req.body.productName;
+      object.product_name = req.body.productName;
     }
     if (req.body.price) {
       productToUpdate.price = req.body.price;
+      object.price = parseInt(req.body.price,10);
     }
     if (req.body.category) {
       productToUpdate.category = req.body.category;
+      object.category = req.body.category;
     }
     if (req.body.description) {
       productToUpdate.description = req.body.description;
+      object.description = req.body.description;
     }
-    await productToUpdate.save();
+    // await productToUpdate.save();
+    index.partialUpdateObject(object).then(({ objectID }) => {
+      console.log(objectID);
+    });
     return res.json('Profile has been updated!')
   } catch(error){
     res.status(500).send({ message: error.message || "Error Occured" });   

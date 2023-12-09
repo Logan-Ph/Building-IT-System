@@ -175,4 +175,6 @@ router.post('/update-user', upload.single('file'), userController.updateUser);
 
 // vendor add new product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
+router.post('/update-product', upload.single('file'), userController.updateProduct);
+router.delete('/delete-product', userController.deleteProduct);
 module.exports = router;
