@@ -98,6 +98,14 @@ router.post('/checkout', authenticateToken, authorizeUser, userController.placeO
 // user add to cart route
 router.get('/add-product/:id', userController.addProduct);
 
+// user update profile route
+router.post('/update-user', upload.single('file'), userController.updateUser);
+
+// vendor crud product route
+router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
+router.post('/update-product', upload.single('file'), userController.updateProduct);
+router.delete('/delete-product', userController.deleteProduct);
+
 // vendor homepage (user side)
 router.get('/vendor/:id', userController.vendorHomepage)
 
@@ -171,6 +179,5 @@ router.get('/auth/google/callback', (req, res, next) => {
         });
     })(req, res);
 });
-router.post('/update-user', upload.single('file'), userController.updateUser);
-router.get('/active-order/:id', userController.updateStatus);
+
 module.exports = router;

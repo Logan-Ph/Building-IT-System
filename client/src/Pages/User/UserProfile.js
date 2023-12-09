@@ -197,8 +197,8 @@ export default function UserProfile() {
                         <div className="flex items-center gap-4 mt-4">
                             <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
-                                <h2 className="text-2xl font-semibold mb-2">{user.name}</h2>
-                                <span className="text-lg text-gray-500">{user.email}</span>
+                                <h2 className="text-2xl font-semibold mb-2">{user && user.name}</h2>
+                                <span className="text-lg text-gray-500">{user && user.email}</span>
                             </div>
                             <button onClick={handleSubmit} className="py-2 px-4 rounded bg-blue-600 sm:flex items-center gap-2 text-white hover:bg-blue-700 ml-auto">
                                 <i className='bx bx-edit-alt' ></i>
@@ -225,21 +225,21 @@ export default function UserProfile() {
                                         <div className="sm:col-span-3">
                                             <label for="name" className="block text-sm font-medium leading-6 text-gray-900">Full name</label>
                                             <div className="mt-2">
-                                                <input onChange={(e) => setName(e.target.value)} placeholder={user.name} type="name" name="name" id="name" autocomplete="name" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setName(e.target.value)} placeholder={user && user.name} type="name" name="name" id="name" autocomplete="name" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
                                             <label for="street-address" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
                                             <div className="mt-2">
-                                                <input onChange={(e) => setAddress(e.target.value)} placeholder={user.address} type="text" name="street-address" id="street-address" autocomplete="street-address" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setAddress(e.target.value)} placeholder={user && user.address} type="text" name="street-address" id="street-address" autocomplete="street-address" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
 
                                         <div className="sm:col-span-4">
                                             <label for="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
                                             <div className="mt-2">
-                                                <input onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user.phoneNumber} id="phoneNumber" name="phoneNumber" type="phoneNumber" autocomplete="phoneNumber" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                                <input onChange={(e) => setPhoneNumber(e.target.value)} placeholder={user && user.phoneNumber} id="phoneNumber" name="phoneNumber" type="phoneNumber" autocomplete="phoneNumber" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                                             </div>
                                         </div>
                                     </div>

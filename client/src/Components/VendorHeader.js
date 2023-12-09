@@ -1,25 +1,36 @@
-import { Fragment, useContext } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import { UserImageContext } from '../Context/UserImageContext'
+import axios from 'axios'
+import { Navigate } from 'react-router-dom'
 
 export default function VendorHeader() {
   const { user } = useContext(UserContext)
   const { userImage } = useContext(UserImageContext)
+  const [navigateTo, setNavigateTo] = useState("");
+
+  const handleLogout = async () => {
+    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    if (res.data === "Logged out successfully") {
+      setNavigateTo('/login');
+    }
+  }
   return <>
     <section>
+      {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 white border-[#E61E2A]">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               {/* <!-- logo --> */}
-              <a className="flex items-center lg:ml-10 " href='\'>
+              <a className="flex items-center lg:ml-10 " href='\dashboard'>
                 <img
                   src={require("./images/logo1.png")}
                   className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
                   alt="logo" />
 
-                <span href='\' className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
+                <span className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
                 </span>
               </a>
 
@@ -30,7 +41,7 @@ export default function VendorHeader() {
             </div>
             <div className='flex items-center'>
               {/* avatar icon */}
-              <DropdownAva user={user} userImage={userImage} />
+              <DropdownAva user={user} userImage={userImage} handleLogout={handleLogout} />
               <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
             </div>
 
@@ -46,7 +57,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function DropdownAva({ user, userImage }) {
+function DropdownAva({ user, userImage, handleLogout }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -77,7 +88,7 @@ function DropdownAva({ user, userImage }) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="#"
+                  href="/dashboard"
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm'
@@ -88,7 +99,7 @@ function DropdownAva({ user, userImage }) {
               )}
             </Menu.Item>
 
-            <form method="POST" action="#">
+            <form>
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -97,6 +108,7 @@ function DropdownAva({ user, userImage }) {
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full px-4 py-2 text-left text-sm'
                     )}
+                    onClick={handleLogout}
                   >
                     <i className="fas fa-sign-out-alt mr-1"></i>
                     Log Out

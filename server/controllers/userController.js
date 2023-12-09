@@ -9,6 +9,18 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
+const algoliasearch = require('algoliasearch')
+const ImageKit = require("imagekit")
+
+// Connect and authenticate with your Algolia app
+const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
+const index = client.initIndex('rBuy')
+
+const imagekit = new ImageKit({
+  publicKey : "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
+  privateKey : "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
+  urlEndpoint : "https://ik.imagekit.io/cnhlinh"
+});
 
 const fs = require("fs");
 require('dotenv').config()
@@ -414,8 +426,12 @@ exports.searchOrder = async (req, res) => {
 }
 
 exports.manageOrder = async (req, res) => {
-  const orders = await Order.find({ vendorID: req.user._id })
-  return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  try {
+    const orders = await Order.find({ vendorID: req.user._id })
+    return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
 }
 
 exports.vendorHomepage = async (req, res) => {
@@ -483,34 +499,10 @@ exports.checkout = async (req, res) => {
   return res.status(200).json({ products: cart[0].products, checkoutInfo: checkoutInfo })
 }
 
-exports.updateStatus = async (req, res) => {
-  if (!req.user) {
-    return res.status(500).json({ error: "This properties belong to the vendor. Please log in to continue!!" })
-  }
-  // Display Active Orders
-  let order = null
-  const orderID = req.params.id
-  Order.findOne({ _id: orderID }).populate('products.product')
-    .then(results => {
-      order = results
-      console.log("Active order to be displayed ", results)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-  const newStatus = req.body.status
-  Order.findByIdAndUpdate(orderID, { status: newStatus }, { new: true })
-    .then(updatedOrder => {
-      console.log(updatedOrder)
-      res.redirect(`/vendor/active-order/${orderID}`)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-};
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect("http://localhost:3000/");
+  res.clearCookie('accessToken');
+  return res.json('Logged out successfully');
 };
 
 exports.updateUser = async (req, res) => {
@@ -669,5 +661,135 @@ exports.updateVendorWallpaper = async (req, res) => {
     return res.json('Profile has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.addNewProduct = async (req, res) => {
+  try {
+    const id = new mongoose.Types.ObjectId();
+    const newProduct = new Product({
+      _id: id,
+      owner: req.user._id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description,
+      img: {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      },
+    });
+    
+    await newProduct.save()
+    .then(()=>res.json("Product added."))
+    .catch(err=>console.log(err));
+
+    const uploadImage = async () => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + req.file.filename),
+          fileName: id + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    
+    const imageURL = await uploadImage();
+
+    const object = {
+      objectID: id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      owner: req.user.businessName,
+      price: parseInt(req.body.price,10),
+      description: req.body.description,
+      image_link: imageURL,
+    };
+
+    index.saveObject(object).wait()
+    .then(()=>console.log("updated to algolia: " + imageURL))
+    .catch(err=>console.log(err));
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
+
+// Function to delete a product
+exports.deleteProduct = async (req, res) => {
+  try {
+    const productID = req.query.id;
+    const productToDelete = await Product.findById(productId);
+    if (!productToDelete) {
+      return res.status(404).json('Product not found');
+    }
+    await Product.findByIdAndDelete(productId);
+    console.log(productID);
+    index.deleteObject(productID)
+    .then(()=>{})
+    .catch(err=>res.json(err));
+    return res.json('Product deleted successfully' );
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateProduct = async (req, res) => {
+  try {
+    const productID = req.body.id;
+    const productToUpdate = await Product.findById(productID);
+
+    let object = {objectID: productID};
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      productToUpdate.img = image;
+
+      const uploadImage = async () => {
+        try {
+          const response = await imagekit.upload({
+            file: fs.readFileSync("uploads/" + req.file.filename),
+            fileName: productID + ".jpg",
+          });
+          console.log(response.url);
+          return response.url;
+        } catch (err) {
+          console.log("Error uploading image:", err);
+          return null;
+        }
+      };
+      const imageURL = await uploadImage();
+      index.partialUpdateObject({
+        image_link: imageURL,
+        objectID: productID
+      }).then(({ objectID }) => {
+        console.log(objectID);
+      });
+    }
+    if (req.body.productName) {
+      productToUpdate.product_name = req.body.productName;
+      object.product_name = req.body.productName;
+    }
+    if (req.body.price) {
+      productToUpdate.price = req.body.price;
+      object.price = parseInt(req.body.price,10);
+    }
+    if (req.body.category) {
+      productToUpdate.category = req.body.category;
+      object.category = req.body.category;
+    }
+    if (req.body.description) {
+      productToUpdate.description = req.body.description;
+      object.description = req.body.description;
+    }
+    // await productToUpdate.save();
+    index.partialUpdateObject(object).then(({ objectID }) => {
+      console.log(objectID);
+    });
+    return res.json('Profile has been updated!')
+  } catch(error){
+    res.status(500).send({ message: error.message || "Error Occured" });   
   }
 }
