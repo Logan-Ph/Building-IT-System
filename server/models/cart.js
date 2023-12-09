@@ -46,7 +46,7 @@ cartSchema.methods.addProduct = function (product, quantity) {
         this.products[productIndex].quantity += parsedQuantity;
     } else {
         // new product, add to cart    
-        this.products.push({ product, quantity: parsedQuantity, owner: product.owner });
+        this.products.push({ product, quantity: parsedQuantity, owner: product.owner, image_link: product.image_link, price: product.price, product_name:product.product_name });
     }
 
     return this.save();

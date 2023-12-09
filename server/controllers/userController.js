@@ -68,9 +68,9 @@ exports.loginSuccess = async (req, res) => {
       ).toString("base64");
     }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
+    res.status(200).json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
   } else {
-    res.json({ user: "", length: 0 })
+    res.status(500).json({ user: "", length: 0 })
   }
 }
 
@@ -307,6 +307,10 @@ exports.verifyEmail = async (req, res) => {
 exports.placeOrder = async (req, res) => {
   try {
     const userID = req.user._id;
+    if (req.body.isRemember) {
+      await User.findByIdAndUpdate(userID, { city: req.body.city, phoneNumber: req.body.phoneNumber, district: req.body.district, ward: req.body.ward, streetAddress: req.body.streetAddress })
+    }
+
     // Find the user's cart
     const userCart = await Cart.findOne({ userID }).populate('products.product');
     if (!userCart) {
@@ -336,6 +340,8 @@ exports.placeOrder = async (req, res) => {
           product_name: cartItem.product.product_name
         })),
         userName: req.user.name,
+        shippingAddress: req.body.streetAddress,
+        contactNumber: req.body.phoneNumber
       });
 
       await order.save();
@@ -455,7 +461,7 @@ exports.getVendorDashboard = async (req, res) => {
     orders.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
     });
-    res.status(200).json({ordersByStatus: ordersCountByStatus});
+    res.status(200).json({ ordersByStatus: ordersCountByStatus });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -466,9 +472,42 @@ exports.postVendorDashboard = async (req, res) => {
 }
 
 exports.checkout = async (req, res) => {
-  return res.status(200).json("hahah");
+  const cart = await Cart.find({ userID: req.user._id })
+  const checkoutInfo = {
+    phoneNumber: req.user.phoneNumber,
+    city: req.user.city,
+    district: req.user.district,
+    ward: req.user.ward,
+    streetAddress: req.user.streetAddress,
+  }
+  return res.status(200).json({ products: cart[0].products, checkoutInfo: checkoutInfo })
 }
 
+exports.updateStatus = async (req, res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "This properties belong to the vendor. Please log in to continue!!" })
+  }
+  // Display Active Orders
+  let order = null
+  const orderID = req.params.id
+  Order.findOne({ _id: orderID }).populate('products.product')
+    .then(results => {
+      order = results
+      console.log("Active order to be displayed ", results)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+  const newStatus = req.body.status
+  Order.findByIdAndUpdate(orderID, { status: newStatus }, { new: true })
+    .then(updatedOrder => {
+      console.log(updatedOrder)
+      res.redirect(`/vendor/active-order/${orderID}`)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+};
 exports.logout = (req, res) => {
   req.session.destroy();
   res.redirect("http://localhost:3000/");

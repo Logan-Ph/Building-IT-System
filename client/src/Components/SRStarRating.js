@@ -35,6 +35,7 @@ export default function SRStarRating() {
                 type="radio"
                 name="rating"
                 value={ratingValue}
+                className="rating"
                 onClick={() => handleRating(ratingValue)}
               />
               <FaStar
