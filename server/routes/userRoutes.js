@@ -9,11 +9,11 @@ const path = require('path');
 require('dotenv').config
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      cb(null, 'uploads') // specify the path to save files
+    destination: function (req, file, cb) {
+        cb(null, 'uploads') // specify the path to save files
     },
-    filename: function(req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // specify the filename
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // specify the filename
     }
 });
 
@@ -123,7 +123,7 @@ router.post('/user-register', userController.userRegister);
 router.post('/vendor-register', userController.vendorRegister);
 
 // admin ban user route
-router.post("/ban-user",userController.banUser);
+router.post("/ban-user", userController.banUser);
 
 // authentication route via login function
 router.get('/login', userController.loginPage);
@@ -159,7 +159,7 @@ router.get('/auth/google/callback', (req, res, next) => {
             return;
         }
 
-        // Authentication sucess
+        // Authentication success
         req.logIn(user, (err) => {
             if (err) {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
@@ -172,4 +172,5 @@ router.get('/auth/google/callback', (req, res, next) => {
     })(req, res);
 });
 router.post('/update-user', upload.single('file'), userController.updateUser);
+router.get('/active-order/:id', userController.updateStatus);
 module.exports = router;

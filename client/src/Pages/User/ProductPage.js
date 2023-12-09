@@ -37,18 +37,6 @@ export default function TestingPage() {
     }
   }, [params.id])
 
-  // const fetchUser = useCallback(async () => {
-  //   try {
-  //     const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-  //     setUser(res.data.user);
-  //     setUserImage(res.data.userImage)
-  //     setIsLoading(false);
-  //   } catch (er) {
-  //     console.log(er);
-  //     setIsLoading(false);
-  //   }
-  // }, [setUser])
-
   useEffect(() => {
     fetchData()
   }, [fetchData])
