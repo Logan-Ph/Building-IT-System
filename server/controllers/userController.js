@@ -414,8 +414,12 @@ exports.searchOrder = async (req, res) => {
 }
 
 exports.manageOrder = async (req, res) => {
-  const orders = await Order.find({ vendorID: req.user._id })
-  return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  try {
+    const orders = await Order.find({ vendorID: req.user._id })
+    return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
 }
 
 exports.vendorHomepage = async (req, res) => {
@@ -483,34 +487,10 @@ exports.checkout = async (req, res) => {
   return res.status(200).json({ products: cart[0].products, checkoutInfo: checkoutInfo })
 }
 
-exports.updateStatus = async (req, res) => {
-  if (!req.user) {
-    return res.status(500).json({ error: "This properties belong to the vendor. Please log in to continue!!" })
-  }
-  // Display Active Orders
-  let order = null
-  const orderID = req.params.id
-  Order.findOne({ _id: orderID }).populate('products.product')
-    .then(results => {
-      order = results
-      console.log("Active order to be displayed ", results)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-  const newStatus = req.body.status
-  Order.findByIdAndUpdate(orderID, { status: newStatus }, { new: true })
-    .then(updatedOrder => {
-      console.log(updatedOrder)
-      res.redirect(`/vendor/active-order/${orderID}`)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-};
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect("http://localhost:3000/");
+  res.clearCookie('accessToken');
+  return res.json('Logged out successfully');
 };
 
 exports.updateUser = async (req, res) => {

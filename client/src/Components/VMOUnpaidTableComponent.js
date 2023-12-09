@@ -26,8 +26,8 @@ export default function UnpaidTableComponent({ foundOrder, orders }) {
                 <Table.Cell>{order._id}</Table.Cell>
                 <Table.Cell>{order.userName}</Table.Cell>
                 <Table.Cell>{formattedDate}</Table.Cell>
-                <Table.Cell>{order.address}</Table.Cell>
-                <Table.Cell>{order.phoneNumer}</Table.Cell>
+                <Table.Cell>{order.shippingAddress}</Table.Cell>
+                <Table.Cell>{order.contactNumber}</Table.Cell>
                 <Table.Cell>
                   <button className="bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg">{order.status}</button>
                 </Table.Cell>
@@ -47,8 +47,8 @@ export default function UnpaidTableComponent({ foundOrder, orders }) {
                 <Table.Cell>{order._id}</Table.Cell>
                 <Table.Cell>{order.userName}</Table.Cell>
                 <Table.Cell>{formattedDate}</Table.Cell>
-                <Table.Cell>{order.address}</Table.Cell>
-                <Table.Cell>{order.phoneNumer}</Table.Cell>
+                <Table.Cell>{order.shippingAddress}</Table.Cell>
+                <Table.Cell>{order.contactNumber}</Table.Cell>
                 <Table.Cell>
                   <button className="bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg">{order.status}</button>
                 </Table.Cell>

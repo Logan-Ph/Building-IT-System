@@ -7,6 +7,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserImageContext } from '../Context/UserImageContext';
+import axios from 'axios';
 
 export default function Header() {
   const { cart } = useContext(CartContext)
@@ -14,9 +15,10 @@ export default function Header() {
   const { userImage } = useContext(UserImageContext)
   const { refine } = useSearchBox();
   const [inputValue, setInputValue] = useState("");
-  const [navigateTo, setNavigateTo] = useState("")
+  const [navigateTo, setNavigateTo] = useState("");
   const { query } = useParams();
   const [searchQuery] = useState(query && (query.split('='))[1]);
+
 
   function submitSearch(e) {
     e.preventDefault();
@@ -48,6 +50,13 @@ export default function Header() {
       mn.classList.toggle("hidden");
     });
   };
+
+  const handleLogout = async () => {
+    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    if (res.data === "Logged out successfully") {
+      setNavigateTo('/login');
+    }
+  }
 
   return (
     <section>
@@ -173,7 +182,7 @@ export default function Header() {
                 {/* if user login this will appear: avatar icon*/}
                 <div className='flex items-center'>
                   {/* avatar icon */}
-                  <DropdownAva userImage={userImage} user={user} />
+                  <DropdownAva userImage={userImage} user={user} handleLogout={handleLogout} />
                   <p className='xs:hidden font-light text-white ml-2 xl:text-lg lg:text-md md:text-sm sm:text-xs'>{user && user.name}</p>
                 </div>
               </div>
@@ -315,7 +324,7 @@ export default function Header() {
               <div className="  lg:block  border-neutral-200">
 
                 <div id="menu" class="flex flex-col xs:space-y-1.5 sm:space-y-1.5 md:space-y-2 ml-3 md:ml-5 my-4 md:my-5 text-white">
-                  <a
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:text-base rounded-md transition duration-150 ease-in-out"
                   >
@@ -330,8 +339,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 md:text-[16px] xs:text-[12.24px] ">Best Seller</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -346,8 +355,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12.24px] md:text-[16px]">New Releases</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -365,8 +374,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Electronics</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -384,8 +393,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Beauty & Personal Care</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -402,8 +411,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Household Appliances</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -420,8 +429,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Fashion</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -436,8 +445,8 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Entertainments</span>
-                  </a>
-                  <a
+                  </span>
+                  <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
                   >
@@ -452,7 +461,7 @@ export default function Header() {
                       ></path>
                     </svg>
                     <span class="ml-2 xs:text-[12px] md:text-[16px]">Toys & Games</span>
-                  </a>
+                  </span>
                 </div>
 
               </div>
@@ -475,7 +484,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function DropdownAva({ user, userImage }) {
+function DropdownAva({ user, userImage, handleLogout }) {
   return (
     <Menu as="div" className="relative inline-block text-left ml-2">
       <div>
@@ -520,11 +529,11 @@ function DropdownAva({ user, userImage }) {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    type="submit"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : '',
                       'block w-full px-4 py-2 text-left text-sm'
                     )}
+                    onClick={handleLogout}
                   >
                     <i className="fas fa-sign-out-alt mr-1"></i>
                     Log Out
