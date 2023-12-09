@@ -1,15 +1,19 @@
-export default function AddImageHomePage() {
+'use client';
+
+import { Label, Textarea } from 'flowbite-react';
+
+export default function AddImageHomePageCarousel() {
     return (
         <>
 
             <div class="mx-auto">
-                <h2 class="mb-2 text-2xl tracking-tight font-bold text-gray-900">Upload Banners in Carousel</h2>
+                <h2 class="mb-2 text-2xl tracking-tight font-bold text-gray-900">Upload Carousel Images in Homepage</h2>
                 <p class="text-sm text-gray-600">Upload real, high resolution, clear product images. You should choose images with 1:1 resolution</p>
 
-                <div className="flex flex-col items-center mx-auto justify-center">
+                <div className="flex flex-col">
 
 
-                    <section class="">
+                    <section class="mx-auto">
                         <div class="max-w-sm  ">
                             <div class="px-4 py-6">
                                 <div id="image-preview" class="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">
@@ -27,8 +31,21 @@ export default function AddImageHomePage() {
                             </div>
                         </div>
                     </section>
-</div>
-                    
+
+
+                    <form>
+                        <div className="max-w-full">
+                            <div className="mb-2 block">
+                                <Label htmlFor="comment" value="Your Content" />
+                            </div>
+                            <Textarea id="comment" placeholder="Write a comment..." required rows={4} />
+                        </div>
+
+                        
+
+                    </form>
+                </div>
+
             </div>
 
         </>

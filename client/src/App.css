@@ -7754,6 +7754,12 @@ input:checked + .toggle-bg {
     flex: 1 1 0%;
   }
 
+  .sm\:scale-50 {
+    --tw-scale-x: .5;
+    --tw-scale-y: .5;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  }
+
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -7764,6 +7770,10 @@ input:checked + .toggle-bg {
 
   .sm\:flex-col {
     flex-direction: column;
+  }
+
+  .sm\:flex-wrap {
+    flex-wrap: wrap;
   }
 
   .sm\:items-center {
@@ -8231,6 +8241,14 @@ input:checked + .toggle-bg {
     margin-bottom: 0px;
   }
 
+  .lg\:mb-3 {
+    margin-bottom: 0.75rem;
+  }
+
+  .lg\:mb-4 {
+    margin-bottom: 1rem;
+  }
+
   .lg\:mb-7 {
     margin-bottom: 1.75rem;
   }
@@ -8243,20 +8261,12 @@ input:checked + .toggle-bg {
     margin-top: 0px;
   }
 
-  .lg\:mt-5 {
-    margin-top: 1.25rem;
-  }
-
-  .lg\:mb-3 {
-    margin-bottom: 0.75rem;
-  }
-
-  .lg\:mb-4 {
-    margin-bottom: 1rem;
-  }
-
   .lg\:mt-4 {
     margin-top: 1rem;
+  }
+
+  .lg\:mt-5 {
+    margin-top: 1.25rem;
   }
 
   .lg\:block {
@@ -8347,8 +8357,16 @@ input:checked + .toggle-bg {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
+  .lg\:flex-row {
+    flex-direction: row;
+  }
+
   .lg\:justify-end {
     justify-content: flex-end;
+  }
+
+  .lg\:gap-16 {
+    gap: 4rem;
   }
 
   .lg\:px-12 {
@@ -8364,6 +8382,11 @@ input:checked + .toggle-bg {
   .lg\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
+  }
+
+  .lg\:px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   .lg\:px-8 {
@@ -8396,21 +8419,16 @@ input:checked + .toggle-bg {
     padding-bottom: 1.5rem;
   }
 
-  .lg\:px-5 {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-
   .lg\:pl-10 {
     padding-left: 2.5rem;
   }
 
-  .lg\:pr-20 {
-    padding-right: 5rem;
-  }
-
   .lg\:pl-5 {
     padding-left: 1.25rem;
+  }
+
+  .lg\:pr-20 {
+    padding-right: 5rem;
   }
 
   .lg\:pt-4 {
@@ -8497,11 +8515,6 @@ input:checked + .toggle-bg {
       font-size: 0.875rem;
       line-height: 1.25rem;
     }
-
-    .lg\:md\:text-3xl {
-      font-size: 1.875rem;
-      line-height: 2.25rem;
-    }
   }
 }
 
@@ -8561,6 +8574,10 @@ input:checked + .toggle-bg {
 
   .xs\:mt-0 {
     margin-top: 0px;
+  }
+
+  .xs\:mt-5 {
+    margin-top: 1.25rem;
   }
 
   .xs\:flex {

@@ -1,4 +1,4 @@
-
+import {Store, CircleUserRound, Users, Package} from 'lucide-react';
 export default function AdminInsight() {
     return (
         <>
@@ -22,14 +22,14 @@ export default function AdminInsight() {
                             </span>
                           </div>
                           <div class=" w-auto pl-4 flex-initial">
-                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-red-500">
-                              <i class="fas fa-chart-bar"></i>
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-pink-500">
+                            <CircleUserRound />
                             </div>
                           </div>
                         </div>
                         <hr class="mt-4 mb-2 w-full border-gray-300" />
                         <p class="text-sm text-gray-400 ">
-                          <span class="text-emerald-500 ">
+                          <span class="text-lime-500 ">
                      
                           </span>
                           <span class="whitespace-nowrap">
@@ -54,13 +54,13 @@ export default function AdminInsight() {
                             </span>
                           </div>
                           <div class=" w-auto pl-4 flex-initial">
-                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-pink-500">
-                            <i class="fa-solid fa-money-bill-wave"></i>                            </div>
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-purple-700">
+                            <Users />                          </div>
                           </div>
                         </div>
                         <hr class="mt-4 mb-2 w-full border-gray-300" />
                         <p class="text-sm text-gray-400">
-                          <span class="text-red-500">
+                          <span class="text-pink-700">
                          
                           </span>
                           <span class="whitespace-nowrap">
@@ -85,8 +85,8 @@ export default function AdminInsight() {
                             </span>
                           </div>
                           <div class=" w-auto pl-4 flex-initial">
-                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-red-500">
-                              <i class="fas fa-users"></i>
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-yellow-400">
+                            <Store />
                             </div>
                           </div>
                         </div>
@@ -116,8 +116,8 @@ export default function AdminInsight() {
                             </span>
                           </div>
                           <div class=" w-auto pl-4 flex-initial">
-                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-emerald-500">
-                              <i class="fas fa-percent"></i>
+                            <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-orange-500">
+                            <Package />
                             </div>
                           </div>
                         </div>

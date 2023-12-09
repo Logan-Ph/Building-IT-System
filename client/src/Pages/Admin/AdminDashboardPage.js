@@ -2,121 +2,24 @@
 
 import Sidebar from "../../Components/Sidebar";
 import { SidebarItem } from "../../Components/Sidebar";
-import BarChart from "../../Components/BarChart";
+import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
-import ToDoList from "../../Components/ToDoList";
+
 import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
-import AddImageHomePage from "../../Components/AddImageHomePage";
+
 import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
+import AddImageHomePageBanner from "../../Components/AddImageHomePageBanner";
+import AddImageHomePageCarousel from "../../Components/AddImageHomePageCarousel";
 export default function DashboardPage() {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal1, setOpenModal1] = useState(false);
+  const [openModal2, setOpenModal2] = useState(false);
+  const [openModal3, setOpenModal3] = useState(false);
+  const [openModal4, setOpenModal4] = useState(false);
+  const [openModal5, setOpenModal5] = useState(false);
   return (
     <>
-      {/* <div class="sm:xs:flex sm:xs:flex-col items-center w-16 h-full  text-gray-700 bg-gray-200 rounded lg:md:hidden">
 
-  <div class="flex flex-col items-center mt-3 border-t border-gray-300">
-    <a class="flex items-center justify-center w-12 h-12 mt-2 rounded hover:bg-gray-300" href="#">
-      <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-      </svg>
-    </a>
-    <a class="flex items-center justify-center w-12 h-12 mt-2 rounded hover:bg-gray-300" href="#">
-      <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-    </a>
-    
-    <a class="flex items-center justify-center w-12 h-12 mt-2 bg-gray-300 rounded" href="#">
-      <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    </a>
-    <a class="flex items-center justify-center w-12 h-12 mt-2 rounded hover:bg-gray-300" href="#">
-      <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-      </svg>
-    </a>
-  </div>
-  <div class="flex flex-col items-center mt-2 border-t border-gray-300">
-    <a class="flex items-center justify-center w-12 h-12 mt-2 rounded hover:bg-gray-300" href="#">
-      <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-    </a>
-    <a class="flex items-center justify-center w-12 h-12 mt-2 rounded hover:bg-gray-300" href="#">
-      <svg class="w-6 h-6 stroke-current"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-      </svg>
-    </a>
-    <a class="relative flex items-center justify-center w-12 h-12 mt-2 hover:bg-gray-300" href="#">
-      <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-      </svg>
-      <span class="absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full"></span>
-    </a>
-  </div>
-  <a class="flex items-center justify-center w-16 h-16 mt-auto bg-gray-200 hover:bg-gray-300" href="#">
-    <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  </a>
-</div>
-
-<div class="lg:md:flex lg:md:flex-col items-center w-[400px] h-screen mt-4  text-gray-700 bg-gray-200 rounded sm:hidden xs:hidden">
-  
-  <div class="w-full px-2">
-    <div class="flex flex-col items-center w-full mt-3 border-t border-gray-300">
-      <a class="flex items-center  w-full h-12 px-10 mt-2 rounded hover:bg-gray-300" href="#">
-        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-        <span class="ml-2 text-lg font-medium">Dasboard</span>
-      </a>
-      
-      <a class="flex items-center w-full h-12 px-10 mt-2 rounded hover:bg-gray-300" href="#">
-        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <span class="ml-2 text-lg  font-medium">Search</span>
-      </a>
-      <a class="flex items-center w-full h-12 px-10 mt-2 bg-gray-300 rounded" href="#">
-        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        <span class="ml-2 text-lg  font-medium">Insights</span>
-      </a>
-      <a class="flex items-center w-full h-12 px-10 mt-2 rounded hover:bg-gray-300" href="#">
-        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-        </svg>
-        <span class="ml-2 text-lg  font-medium">Docs</span>
-      </a>
-    </div>
-    <div class="flex flex-col items-center w-full mt-2 border-t border-gray-300">
-      <a class="flex items-center w-full h-12 px-10 mt-2 rounded hover:bg-gray-300" href="#">
-        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-        <span class="ml-2 text-lg  font-medium">Products</span>
-      </a>
-      <a class="flex items-center w-full h-12 px-10 mt-2 rounded hover:bg-gray-300" href="#">
-        <svg class="w-6 h-6 stroke-current"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-        </svg>
-        <span class="ml-2 text-lg  font-medium">Settings</span>
-      </a>
-      
-    </div>
-  </div>
-  <a class="flex items-center justify-center w-full h-16 mt-auto bg-gray-200 hover:bg-gray-300" href="#">
-    <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-    <span class="ml-2 text-lg  font-medium">Account</span>
-  </a>
-  
-</div> */}
 
       <link
         rel="stylesheet"
@@ -195,25 +98,28 @@ export default function DashboardPage() {
               Upload real, high resolution, clear product images. You should choose images with 1:1 resolution
             </h1>
 
-            <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-10 lg:pl-10 mb-6 ">Carousel Images</label>
+            <h1 class="font-bold  lg:pl-5  uppercase lg:md:text-2xl text-gray-700 text-lg pt-10 ">
+            1. Carousel
+            </h1>
             <div
-              class="flex flex-wrap justify-center gap-16 pb-20 ">
+              class="flex flex-wrap justify-center lg:gap-16 pb-20 ">
 
-
+              
               <div className="flex flex-col justify-center items-center">
-                <img src="https://static.vecteezy.com/system/resources/previews/002/282/929/non_2x/red-and-gold-rectangle-long-banner-design-free-vector.jpg" className="h-64 w-[550px] mb-6"></img>
+                <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-5 lg:pl-10 mb-4 ">Carousel Image #1</label>
+                <img src="https://static.vecteezy.com/system/resources/previews/002/282/929/non_2x/red-and-gold-rectangle-long-banner-design-free-vector.jpg" className="h-64 w-[550px] mb-4"></img>
 
-                <Button onClick={() => setOpenModal(true)}>Update Image</Button>
-                <Modal show={openModal} onClose={() => setOpenModal(false)}>
+                <Button onClick={() => setOpenModal1(true)}>Update Image</Button>
+                <Modal show={openModal1} onClose={() => setOpenModal1(false)}>
                   <Modal.Header>Update Image</Modal.Header>
                   <Modal.Body>
-                    < AddImageHomePage />
+                    < AddImageHomePageCarousel />
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => setOpenModal(false)}>Accept</Button>
+                    <Button onClick={() => setOpenModal1(false)}>Accept</Button>
 
 
-                    <Button color="gray" onClick={() => setOpenModal(false)}>
+                    <Button color="gray" onClick={() => setOpenModal1(false)}>
                       Decline
                     </Button>
                   </Modal.Footer>
@@ -222,18 +128,19 @@ export default function DashboardPage() {
 
 
               <div className="flex flex-col justify-center items-center">
-                <img src="https://cdn11.bigcommerce.com/s-nuizsgwrav/images/stencil/790x790/uploaded_images/creative-ways-to-use-large-custom-banners.jpg?t=1620403256" className="h-64 w-[550px] mb-6"></img>
-                <Button onClick={() => setOpenModal(true)}>Update Image</Button>
-                <Modal show={openModal} onClose={() => setOpenModal(false)}>
+                <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-5 lg:pl-10 mb-4 ">Carousel Image #2</label>
+                <img src="https://cdn11.bigcommerce.com/s-nuizsgwrav/images/stencil/790x790/uploaded_images/creative-ways-to-use-large-custom-banners.jpg?t=1620403256" className="h-64 w-[550px] mb-4"></img>
+                <Button onClick={() => setOpenModal2(true)}>Update Image</Button>
+                <Modal show={openModal2} onClose={() => setOpenModal2(false)}>
                   <Modal.Header>Update Image</Modal.Header>
                   <Modal.Body>
-                    < AddImageHomePage />
+                  < AddImageHomePageCarousel />
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => setOpenModal(false)}>Accept</Button>
+                    <Button onClick={() => setOpenModal2(false)}>Accept</Button>
 
 
-                    <Button color="gray" onClick={() => setOpenModal(false)}>
+                    <Button color="gray" onClick={() => setOpenModal2(false)}>
                       Decline
                     </Button>
                   </Modal.Footer>
@@ -241,18 +148,19 @@ export default function DashboardPage() {
               </div>
 
               <div className="flex flex-col  justify-center items-center">
-                <img src="https://cdn11.bigcommerce.com/s-nuizsgwrav/images/stencil/790x790/uploaded_images/creative-ways-to-use-large-custom-banners.jpg?t=1620403256" className="h-64 w-[550px] mb-6"></img>
-                <Button onClick={() => setOpenModal(true)}>Update Image</Button>
-                <Modal show={openModal} onClose={() => setOpenModal(false)}>
+                <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 lg:pl-10 mb-4 lg:mt-0 mt-5">Carousel Image #3</label>
+                <img src="https://cdn11.bigcommerce.com/s-nuizsgwrav/images/stencil/790x790/uploaded_images/creative-ways-to-use-large-custom-banners.jpg?t=1620403256" className="h-64 w-[550px] mb-4"></img>
+                <Button onClick={() => setOpenModal3(true)}>Update Image</Button>
+                <Modal show={openModal3} onClose={() => setOpenModal3(false)}>
                   <Modal.Header>Update Image</Modal.Header>
                   <Modal.Body>
-                    < AddImageHomePage />
+                  < AddImageHomePageCarousel />
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={() => setOpenModal(false)}>Accept</Button>
+                    <Button onClick={() => setOpenModal3(false)}>Accept</Button>
 
 
-                    <Button color="gray" onClick={() => setOpenModal(false)}>
+                    <Button color="gray" onClick={() => setOpenModal3(false)}>
                       Decline
                     </Button>
                   </Modal.Footer>
@@ -261,8 +169,63 @@ export default function DashboardPage() {
 
             </div>
 
+            <h1 class="font-bold  lg:pl-5  uppercase lg:md:text-2xl text-gray-700 text-lg pt-10 ">
+            2. Banner
+            </h1>
+            <div
+              class="flex flex-wrap justify-center lg:gap-16 pb-20 ">
+
+
+              <div className="flex flex-col justify-center items-center">
+                <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-5 lg:pl-10 mb-4 ">Banner Image #1</label>
+                <img src="https://treobangron.com.vn/wp-content/uploads/2023/01/banner-shopee.jpg" className="h-64 w-[550px] mb-4"></img>
+
+                <Button onClick={() => setOpenModal4(true)}>Update Image</Button>
+                <Modal show={openModal4} onClose={() => setOpenModal4(false)}>
+                  <Modal.Header>Update Image</Modal.Header>
+                  <Modal.Body>
+                  < AddImageHomePageBanner />
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => setOpenModal4(false)}>Accept</Button>
+
+
+                    <Button color="gray" onClick={() => setOpenModal4(false)}>
+                      Decline
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </div>
+
+
+              <div className="flex flex-col justify-center items-center">
+                <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 mt-5 lg:pl-10 mb-4 ">Banner Image #2</label>
+                <img src="https://digi.cropro.vn/wp-content/uploads/2022/08/Orange-Red-Flash-Sale-9.9-Promotion-Banner-1024x512.png" className="h-64 w-[550px] mb-4"></img>
+                <Button onClick={() => setOpenModal5(true)}>Update Image</Button>
+                <Modal show={openModal5} onClose={() => setOpenModal5(false)}>
+                  <Modal.Header>Update Image</Modal.Header>
+                  <Modal.Body>
+                  < AddImageHomePageBanner />
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button onClick={() => setOpenModal5(false)}>Accept</Button>
+
+
+                    <Button color="gray" onClick={() => setOpenModal5(false)}>
+                      Decline
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </div>
+
+
+            </div>
 
           </div>
+
+
+
+          
           <div class="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4 pt-10 pb-20">
 
 
@@ -280,9 +243,9 @@ export default function DashboardPage() {
               <AdminInsight />
               <div className="mt-4">
                 <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black lg:md:text-2xl text-lg">
-                  Last Month Incomes
+                  Last Month Users
                 </h1>
-                <BarChart />
+                <AdminBarChart />
               </div>
               <div id="last-users"></div>
             </div>
