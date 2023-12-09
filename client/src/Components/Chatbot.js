@@ -1,18 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { ChatContainer, MainContainer, MessageList, TypingIndicator } from "@chatscope/chat-ui-kit-react"
+
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showImage, setShowImage] = useState(false);
+  const [typing, setTyping] = useState(false)
+  const API_KEY = "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"
   const messageBoxRef = useRef();
 
   const send = () => {
     if (inputMessage !== '') {
+      setTyping(true)
       addMsg(inputMessage);
       setInputMessage('');
       setTimeout(() => addResponseMsg(inputMessage), 1000);
     }
   };
+
+  async function processMessageToChatGPT(chatMessage) {
+    
+  }
 
   const addMsg = (msg) => {
     setMessages((prevMessages) => [...prevMessages, { text: msg, sent: true }]);
@@ -69,7 +78,13 @@ export default function Chatbot() {
             </div>
           ))}
         </div>
-        <div className="line"></div>
+        <div className="line">
+          <MainContainer>
+            <ChatContainer>
+              <MessageList typingIndicator={typing ? <TypingIndicator content="rBuddy is typing" /> : null} />
+            </ChatContainer>
+          </MainContainer>
+        </div>
         <div className="input-div">
           <input
             className="input-message"

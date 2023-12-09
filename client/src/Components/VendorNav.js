@@ -1,6 +1,6 @@
 import { useSearchBox } from "react-instantsearch";
 
-export default function VandorNav({ vendor, activeTab }) {
+export default function VandorNav({ vendor, activeTab, vendorImage }) {
   const { refine } = useSearchBox();
 
   const getTabClass = (tabName) => {
@@ -14,12 +14,8 @@ export default function VandorNav({ vendor, activeTab }) {
         <img class="h-auto max-w-full" src="/images/cover.jpg" alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img
-              class="vendor-avatar md:w- rounded-full"
-              src={require("../Components/images/avatar.png")}
-              alt=""
-            />
-
+            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full" alt="" />
+           
             <div class="font-medium">
               <div class="text-2xl">{vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">

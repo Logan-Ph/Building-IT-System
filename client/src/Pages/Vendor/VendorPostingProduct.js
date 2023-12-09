@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 import { UserContext } from "../../Context/UserContext";
 import { UserImageContext } from '../../Context/UserImageContext';
 import { Navigate } from 'react-router-dom';
@@ -31,16 +31,15 @@ export default function VendorPostingProduct() {
     setCategory(event.target.value);
   };
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
-      setUserImage(res.data.userImage);
+      setUserImage(res.data.userImage)
+    } catch (er) {
+      setError(er);
     }
-    catch (er) {
-      setError(er)
-    }
-  }
+  }, [setUser, setUserImage])
 
   async function axiosPostData() {
     try {
@@ -61,7 +60,7 @@ export default function VendorPostingProduct() {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
 
   return (
