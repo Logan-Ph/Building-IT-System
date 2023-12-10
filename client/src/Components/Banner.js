@@ -1,7 +1,3 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import '../css/homepage.css'
-
 export default function Banner() {
     return <>
         <div className="flex xl:flex-row lg:flex-row items-center md:flex-row sm:flex-row xs:flex-col xl:justify-between lg:justify-between md:justify-between bg-white py-4 my-4 xs:hidden">
@@ -63,41 +59,6 @@ export default function Banner() {
                     <p className="text-[#000054] xl:text-md lg:text-sm md:text-xs sm:text-2xs sm:line-clamp-1">Discount up to 90%</p>
                 </div>
             </div>
-
         </div>
-
-        <Swiper
-            breakpoints={{
-              300: {
-                spaceBetween: 7,
-                slidesPerView: 3,
-              },
-
-              576: {
-                spaceBetween: 10,
-                slidesPerView: 3,
-              },
-
-              898: {
-                spaceBetween: 20,
-                slidesPerView: 4,
-              },
-              1200: {
-                spaceBetween: 15,
-                slidesPerView: 5,
-              },
-              1259: {
-                spaceBetween: 15,
-                slidesPerView: 5,
-              },
-            }}
-          >
-            <div className="mt-64">
-              {/* Realated Product */}
-                <SwiperSlide>
-
-                </SwiperSlide>
-            </div>
-          </Swiper>
     </>
 }
