@@ -105,6 +105,7 @@ router.post('/update-user', upload.single('file'), userController.updateUser);
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 router.post('/update-product', upload.single('file'), userController.updateProduct);
 router.delete('/delete-product', userController.deleteProduct);
+router.get('/manage-product', userController.manageProduct);
 
 // vendor homepage (user side)
 router.get('/vendor/:id', userController.vendorHomepage)

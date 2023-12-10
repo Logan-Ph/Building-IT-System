@@ -723,8 +723,9 @@ exports.addNewProduct = async (req, res) => {
     };
 
     index.saveObject(object).wait()
-      .then(() => console.log("updated to algolia: " + imageURL))
-      .catch(err => console.log(err));
+    .then(() => console.log("updated to algolia: " + imageURL))
+    .catch(err => console.log(err));
+    return res.json("Product has been uploaded.")
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -802,8 +803,17 @@ exports.updateProduct = async (req, res) => {
     index.partialUpdateObject(object).then(({ objectID }) => {
       console.log(objectID);
     });
-    return res.json('Profile has been updated!')
+    return res.json('Product has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.manageProduct = async (req, res) => {
+  try {
+    const products = await Product.find({ owner: req.user._id })
+    return res.status(200).json((products) ? { products: products } : { products: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find products." })
   }
 }

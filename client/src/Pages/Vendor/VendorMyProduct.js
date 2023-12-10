@@ -8,6 +8,7 @@ export default function VendorMyProduct() {
   const { setUser } = useContext(UserContext)
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState();
+  const [products, setProducts] = useState([]);
 
   const fetchUser = async () => {
     try {
@@ -20,13 +21,24 @@ export default function VendorMyProduct() {
     }
   }
 
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/manage-product", {withCredentials: true});
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
-  }, [])
+    fetchProducts();
+  }, []);
 
   return (
     <>
       {error && <Navigate to={'/login'} replace />}
+      {console.log(products)}
       <div class=" bg-white h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
@@ -114,57 +126,25 @@ export default function VendorMyProduct() {
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">
-                        $20000
+                {products.map((product) => (
+                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {product.product_name}
                     </td>
-                    <td class="px-6 py-4">
-                        50
+                    <td className="px-6 py-4">
+                      ${product.price}
                     </td>
-                    <td class="px-6 py-4">
-                        $2999
+                    <td className="px-6 py-4">
+                      {product.quantity}
                     </td>
-                    <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    <td className="px-6 py-4">
+                      {product.description}
                     </td>
-                </tr>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Microsoft Surface Pro
-                    </th>
-                    <td class="px-6 py-4">
-                        $1000
+                    <td className="px-6 py-4 text-right">
+                      <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                     </td>
-                    <td class="px-6 py-4">
-                        200
-                    </td>
-                    <td class="px-6 py-4">
-                        $1999
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    </td>
-                </tr>
-                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Magic Mouse 2
-                    </th>
-                    <td class="px-6 py-4">
-                        $100
-                    </td>
-                    <td class="px-6 py-4">
-                        200
-                    </td>
-                    <td class="px-6 py-4">
-                        $1000
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    </td>
-                </tr>
+                  </tr>
+                ))}
             </tbody>
         </table>
       </div>

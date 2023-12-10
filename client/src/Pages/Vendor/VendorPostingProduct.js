@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useContext, useState, useEffect, useCallback } from 'react'
 import { UserContext } from "../../Context/UserContext";
 import { UserImageContext } from '../../Context/UserImageContext';
+import { ToastContainer, toast } from 'react-toastify'
 import { Navigate } from 'react-router-dom';
 
 export default function VendorPostingProduct() {
@@ -13,6 +14,8 @@ export default function VendorPostingProduct() {
   const { setUser } = useContext(UserContext);
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState('');
+  const [msg, setMsg] = useState('')
+  const [loading, setLoading] = useState(false);
 
   const data = {
     productName: productName,
@@ -31,6 +34,37 @@ export default function VendorPostingProduct() {
     setCategory(event.target.value);
   };
 
+  useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
+  }, [error, msg]);
+
+  const notify = (error) => {
+      toast.error(error, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          pauseOnHover: false,
+          theme: "light",
+      });
+  }
+
+  const success = (success) => {
+      toast.success(success, {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          pauseOnHover: false,
+          theme: "light",
+      });
+  }
+
   const fetchUser = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
@@ -43,9 +77,12 @@ export default function VendorPostingProduct() {
 
   async function axiosPostData() {
     try {
+      setLoading(true);
       await axios.post('http://localhost:4000/add-new-product', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setError('')
+          setMsg(res.data)
+          setLoading(false)
         })
         .catch(er => { setError(er.response.data) });
     } catch (error) {
@@ -56,6 +93,9 @@ export default function VendorPostingProduct() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axiosPostData();
+    if (error) {
+      notify(error);
+    }
   }
 
   useEffect(() => {
@@ -147,7 +187,7 @@ export default function VendorPostingProduct() {
 
           <div class="mt-6 flex items-center justify-end gap-x-6">
             <button type="button" class="rounded-md px-3 py-2 text-sm font-semibold shadow-sm border-solid border-2  hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Cancel</button>
-            <button onClick={handleSubmit} type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save and Publish</button>
+            <button onClick={handleSubmit} disabled={loading} type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save and Publish</button>
           </div>
         </div>
       </form>
