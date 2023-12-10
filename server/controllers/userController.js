@@ -11,6 +11,9 @@ const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
+const OpenAI = require('openai')
+const API_KEY = "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"
+const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
 
 // Connect and authenticate with your Algolia app
 const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
@@ -88,9 +91,19 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
+    // const thread = await openai.beta.threads.create({
+    //   messages: [
+    //     {
+    //       "role": "user",
+    //       "content": "Create 3 data visualizations based on the trends in this file.",
+    //     }
+    //   ]
+    // });
+    // console.log(thread)
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
+    console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }
