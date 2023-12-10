@@ -20,6 +20,7 @@
     "flowbite-react": "^0.7.0-beta.4",
     "instantsearch.js": "^4.60.0",
     "lucide-react": "^0.294.0",
+    "openai": "^4.0.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
