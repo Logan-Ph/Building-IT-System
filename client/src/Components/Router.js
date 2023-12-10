@@ -125,7 +125,7 @@ export default function Router() {
           element: <VendorHomePage />,
         },
         {
-          path: "/search/:query",
+          path: "/search/:query/:category/:price",
           element: <SearchResultPage />,
         },
       ],

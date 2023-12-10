@@ -50,7 +50,7 @@ export default function ProductDetailCard({ product, vendorName }) {
         } catch (er) {
             console.log(er);
         }
-    }, [setUser, setCart])
+    }, [setUser, setCart, setUserImage])
 
     useEffect(() => {
         fetchUser();

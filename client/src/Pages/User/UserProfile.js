@@ -72,7 +72,7 @@ export default function UserProfile() {
         } catch (er) {
             setIsLoading(false);
         }
-    }, [setUser,setUserImage])
+    }, [setUser, setUserImage])
 
     const [phoneNumber, setPhoneNumber] = useState('')
     const [address, setAddress] = useState('')

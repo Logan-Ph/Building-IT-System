@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FunnelIcon } from '@heroicons/react/20/solid'
@@ -8,12 +8,19 @@ import SRPagination from '../../Components/SRPagination'
 import SRPriceRange from '../../Components/SRPriceRange'
 import SRStarRating from '../../Components/SRStarRating'
 import { useHits, useRefinementList } from 'react-instantsearch';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
+import { UserContext } from '../../Context/UserContext';
+import axios from 'axios';
+import { CartContext } from '../../Context/CartContext';
+import { UserImageContext } from '../../Context/UserImageContext';
 
 
 export default function Example() {
   const { hits } = useHits();
+  const { user, setUser } = useContext(UserContext)
+  const { setCart } = useContext(CartContext)
+  const { setUserImage } = useContext(UserImageContext)
   const { refine, items } = useRefinementList({ attribute: 'category', operator: 'or' });
   const [valueFilter, setValueFilter] = useState([]);
   const [sortOptions, setSortOptions] = useState([
@@ -22,10 +29,23 @@ export default function Example() {
     { label: 'Price: High to Low', value: 'rBuy_price_desc', current: false },
   ]);
   const { query } = useParams();
+  const { category } = useParams();
+  const oldCategoryRef = useRef();
   const [searchQuery, setSearchQuery] = useState((query.split('='))[1]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      setUser(res.data.user);
+      setCart(res.data.length)
+      setUserImage(res.data.userImage)
+    } catch (er) {
+    }
+  }, [setUser, setCart, setUserImage])
+
   useEffect(() => {
+    fetchUser();
     setSearchQuery((query.split('='))[1]);
     if (items.length > 0) {
       setValueFilter(items.map(item => ({
@@ -34,10 +54,33 @@ export default function Example() {
         isRefined: item.isRefined,
       })));
     }
-  }, [query, items]);
+  }, [query, items, fetchUser]);
+
+  useEffect(() => {
+    if ((category.split('='))[1]){
+      if (oldCategoryRef.current) {
+        // Refine with old state
+        refine((oldCategoryRef.current.split('='))[1]);
+      }
+  
+      // find the refined filter that user apply
+      const refinedFilter = valueFilter.filter(option => option.isRefined && option.value !== (oldCategoryRef.current.split('='))[1]);
+  
+      // reset the refined filter
+      refinedFilter.forEach(option => {
+        refine(option.value)
+      })
+  
+      // Refine with new state
+      refine((category.split('='))[1]);
+      // Update the old state
+      oldCategoryRef.current = category;
+    }
+  }, [category, refine]);
 
   return (
     <div className="bg-white">
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>

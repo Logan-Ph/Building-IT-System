@@ -12,16 +12,12 @@ export default function SRStarRating() {
 
   const handleRating = (ratingValue) => {
     setRating(ratingValue);
-    if (ratingValue >= 3.5) {
-      refine([ratingValue, MAX]);
-    } else {
-      refine([MIN, MAX]);
-    }
+    refine([ratingValue, MAX]);
   }
 
   useEffect(() => {
     refine([MIN, MAX]);
-  }, [refine]);
+  }, []);
 
   return (
     <>
@@ -35,7 +31,6 @@ export default function SRStarRating() {
                 type="radio"
                 name="rating"
                 value={ratingValue}
-                className="rating"
                 onClick={() => handleRating(ratingValue)}
               />
               <FaStar

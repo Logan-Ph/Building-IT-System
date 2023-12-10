@@ -13,6 +13,7 @@ export default function VendorPostingProduct() {
   const { setUser } = useContext(UserContext);
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const data = {
     productName: productName,
@@ -36,6 +37,7 @@ export default function VendorPostingProduct() {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
       setUserImage(res.data.userImage)
+      setIsLoading(false)
     } catch (er) {
       setError(er);
     }
@@ -62,6 +64,9 @@ export default function VendorPostingProduct() {
     fetchUser();
   }, [fetchUser]);
 
+  if (isLoading) {
+    return <div>Loading....</div>
+  }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">

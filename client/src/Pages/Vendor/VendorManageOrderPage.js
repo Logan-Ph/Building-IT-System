@@ -10,13 +10,14 @@ import { UserImageContext } from '../../Context/UserImageContext';
 import { Navigate } from 'react-router-dom';
 
 export default function ManageOrderPage() {
-    const { setUser } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
     const { setUserImage } = useContext(UserImageContext)
     const [error, setError] = useState();
     const [status, setStatus] = useState("")
     const [orderId, setOrderId] = useState("")
     const [foundOrder, setFoundOrder] = useState()
     const [orders, setOrders] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     const getOrders = useCallback(async () => {
         try {
@@ -25,23 +26,24 @@ export default function ManageOrderPage() {
         }
         catch (error) {
         }
-    }, [orders])
+    }, [setOrders])
 
-    const fetchUser = async () => {
+    const fetchUser = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
             setUser(res.data.user);
             setUserImage(res.data.userImage);
+            setIsLoading(false)
         }
         catch (er) {
             setError(er)
         }
-    }
+    }, [setUser, setUserImage])
 
     useEffect(() => {
         getOrders();
         fetchUser();
-    }, [])
+    }, [getOrders, fetchUser])
 
     const postData = async () => {
         let statusValue;
@@ -90,9 +92,15 @@ export default function ManageOrderPage() {
         postData()
     }
 
+    if (isLoading) {
+        return <div>Loading....</div>
+    }
+
     return (
         <>
             {error && <Navigate to={'/login'} replace />}
+            {user && user.role === "User" && <Navigate to={'/'} replace />}
+
             <ToastContainer
                 position="top-center"
                 autoClose={10000}

@@ -39,7 +39,7 @@ export default function Homepage() {
             console.log(er);
             setIsLoading(false);
         }
-    }, [setUser, setCart])
+    }, [setUser, setCart, setUserImage])
 
     useEffect(() => {
         fetchProduct();
@@ -76,7 +76,7 @@ export default function Homepage() {
                     {/* Trending Product */}
                     <div className="flex flex-row items-center my-6">
                         <div className='w-8 h-8'>
-                            <img src={require("../../Components/images/trending.png")} className="object-cover" />
+                            <img src={require("../../Components/images/trending.png")} className="object-cover" alt='trending product'/>
                         </div>
                         <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
                     </div>

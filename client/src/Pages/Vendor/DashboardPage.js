@@ -3,32 +3,34 @@ import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
 import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import LogInPage from "../User/LogInPage";
 import { UserContext } from "../../Context/UserContext";
 import { UserImageContext } from "../../Context/UserImageContext";
 
 
 
 export default function DashboardPage() {
-  const { setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const { setUserImage } = useContext(UserImageContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState();
-  const fetchUser = async () => {
+
+  const fetchUser = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
       setUser(res.data.user);
       setUserImage(res.data.userImage);
+      setIsLoading(false)
     }
     catch (er) {
       setError(er)
     }
-  }
+  }, [setUser, setUserImage])
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       console.log(res.data.ordersByStatus)
@@ -37,18 +39,20 @@ export default function DashboardPage() {
     catch (er) {
       console.log(er);
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchUser();
     fetchData();
-  }, [])
+  }, [fetchUser, fetchData])
 
-  if (error) {
+  if (isLoading) {
+    return <div>....is loading</div>
   }
 
   return (
     <>
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
       {error && <Navigate to={'/login'} />}
       <link
         rel="stylesheet"
