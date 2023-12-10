@@ -12,6 +12,8 @@ import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
 import { UserImageContext } from '../../Context/UserImageContext';
 
+
+
 export default function Homepage() {
     const { user, setUser } = useContext(UserContext)
     const { setUserImage } = useContext(UserImageContext)
@@ -50,6 +52,7 @@ export default function Homepage() {
         return <div>Loading....</div>
     }
 
+
     return (
         <>
             {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
@@ -65,33 +68,37 @@ export default function Homepage() {
                 pauseOnHover={false}
                 theme="light"
             />
-            <div className="lg:my-6 xs:my-2 sm:my-2 md:my-4">
-                <Slider />
-            </div>
 
-            <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col justify-around pb-32 w-full ">
-                    {/* Top banner */}
-                    <Banner />
-                    {/* Trending Product */}
-                    <div className="flex flex-row items-center my-6">
-                        <div className='w-8 h-8'>
-                            <img src={require("../../Components/images/trending.png")} className="object-cover" />
+            <section className='bg-gray-50 py-6'>
+                <main className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 py-5">
+                    {/* Carousel */}
+                    <Slider />
+
+                    <div className="flex flex-col justify-around pb-32 w-full ">
+                        {/* Top banner */}
+                        <Banner />
+                        {/* Trending Product */}
+                        <div className="flex flex-row items-center my-6">
+                            <div className='w-8 h-8'>
+                                <img src={require("../../Components/images/trending.png")} className="object-cover" />
+                            </div>
+                            <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
                         </div>
-                        <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
-                    </div>
 
-                    <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
-                        {products.map((product) => (
-                            <ProductCard product={product} />
-                        ))}
+                        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-x-4 gap-y-8 sm:gap-x-10 sm:gap-y-10  items-center">
+                            {products.map((product) => (
+                                <ProductCard product={product} />
+                            ))}
+                        </div>
+                        <div className='flex flex-col items-center my-10'>
+                            <button type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
+                        </div>
                     </div>
-                    <div className='flex flex-col items-center my-10'>
-                        <button type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
-                    </div>
-                </div>
-            </main>
+                </main>
+            </section>
+
             {/* <SimpleSlider/> */}
+
         </>
     )
 }

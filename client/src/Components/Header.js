@@ -194,7 +194,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
+        <div className="flex items-center justify-between py-2">
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">

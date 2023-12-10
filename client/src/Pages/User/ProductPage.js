@@ -1,4 +1,3 @@
-import "swiper/css";
 import { useParams } from "react-router-dom"
 import { useState, useEffect, useCallback } from 'react'
 import axios from "axios"
@@ -6,10 +5,14 @@ import recommend from '@algolia/recommend';
 import { useRelatedProducts } from '@algolia/recommend-react'
 import RelatedProduct from "../../Components/RelatedProduct";
 import CustomerReview from '../../Components/CustomerReview';
-import { Swiper, SwiperSlide } from "swiper/react";
 import ProductDetailCard from "../../Components/ProductDetailCard";
 import ProductDetailComment from "../../Components/ProductDetailComment";
 import { ToastContainer } from "react-toastify";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+
 
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
