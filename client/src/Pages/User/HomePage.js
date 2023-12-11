@@ -113,36 +113,77 @@ function MiddleBanner(){
     return <>
         <div className='grid grid-cols-2  gap-x-4 xs:overflow-y divide-x-2  border border-gray-100 '>
 
-        <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
-            <Carousel>
-            <img src={require("../../Components/images/bannerN5.jpg")} alt="banner1" className='scale-90 border border-gray-200 shadow-lg' />
-            <img src={require("../../Components/images/bannerN6.jpg")} alt="banner2" className='scale-90 border border-gray-200 shadow-lg' />
-            <img src={require("../../Components/images/bannerN9.jpg")} alt="banner3" className='scale-90 border border-gray-200 shadow-lg'/>
-            </Carousel>
-        </div>
-
-        <div className='bg-white grid grid-cols-3 gap-x-4 px-4 py-6'>
-            <div className='flex items-center flex-col'>
-                <div className='w-70px h-70px'>
-                    <img src={require("../../Components/images/tv.png")} alt="tv" className='w-full h-full object-cover' />
-                </div>
-                <div>Electronics</div>
+            <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
+                <Carousel>
+                <img src={require("../../Components/images/bannerN5.jpg")} alt="banner1" className='scale-90 border border-gray-200 shadow-lg' />
+                <img src={require("../../Components/images/bannerN6.jpg")} alt="banner2" className='scale-90 border border-gray-200 shadow-lg' />
+                <img src={require("../../Components/images/bannerN9.jpg")} alt="banner3" className='scale-90 border border-gray-200 shadow-lg'/>
+                </Carousel>
             </div>
 
-            <div>
-                <div>
-                    <img src={require("../../Components/images/tv.png")} alt="..." />
+            <div className='bg-white grid grid-cols-3 gap-x-4 px-4 py-6'>
+
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv" 
+                        className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
+                        style={{transformOrigin: "center center"}}/>
+                    <div 
+                        className="transition duration-300 group-hover:-translate-y-1 mt-2 "
+                        style={{transformOrigin: "center center"}}
+                    > Household Appliances</div>
                 </div>
-                <div>Beuty & Care</div>
-            </div>
-            
-            <div>
-                <div>
-                    <img src={require("../../Components/images/tv.png")} alt="..." />
+
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                    <img src={require("../../Components/images/laptop.jpg")} alt="tv" 
+                        className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
+                        style={{transformOrigin: "center center"}}/>
+                    <div 
+                        className="transition duration-300 group-hover:-translate-y-1 mt-2 "
+                        style={{transformOrigin: "center center"}}
+                    > Electronics</div>
                 </div>
-                <div>Fashion</div>
+
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                    <img src={require("../../Components/images/fashion.jpg")} alt="tv" 
+                        className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
+                        style={{transformOrigin: "center center"}}/>
+                    <div 
+                        className="transition duration-300 group-hover:-translate-y-1 mt-2 "
+                        style={{transformOrigin: "center center"}}
+                    > Fashion</div>
+                </div>
+
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                    <img src={require("../../Components/images/game.jpg")} alt="tv" 
+                        className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
+                        style={{transformOrigin: "center center"}}/>
+                    <div 
+                        className="transition duration-300 group-hover:-translate-y-1 mt-2 "
+                        style={{transformOrigin: "center center"}}
+                    > Toys & Game</div>
+                </div>
+
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                    <img src={require("../../Components/images/beauty.jpg")} alt="tv" 
+                        className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
+                        style={{transformOrigin: "center center"}}/>
+                    <div 
+                        className="transition duration-300 group-hover:-translate-y-1 mt-2 "
+                        style={{transformOrigin: "center center"}}
+                    > Beauty & Care</div>
+                </div>
+
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                    <img src={require("../../Components/images/enter.jpg")} alt="tv" 
+                        className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
+                        style={{transformOrigin: "center center"}}/>
+                    <div 
+                        className="transition duration-300 group-hover:-translate-y-1 mt-2 "
+                        style={{transformOrigin: "center center"}}
+                    > Entertainment</div>
+                </div>
+
             </div>
-        </div>
 
         </div>
 
