@@ -14,10 +14,6 @@ import { UserImageContext } from '../../Context/UserImageContext';
 
 import { Carousel } from 'flowbite-react';
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-
-
 
 export default function Homepage() {
     const { user, setUser } = useContext(UserContext)
@@ -256,6 +252,10 @@ function MiddleBanner(){
         </div>
     </>
 }
+
+
+
+
 
 
 
