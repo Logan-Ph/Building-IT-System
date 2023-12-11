@@ -4,13 +4,15 @@ import CustomerCard from "../../Components/ProfileCard/CustomerCard";
 import VendorCard from "../../Components/ProfileCard/VendorCard";
 import ShipperCard from "../../Components/ProfileCard/ShipperCard";
 import { Navigate, useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { UserContext } from "../../Context/UserContext";
 
 export default function ReportInfoPage() {
   const params = useParams()
-  const [user, setUser] = useState()
-  const [userImage, setUserImage] = useState()
+  const { user, setUser } = useContext(UserContext)
+  const [userInfo, setUserInfo] = useState()
+  const [userInfoImage, setUserInfoImage] = useState()
   const [orders, setOrders] = useState([])
   const [error, setError] = useState()
   const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
@@ -19,8 +21,8 @@ export default function ReportInfoPage() {
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/admin/${params.id}/report`, { withCredentials: true });
-      setUser(res.data.user);
-      setUserImage(res.data.userImage);
+      setUserInfo(res.data.user);
+      setUserInfoImage(res.data.userImage);
       setOrders(res.data.orders)
       setIsLoading(false)
     } catch (error) {
@@ -29,9 +31,21 @@ export default function ReportInfoPage() {
     }
   }, [params])
 
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      setUser(res.data.user);
+      setIsLoading(false)
+    } catch (er) {
+      setError(er)
+      setIsLoading(false)
+    }
+  }, [setUser])
+
   useEffect(() => {
     fetchData()
-  }, [fetchData])
+    fetchUser()
+  }, [fetchData, fetchUser])
 
   useEffect(() => {
     const orderStatus = orders.reduce((acc, order) => {
@@ -51,17 +65,19 @@ export default function ReportInfoPage() {
   return (
     <>
       <section class="bg-gray-200">
+        {user && user.role === "User" && <Navigate to={"/"} replace />}
+        {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
         {error && <Navigate to={"/admin/manage-user"} replace />}
         <div class="container mx-auto p-5">
           <h1 class="m-5 text-3xl font-light text-center">
             Account Information
           </h1>
           {/* <!-- Customer --> */}
-          {user && user.role === "User" && <CustomerCard user={user} userImage={userImage} categorizedOrder={categorizedOrder} orders={orders} />}
+          {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} orders={orders} />}
           {/* <!-- Vendor --> */}
-          {user && user.role === "Vendor" && <VendorCard user={user} userImage={userImage} categorizedOrder={categorizedOrder} orders={orders} />}
+          {userInfo && userInfo.role === "Vendor" && <VendorCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} orders={orders} />}
           {/* <!-- Shipper --> */}
-          {user && user.role === "Shipper" && <ShipperCard user={user} userImage={userImage} categorizedOrder={categorizedOrder} />}
+          {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} />}
           {/* Report Section */}
           <ReportInfo />
         </div>

@@ -10,7 +10,7 @@ export default function VendorPostingProduct() {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState('');
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +71,8 @@ export default function VendorPostingProduct() {
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
       {error && <Navigate to='/login' replace={true} />}
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">

@@ -100,7 +100,7 @@ export default function ManageOrderPage() {
         <>
             {error && <Navigate to={'/login'} replace />}
             {user && user.role === "User" && <Navigate to={'/'} replace />}
-
+            {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}

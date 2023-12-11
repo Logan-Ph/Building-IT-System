@@ -53,6 +53,7 @@ export default function Homepage() {
     return (
         <>
             {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+            {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -76,7 +77,7 @@ export default function Homepage() {
                     {/* Trending Product */}
                     <div className="flex flex-row items-center my-6">
                         <div className='w-8 h-8'>
-                            <img src={require("../../Components/images/trending.png")} className="object-cover" alt='trending product'/>
+                            <img src={require("../../Components/images/trending.png")} className="object-cover" alt='trending product' />
                         </div>
                         <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
                     </div>

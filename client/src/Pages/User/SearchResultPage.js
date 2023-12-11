@@ -81,6 +81,7 @@ export default function Example() {
   return (
     <div className="bg-white">
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>

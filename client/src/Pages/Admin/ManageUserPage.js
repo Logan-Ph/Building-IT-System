@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
-  const [users, setUsers] = useState([]);
+  const [usersInfo, setUsersInfo] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
   const [usersImage, setUsersImage] = useState([]);
@@ -32,7 +32,7 @@ export default function ManageUserPage() {
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
-      setUsers(res.data.users);
+      setUsersInfo(res.data.users);
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
       setUsersImage(res.data.usersImage);
@@ -55,11 +55,13 @@ export default function ManageUserPage() {
 
   return (
     <div class="container mx-auto my-5">
-      {error && <Navigate to={'/login'} />}
+      {user && user.role === "User" && <Navigate to={"/"} replace />}
+      {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
+      {error && <Navigate to={"/login"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
           <Tabs.Item active title="Customer">
-            <UserTable users={users} usersImage={usersImage} />
+            <UserTable users={usersInfo} usersImage={usersImage} />
           </Tabs.Item>
           <Tabs.Item title="Vendor">
             <VendorTable vendors={vendors} vendorsImage={vendorsImage} />

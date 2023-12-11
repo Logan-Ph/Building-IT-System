@@ -51,6 +51,7 @@ export default function DashboardPage() {
   return (
     <>
       {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {error && <Navigate to={'/login'} />}
       <link
         rel="stylesheet"

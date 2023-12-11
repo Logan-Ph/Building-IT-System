@@ -61,6 +61,7 @@ export default function CheckoutPage() {
     <>
       {error && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <section>
         <div class="mx-auto px-10 my-10">
           <h1 class="text-center text-5xl">Checkout</h1>
