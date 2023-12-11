@@ -12,7 +12,7 @@ export default function VendorMyProduct() {
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {!user && <Navigate to={'/login'} replace />}
-      <div class=" bg-white h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
+      <div class=" bg-gray-100 h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
             <form>
@@ -62,40 +62,105 @@ export default function VendorMyProduct() {
         </div>
 
 
-        <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
-          <div className="mb-4 flex justify-between items-center">
-            <div className="flex space-x-2">
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">All</button>
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Live</button>
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Sold Out</button>
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Reviewing</button>
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Violation</button>
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Delisted</button>
-            </div>
-            <div className="space-x-2">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
-              <button className="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Batch tools</button>
-            </div>
+      <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
+        <div class="mb-4 flex justify-between items-center">
+          <div class="flex space-x-2">
+            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">All</button>
+            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Live</button>
+            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Sold Out</button>
+            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Reviewing</button>
+            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Violation</button>
+            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Delisted</button>
           </div>
-          <table className="w-full text-center table-auto border-collapse">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">Product name</th>
-                <th className="border border-gray-300 p-2">SKU</th>
-                <th className="border border-gray-300 p-2">Variations</th>
-                <th className="border border-gray-300 p-2">Price</th>
-                <th className="border border-gray-300 p-2">Stock</th>
-                <th className="border border-gray-300 p-2">Sales</th>
-                <th className="border border-gray-300 p-2">Action</th>
-              </tr>
+          <div class="space-x-2">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
+          </div>
+        </div>
+
+      <div class="relative overflow-x-auto sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Product name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Price
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Stock
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Sales
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                    </th>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colspan="7" className="border border-gray-300 p-2">No Product Found</td>
-              </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white flex items-center space-x-4 mb-4">
+                    <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded mr-5 " alt="" />
+                        Apple MacBook Pro 17"
+                    </th>
+                    <td class="px-6 py-4">
+                        $20000
+                    </td>
+                    <td class="px-6 py-4">
+                        50
+                    </td>
+                    <td class="px-6 py-4">
+                        $2999
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
+                    </td>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center space-x-4 mb-4">
+                    <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded mr-5 " alt="" />
+                        Microsoft Surface Pro
+                    </th>
+                    <td class="px-6 py-4">
+                        $1000
+                    </td>
+                    <td class="px-6 py-4">
+                        200
+                    </td>
+                    <td class="px-6 py-4">
+                        $1999
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
+                    </td>
+                </tr>
+                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center space-x-4 mb-4">
+                    <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded mr-5 " alt="" />
+                        Magic Mouse 2
+                    </th>
+                    <td class="px-6 py-4">
+                        $100
+                    </td>
+                    <td class="px-6 py-4">
+                        200
+                    </td>
+                    <td class="px-6 py-4">
+                        $1000
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
+
+                    </td>
+                </tr>
             </tbody>
-          </table>
-        </div>
+        </table>
+      </div>
+    </div>
 
       </div>
 

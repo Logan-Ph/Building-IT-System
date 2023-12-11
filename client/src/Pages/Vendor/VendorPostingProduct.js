@@ -50,7 +50,7 @@ export default function VendorPostingProduct() {
   }
 
   return (
-    <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
+    <div className="container mx-auto my-8 px-4 rounded-lg bg-gray-100 shadow p-4 max-w-4xl">
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {(error || !user) && <Navigate to='/login' replace={true} />}
