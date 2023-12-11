@@ -14,6 +14,9 @@ import { UserImageContext } from '../../Context/UserImageContext';
 
 import { Carousel } from 'flowbite-react';
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
 
 
 export default function Homepage() {
@@ -82,13 +85,13 @@ export default function Homepage() {
                     {/* Category */}
                     <MiddleBanner/>
 
-                    <div className="flex flex-col justify-around pb-32">
+                    <div className="flex flex-col justify-around my-10 pb-32">
                         {/* Trending Product */}
                         <div className="flex flex-row items-center my-6">
                             <div className='w-8 h-8'>
                                 <img src={require("../../Components/images/trending.png")} className="object-cover" />
                             </div>
-                            <h2 className="xl:ml-2 lg:ml-2 md:ml-1 sm:ml-1 xs:ml-1 col-span-full text-center xs:text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
+                            <h2 className="xl:ml-2 lg:ml-2 md:ml-1 sm:ml-1 xs:ml-1 col-span-full text-center xs:text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl font-bold text-[#E61E2A]">rBuy suggestion</h2>
                         </div>
 
                         <div className="grid xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 gap-x-4 gap-y-4">
@@ -102,7 +105,6 @@ export default function Homepage() {
                         </div>
                     </div>
 
-                    
                 </main>
             </section>
 
@@ -252,6 +254,8 @@ function MiddleBanner(){
             </div>
 
         </div>
-
     </>
 }
+
+
+
