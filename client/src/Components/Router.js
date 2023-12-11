@@ -125,7 +125,7 @@ export default function Router() {
           element: <VendorHomePage />,
         },
         {
-          path: "/search/:query",
+          path: "/search/:query/:category/:price",
           element: <SearchResultPage />,
         },
       ],
@@ -179,11 +179,11 @@ export default function Router() {
           element: <ManageUserPage />,
         },
         {
-          path: "/admin/report",
+          path: "/admin/:id/report",
           element: <ReportInfoPage />,
         },
         {
-          path: "/admin/manage-order",
+          path: "/admin/manage-product",
           element: <AdminManageVendorProduct />,
         },
         {

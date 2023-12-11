@@ -1,55 +1,43 @@
 import BarChart from "../../Components/BarChart";
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
-import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
-import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import LogInPage from "../User/LogInPage";
 import { UserContext } from "../../Context/UserContext";
-import { UserImageContext } from "../../Context/UserImageContext";
-
-
 
 export default function DashboardPage() {
-  const { setUser } = useContext(UserContext)
-  const { setUserImage } = useContext(UserImageContext)
+  const { user } = useContext(UserContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
-  const [error, setError] = useState();
-  const fetchUser = async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-      setUser(res.data.user);
-      setUserImage(res.data.userImage);
-    }
-    catch (er) {
-      setError(er)
-    }
-  }
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
-      console.log(res.data.ordersByStatus)
       setOrdersByStatus(res.data.ordersByStatus);
+      setIsLoading(false)
     }
     catch (er) {
-      console.log(er);
+      setError(er);
+      setIsLoading(false)
     }
-  }
-
-  useEffect(() => {
-    fetchUser();
-    fetchData();
   }, [])
 
-  if (error) {
+  useEffect(() => {
+    fetchData();
+  }, [fetchData])
+
+  if (user === undefined || isLoading) {
+    return <div>....is loading</div>
   }
 
   return (
     <>
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {error && <Navigate to={'/login'} />}
+      {!user && <Navigate to={'/login'} replace />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"

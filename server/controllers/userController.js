@@ -11,6 +11,9 @@ const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
+// const OpenAI = require('openai')
+// const API_KEY = "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"
+// const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
 
 // Connect and authenticate with your Algolia app
 const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
@@ -91,6 +94,7 @@ exports.homePage = async (req, res) => {
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
+    console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }
@@ -805,5 +809,97 @@ exports.updateProduct = async (req, res) => {
     return res.json('Profile has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.manageUser = async (req, res) => {
+  try {
+    const users = await User.find({});
+    const vendors = await Vendor.find({});
+    const shippers = await Shipper.find({});
+
+    let usersImage = [];
+    let vendorsImage = [];
+    let shippersImage = [];
+
+    users.forEach(user => {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      usersImage.push(userImage);
+    })
+
+    vendors.forEach(user => {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      vendorsImage.push(userImage);
+    })
+
+    shippers.forEach(user => {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      shippersImage.push(userImage);
+    })
+
+
+
+    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers, usersImage: usersImage, vendorsImage: vendorsImage, shippersImage: shippersImage });
+  } catch {
+    return res.status(500).json({ error: "Cannot find user. " })
+  }
+}
+
+exports.reportPage = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const vendor = await Vendor.findById(req.params.id);
+    const shipper = await Shipper.findById(req.params.id);
+
+    if (user) {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      const orders = await Order.find({ userId: user._id })
+      return res.status(200).json({ user: user, userImage: userImage, orders: orders });
+    }
+
+    if (vendor) {
+      let vendorImage;
+      if (vendor.img.data) {
+        vendorImage = Buffer.from(
+          vendor.img.data
+        ).toString("base64");
+      }
+      const orders = await Order.find({ vendorID: vendor._id })
+      return res.status(200).json({ user: vendor, userImage: vendorImage, orders: orders });
+    };
+
+    if (shipper) {
+      let shipperImage;
+      if (shipper.img.data) {
+        shipperImage = Buffer.from(
+          shipper.img.data
+        ).toString("base64");
+      }
+      return res.status(200).json({ user: shipper, userImage: shipperImage });
+    }
+
+    if (!user && !vendor && !shipper) throw new Error("User not found");
+  } catch (er) {
+    return res.status(500).json({ error: er })
   }
 }

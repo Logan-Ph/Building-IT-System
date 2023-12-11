@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchBox } from 'react-instantsearch';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
@@ -10,26 +10,49 @@ import { UserImageContext } from '../Context/UserImageContext';
 import axios from 'axios';
 
 export default function Header() {
-  const { cart } = useContext(CartContext)
-  const { user } = useContext(UserContext)
-  const { userImage } = useContext(UserImageContext)
+  const { cart, setCart } = useContext(CartContext)
+  const { user, setUser } = useContext(UserContext)
+  const { userImage, setUserImage } = useContext(UserImageContext)
   const { refine } = useSearchBox();
-  const [inputValue, setInputValue] = useState("");
+  const [inputQuery, setInputQuery] = useState("");
   const [navigateTo, setNavigateTo] = useState("");
   const { query } = useParams();
   const [searchQuery] = useState(query && (query.split('='))[1]);
+  const { category } = useParams();
+  const [searchCategory] = useState(category && (category.split('='))[1]);
 
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      setUser(res.data.user);
+      setCart(res.data.length)
+      setUserImage(res.data.userImage)
+    } catch (er) {
+      setUser(null)
+    }
+  }, [setUser, setCart, setUserImage])
 
   function submitSearch(e) {
     e.preventDefault();
-    setNavigateTo(`/search/query=${inputValue}`);
-    refine(inputValue)
-    setInputValue("")
+    if (inputQuery) {
+      setNavigateTo(`/search/query=${inputQuery}/category=/price=`);
+      refine(inputQuery)
+      setInputQuery("")
+    }
+  }
+
+  function applyCategory(category) {
+    refine("")
+    setNavigateTo(`/search/query=/category=${category}/price=`)
   }
 
   useEffect(() => {
+    fetchUser();
+  }, [fetchUser])
+
+  useEffect(() => {
     searchQuery && refine(searchQuery)
-  }, [searchQuery, refine]);
+  }, [searchQuery, refine, searchCategory]);
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -58,8 +81,15 @@ export default function Header() {
     }
   }
 
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
+
+
   return (
     <section>
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
@@ -81,8 +111,8 @@ export default function Header() {
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
-                value={inputValue}
-                onChange={(e) => setInputValue(e.currentTarget.value)}
+                value={inputQuery}
+                onChange={(e) => setInputQuery(e.currentTarget.value)}
               />
               <div class="grid place-items-center h-full w-12 text-gray-300">
                 <svg
@@ -204,22 +234,19 @@ export default function Header() {
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
               Electronics
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
               Beauty & Personal Care
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>
               Household Appliances
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}>
               Fashion
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              Entertainment
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
               Toys & Games
             </span>
           </div>
@@ -303,7 +330,7 @@ export default function Header() {
                   type="text"
                   className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-xs text-gray-600 focus:outline-none"
                   placeholder="Search"
-                  onChange={(e) => setInputValue(e.currentTarget.value)}
+                  onChange={(e) => setInputQuery(e.currentTarget.value)}
                 />
                 <button className="rounded-tr-md rounded-br-md px-2 py-3 hidden md:block text-white">
                   <svg
@@ -373,7 +400,7 @@ export default function Header() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Electronics</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>Electronics</span>
                   </span>
                   <span
                     href=""
@@ -392,7 +419,7 @@ export default function Header() {
                         d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Beauty & Personal Care</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>Beauty & Personal Care</span>
                   </span>
                   <span
                     href=""
@@ -410,7 +437,7 @@ export default function Header() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Household Appliances</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>Household Appliances</span>
                   </span>
                   <span
                     href=""
@@ -428,23 +455,7 @@ export default function Header() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Fashion</span>
-                  </span>
-                  <span
-                    href=""
-                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
-                  >
-                    <svg
-                      class="w-6 h-6 fill-current inline-block"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"
-                      ></path>
-                    </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Entertainments</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}>Fashion</span>
                   </span>
                   <span
                     href=""
@@ -460,7 +471,7 @@ export default function Header() {
                         d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12px] md:text-[16px]">Toys & Games</span>
+                    <span class="ml-2 xs:text-[12px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>Toys & Games</span>
                   </span>
                 </div>
 

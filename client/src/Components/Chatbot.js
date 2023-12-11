@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChatContainer, MainContainer, MessageList, TypingIndicator } from "@chatscope/chat-ui-kit-react"
+import { OpenAI } from 'openai'
+const API_KEY = "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"
+const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
@@ -7,7 +10,6 @@ export default function Chatbot() {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showImage, setShowImage] = useState(false);
   const [typing, setTyping] = useState(false)
-  const API_KEY = "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"
   const messageBoxRef = useRef();
 
   const send = () => {
@@ -19,9 +21,11 @@ export default function Chatbot() {
     }
   };
 
-  async function processMessageToChatGPT(chatMessage) {
-    
+  const createThread = async () => {
+    const emptyThread = await openai.beta.threads.create();
+    console.log(emptyThread)
   }
+
 
   const addMsg = (msg) => {
     setMessages((prevMessages) => [...prevMessages, { text: msg, sent: true }]);
@@ -101,7 +105,7 @@ export default function Chatbot() {
               }
             }}
           />
-          <button className="input-send" onClick={send}>
+          <button className="input-send" onClick={() => { send() }}>
             <svg style={{ width: "24px", height: "24px" }}>
               <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
             </svg>
