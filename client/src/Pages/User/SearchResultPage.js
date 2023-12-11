@@ -57,20 +57,16 @@ export default function Example() {
   }, [query, items, fetchUser]);
 
   useEffect(() => {
-    if ((category.split('='))[1]){
+    if ((category.split('='))[1]) {
       if (oldCategoryRef.current) {
         // Refine with old state
+        console.log(oldCategoryRef.current)
         refine((oldCategoryRef.current.split('='))[1]);
       }
-  
-      // find the refined filter that user apply
-      const refinedFilter = valueFilter.filter(option => option.isRefined && option.value !== (oldCategoryRef.current.split('='))[1]);
-  
-      // reset the refined filter
-      refinedFilter.forEach(option => {
-        refine(option.value)
-      })
-  
+
+      // reset the refine 
+      valueFilter.filter(option => option.isRefined && (!oldCategoryRef.current || option.value !== (oldCategoryRef.current.split('='))[1])).forEach(option => refine(option.value));
+
       // Refine with new state
       refine((category.split('='))[1]);
       // Update the old state
@@ -162,7 +158,7 @@ export default function Example() {
                 <div className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange />
                   <SRStarRating />
-                  <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} />
+                  <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
                 </div>
               </div>
 
@@ -181,8 +177,9 @@ export default function Example() {
   )
 }
 
-function CheckboxLabel({ setValueFilter, valueFilter, refine }) {
+function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) {
   const handleItemClick = (value) => {
+    if (oldCategoryRef.current && value === (oldCategoryRef.current.split('='))[1]) { oldCategoryRef.current = null; }
     refine(value)
     setValueFilter(valueFilter.map(option => option.value === value ? { ...option, isRefined: !option.isRefined } : option));
   }

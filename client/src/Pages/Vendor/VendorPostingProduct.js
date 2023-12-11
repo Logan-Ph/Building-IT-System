@@ -40,6 +40,7 @@ export default function VendorPostingProduct() {
       setIsLoading(false)
     } catch (er) {
       setError(er);
+      setIsLoading(false)
     }
   }, [setUser, setUserImage])
 
