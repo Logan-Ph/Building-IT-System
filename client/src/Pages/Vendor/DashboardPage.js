@@ -51,11 +51,9 @@ export default function DashboardPage() {
 
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
-      />
-        <div class="max-w-8xl mb-10 pb-5 lg:md:w-full w-5/6 ">
+
+      <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
+
         <div
           id="content"
           class="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4"
@@ -85,9 +83,11 @@ export default function DashboardPage() {
               <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black lg:md:text-2xl text-lg">
                 Last Month Incomes
               </h1>
+
+            </div>
+            <div className="relative">
               <BarChart />
             </div>
-            <div id="last-users"></div>
           </div>
         </div>
       </div>

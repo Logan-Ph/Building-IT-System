@@ -5,6 +5,7 @@ import UnpaidTableComponent from '../../Components/VMOUnpaidTableComponent';
 import AllTableComponent from '../../Components/VMOAllTableComponent';
 import { UserContext } from '../../Context/UserContext';
 import axios from 'axios';
+import ToDoList from '../../Components/ToDoList';
 
 export default function ManageOrderPage() {
     const { user } = useContext(UserContext)
@@ -23,14 +24,14 @@ export default function ManageOrderPage() {
 
     const getData = async () => {
         try {
-            
+
         } catch (error) {
 
         }
     }
 
     return <>
-        <main className="max-w-8xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] ">
+        <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] ">
             <div className="flex items-center py-10">
                 <div className="flex flex-row items-center">
                     <input type="text" name="search" placeholder="Search orders here.... "
@@ -45,11 +46,13 @@ export default function ManageOrderPage() {
                     </button>
                 </div>
             </div>
-
+            
             <div>
                 <Component />
             </div>
+       
         </main>
+        
     </>
 }
 
@@ -74,7 +77,7 @@ function Component() {
             <Tabs.Item title="Failed Delivery">
                 <UnpaidTableComponent />
 
-            {/* <div className="overflow-x-auto">
+                {/* <div className="overflow-x-auto">
                 <div className='border border-gray my-1 py-32'>
                     <div className='flex flex-col justify-center items-center'>
                         <div className='w-[100px] h-[80px]'>
