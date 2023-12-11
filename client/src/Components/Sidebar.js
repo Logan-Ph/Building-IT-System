@@ -39,17 +39,17 @@ export default function Sidebar({ children }) {
     };
   }, [width]);
 
-  if (user === undefined) {
-    return <div>Loading....</div>
-  }
+  // if (user === undefined) {
+  //   return <div>Loading....</div>
+  // }
 
-  if (user && user.role === "User") {
-    return <Navigate to={'/'} replace />
-  }
+  // if (user && user.role === "User") {
+  //   return <Navigate to={'/'} replace />
+  // }
 
-  if ((!user && user !== undefined)) {
-    return <Navigate to={'/login'} replace />
-  }
+  // if ((!user && user !== undefined)) {
+  //   return <Navigate to={'/login'} replace />
+  // }
   return (
     <aside className="">
       <nav className=" h-screen flex flex-col bg-white border-r shadow-sm">

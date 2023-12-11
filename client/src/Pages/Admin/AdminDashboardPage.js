@@ -4,12 +4,13 @@ import Sidebar from "../../Components/Sidebar";
 import { SidebarItem } from "../../Components/Sidebar";
 import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
-import AddImageHomePage from "../../Components/AddImageHomePage";
+
 
 import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
 import AddImageHomePageBanner from "../../Components/AddImageHomePageBanner";
 import AddImageHomePageCarousel from "../../Components/AddImageHomePageCarousel";
+import { Settings } from "lucide-react";
 export default function DashboardPage() {
   const [openModal1, setOpenModal1] = useState(false);
   const [openModal2, setOpenModal2] = useState(false);
@@ -24,65 +25,12 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div className=" flex">
+     
 
 
-        <Sidebar>
+        
 
-
-
-
-
-
-
-
-          <SidebarItem icon={<Settings size={20} />} text="Product"
-            subitems={[
-              { text: "My Products" },
-              { text: "Add Product", href: "https://www.google.com/" },
-              { text: "Delete Product" },
-              // Add more subitems as needed
-            ]} />
-
-
-
-
-
-          <SidebarItem icon={<Settings size={20} />} text="Order"
-            subitems={[
-              { text: "My Orders", href: "https://www.google.com/" },
-              { text: "Ship Orders" },
-              // Add more subitems as needed
-            ]} />
-
-
-
-          <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-            subitems={[
-              { text: "Subitem 1", href: "https://www.google.com/" },
-              { text: "Subitem 2" },
-              // Add more subitems as needed
-            ]} />
-
-
-
-          <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-            subitems={[
-              { text: "Subitem 1", href: "https://www.google.com/" },
-              { text: "Subitem 2" },
-              // Add more subitems as needed
-            ]} />
-
-
-          <SidebarItem icon={<Settings size={20} />} text="Dashboard"
-            subitems={[
-              { text: "Subitem 1", href: "https://www.google.com/" },
-              { text: "Subitem 2" },
-              // Add more subitems as needed
-            ]} />
-        </Sidebar>
-
-        <div class=" max-w-8xl mb-10 pb-5 lg:md:w-full w-5/6 ">
+        <div class=" max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden ">
 
 
 
@@ -146,25 +94,7 @@ export default function DashboardPage() {
                 </Modal>
               </div>
 
-              <div className="flex flex-col  justify-center items-center">
-                <label for="cover-photo" class="block text-lg font-bold leading-6 text-gray-900 lg:pl-10 mb-4 lg:mt-0 mt-5">Carousel Image #3</label>
-                <img src="https://cdn11.bigcommerce.com/s-nuizsgwrav/images/stencil/790x790/uploaded_images/creative-ways-to-use-large-custom-banners.jpg?t=1620403256" className="h-64 w-[550px] mb-4"></img>
-                <Button onClick={() => setOpenModal3(true)}>Update Image</Button>
-                <Modal show={openModal3} onClose={() => setOpenModal3(false)}>
-                  <Modal.Header>Update Image</Modal.Header>
-                  <Modal.Body>
-                  < AddImageHomePageCarousel />
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button onClick={() => setOpenModal3(false)}>Accept</Button>
-
-
-                    <Button color="gray" onClick={() => setOpenModal3(false)}>
-                      Decline
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              </div>
+ 
 
             </div>
 
@@ -250,7 +180,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
+      
 
 
 

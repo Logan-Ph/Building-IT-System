@@ -42,7 +42,7 @@ export default function DashboardPage() {
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32  relative py-20 ">
+      <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
         <div
           id="content"
           class="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4"
@@ -75,7 +75,7 @@ export default function DashboardPage() {
 
             </div>
             <div className="relative">
-              <BarChart />
+              {/* <BarChart /> */}
             </div>
           </div>
         </div>
