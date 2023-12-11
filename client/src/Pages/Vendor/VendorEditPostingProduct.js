@@ -4,7 +4,7 @@ import { UserContext } from "../../Context/UserContext";
 import { UserImageContext } from '../../Context/UserImageContext';
 import { Navigate } from 'react-router-dom';
 
-export default function VendorPostingProduct() {
+export default function VendorEditPostingProduct() {
   const [productName, setProductName] = useState('');
   const [category, setCategory] = useState("Household Appliances");
   const [price, setPrice] = useState('');
