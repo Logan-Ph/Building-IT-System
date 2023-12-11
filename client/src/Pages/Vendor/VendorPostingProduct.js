@@ -11,7 +11,8 @@ export default function VendorPostingProduct() {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState('');
-  const { setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const { setUser } = useContext(UserContext)
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('')
@@ -98,14 +99,16 @@ export default function VendorPostingProduct() {
     }
   }
 
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
+  if (user === undefined) {
+    console.log(user)
+    return <div>Loading....</div>
+  }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
-      {error && <Navigate to='/login' replace={true} />}
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {(error || !user) && <Navigate to='/login' replace={true} />}
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">

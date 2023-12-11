@@ -822,14 +822,6 @@ exports.manageProduct = async (req, res) => {
   }
 }
 
-exports.manageProduct = async (req, res) => {
-  try {
-    const products = await Product.find({ owner: req.user._id })
-    return res.status(200).json((products) ? { products: products } : { products: "" });
-  } catch {
-    return res.status(500).json({ error: "Cannot find products." })
-  }
-}
 
 exports.manageUser = async (req, res) => {
   try {
