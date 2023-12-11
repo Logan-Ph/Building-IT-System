@@ -705,13 +705,14 @@ exports.addNewProduct = async (req, res) => {
       category: req.body.category,
       price: req.body.price,
       description: req.body.description,
+      stock: req.body.stock,
       image_link: imageURL,
       no_of_ratings: 0,
       ratings: 0.0,
     });
 
     await newProduct.save()
-      .then(() => res.json("Product added."))
+      .then(() => {})
       .catch(err => console.log(err));
 
     const object = {
@@ -721,6 +722,7 @@ exports.addNewProduct = async (req, res) => {
       owner: req.user.businessName,
       price: parseInt(req.body.price, 10),
       description: req.body.description,
+      stock: req.body.stock,
       image_link: imageURL,
       no_of_ratings: 0,
       ratings: 0.0,
@@ -731,7 +733,7 @@ exports.addNewProduct = async (req, res) => {
     .catch(err => console.log(err));
     return res.json("Product has been uploaded.")
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).json({ message: error.message || "Error Occured" });
   }
 };
 
@@ -802,6 +804,10 @@ exports.updateProduct = async (req, res) => {
     if (req.body.description) {
       productToUpdate.description = req.body.description;
       object.description = req.body.description;
+    }
+    if (req.body.stock) {
+      productToUpdate.stock = req.body.stock;
+      object.stock = req.body.stock;
     }
     // await productToUpdate.save();
     index.partialUpdateObject(object).then(({ objectID }) => {
