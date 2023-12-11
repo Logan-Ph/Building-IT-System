@@ -25,6 +25,14 @@ const orderSchema = new mongoose.Schema({
       },
     }
   ],
+  shippingAddress:{
+    type: String,
+    require: true,
+  },
+  contactNumber:{
+    type: String,
+    require: true,
+  },
   userId: {
     type: mongoose.Types.ObjectId,
     ref: "User",

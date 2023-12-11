@@ -2,12 +2,10 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
-import { UserContext } from "../Context/UserContext";
 
 export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
     const { setCart } = useContext(CartContext)
-    const { setUser } = useContext(UserContext)
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
 
@@ -38,20 +36,6 @@ export default function ProductDetailCard({ product, vendorName }) {
             });
         }
     }, [error, msg]);
-
-    const fetchUser = useCallback(async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-            setUser(res.data.user);
-            setCart(res.data.length)
-        } catch (er) {
-            console.log(er);
-        }
-    }, [setUser, setCart])
-
-    useEffect(() => {
-        fetchUser();
-    }, [fetchUser]);
 
     useEffect(() => {
         if (error || msg) {
@@ -101,7 +85,7 @@ export default function ProductDetailCard({ product, vendorName }) {
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
                                     <a
-                                        href="\search\query=?"
+                                        href="\search\query=\category=\price="
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                     >
                                         {" "}
@@ -116,7 +100,7 @@ export default function ProductDetailCard({ product, vendorName }) {
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
                                     <a
-                                        href={`/vendor/${product.owner}`}
+                                        href={`/vendor/${product.owner}/home`}
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                         aria-current="page"
                                     >

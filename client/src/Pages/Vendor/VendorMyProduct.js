@@ -1,8 +1,18 @@
+import { useContext } from "react";
+import { UserContext } from "../../Context/UserContext";
+import { Navigate } from "react-router-dom";
 
 export default function VendorMyProduct() {
+  const { user } = useContext(UserContext)
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
   return (
     <>
-      <div class=" bg-white h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20  ">
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {!user && <Navigate to={'/login'} replace />}
+      <div class=" bg-white h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
             <form>

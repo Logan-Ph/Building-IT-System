@@ -3,8 +3,21 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const passport = require('passport');
+const multer = require('multer');
+const path = require('path');
+
 require('dotenv').config
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads') // specify the path to save files
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)) // specify the filename
+    }
+});
+
+const upload = multer({ storage });
 /**
  *  App routes
 */
@@ -85,6 +98,14 @@ router.post('/checkout', authenticateToken, authorizeUser, userController.placeO
 // user add to cart route
 router.get('/add-product/:id', userController.addProduct);
 
+// user update profile route
+router.post('/update-user', upload.single('file'), userController.updateUser);
+
+// vendor crud product route
+router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
+router.post('/update-product', upload.single('file'), userController.updateProduct);
+router.delete('/delete-product', userController.deleteProduct);
+
 // vendor homepage (user side)
 router.get('/vendor/:id', userController.vendorHomepage)
 
@@ -93,6 +114,7 @@ router.get('/vendor/:id/product', userController.vendorProductPage);
 
 //vendor manage order (vendor side)
 router.post('/search-order', userController.searchOrder);
+router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 
 // vendor dashboard route (vendor side)
@@ -102,11 +124,20 @@ router.get('/dashboard', authenticateToken, authorizeVendor, userController.getV
 // logout route
 router.get('/logout', userController.logout);
 
+// admin manage user route
+router.get('/admin/manage-user', userController.manageUser)
+
 // user register route
 router.post('/user-register', userController.userRegister);
 
 // vendor register route
 router.post('/vendor-register', userController.vendorRegister);
+
+// admin report user page
+router.get('/admin/:id/report', userController.reportPage);
+
+// admin ban user route
+router.post("/ban-user", userController.banUser);
 
 // authentication route via login function
 router.get('/login', userController.loginPage);
@@ -142,7 +173,7 @@ router.get('/auth/google/callback', (req, res, next) => {
             return;
         }
 
-        // Authentication sucess
+        // Authentication success
         req.logIn(user, (err) => {
             if (err) {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
@@ -154,4 +185,5 @@ router.get('/auth/google/callback', (req, res, next) => {
         });
     })(req, res);
 });
+
 module.exports = router;

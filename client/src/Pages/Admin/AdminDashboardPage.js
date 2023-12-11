@@ -4,8 +4,7 @@ import Sidebar from "../../Components/Sidebar";
 import { SidebarItem } from "../../Components/Sidebar";
 import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
-
-import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
+import AddImageHomePage from "../../Components/AddImageHomePage";
 
 import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
@@ -259,5 +258,5 @@ export default function DashboardPage() {
 
 
     </>
-  );
+  )
 }

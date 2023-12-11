@@ -27,7 +27,10 @@ const vendorSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
+    },
+
+    wallpaper: {
+        data: Buffer,
     },
 
     verify: {
@@ -39,7 +42,10 @@ const vendorSchema = new mongoose.Schema({
         type: String,
         require: true,
         default: "Vendor",
-    }
+    },
+    banEndDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model('Vendor', vendorSchema)

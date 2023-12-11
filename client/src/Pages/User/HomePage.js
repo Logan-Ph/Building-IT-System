@@ -7,13 +7,11 @@ import '../../css/homepage.css'
 import Slider from '../../Components/Slider';
 import Banner from '../../Components/Banner';
 import { UserContext } from '../../Context/UserContext';
-import { CartContext } from '../../Context/CartContext';
 import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
 
 export default function Homepage() {
-    const { user, setUser } = useContext(UserContext)
-    const { setCart } = useContext(CartContext)
+    const { user } = useContext(UserContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -21,35 +19,23 @@ export default function Homepage() {
         try {
             const res = await axios.get("http://localhost:4000/", { withCredentials: true });
             setProducts(res.data.product);
+            setIsLoading(false)
         } catch (er) {
-            console.log(er);
+            setIsLoading(false)
         }
     }, [])
 
-    const fetchUser = useCallback(async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-            setUser(res.data.user);
-            setCart(res.data.length)
-            setIsLoading(false);
-        } catch (er) {
-            console.log(er);
-            setIsLoading(false);
-        }
-    }, [setUser, setCart])
-
     useEffect(() => {
         fetchProduct();
-        fetchUser();
-    }, [fetchProduct, fetchUser]);
+    }, [fetchProduct]);
 
-    if (isLoading) {
+    if (user === undefined || isLoading) {
         return <div>Loading....</div>
     }
-
     return (
         <>
-            {user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+            {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+            {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -73,7 +59,7 @@ export default function Homepage() {
                     {/* Trending Product */}
                     <div className="flex flex-row items-center my-6">
                         <div className='w-8 h-8'>
-                            <img src={require("../../Components/images/trending.png")} className="object-cover" />
+                            <img src={require("../../Components/images/trending.png")} className="object-cover" alt='trending product' />
                         </div>
                         <h2 className="ml-2 col-span-full text-center xs:text-md sm:text-xl md:text-2xl text-3xl font-bold text-[#E61E2A]">Trending Products</h2>
                     </div>

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FunnelIcon } from '@heroicons/react/20/solid'
@@ -8,36 +8,62 @@ import SRPagination from '../../Components/SRPagination'
 import SRPriceRange from '../../Components/SRPriceRange'
 import SRStarRating from '../../Components/SRStarRating'
 import { useHits, useRefinementList } from 'react-instantsearch';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
-
+import { UserContext } from '../../Context/UserContext';
 
 export default function Example() {
   const { hits } = useHits();
-  const [valueFilter, setValueFilter] = useState([
-    { value: 'household appliances', label: 'Household Appliances', isRefined: false },
-    { value: 'electronics', label: 'Electronics', isRefined: false },
-    { value: 'fashion', label: 'Fashion', isRefined: false },
-    { value: 'beauty & personal care', label: 'Beauty & Care', isRefined: false },
-    { value: 'baby toys', label: 'Baby Toys', isRefined: false },
-  ]);
-  const { refine } = useRefinementList({ attribute: 'category', operator: 'and' });
-
+  const { user } = useContext(UserContext)
+  const { refine, items } = useRefinementList({ attribute: 'category', operator: 'or' });
+  const [valueFilter, setValueFilter] = useState([]);
   const [sortOptions, setSortOptions] = useState([
     { label: 'Most Popular', value: 'rBuy_relavant_sort', current: false },
     { label: 'Price: Low to High', value: 'rBuy_price_asc', current: false },
     { label: 'Price: High to Low', value: 'rBuy_price_desc', current: false },
   ]);
   const { query } = useParams();
+  const { category } = useParams();
+  const oldCategoryRef = useRef();
   const [searchQuery, setSearchQuery] = useState((query.split('='))[1]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   useEffect(() => {
     setSearchQuery((query.split('='))[1]);
-  }, [query]);
+    if (items.length > 0) {
+      setValueFilter(items.map(item => ({
+        value: item.label,
+        label: item.label,
+        isRefined: item.isRefined,
+      })));
+    }
+  }, [query, items]);
+
+  useEffect(() => {
+    if ((category.split('='))[1]) {
+      if (oldCategoryRef.current) {
+        // Refine with old state
+        refine((oldCategoryRef.current.split('='))[1]);
+      }
+
+      // reset the refine 
+      valueFilter.filter(option => option.isRefined && (!oldCategoryRef.current || option.value !== (oldCategoryRef.current.split('='))[1])).forEach(option => refine(option.value));
+
+      // Refine with new state
+      refine((category.split('='))[1]);
+      // Update the old state
+      oldCategoryRef.current = category;
+    }
+  }, [category, refine]);
+
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
 
   return (
     <div className="bg-white">
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -118,7 +144,7 @@ export default function Example() {
                 <div className="xs:hidden sm:hidden lg:block wi">
                   <SRPriceRange />
                   <SRStarRating />
-                  <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} />
+                  <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
                 </div>
               </div>
 
@@ -137,8 +163,9 @@ export default function Example() {
   )
 }
 
-function CheckboxLabel({ setValueFilter, valueFilter, refine }) {
+function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) {
   const handleItemClick = (value) => {
+    if (oldCategoryRef.current && value === (oldCategoryRef.current.split('='))[1]) { oldCategoryRef.current = null; }
     refine(value)
     setValueFilter(valueFilter.map(option => option.value === value ? { ...option, isRefined: !option.isRefined } : option));
   }
