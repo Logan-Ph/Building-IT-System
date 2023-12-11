@@ -27,6 +27,7 @@ export default function CheckoutPage() {
       setIsLoading(false)
     } catch (er) {
       setError(er)
+      setIsLoading(false)
     }
   }, [setUser, setCart, setUserImage])
 

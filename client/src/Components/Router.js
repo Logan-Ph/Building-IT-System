@@ -179,7 +179,7 @@ export default function Router() {
           element: <ManageUserPage />,
         },
         {
-          path: "/admin/report",
+          path: "/admin/:id/report",
           element: <ReportInfoPage />,
         },
         {

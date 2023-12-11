@@ -34,7 +34,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, async function verify(email, password, done) {
-  const user = (await User.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1 }))[0] || (await Vendor.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1 }))[0] || (await Shipper.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1 }))[0]
+  const user = (await User.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role:1 }))[0] || (await Vendor.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role:1 }))[0] || (await Shipper.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role:1 }))[0]
   if (!user) return done(null, false, { message: "Please check the email and password again" }) // check if the user did not exist
   if (!user.password) return done(null, false, { message: "Please check the email and password again" }) // check if the account is gmail account 
   if (!user.verify) return done(null, false, { message: "You need to verify your account with gmail" }) // check if the user email is verify

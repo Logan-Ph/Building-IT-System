@@ -17,7 +17,7 @@ export default function SRStarRating() {
 
   useEffect(() => {
     refine([MIN, MAX]);
-  }, []);
+  }, [refine]);
 
   return (
     <>

@@ -1,8 +1,6 @@
 import BarChart from "../../Components/BarChart";
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
-import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
-import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
@@ -26,6 +24,7 @@ export default function DashboardPage() {
       setIsLoading(false)
     }
     catch (er) {
+      setIsLoading(false)
       setError(er)
     }
   }, [setUser, setUserImage])
@@ -33,7 +32,6 @@ export default function DashboardPage() {
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
-      console.log(res.data.ordersByStatus)
       setOrdersByStatus(res.data.ordersByStatus);
     }
     catch (er) {

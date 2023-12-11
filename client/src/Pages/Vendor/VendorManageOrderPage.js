@@ -149,14 +149,9 @@ function Component({ foundOrder, orders, setStatus }) {
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders]);
 
-    const handlClickEvent = () => {
-        console.log("asdads")
-    }
-
     return (
-        <Tabs aria-label="Tabs with icons" style="underline" onActiveTabChange={(tab) => setStatus(tab)}>
+        <Tabs aria-label="Tabs with icons" onActiveTabChange={(tab) => setStatus(tab)}>
             <Tabs.Item active title="All" >
-                {console.log(orders)}
                 {orders.length === 0 && <div className="overflow-x-auto">
                     <div className='border border-gray my-1 py-32'>
                         <div className='flex flex-col justify-center items-center'>
@@ -170,7 +165,7 @@ function Component({ foundOrder, orders, setStatus }) {
                 </div>}
                 {orders.length !== 0 && <AllTableComponent foundOrder={foundOrder} orders={orders} />}
             </Tabs.Item>
-            <Tabs.Item title="Unpaid" onClickCapture={handlClickEvent}>
+            <Tabs.Item title="Unpaid" >
                 {!categorizedOrder["Unpaid"] && <div className="overflow-x-auto">
                     <div className='border border-gray my-1 py-32'>
                         <div className='flex flex-col justify-center items-center'>
