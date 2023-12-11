@@ -15,7 +15,7 @@ export default function VendorSidebar() {
             ]} />
 
         <a href="/manage-order">
-            <SidebarItem icon={<PackageSearch size={20} />} text="My Orders" />
+            <SidebarItem icon={<PackageSearch size={20} />} text="Orders" />
         </a>
 
         {/* <SidebarItem icon={<Settings size={20} />} text="Dashboard"
