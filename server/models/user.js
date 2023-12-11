@@ -4,36 +4,34 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
     },
-
-    facebookId: {
-        type: String,
-    },
-
     email: {
         type: String,
     },
-
     password: {
         type: String,
     },
-
-    address: {
-        type: String,
-    },
-
     name: {
         type: String,
     },
+    streetAddress: {
+        type: String,
+    },
+    ward: {
+        type: String,
+    },
+    district: {
+        type: String,
 
+    },
+    city: {
+        type: String,
+    },
     phoneNumber: {
         type: String,
     },
-
     img: {
         data: Buffer,
-        contentType: String,
     },
-
     verify: {
         type: Boolean,
         default: false,
@@ -42,8 +40,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
         default: "User",
-    }
-
+    },
+    banEndDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model('User', userSchema)

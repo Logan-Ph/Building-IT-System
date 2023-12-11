@@ -1,59 +1,48 @@
 import BarChart from "../../Components/BarChart";
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
-import { Settings, LayoutDashboard, LineChart, ChevronDown } from "lucide-react";
-import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import LogInPage from "../User/LogInPage";
+import { UserContext } from "../../Context/UserContext";
 
 export default function DashboardPage() {
-  const [user, setUser] = useState();
-  const [error, setError] = useState();
+  const { user } = useContext(UserContext)
+  const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState("")
 
-  const fetchUser = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-      setUser(res.data.user);
+      const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
+      setOrdersByStatus(res.data.ordersByStatus);
       setIsLoading(false)
     }
     catch (er) {
-      setError(er)
+      setError(er);
+      setIsLoading(false)
     }
-  }
-
-  const fetchData = async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
-      console.log(res.data);
-    }
-    catch (er) {
-      console.log(er);
-    }
-  }
-
-  useEffect(() => {
-    fetchUser();
-    fetchData();
   }, [])
 
-  if (error) {
-    return <Navigate to={'/login'} />
-  }
+  useEffect(() => {
+    fetchData();
+  }, [fetchData])
 
-  if (isLoading) {
-    return <LogInPage />
+  if (user === undefined || isLoading) {
+    return <div>....is loading</div>
   }
 
   return (
     <>
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {error && <Navigate to={'/login'} />}
+      {!user && <Navigate to={'/login'} replace />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
       />
-      <div class=" bg-white h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 text-slate-300 relative py-20 ">
+      <div class=" bg-white h-auto max-w-8xl md:w-2/3 w-3/4 mx-auto md:mr-32  relative py-20 ">
         <div
           id="content"
           class="bg-slate-200 col-span-9 rounded-lg p-6 mx-auto px-auto mb-12 "
@@ -64,7 +53,7 @@ export default function DashboardPage() {
           <h1 class="font-medium  lg:md:pt-1 pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
             Things your business need to deal with
           </h1>
-          <ToDoList />
+          <ToDoList ordersByStatus={ordersByStatus} />
         </div>
         <div class="">
           <div

@@ -9,7 +9,23 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
-const order = require('../models/order')
+const algoliasearch = require('algoliasearch')
+const ImageKit = require("imagekit")
+// const OpenAI = require('openai')
+// const API_KEY = "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"
+// const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
+
+// Connect and authenticate with your Algolia app
+const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
+const index = client.initIndex('rBuy')
+
+const imagekit = new ImageKit({
+  publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
+  privateKey: "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
+  urlEndpoint: "https://ik.imagekit.io/cnhlinh"
+});
+
+const fs = require("fs");
 require('dotenv').config()
 
 function sendEmailVerification(userEmail) {
@@ -59,10 +75,17 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
+    const user = (await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id));
+    let userImage;
+    if (user.img.data) {
+      userImage = Buffer.from(
+        user.img.data
+      ).toString("base64");
+    }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.json({ user: req.user, length: (cart) ? cart.getTotalProducts() : 0 });
+    res.status(200).json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
   } else {
-    res.json({ user: "", length: 0 })
+    res.status(500).json({ user: "", length: 0 })
   }
 }
 
@@ -71,6 +94,7 @@ exports.homePage = async (req, res) => {
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
+    console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }
@@ -299,6 +323,10 @@ exports.verifyEmail = async (req, res) => {
 exports.placeOrder = async (req, res) => {
   try {
     const userID = req.user._id;
+    if (req.body.isRemember) {
+      await User.findByIdAndUpdate(userID, { city: req.body.city, phoneNumber: req.body.phoneNumber, district: req.body.district, ward: req.body.ward, streetAddress: req.body.streetAddress })
+    }
+
     // Find the user's cart
     const userCart = await Cart.findOne({ userID }).populate('products.product');
     if (!userCart) {
@@ -328,6 +356,8 @@ exports.placeOrder = async (req, res) => {
           product_name: cartItem.product.product_name
         })),
         userName: req.user.name,
+        shippingAddress: req.body.streetAddress,
+        contactNumber: req.body.phoneNumber
       });
 
       await order.save();
@@ -379,24 +409,45 @@ exports.addProduct = async (req, res) => {
 }
 
 exports.searchOrder = async (req, res) => {
-  const orderId = req.body.orderId;
-  const order = await Order.find({ vendorID: req.user.businessName, _id: orderId });
-  if (!order) {
+  try {
+    const orderId = req.body.orderId;
+    const orderStatus = req.body.orderStatus
+    let order;
+    if (orderStatus) {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
+    } else {
+      order = await Order.find({ vendorID: req.user._id, _id: orderId });
+    }
+
+    if (!order) {
+      return res.status(500).json({ error: "Cannot find order. " })
+    }
+
+    return res.status(200).json({ order: order });
+  } catch {
     return res.status(500).json({ error: "Cannot find order. " })
   }
-
-  return res.status(200).json({ order: order });
 }
 
 exports.manageOrder = async (req, res) => {
-  const orders = await Order.find({ vendorID: req.user._id })
-  return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  try {
+    const orders = await Order.find({ vendorID: req.user._id })
+    return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
 }
 
 exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    return res.status(200).json({ vendor: vendor });
+    let vendorImage;
+    if (vendor.img.data) {
+      vendorImage = Buffer.from(
+        vendor.img.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -405,14 +456,47 @@ exports.vendorHomepage = async (req, res) => {
 exports.vendorProductPage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    return res.status(200).json({ vendor: vendor });
+    let vendorImage;
+    if (vendor.img.data) {
+      vendorImage = Buffer.from(
+        vendor.img.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
 }
 
+exports.confirmOrder = async (req, res) => {
+  const orderId = req.body.orderId;
+  await Order.findByIdAndUpdate(orderId, { status: "To Ship" });
+  return res.status(200).json({ msg: "Order confirmed" });
+
+}
+
 exports.getVendorDashboard = async (req, res) => {
-  return res.status(200).json("hahah");
+  try {
+    const orders = await Order.aggregate([
+      {
+        $match: { vendorID: new mongoose.Types.ObjectId(req.user._id) }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const ordersCountByStatus = {};
+    orders.forEach(orderGroup => {
+      ordersCountByStatus[orderGroup._id] = orderGroup.count;
+    });
+    res.status(200).json({ ordersByStatus: ordersCountByStatus });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 exports.postVendorDashboard = async (req, res) => {
@@ -420,10 +504,402 @@ exports.postVendorDashboard = async (req, res) => {
 }
 
 exports.checkout = async (req, res) => {
-  return res.status(200).json("hahah");
+  const cart = await Cart.find({ userID: req.user._id })
+  const checkoutInfo = {
+    phoneNumber: req.user.phoneNumber,
+    city: req.user.city,
+    district: req.user.district,
+    ward: req.user.ward,
+    streetAddress: req.user.streetAddress,
+  }
+  return res.status(200).json({ products: cart[0].products, checkoutInfo: checkoutInfo })
 }
 
 exports.logout = (req, res) => {
   req.session.destroy();
-  res.redirect("http://localhost:3000/");
+  res.clearCookie('accessToken');
+  return res.json('Logged out successfully');
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      user.img = image;
+    }
+    if (req.body.name) {
+      user.name = req.body.name
+    }
+    if (req.body.address) {
+      user.address = req.body.address
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.status(500).json("Phone number already exists.")
+      } else {
+        user.phoneNumber = phoneNumber;
+      }
+    }
+    await user.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateVendor = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ email: req.body.email });
+
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.img = image;
+    }
+
+    if (req.body.address) { vendor.address = req.body.address; }
+    if (req.body.businessName) {
+      const checkBusinessName = (await Vendor.findOne({ businessName: req.body.businessName }));
+      if (checkBusinessName(req.body.businessName)) {
+        return res.status(500).json("Business name has already existed.")
+      } else {
+        vendor.businessName = req.body.businessName;
+      }
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        return res.json("Phone number has already existed.");
+      } else { vendor.phoneNumber = req.body.phoneNumber; }
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateShipper = async (req, res) => {
+  try {
+    const shipper = await Shipper.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+      shipper.img = image;
+    }
+    if (req.body.name) {
+      shipper.name = req.body.name;
+    }
+    if (req.body.address) {
+      shipper.address = req.body.address;
+    }
+    if (req.body.phoneNumber) {
+      const phoneNumber = req.body.phoneNumber;
+      const checkPhone =
+        (await User.findOne({ phoneNumber: phoneNumber })) ||
+        (await Vendor.findOne({ phoneNumber: phoneNumber })) ||
+        (await Shipper.findOne({ phoneNumber: phoneNumber }));
+      if (checkPhone) {
+        shipper.phoneNumber = req.body.phoneNumber;
+      }
+    }
+    await shipper.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.banUser = async (req, res) => {
+  const userId = req.body.userId;
+  const banDuration = req.body.banDate; // This should be in days or months
+
+  let endDate;
+
+  if (banDuration === '1 month') {
+    endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+  } else {
+    const banDays = parseInt(banDuration); // Convert the ban duration to integer
+    endDate = new Date(Date.now() + banDays * 24 * 60 * 60 * 1000); // Add the ban duration to the current date
+  }
+
+  try {
+    const user = await User.findById(userId);
+    const vendor = await Vendor.findById(userId);
+    const shipper = await Shipper.findById(userId);
+
+    if (user) {
+      await User.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (vendor) {
+      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else if (shipper) {
+      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate });
+    } else {
+      throw new Error('User does not exist!');
+    }
+
+    return res.status(200).json("Banned user successfully");
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
+exports.userProfile = async (req, res) => {
+  return res.status(200).json("profile page");
+}
+
+exports.updateVendorWallpaper = async (req, res) => {
+  try {
+    const vendor = await Vendor.findOne({ email: req.body.email });
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      vendor.wallpaper = image;
+    }
+    await vendor.save();
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.addNewProduct = async (req, res) => {
+  try {
+    const id = new mongoose.Types.ObjectId();
+    const uploadImage = async () => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + req.file.filename),
+          fileName: id + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+
+    const imageURL = await uploadImage();
+
+    const newProduct = new Product({
+      _id: id,
+      owner: req.user._id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      price: req.body.price,
+      description: req.body.description,
+      image_link: imageURL,
+      no_of_ratings: 0,
+      ratings: 0.0,
+    });
+
+    await newProduct.save()
+      .then(() => res.json("Product added."))
+      .catch(err => console.log(err));
+
+    const object = {
+      objectID: id,
+      product_name: req.body.productName,
+      category: req.body.category,
+      owner: req.user.businessName,
+      price: parseInt(req.body.price, 10),
+      description: req.body.description,
+      image_link: imageURL,
+      no_of_ratings: 0,
+      ratings: 0.0,
+    };
+
+    index.saveObject(object).wait()
+      .then(() => console.log("updated to algolia: " + imageURL))
+      .catch(err => console.log(err));
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
+
+// Function to delete a product
+exports.deleteProduct = async (req, res) => {
+  try {
+    const productID = req.query.id;
+    const productToDelete = await Product.findById(productId);
+    if (!productToDelete) {
+      return res.status(404).json('Product not found');
+    }
+    await Product.findByIdAndDelete(productId);
+    console.log(productID);
+    index.deleteObject(productID)
+      .then(() => { })
+      .catch(err => res.json(err));
+    return res.json('Product deleted successfully');
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.updateProduct = async (req, res) => {
+  try {
+    const productID = req.body.id;
+    const productToUpdate = await Product.findById(productID);
+
+    let object = { objectID: productID };
+    if (req.file) {
+      const image = {
+        data: fs.readFileSync("uploads/" + req.file.filename),
+      };
+      productToUpdate.img = image;
+
+      const uploadImage = async () => {
+        try {
+          const response = await imagekit.upload({
+            file: fs.readFileSync("uploads/" + req.file.filename),
+            fileName: productID + ".jpg",
+          });
+          console.log(response.url);
+          return response.url;
+        } catch (err) {
+          console.log("Error uploading image:", err);
+          return null;
+        }
+      };
+      const imageURL = await uploadImage();
+      index.partialUpdateObject({
+        image_link: imageURL,
+        objectID: productID
+      }).then(({ objectID }) => {
+        console.log(objectID);
+      });
+    }
+    if (req.body.productName) {
+      productToUpdate.product_name = req.body.productName;
+      object.product_name = req.body.productName;
+    }
+    if (req.body.price) {
+      productToUpdate.price = req.body.price;
+      object.price = parseInt(req.body.price, 10);
+    }
+    if (req.body.category) {
+      productToUpdate.category = req.body.category;
+      object.category = req.body.category;
+    }
+    if (req.body.description) {
+      productToUpdate.description = req.body.description;
+      object.description = req.body.description;
+    }
+    // await productToUpdate.save();
+    index.partialUpdateObject(object).then(({ objectID }) => {
+      console.log(objectID);
+    });
+    return res.json('Profile has been updated!')
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.manageUser = async (req, res) => {
+  try {
+    const users = await User.find({});
+    const vendors = await Vendor.find({});
+    const shippers = await Shipper.find({});
+
+    let usersImage = [];
+    let vendorsImage = [];
+    let shippersImage = [];
+
+    users.forEach(user => {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      usersImage.push(userImage);
+    })
+
+    vendors.forEach(user => {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      vendorsImage.push(userImage);
+    })
+
+    shippers.forEach(user => {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      shippersImage.push(userImage);
+    })
+
+
+
+    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers, usersImage: usersImage, vendorsImage: vendorsImage, shippersImage: shippersImage });
+  } catch {
+    return res.status(500).json({ error: "Cannot find user. " })
+  }
+}
+
+exports.reportPage = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const vendor = await Vendor.findById(req.params.id);
+    const shipper = await Shipper.findById(req.params.id);
+
+    if (user) {
+      let userImage;
+      if (user.img.data) {
+        userImage = Buffer.from(
+          user.img.data
+        ).toString("base64");
+      }
+      const orders = await Order.find({ userId: user._id })
+      return res.status(200).json({ user: user, userImage: userImage, orders: orders });
+    }
+
+    if (vendor) {
+      let vendorImage;
+      if (vendor.img.data) {
+        vendorImage = Buffer.from(
+          vendor.img.data
+        ).toString("base64");
+      }
+      const orders = await Order.find({ vendorID: vendor._id })
+      return res.status(200).json({ user: vendor, userImage: vendorImage, orders: orders });
+    };
+
+    if (shipper) {
+      let shipperImage;
+      if (shipper.img.data) {
+        shipperImage = Buffer.from(
+          shipper.img.data
+        ).toString("base64");
+      }
+      return res.status(200).json({ user: shipper, userImage: shipperImage });
+    }
+
+    if (!user && !vendor && !shipper) throw new Error("User not found");
+  } catch (er) {
+    return res.status(500).json({ error: er })
+  }
+}

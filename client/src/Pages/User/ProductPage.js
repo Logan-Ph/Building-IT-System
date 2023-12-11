@@ -1,16 +1,16 @@
 import "swiper/css";
-import { useParams } from "react-router-dom"
-import { useState, useEffect, useCallback } from 'react'
+import { Navigate, useParams } from "react-router-dom"
+import { useState, useEffect, useCallback, useContext } from 'react'
 import axios from "axios"
 import recommend from '@algolia/recommend';
 import { useRelatedProducts } from '@algolia/recommend-react'
-import { Navigate } from 'react-router-dom'
 import RelatedProduct from "../../Components/RelatedProduct";
-import CustomerReview from "../../Components/CustomerReview";
+import CustomerReview from '../../Components/CustomerReview';
 import { Swiper, SwiperSlide } from "swiper/react";
 import ProductDetailCard from "../../Components/ProductDetailCard";
 import ProductDetailComment from "../../Components/ProductDetailComment";
 import { ToastContainer } from "react-toastify";
+import { UserContext } from "../../Context/UserContext";
 
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
@@ -20,6 +20,8 @@ export default function TestingPage() {
   const [product, setProduct] = useState([])
   const [vendorName, setVendorName] = useState("")
   const [error, setError] = useState()
+  const { user } = useContext(UserContext)
+  const [isLoading, setIsLoading] = useState(true)
 
   const { recommendations } = useRelatedProducts({
     recommendClient,
@@ -33,8 +35,10 @@ export default function TestingPage() {
       const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
       setVendorName(res.data.vendorName);
+      setIsLoading(false)
     } catch (error) {
       setError(error);
+      setIsLoading(false)
     }
   }, [params.id])
 
@@ -42,8 +46,16 @@ export default function TestingPage() {
     fetchData()
   }, [fetchData])
 
+  if (user === undefined || isLoading) {
+    return <div>....is loading</div>
+  }
+
   return (
     <>
+      {error && <Navigate to={"/"} replace />}
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+
       <ToastContainer
         position="top-center"
         autoClose={10000}

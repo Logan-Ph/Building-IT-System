@@ -1,4 +1,11 @@
-export default function CheckoutInfo() {
+import React, { useState } from 'react';
+
+export default function CheckoutInfo({ setCheckoutInfo, products, price, checkoutInfo }) {
+    const [openSection, setOpenSection] = useState(1);
+    const toggleAccordion = (section) => {
+        setOpenSection(openSection === section ? null : section);
+    };
+
     return (
         <div
             id="accordion-open"
@@ -9,10 +16,13 @@ export default function CheckoutInfo() {
             <h2 id="accordion-open-heading-1">
                 <button
                     type="button"
+                    onClick={() => toggleAccordion(1)}
+                    aria-expanded={openSection === 1}
                     class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b-2 border-gray-400 gap-3"
                     data-accordion-target="#accordion-open-body-1"
-                    aria-expanded="true"
+
                     aria-controls="accordion-open-body-1"
+
                 >
                     <span class="text-xl font-bold">Shipping address</span>
                     <svg
@@ -34,6 +44,7 @@ export default function CheckoutInfo() {
                 </button>
             </h2>
             <div
+                style={{ display: openSection === 1 ? 'block' : 'none' }}
                 id="accordion-open-body-1"
                 class="hidden"
                 aria-labelledby="accordion-open-heading-1"
@@ -41,20 +52,6 @@ export default function CheckoutInfo() {
                 <div class="py-5 border-b-2 border-gray-400">
                     <form class="border-gray-200 my-4 p-4 rounded-lg bg-gray-50">
                         <div class="space-y-6">
-                            <div>
-                                <label
-                                    for="full_name"
-                                    class="block mb-2 text-sm font-medium text-gray-900"
-                                >
-                                    Full name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="full_name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    required
-                                />
-                            </div>
                             <div>
                                 <label
                                     for="phone"
@@ -65,10 +62,12 @@ export default function CheckoutInfo() {
                                 <input
                                     type="tel"
                                     id="phone"
+                                    defaultValue={checkoutInfo.phoneNumber}
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     placeholder="(+84)"
                                     pattern="^(\+84)?[0-9]{8,}$"
                                     required
+                                    onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, phoneNumber: e.target.value }))}
                                 />
                             </div>
                             <div>
@@ -81,8 +80,10 @@ export default function CheckoutInfo() {
                                 <input
                                     type="text"
                                     id="city"
+                                    defaultValue={checkoutInfo.city}
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     required
+                                    onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, city: e.target.value }))}
                                 />
                             </div>
                             <div class="grid grid-cols-2 gap-4">
@@ -96,8 +97,10 @@ export default function CheckoutInfo() {
                                     <input
                                         type="text"
                                         id="district"
+                                        defaultValue={checkoutInfo.district}
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                         required
+                                        onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, district: e.target.value }))}
                                     />
                                 </div>
                                 <div>
@@ -110,8 +113,10 @@ export default function CheckoutInfo() {
                                     <input
                                         type="text"
                                         id="ward"
+                                        defaultValue={checkoutInfo.ward}
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                         required
+                                        onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, ward: e.target.value }))}
                                     />
                                 </div>
                             </div>
@@ -125,8 +130,10 @@ export default function CheckoutInfo() {
                                 <input
                                     type="text"
                                     id="streetAddress"
+                                    defaultValue={checkoutInfo.streetAddress}
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                     required
+                                    onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, streetAddress: e.target.value }))}
                                 />
                             </div>
                             <div class="flex items-start mb-6">
@@ -137,6 +144,7 @@ export default function CheckoutInfo() {
                                         value=""
                                         class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
                                         required
+                                        onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, isRemember: e.target.value }))}
                                     />
                                 </div>
                                 <label
@@ -153,9 +161,11 @@ export default function CheckoutInfo() {
             <h2 id="accordion-open-heading-2">
                 <button
                     type="button"
+                    onClick={() => toggleAccordion(2)}
+                    aria-expanded={openSection === 2}
                     class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b-2 border-gray-400"
                     data-accordion-target="#accordion-open-body-2"
-                    aria-expanded="false"
+
                     aria-controls="accordion-open-body-2"
                 >
                     <span class="text-xl font-bold">Payment method</span>
@@ -178,6 +188,7 @@ export default function CheckoutInfo() {
                 </button>
             </h2>
             <div
+                style={{ display: openSection === 2 ? 'block' : 'none' }}
                 id="accordion-open-body-2"
                 class="hidden"
                 aria-labelledby="accordion-open-heading-2"
@@ -195,7 +206,7 @@ export default function CheckoutInfo() {
                                     id="COD"
                                     name="paymentMethod"
                                     value="COD"
-                                    class="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                    className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                                     data-tabs-target="#cod"
                                     role="tab"
                                     aria-controls="cod"
@@ -212,7 +223,7 @@ export default function CheckoutInfo() {
                                     id="creditCard"
                                     name="paymentMethod"
                                     value="creditCard"
-                                    class="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                    className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
                                     data-tabs-target="#card"
                                     role="tab"
                                     aria-controls="card"
@@ -307,9 +318,11 @@ export default function CheckoutInfo() {
             <h2 id="accordion-open-heading-3">
                 <button
                     type="button"
+                    onClick={() => toggleAccordion(3)}
+                    aria-expanded={openSection === 3}
                     class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b-2 border-gray-400 gap-3"
                     data-accordion-target="#accordion-open-body-3"
-                    aria-expanded="false"
+
                     aria-controls="accordion-open-body-3"
                 >
                     <span class="text-xl font-bold">Review your order</span>
@@ -332,6 +345,7 @@ export default function CheckoutInfo() {
                 </button>
             </h2>
             <div
+                style={{ display: openSection === 3 ? 'block' : 'none' }}
                 id="accordion-open-body-3"
                 class="hidden"
                 aria-labelledby="accordion-open-heading-3"
@@ -339,105 +353,39 @@ export default function CheckoutInfo() {
                 <div class="py-5 border-b-2 border-gray-400">
                     <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
                         <div class="container mb-3">
-                            <div class="order-shop py-3 text-xl font-bold">
-                                Radiant Beauty
-                            </div>
                             <div class="order-content">
                                 <div class="checkout order-details">
-                                    <div class="order-columns">
-                                        <div class="order-info-product px-3">
-                                            {/* Product Name */}
-                                            <span class="text-lg font-semibold text-gray-900">
-                                                Ofelia
-                                            </span>
-                                            {/* Product category */}
-                                            <p class="text-base">Color: Red</p>
-                                            <br />
-                                            {/* Product price and quantity */}
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-base font-bold text-gray-900">
-                                                    $599
-                                                </span>
-                                                <span class="text-base font-bold text-gray-900">
-                                                    x9
-                                                </span>
+                                    {products && products.map((product, i) => (
+                                        <>
+                                            <div class="order-columns">
+                                                <div class="order-info-product px-3">
+                                                    <span class="text-lg font-semibold text-gray-900">
+                                                        {product.product_name}
+                                                    </span>
+                                                    <br />
+                                                    <div class="flex items-center justify-between">
+                                                        <span class="text-base font-bold text-gray-900">
+                                                            ${product.price}
+                                                        </span>
+                                                        <span class="text-base font-bold text-gray-900">
+                                                            x{product.quantity}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="order-product-img">
+                                                    <img alt=""
+                                                        src={product.image_link}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="order-product-img">
-                                            <img alt=""
-                                                src={require("../Components/images/logo1.png")}
-                                            />
-                                        </div>
-                                    </div>
+                                            {(i + 1) !== products.length && <hr class="h-px my-8 bg-gray-200 border-0" />}
+                                        </>
+                                    ))}
                                 </div>
                             </div>
                             <hr class="h-px my-5 border-0 bg-gray-700" />
                             <div class="order-total mb-3 text-right font-semibold">
-                                Total: $70
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
-                        <div class="container mb-3">
-                            <div class="order-shop py-3 text-xl font-bold">
-                                Radiant Beauty
-                            </div>
-                            <div class="order-content">
-                                <div class="checkout order-details">
-                                    <div class="order-columns">
-                                        <div class="order-info-product px-3">
-                                            <span class="text-lg font-semibold text-gray-900">
-                                                Ofelia
-                                            </span>
-                                            <p class="text-base">Color: Red</p>
-                                            <br />
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-base font-bold text-gray-900">
-                                                    $599
-                                                </span>
-                                                <span class="text-base font-bold text-gray-900">
-                                                    x9
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="order-product-img">
-                                            <img alt=""
-                                                src={require("../Components/images/house.jpg")}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* <!--If customer buy 2 different items of one shop--> */}
-                                    <hr class="h-px my-8 bg-gray-200 border-0" />
-
-                                    <div class="order-columns">
-                                        <div class="order-info-product px-3">
-                                            <span class="text-lg font-semibold text-gray-900">
-                                                Ofelia
-                                            </span>
-                                            <p class="text-base">Color: Red</p>
-                                            <br />
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-base font-bold text-gray-900">
-                                                    $599
-                                                </span>
-                                                <span class="text-base font-bold text-gray-900">
-                                                    x9
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="order-product-img">
-                                            <img alt=""
-                                                src={require("../Components/images/devices.jpg")}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="h-px my-5 border-0 bg-gray-700" />
-                            <div class="order-total mb-3 text-right font-semibold">
-                                Total: $70
+                                Total: ${price.current}
                             </div>
                         </div>
                     </div>

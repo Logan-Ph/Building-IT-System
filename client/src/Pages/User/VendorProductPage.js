@@ -1,9 +1,7 @@
 import VendorNav from "../../Components/VendorNav";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Disclosure } from "@headlessui/react";
 import {
-  ChevronDownIcon,
   FunnelIcon,
   MinusIcon,
   PlusIcon,
@@ -13,11 +11,12 @@ import SRProductCard from "../../Components/SRProductCard";
 import SRPagination from "../../Components/SRPagination";
 import SRPriceRange from "../../Components/SRPriceRange";
 import SRStarRating from "../../Components/SRStarRating";
-import { useHits, useRefinementList, useSortBy } from "react-instantsearch";
-import { useParams } from "react-router-dom";
+import { useHits, useRefinementList } from "react-instantsearch";
+import { Navigate, useParams } from "react-router-dom";
 import CustomRefinementList from "../../Components/CustomRefinementList";
 import axios from "axios";
 import SortOptions from "../../Components/SortOptions";
+import { UserContext } from "../../Context/UserContext";
 
 const filters = [
   {
@@ -43,44 +42,50 @@ const filters = [
 
 export default function VendorProductPage() {
   const [sortOptions, setSortOptions] = useState([
-    { name: "Most Popular", current: true, value: "rBuy_relavant_sort" },
-    { name: "Price: Low to High", current: false, value: "rBuy_price_asc" },
-    { name: "Price: High to Low", current: false, value: "rBuy_price_desc" },
+    { label: 'Most Popular', value: 'rBuy_relavant_sort', current: false },
+    { label: 'Price: Low to High', value: 'rBuy_price_asc', current: false },
+    { label: 'Price: High to Low', value: 'rBuy_price_desc', current: false },
   ]);
   const { refine } = useRefinementList({ attribute: 'owner' });
   const params = useParams()
   const { hits } = useHits();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [vendor, setVendor] = useState()
+  const [vendorImage, setVendorImage] = useState()
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/vendor/${params.id}/product`, { withCredentials: true })
       setVendor(res.data.vendor)
+      setVendorImage(res.data.vendorImage)
       setIsLoading(false)
     } catch (error) {
       setError(error)
+      setIsLoading(false)
     }
   }, [params.id])
 
+
   useEffect(() => {
-    fetchData()
-    if (vendor) {
-      refine(vendor.businessName);
-    }
+    fetchData();
+    vendor && refine(vendor.businessName);
   }, [fetchData, refine, vendor?.businessName])
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>....is loading</div>
   }
 
   return (
     <>
+      {error && <Navigate to={"/"} replace />}
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav vendor={vendor} />
+        <VendorNav vendor={vendor} activeTab={"PRODUCTS"} vendorImage={vendorImage} />
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 className="text-3xl font-semibold tracking-tight text-gray-900">

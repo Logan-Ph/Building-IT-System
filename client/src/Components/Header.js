@@ -1,4 +1,58 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSearchBox } from 'react-instantsearch';
+import { useContext } from 'react';
+import { CartContext } from '../Context/CartContext';
+import { UserContext } from '../Context/UserContext';
+import { Navigate, useParams } from 'react-router-dom';
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import { UserImageContext } from '../Context/UserImageContext';
+import axios from 'axios';
+
 export default function Header() {
+  const { cart, setCart } = useContext(CartContext)
+  const { user, setUser } = useContext(UserContext)
+  const { userImage, setUserImage } = useContext(UserImageContext)
+  const { refine } = useSearchBox();
+  const [inputQuery, setInputQuery] = useState("");
+  const [navigateTo, setNavigateTo] = useState("");
+  const { query } = useParams();
+  const [searchQuery] = useState(query && (query.split('='))[1]);
+  const { category } = useParams();
+  const [searchCategory] = useState(category && (category.split('='))[1]);
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      setUser(res.data.user);
+      setCart(res.data.length)
+      setUserImage(res.data.userImage)
+    } catch (er) {
+      setUser(null)
+    }
+  }, [setUser, setCart, setUserImage])
+
+  function submitSearch(e) {
+    e.preventDefault();
+    if (inputQuery) {
+      setNavigateTo(`/search/query=${inputQuery}/category=/price=`);
+      refine(inputQuery)
+      setInputQuery("")
+    }
+  }
+
+  function applyCategory(category) {
+    refine("")
+    setNavigateTo(`/search/query=/category=${category}/price=`)
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser])
+
+  useEffect(() => {
+    searchQuery && refine(searchQuery)
+  }, [searchQuery, refine, searchCategory]);
 
   document.addEventListener('DOMContentLoaded', () => {
     const burger = document.querySelectorAll(".navbar-burger");
@@ -20,8 +74,23 @@ export default function Header() {
     });
   };
 
+  const handleLogout = async () => {
+    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    if (res.data === "Logged out successfully") {
+      setNavigateTo('/login');
+    }
+  }
+
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
+
+
   return (
     <section>
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
@@ -44,10 +113,26 @@ export default function Header() {
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
                 placeholder="Enter "
+                value={inputQuery}
+                onChange={(e) => setInputQuery(e.currentTarget.value)}
               />
-            </div>
-            <div className='flex items-center'>
-
+              <div class="grid place-items-center h-full w-12 text-gray-300">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+            </form>
 
               <div className="ml-2 flex">
                 <div className="mr-2 flex">
@@ -67,7 +152,7 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-slate-300">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-lg hover:shadow-3xl bg-blue-400 transition duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -86,7 +171,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-slate-300">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-md hover:shadow-2xl transition duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-[18px] w-[18px] text-red-500"
@@ -104,7 +189,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-slate-300">
+                <a href='/checkout' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -123,6 +208,13 @@ export default function Header() {
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
                     Cart
                   </span>
+                </a>
+
+                {/* if user login this will appear: avatar icon*/}
+                <div className='flex items-center'>
+                  {/* avatar icon */}
+                  <DropdownAva userImage={userImage} user={user} handleLogout={handleLogout} />
+                  <p className='xs:hidden font-light text-white ml-2 xl:text-lg lg:text-md md:text-sm sm:text-xs'>{user && user.name}</p>
                 </div>
               </div>
             </div>
@@ -136,46 +228,44 @@ export default function Header() {
         <div className="mt-2 flex items-center justify-between">
           <div className="flex gap-x-2 py-1 px-2"></div>
 
-          <div className="flex gap-x-8 sm:hidden md:hidden xs:hidden">
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
-              Best seller
+          <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
+              Best Seller
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
               Electronics
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
               Beauty & Personal Care
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>
               Household Appliances
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}>
               Fashion
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
-              Entertainment
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100">
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
               Toys & Games
             </span>
           </div>
-
-          <a href='/register' className="cursor-pointer rounded-sm py-1 px-4 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
-            Becoma a vendor
-          </a>
+          <div>
+            {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+              Become a vendor
+            </a>}
+          </div>
         </div>
       </div>
 
       <div className="navbar-menu relative z-50 sm:w-1 hidden">
         <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"></div>
 
-        <div className="">
+        <div className=" ">
           <div className="container flex flex-col mx-auto bg-white ">
             <aside
-              className="group/sidebar flex flex-col shrink-0 lg:w-[250px] w-[200px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-[#222160] border-r border-r-dashed border-r-neutral-200 sidenav fixed-start loopple-fixed-start"
+              className="group/sidebar flex flex-col shrink-0 lg:w-[280px] md:w-[280px]  sm:w-[280px] xs:w-[200px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-[#222160]  sidenav fixed-start loopple-fixed-start overflow-y-auto"
               id="sidenav-main"
             >
               <div className="flex shrink-0 px-8 items-center justify-between h-[96px]">
@@ -216,17 +306,22 @@ export default function Header() {
                 <div className="flex items-center mr-5">
                   <div className="mr-5">
                     <div className="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
-                      <img
-                        className="w-[40px] h-[40px] shrink-0 inline-block rounded-[.95rem]"
-                        src="https://inkythuatso.com/uploads/thumbnails/800/2023/03/9-anh-dai-dien-trang-inkythuatso-03-15-27-03.jpg"
-                        alt="avatar"
-                      />
+                      <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                        <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                      </div>
+                      {user && userImage && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+                        src={`data:image/jpeg;base64,${userImage}`}
+                        alt="avatar_img" />
+                      }
+                      {user && !userImage && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                        <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                      </div>}
                     </div>
                   </div>
                   <div className="mr-2 ">
-                    <div className=" text-white hover:text-primary transition-colors duration-200 ease-in-out text-[1.075rem] font-medium  text-secondary-inverse">
-                      User
-                    </div>
+                    {user && <div className=" text-white hover:text-primary transition-colors duration-200 ease-in-out text-[1.075rem] font-medium  text-secondary-inverse">
+                      {user.name}
+                    </div>}
                   </div>
                 </div>
               </div>
@@ -236,6 +331,7 @@ export default function Header() {
                   type="text"
                   className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-xs text-gray-600 focus:outline-none"
                   placeholder="Search"
+                  onChange={(e) => setInputQuery(e.currentTarget.value)}
                 />
                 <button className="rounded-tr-md rounded-br-md px-2 py-3 hidden md:block text-white">
                   <svg
@@ -253,105 +349,139 @@ export default function Header() {
                 </button>
               </div>
 
-              <div className="hidden border-b border-dashed lg:block  border-neutral-200"></div>
+              <div className="  lg:block  border-neutral-200">
 
-              <div className="relative pl-3 my-5 ">
-                <div className="flex flex-col w-full font-medium text-[12.5px]">
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Best seller
-                      </a>
-                    </span>
-                  </div>
+                <div id="menu" class="flex flex-col xs:space-y-1.5 sm:space-y-1.5 md:space-y-2 ml-3 md:ml-5 my-4 md:my-5 text-white">
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:text-base rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 md:text-[16px] xs:text-[12.24px] ">Best Seller</span>
+                  </span>
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">New Releases</span>
+                  </span>
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                      <path
+                        fill-rule="evenodd"
+                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>Electronics</span>
+                  </span>
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"
+                      ></path>
+                      <path
+                        d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>Beauty & Personal Care</span>
+                  </span>
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>Household Appliances</span>
+                  </span>
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}>Fashion</span>
+                  </span>
+                  <span
+                    href=""
+                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                  >
+                    <svg
+                      class="w-6 h-6 fill-current inline-block"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
+                      ></path>
+                    </svg>
+                    <span class="ml-2 xs:text-[12px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>Toys & Games</span>
+                  </span>
+                </div>
 
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        New Releases
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Electronics
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Beauty & Personal Care
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Household Appliances
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Fashion
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Entertainment
-                      </a>
-                    </span>
-                  </div>
-
-                  {/* <!-- menu item --> */}
-                  <div>
-                    <span className="select-none flex items-center px-4 py-[.3rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-                      <a
-                        href="/"
-                        className="flex items-center flex-grow  text-white hover:text-dark"
-                      >
-                        Toys & Games
-                      </a>
-                    </span>
-                  </div>
+              </div>
+              <div className="mt-5">
+                <div className="mt-40 flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
+                  <a className="text-md font-medium text-black" href={user ? "/logout" : "/login"} >
+                    {user ? "logout" : "Sign in"}
+                  </a>
                 </div>
               </div>
             </aside>
@@ -362,4 +492,70 @@ export default function Header() {
   );
 }
 
-// Burger menus
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+function DropdownAva({ user, userImage, handleLogout }) {
+  return (
+    <Menu as="div" className="relative inline-block text-left ml-2">
+      <div>
+        <Menu.Button className="flex">
+          {user && userImage && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+            src={`data:image/jpeg;base64,${userImage}`}
+            alt="avatar_img" />
+          }
+          {user && !userImage && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+          </div>}
+
+        </Menu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-[-10px] z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  href="/profile"
+                  className={classNames(
+                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    'block px-4 py-2 text-sm'
+                  )}>
+                  <i class="fas fa-user-circle mr-1"></i>
+                  My profile
+                </a>
+              )}
+            </Menu.Item>
+
+            <div>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : '',
+                      'block w-full px-4 py-2 text-left text-sm'
+                    )}
+                    onClick={handleLogout}
+                  >
+                    <i className="fas fa-sign-out-alt mr-1"></i>
+                    Log Out
+                  </button>
+                )}
+              </Menu.Item>
+            </div>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  )
+}
