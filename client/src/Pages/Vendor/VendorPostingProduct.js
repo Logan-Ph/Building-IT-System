@@ -14,7 +14,7 @@ export default function VendorPostingProduct() {
   const { setUser } = useContext(UserContext);
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState('');
-  const [msg, setMsg] = useState('')
+  const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   const data = {
@@ -53,16 +53,16 @@ export default function VendorPostingProduct() {
   }
 
   const success = (success) => {
-      toast.success(success, {
-          position: "top-center",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          pauseOnHover: false,
-          theme: "light",
-      });
+    toast.success(success, {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
   }
 
   const fetchUser = useCallback(async () => {
@@ -187,7 +187,8 @@ export default function VendorPostingProduct() {
 
           <div class="mt-6 flex items-center justify-end gap-x-6">
             <button type="button" class="rounded-md px-3 py-2 text-sm font-semibold shadow-sm border-solid border-2  hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Cancel</button>
-            <button onClick={handleSubmit} disabled={loading} type="submit" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save and Publish</button>
+            <button onClick={handleSubmit} disabled={loading} type="submit" class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
+            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white'}`}>Save and Publish</button>
           </div>
         </div>
       </form>
