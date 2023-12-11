@@ -1,8 +1,7 @@
 'use client';
-import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
+import { ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { useEffect } from "react";
-import { Accordion } from 'flowbite-react';
 import { UserContext } from "../Context/UserContext";
 import { Navigate } from "react-router-dom";
 const SidebarContext = createContext();

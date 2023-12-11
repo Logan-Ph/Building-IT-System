@@ -43,7 +43,6 @@ export default function Example() {
     if ((category.split('='))[1]) {
       if (oldCategoryRef.current) {
         // Refine with old state
-        console.log(oldCategoryRef.current)
         refine((oldCategoryRef.current.split('='))[1]);
       }
 
