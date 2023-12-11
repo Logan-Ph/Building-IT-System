@@ -7,15 +7,11 @@ import '../../css/homepage.css'
 import Slider from '../../Components/Slider';
 import Banner from '../../Components/Banner';
 import { UserContext } from '../../Context/UserContext';
-import { CartContext } from '../../Context/CartContext';
 import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
-import { UserImageContext } from '../../Context/UserImageContext';
 
 export default function Homepage() {
-    const { user, setUser } = useContext(UserContext)
-    const { setUserImage } = useContext(UserImageContext)
-    const { setCart } = useContext(CartContext)
+    const { user } = useContext(UserContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -23,33 +19,19 @@ export default function Homepage() {
         try {
             const res = await axios.get("http://localhost:4000/", { withCredentials: true });
             setProducts(res.data.product);
+            setIsLoading(false)
         } catch (er) {
-            console.log(er);
+            setIsLoading(false)
         }
     }, [])
 
-    const fetchUser = useCallback(async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-            setUser(res.data.user);
-            setCart(res.data.length)
-            setUserImage(res.data.userImage)
-            setIsLoading(false);
-        } catch (er) {
-            console.log(er);
-            setIsLoading(false);
-        }
-    }, [setUser, setCart, setUserImage])
-
     useEffect(() => {
         fetchProduct();
-        fetchUser();
-    }, [fetchProduct, fetchUser]);
+    }, [fetchProduct]);
 
-    if (isLoading) {
+    if (user === undefined || isLoading) {
         return <div>Loading....</div>
     }
-
     return (
         <>
             {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}

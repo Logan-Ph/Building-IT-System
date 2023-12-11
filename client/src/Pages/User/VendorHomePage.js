@@ -2,16 +2,12 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import VendorNav from "../../Components/VendorNav";
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
-import { UserImageContext } from "../../Context/UserImageContext";
 import { UserContext } from "../../Context/UserContext";
-import { CartContext } from "../../Context/CartContext";
 export default function VendorHomePage() {
   const params = useParams()
   const [vendor, setVendor] = useState()
   const [vendorImage, setVendorImage] = useState()
-  const { setUserImage } = useContext(UserImageContext)
-  const { user, setUser } = useContext(UserContext)
-  const { setCart } = useContext(CartContext)
+  const { user } = useContext(UserContext)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
@@ -26,25 +22,12 @@ export default function VendorHomePage() {
     }
   }, [params.id])
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setCart(res.data.length)
-      setUserImage(res.data.userImage)
-      setIsLoading(false);
-    } catch (er) {
-      console.log(er);
-      setIsLoading(false);
-    }
-  }, [setUser, setCart, setUserImage])
 
   useEffect(() => {
     fetchData();
-    fetchUser();
-  }, [fetchData, fetchUser])
+  }, [fetchData])
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>....is loading</div>
   }
 

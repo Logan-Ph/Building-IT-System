@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchBox } from 'react-instantsearch';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
@@ -10,9 +10,9 @@ import { UserImageContext } from '../Context/UserImageContext';
 import axios from 'axios';
 
 export default function Header() {
-  const { cart } = useContext(CartContext)
-  const { user } = useContext(UserContext)
-  const { userImage } = useContext(UserImageContext)
+  const { cart, setCart } = useContext(CartContext)
+  const { user, setUser } = useContext(UserContext)
+  const { userImage, setUserImage } = useContext(UserImageContext)
   const { refine } = useSearchBox();
   const [inputQuery, setInputQuery] = useState("");
   const [navigateTo, setNavigateTo] = useState("");
@@ -21,6 +21,16 @@ export default function Header() {
   const { category } = useParams();
   const [searchCategory] = useState(category && (category.split('='))[1]);
 
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      setUser(res.data.user);
+      setCart(res.data.length)
+      setUserImage(res.data.userImage)
+    } catch (er) {
+      setUser(null)
+    }
+  }, [setUser, setCart, setUserImage])
 
   function submitSearch(e) {
     e.preventDefault();
@@ -30,6 +40,15 @@ export default function Header() {
       setInputQuery("")
     }
   }
+
+  function applyCategory(category) {
+    refine("")
+    setNavigateTo(`/search/query=/category=${category}/price=`)
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser])
 
   useEffect(() => {
     searchQuery && refine(searchQuery)
@@ -62,8 +81,15 @@ export default function Header() {
     }
   }
 
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
+
+
   return (
     <section>
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
@@ -208,7 +234,7 @@ export default function Header() {
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
               Electronics
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>

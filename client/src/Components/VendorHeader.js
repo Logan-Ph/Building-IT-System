@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from 'react'
+import { Fragment, useCallback, useContext, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import { UserImageContext } from '../Context/UserImageContext'
@@ -6,9 +6,22 @@ import axios from 'axios'
 import { Navigate } from 'react-router-dom'
 
 export default function VendorHeader() {
-  const { user } = useContext(UserContext)
-  const { userImage } = useContext(UserImageContext)
+  const { user, setUser } = useContext(UserContext)
+  const { userImage, setUserImage } = useContext(UserImageContext)
   const [navigateTo, setNavigateTo] = useState("");
+  const [isLoading, setIsLoading] = useState(true)
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      setUser(res.data.user);
+      setUserImage(res.data.userImage)
+      setIsLoading(false)
+    } catch (er) {
+      setUser(null)
+      setIsLoading(false)
+    }
+  }, [setUser, setUserImage])
 
   const handleLogout = async () => {
     const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
@@ -16,41 +29,58 @@ export default function VendorHeader() {
       setNavigateTo('/login');
     }
   }
-  return <>
-    <section>
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
+
+  if (user === undefined || isLoading) {
+    return <div>Loading....</div>
+  }
+
+  if (user && user.role === "User") {
+    return <Navigate to={'/'} replace />
+  }
+
+  if (user && user.role === "Admin") {
+    return <Navigate to={'/admin/manage-user'} replace />
+  }
+
+  if ((!user && user !== undefined)) {
+    return <Navigate to={'/login'} replace />
+  }
+  return (
+    <>
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
-      <div className="w-full">
-        <div className="border py-3 px-6 white border-[#E61E2A]">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              {/* <!-- logo --> */}
-              <a className="flex items-center lg:ml-10 " href='\dashboard'>
-                <img
-                  src={require("./images/logo1.png")}
-                  className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
-                  alt="logo" />
-
-                <span className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
-                </span>
-              </a>
-
-              {/* Vendor page */}
-
-              <h1 className="lg:text-2xl xs:text-xs sm:text-md md:text-lg xl:text-3xl text-gray-900 flex items-center font-semibold xl:ml-12 lg:ml-10 xs:ml-1 sm:ml-2 md:ml-2">Seller Centre</h1>
+      <section>
+        <div className="w-full">
+          <div className="border py-3 px-6 white border-[#E61E2A]">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                {/* <!-- logo --> */}
+                <a className="flex items-center lg:ml-10 " href='\dashboard'>
+                  <img
+                    src={require("./images/logo1.png")}
+                    className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
+                    alt="logo" />
+                  <span className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
+                  </span>
+                </a>
+                {/* Vendor page */}
+                <h1 className="lg:text-2xl xs:text-xs sm:text-md md:text-lg xl:text-3xl text-gray-900 flex items-center font-semibold xl:ml-12 lg:ml-10 xs:ml-1 sm:ml-2 md:ml-2">Seller Centre</h1>
+              </div>
+              <div className='flex items-center'>
+                {/* avatar icon */}
+                <DropdownAva user={user} userImage={userImage} handleLogout={handleLogout} />
+                <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
+              </div>
 
             </div>
-            <div className='flex items-center'>
-              {/* avatar icon */}
-              <DropdownAva user={user} userImage={userImage} handleLogout={handleLogout} />
-              <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
-            </div>
-
           </div>
         </div>
-      </div>
-    </section>
-
-  </>
+      </section>
+    </>
+  )
 }
 
 function classNames(...classes) {

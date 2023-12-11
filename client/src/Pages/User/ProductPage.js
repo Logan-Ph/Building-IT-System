@@ -38,6 +38,7 @@ export default function TestingPage() {
       setIsLoading(false)
     } catch (error) {
       setError(error);
+      setIsLoading(false)
     }
   }, [params.id])
 
@@ -45,7 +46,7 @@ export default function TestingPage() {
     fetchData()
   }, [fetchData])
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>....is loading</div>
   }
 

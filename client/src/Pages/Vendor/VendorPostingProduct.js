@@ -10,8 +10,7 @@ export default function VendorPostingProduct() {
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [file, setFile] = useState('');
-  const { user, setUser } = useContext(UserContext);
-  const { setUserImage } = useContext(UserImageContext)
+  const { user } = useContext(UserContext);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,28 +31,13 @@ export default function VendorPostingProduct() {
     setCategory(event.target.value);
   };
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setUserImage(res.data.userImage)
-      setIsLoading(false)
-    } catch (er) {
-      setError(er);
-      setIsLoading(false)
-    }
-  }, [setUser, setUserImage])
-
   async function axiosPostData() {
-    try {
-      await axios.post('http://localhost:4000/add-new-product', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
-        .then(res => {
-          setError('')
-        })
-        .catch(er => { setError(er.response.data) });
-    } catch (error) {
-      console.error('Failed to update.', error);
-    }
+    await axios.post('http://localhost:4000/add-new-product', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      .then(res => {
+        setError('')
+        setIsLoading(false)
+      })
+      .catch(er => { setError(er.response.data); setIsLoading(false) });
   }
 
   const handleSubmit = (e) => {
@@ -61,19 +45,15 @@ export default function VendorPostingProduct() {
     axiosPostData();
   }
 
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>Loading....</div>
   }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
-      {error && <Navigate to='/login' replace={true} />}
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {(error || !user) && <Navigate to='/login' replace={true} />}
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">

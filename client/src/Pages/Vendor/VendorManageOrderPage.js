@@ -6,12 +6,10 @@ import AllTableComponent from '../../Components/VMOAllTableComponent';
 import { UserContext } from '../../Context/UserContext';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import { UserImageContext } from '../../Context/UserImageContext';
 import { Navigate } from 'react-router-dom';
 
 export default function ManageOrderPage() {
-    const { user, setUser } = useContext(UserContext)
-    const { setUserImage } = useContext(UserImageContext)
+    const { user } = useContext(UserContext)
     const [error, setError] = useState();
     const [status, setStatus] = useState("")
     const [orderId, setOrderId] = useState("")
@@ -23,27 +21,17 @@ export default function ManageOrderPage() {
         try {
             const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
             setOrders(res.data.orders)
+            setIsLoading(false)
         }
         catch (error) {
+            setError(error)
+            setIsLoading(false)
         }
     }, [setOrders])
 
-    const fetchUser = useCallback(async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-            setUser(res.data.user);
-            setUserImage(res.data.userImage);
-            setIsLoading(false)
-        }
-        catch (er) {
-            setError(er)
-        }
-    }, [setUser, setUserImage])
-
     useEffect(() => {
         getOrders();
-        fetchUser();
-    }, [getOrders, fetchUser])
+    }, [getOrders])
 
     const postData = async () => {
         let statusValue;
@@ -92,15 +80,15 @@ export default function ManageOrderPage() {
         postData()
     }
 
-    if (isLoading) {
+    if (user === undefined || isLoading) {
         return <div>Loading....</div>
     }
 
     return (
         <>
-            {error && <Navigate to={'/login'} replace />}
             {user && user.role === "User" && <Navigate to={'/'} replace />}
             {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+            {(!user || error) && <Navigate to={'/login'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}

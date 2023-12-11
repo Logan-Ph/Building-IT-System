@@ -2,14 +2,15 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { useEffect } from "react";
-
-
 import { Accordion } from 'flowbite-react';
+import { UserContext } from "../Context/UserContext";
+import { Navigate } from "react-router-dom";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [expanded, setExpanded] = useState(true);
+  const { user } = useContext(UserContext)
 
   function getSize() {
     setWidth(window.innerWidth);
@@ -39,6 +40,21 @@ export default function Sidebar({ children }) {
     };
   }, [width]);
 
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
+
+  if (user && user.role === "User") {
+    return <Navigate to={'/'} replace />
+  }
+
+  if (user && user.role === "Admin") {
+    return <Navigate to={'/admin/manage-user'} replace />
+  }
+
+  if ((!user && user !== undefined)) {
+    return <Navigate to={'/login'} replace />
+  }
   return (
     <aside className="">
       <nav className=" h-screen flex flex-col bg-white border-r shadow-sm">
@@ -61,7 +77,7 @@ export default function Sidebar({ children }) {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
 
-        
+
       </nav>
     </aside>
   );
@@ -76,7 +92,7 @@ export function SidebarItem({ icon, text, active, alert, subitems }) {
   };
 
   return (
-    
+
     <div>
       <div
         className={`dropdown-btn
@@ -88,13 +104,13 @@ export function SidebarItem({ icon, text, active, alert, subitems }) {
             : "hover:bg-indigo-50 text-gray-600"}`}
         onClick={handleSubitemsToggle}
       >
-        {icon} 
+        {icon}
         <span className={`overflow-hidden transition-all lg:md:text-lg   ${expanded ? "w-52 ml-3" : "w-0"}`}>{text} </span>
-        {expanded && (showSubitems ? <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg> )}
+        {expanded && (showSubitems ? <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6" /></svg>)}
         {alert && (
           <div
             className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? "" : "top-2"}`}
-          /> 
+          />
         )}
 
         {!expanded && (
@@ -106,7 +122,7 @@ export function SidebarItem({ icon, text, active, alert, subitems }) {
               group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
           `}
           >
-            {text} 
+            {text}
           </div>
         )}
 

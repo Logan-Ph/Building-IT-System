@@ -5,46 +5,30 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
-import { UserImageContext } from "../../Context/UserImageContext";
-
-
 
 export default function DashboardPage() {
-  const { user, setUser } = useContext(UserContext)
-  const { setUserImage } = useContext(UserImageContext)
+  const { user } = useContext(UserContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState();
-
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-      setUser(res.data.user);
-      setUserImage(res.data.userImage);
-      setIsLoading(false)
-    }
-    catch (er) {
-      setIsLoading(false)
-      setError(er)
-    }
-  }, [setUser, setUserImage])
+  const [error, setError] = useState("")
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
+      setIsLoading(false)
     }
     catch (er) {
-      console.log(er);
+      setError(er);
+      setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    fetchUser();
     fetchData();
-  }, [fetchUser, fetchData])
+  }, [fetchData])
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>....is loading</div>
   }
 
@@ -53,6 +37,7 @@ export default function DashboardPage() {
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {error && <Navigate to={'/login'} />}
+      {!user && <Navigate to={'/login'} replace />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"

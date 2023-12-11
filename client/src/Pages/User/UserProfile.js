@@ -11,13 +11,16 @@ export default function UserProfile() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
-    const { userImage, setUserImage } = useContext(UserImageContext)
+    const { userImage } = useContext(UserImageContext)
     const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
-
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
-    const { user, setUser } = useContext(UserContext)
-    const [isLoading, setIsLoading] = useState(true)
+    const { user } = useContext(UserContext)
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [address, setAddress] = useState('')
+    const [name, setName] = useState('')
+    const email = user && user.email;
+    const [file, setFile] = useState();
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -32,10 +35,6 @@ export default function UserProfile() {
         setActiveDropdown(activeDropdown === index ? null : index);
     };
 
-    useEffect(() => {
-        error && notify(error)
-        msg && success(msg)
-    }, [error, msg]);
 
     const notify = (error) => {
         toast.error(error, {
@@ -62,23 +61,6 @@ export default function UserProfile() {
             theme: "light",
         });
     }
-
-    const fetchUser = useCallback(async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-            setUser(res.data.user);
-            setUserImage(res.data.userImage)
-            setIsLoading(false);
-        } catch (er) {
-            setIsLoading(false);
-        }
-    }, [setUser, setUserImage])
-
-    const [phoneNumber, setPhoneNumber] = useState('')
-    const [address, setAddress] = useState('')
-    const [name, setName] = useState('')
-    const email = user && user.email;
-    const [file, setFile] = useState();
 
     const handleFileChange = (event) => {
         event.preventDefault()
@@ -115,10 +97,11 @@ export default function UserProfile() {
     }
 
     useEffect(() => {
-        fetchUser();
-    }, [fetchUser]);
+        error && notify(error)
+        msg && success(msg)
+    }, [error, msg]);
 
-    if (isLoading) {
+    if (user === undefined) {
         return <div>Loading....</div>
     }
 

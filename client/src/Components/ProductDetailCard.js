@@ -2,14 +2,10 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
-import { UserContext } from "../Context/UserContext";
-import { UserImageContext } from "../Context/UserImageContext";
 
 export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
     const { setCart } = useContext(CartContext)
-    const { setUser } = useContext(UserContext)
-    const { setUserImage } = useContext(UserImageContext)
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
 
@@ -40,21 +36,6 @@ export default function ProductDetailCard({ product, vendorName }) {
             });
         }
     }, [error, msg]);
-
-    const fetchUser = useCallback(async () => {
-        try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-            setUser(res.data.user);
-            setCart(res.data.length)
-            setUserImage(res.data.userImage)
-        } catch (er) {
-            console.log(er);
-        }
-    }, [setUser, setCart, setUserImage])
-
-    useEffect(() => {
-        fetchUser();
-    }, [fetchUser]);
 
     useEffect(() => {
         if (error || msg) {

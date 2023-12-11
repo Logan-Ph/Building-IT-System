@@ -16,9 +16,7 @@ import { Navigate, useParams } from "react-router-dom";
 import CustomRefinementList from "../../Components/CustomRefinementList";
 import axios from "axios";
 import SortOptions from "../../Components/SortOptions";
-import { UserImageContext } from "../../Context/UserImageContext";
 import { UserContext } from "../../Context/UserContext";
-import { CartContext } from "../../Context/CartContext";
 
 const filters = [
   {
@@ -56,9 +54,7 @@ export default function VendorProductPage() {
   const [vendorImage, setVendorImage] = useState()
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const { setUserImage } = useContext(UserImageContext)
-  const { user, setUser } = useContext(UserContext)
-  const { setCart } = useContext(CartContext)
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
@@ -68,31 +64,17 @@ export default function VendorProductPage() {
       setIsLoading(false)
     } catch (error) {
       setError(error)
+      setIsLoading(false)
     }
   }, [params.id])
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setCart(res.data.length)
-      setUserImage(res.data.userImage)
-      setIsLoading(false);
-    } catch (er) {
-      console.log(er);
-      setIsLoading(false);
-    }
-  }, [setUser, setCart, setUserImage])
 
   useEffect(() => {
     fetchData();
-    fetchUser();
-    if (vendor) {
-      refine(vendor.businessName);
-    }
-  }, [fetchData, refine, vendor?.businessName, fetchUser])
+    vendor && refine(vendor.businessName);
+  }, [fetchData, refine, vendor?.businessName])
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>....is loading</div>
   }
 

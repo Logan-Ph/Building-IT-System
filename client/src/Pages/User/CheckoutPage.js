@@ -1,46 +1,29 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
-import { CartContext } from "../../Context/CartContext";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import CheckoutInfo from "../../Components/CheckoutInfo"
 import OrderSummary from "../../Components/OrderSummary";
-import { UserImageContext } from "../../Context/UserImageContext";
 
 export default function CheckoutPage() {
-  const { user, setUser } = useContext(UserContext)
-  const { setCart } = useContext(CartContext)
-  const { setUserImage } = useContext(UserImageContext)
+  const { user } = useContext(UserContext)
   const [products, setProducts] = useState()
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [checkoutInfo, setCheckoutInfo] = useState({})
   let price = useRef(0);
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setCart(res.data.length)
-      setUserImage(res.data.userImage)
-      setError("")
-      setIsLoading(false)
-    } catch (er) {
-      setError(er)
-      setIsLoading(false)
-    }
-  }, [setUser, setCart, setUserImage])
-
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/checkout", { withCredentials: true });
       setProducts(res.data.products)
       setCheckoutInfo(res.data.checkoutInfo)
+      setIsLoading(false)
     } catch (er) {
       setError(er)
+      setIsLoading(false)
     }
   }, [])
-
 
   useEffect(() => {
     products?.forEach((product) => {
@@ -49,11 +32,10 @@ export default function CheckoutPage() {
   }, [products]);
 
   useEffect(() => {
-    fetchUser();
     fetchData();
-  }, [fetchUser, fetchData]);
+  }, [fetchData]);
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>Loading....</div>
   }
 

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FunnelIcon } from '@heroicons/react/20/solid'
@@ -11,16 +11,10 @@ import { useHits, useRefinementList } from 'react-instantsearch';
 import { Navigate, useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
 import { UserContext } from '../../Context/UserContext';
-import axios from 'axios';
-import { CartContext } from '../../Context/CartContext';
-import { UserImageContext } from '../../Context/UserImageContext';
-
 
 export default function Example() {
   const { hits } = useHits();
-  const { user, setUser } = useContext(UserContext)
-  const { setCart } = useContext(CartContext)
-  const { setUserImage } = useContext(UserImageContext)
+  const { user } = useContext(UserContext)
   const { refine, items } = useRefinementList({ attribute: 'category', operator: 'or' });
   const [valueFilter, setValueFilter] = useState([]);
   const [sortOptions, setSortOptions] = useState([
@@ -34,18 +28,7 @@ export default function Example() {
   const [searchQuery, setSearchQuery] = useState((query.split('='))[1]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setCart(res.data.length)
-      setUserImage(res.data.userImage)
-    } catch (er) {
-    }
-  }, [setUser, setCart, setUserImage])
-
   useEffect(() => {
-    fetchUser();
     setSearchQuery((query.split('='))[1]);
     if (items.length > 0) {
       setValueFilter(items.map(item => ({
@@ -54,7 +37,7 @@ export default function Example() {
         isRefined: item.isRefined,
       })));
     }
-  }, [query, items, fetchUser]);
+  }, [query, items]);
 
   useEffect(() => {
     if ((category.split('='))[1]) {
@@ -73,6 +56,10 @@ export default function Example() {
       oldCategoryRef.current = category;
     }
   }, [category, refine]);
+
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
 
   return (
     <div className="bg-white">
