@@ -183,7 +183,7 @@ export default function Router() {
           element: <ReportInfoPage />,
         },
         {
-          path: "/admin/manage-order",
+          path: "/admin/manage-product",
           element: <AdminManageVendorProduct />,
         },
         {

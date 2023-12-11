@@ -12,7 +12,6 @@ export default function VendorPostingProduct() {
   const [file, setFile] = useState('');
   const { user } = useContext(UserContext);
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   const data = {
     productName: productName,
@@ -35,9 +34,8 @@ export default function VendorPostingProduct() {
     await axios.post('http://localhost:4000/add-new-product', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         setError('')
-        setIsLoading(false)
       })
-      .catch(er => { setError(er.response.data); setIsLoading(false) });
+      .catch(er => { setError(er.response.data)});
   }
 
   const handleSubmit = (e) => {
@@ -45,7 +43,8 @@ export default function VendorPostingProduct() {
     axiosPostData();
   }
 
-  if (user === undefined || isLoading) {
+  if (user === undefined) {
+    console.log(user)
     return <div>Loading....</div>
   }
 

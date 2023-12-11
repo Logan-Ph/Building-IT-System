@@ -47,10 +47,6 @@ export default function Sidebar({ children }) {
     return <Navigate to={'/'} replace />
   }
 
-  if (user && user.role === "Admin") {
-    return <Navigate to={'/admin/manage-user'} replace />
-  }
-
   if ((!user && user !== undefined)) {
     return <Navigate to={'/login'} replace />
   }
