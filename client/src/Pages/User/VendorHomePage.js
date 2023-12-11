@@ -31,7 +31,7 @@ export default function VendorHomePage() {
   return (
     <>
       {error && <Navigate to={"/"} replace />}
-      <section>
+      <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
         <VendorNav vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} />
 

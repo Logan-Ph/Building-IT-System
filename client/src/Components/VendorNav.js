@@ -19,7 +19,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
             <div class="font-medium">
               <div class="text-2xl">{vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">
-                <span class="border-r border-black pr-3">1,8 followers</span>vendorproduct
+                <span class="border-r border-black pr-3">1,8 followers</span>
                 <span class="pl-2">69 products</span>
               </div>
               <div>
