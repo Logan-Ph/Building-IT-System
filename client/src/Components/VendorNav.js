@@ -15,9 +15,9 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
             <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full" alt="" />
-           
+
             <div class="font-medium">
-              <div class="text-2xl">{vendor.businessName}</div>
+              <div class="text-2xl">{vendor && vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">
                 <span class="border-r border-black pr-3">1,8 followers</span>vendorproduct
                 <span class="pl-2">69 products</span>
@@ -70,7 +70,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
                       type="search"
                       id="default-search"
                       class="block w-full py-4 px-8 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder={`Search in ${vendor.businessName}`}
+                      placeholder={`Search in ${vendor && vendor.businessName}`}
                       onChange={(e) => refine(e.target.value)}
                     />
                   </>}
@@ -81,7 +81,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
               <li className={getTabClass('HOME')}>
-                <a href={`/vendor/${vendor._id}/home`}
+                <a href={(vendor) ? `/vendor/${vendor._id}/home` : ""}
 
                   class="text-gray-900hover:underline text-sm font-light md:text-lg"
                   aria-current="page"
@@ -91,7 +91,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
               </li>
               <li className={getTabClass('PRODUCTS')}>
                 <a
-                  href={`/vendor/${vendor._id}/product`}
+                  href={(vendor) ? `/vendor/${vendor._id}/product` : ""}
                   class="text-gray-900hover:underline text-sm md:text-lg font-light"
                 >
                   PRODUCTS

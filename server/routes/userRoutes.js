@@ -125,11 +125,17 @@ router.get('/dashboard', authenticateToken, authorizeVendor, userController.getV
 // logout route
 router.get('/logout', userController.logout);
 
+// admin manage user route
+router.get('/admin/manage-user', userController.manageUser)
+
 // user register route
 router.post('/user-register', userController.userRegister);
 
 // vendor register route
 router.post('/vendor-register', userController.vendorRegister);
+
+// admin report user page
+router.get('/admin/:id/report', userController.reportPage);
 
 // admin ban user route
 router.post("/ban-user", userController.banUser);

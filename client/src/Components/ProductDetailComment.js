@@ -5,7 +5,6 @@ import { Rating } from "flowbite-react";
 export default function ProductDetailComment({ product }) {
     const textMessage = () => {
         document.getElementById("customer_review").className = "block";
-        console.log("hahaha");
     }
 
     return (<div className="w-full lg:md:py-12 md:pr-2 xs:py-3">

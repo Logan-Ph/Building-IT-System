@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import VendorNav from "../../Components/VendorNav";
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
+import { UserContext } from "../../Context/UserContext";
 export default function VendorHomePage() {
   const params = useParams()
   const [vendor, setVendor] = useState()
   const [vendorImage, setVendorImage] = useState()
+  const { user } = useContext(UserContext)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
@@ -20,17 +22,20 @@ export default function VendorHomePage() {
     }
   }, [params.id])
 
+
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [fetchData])
 
-  if (isLoading) {
+  if (user === undefined || isLoading) {
     return <div>....is loading</div>
   }
 
   return (
     <>
       {error && <Navigate to={"/"} replace />}
+      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
         <VendorNav vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} />
