@@ -11,6 +11,7 @@ import ProductDetailCard from "../../Components/ProductDetailCard";
 import ProductDetailComment from "../../Components/ProductDetailComment";
 import { ToastContainer } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
+import { MessagesSquare, Store } from "lucide-react";
 
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
@@ -86,6 +87,73 @@ export default function TestingPage() {
         </div>
       </section>
 
+
+      <section className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
+
+        <div class="flex items-center text-gray-800">
+          <div className="flex  my-8 w-2/5 items-center">
+
+            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" />
+            <div className="ml-4">
+              <div className="font-bold text-2xl mb-2">Appliances Shop</div>
+              <div className="flex">
+                <button class=" mr-2 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200  inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
+                  <MessagesSquare size={21}/>
+                  <div className="ml-1 ">Chat Now</div>
+
+                </button>
+                <button class="mr-2 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200    inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
+                <Store size={20}/>
+                  <div className="ml-1">View Shop</div>
+
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="p-4 w-full">
+            <div class="grid grid-cols-12 gap-4">
+              <div class="col-span-12 sm:col-span-6 md:col-span-3">
+                <div class="flex flex-row bg-white shadow-sm rounded p-4">
+
+                  <div class="flex flex-col flex-grow ml-4">
+                    <div class="text-sm text-gray-500">Users</div>
+                    <div class="font-bold text-lg">1259</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-12 sm:col-span-6 md:col-span-3">
+                <div class="flex flex-row bg-white shadow-sm rounded p-4">
+
+                  <div class="flex flex-col flex-grow ml-4">
+                    <div class="text-sm text-gray-500">Orders</div>
+                    <div class="font-bold text-lg">230</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-12 sm:col-span-6 md:col-span-3">
+                <div class="flex flex-row bg-white shadow-sm rounded p-4">
+
+                  <div class="flex flex-col flex-grow ml-4">
+                    <div class="text-sm text-gray-500">New Clients</div>
+                    <div class="font-bold text-lg">190</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-12 sm:col-span-6 md:col-span-3">
+                <div class="flex flex-row bg-white shadow-sm rounded p-4">
+
+                  <div class="flex flex-col flex-grow ml-4">
+                    <div class="text-sm text-gray-500">Revenue</div>
+                    <div class="font-bold text-lg">$ 32k</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <div className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
         <div className="lg:py-12 md:py-12 sm:py-8 xs:py-4">
           <h2 className="lg:text-2xl md:text-2xl  sm:xs:text-xl font-bold text-gray-600 mb-8 xs:mb-3 sm:mb-3 ">
