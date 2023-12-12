@@ -90,7 +90,7 @@ export default function ManageUserPage() {
 function UserTable({ users, usersImage }) {
   return (
     <>
-      <div className="p-4 bg-gray-200">
+      <div className="p-4 bg-gray-100">
         <div className="relative overflow-x-auto">
           <Table hoverable>
             <Table.Head>
@@ -175,7 +175,7 @@ function UserTable({ users, usersImage }) {
 
 function VendorTable({ vendors, vendorsImage }) {
   return (<>
-    <div className="p-4 bg-gray-200">
+    <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <Table hoverable>
           <Table.Head>
@@ -257,7 +257,7 @@ function VendorTable({ vendors, vendorsImage }) {
 
 function ShipperTable({ shippers, shippersImage }) {
   return (<>
-    <div className="p-4 bg-gray-200">
+    <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <Table hoverable>
           <Table.Head>
@@ -342,7 +342,7 @@ function ShipperTable({ shippers, shippersImage }) {
 
 function ReportedTable() {
   return (<>
-    <div className="p-4 bg-gray-200">
+    <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
           <div>
