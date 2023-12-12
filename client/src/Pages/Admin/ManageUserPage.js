@@ -3,8 +3,12 @@ import { Tabs } from "flowbite-react";
 import { Table } from "flowbite-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
+import { AiFillDelete } from "react-icons/ai";
+import { FaShoppingBag } from "react-icons/fa";
+
 import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
+import AdminManageVendorProduct from "./AdminManageVendorProduct";
 
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
@@ -60,10 +64,10 @@ export default function ManageUserPage() {
       {error && <Navigate to={"/login"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
-          <Tabs.Item active title="Customer">
+          <Tabs.Item active title="Customer" icon={HiUserCircle}>
             <UserTable users={usersInfo} usersImage={usersImage} />
           </Tabs.Item>
-          <Tabs.Item title="Vendor">
+          <Tabs.Item title="Vendor" icon={FaShoppingBag}>
             <VendorTable vendors={vendors} vendorsImage={vendorsImage} />
           </Tabs.Item>
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
@@ -71,6 +75,11 @@ export default function ManageUserPage() {
           </Tabs.Item>
           <Tabs.Item title="Reported Account" icon={HiClipboardList}>
             <ReportedTable />
+          </Tabs.Item>
+
+          {/* Admin manage product */}
+          <Tabs.Item title="Product" icon={AiFillDelete}>
+            <AdminManageVendorProduct/>
           </Tabs.Item>
         </Tabs>
       </div>
