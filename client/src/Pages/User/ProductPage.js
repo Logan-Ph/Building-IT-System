@@ -53,6 +53,7 @@ export default function TestingPage() {
 
   return (
     <>
+    
       {error && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
@@ -75,7 +76,76 @@ export default function TestingPage() {
           <ProductDetailCard product={product} vendorName={vendorName} />
         </div>
       </section>
+      <section className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
 
+<div class="flex xs:sm:flex-col lg:md:flex-row items-center text-gray-800 ">
+  <div className="flex flex-row my-8 w-full lg:w-3/5 items-center mx-auto lg:md:justify-normal sm:xs:justify-center">
+
+    <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" />
+    <div className="ml-4">
+      <div className="font-semibold lg:md:text-3xl xs:sm:text-2xl mb-2">Appliances Shop</div>
+      <div className="flex">
+        <button class=" mr-2.5 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200  inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
+          <MessagesSquare size={21}/>
+          <div className="ml-1.5 ">Chat Now</div>
+
+        </button>
+        <button class="ml-1 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200    inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
+        <Store size={20}/>
+          <div className="ml-1.5">View Shop</div>
+
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="text-center lg:mb-0 xs:sm:md:mb-10 ">
+    <div class="grid grid-cols-12 gap-4 place-content-between">
+      <div class="col-span-12 sm:col-span-6 md:col-span-3">
+        <div class="">
+
+          <div class="flex lg:md:flex-col flex-grow ml-4">
+            <div class="text-lg text-gray-500">Users</div>
+            <div class="font-semibold text-lg lg:ml-0 sm:ml-2 ">1259</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-12 sm:col-span-6 md:col-span-3">
+        <div class="">
+
+          <div class="flex lg:flex-col flex-grow ml-4">
+            <div class="text-lg text-gray-500">Orders</div>
+            <div class="font-semibold text-lg sm:ml-2">230</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-12 sm:col-span-6 md:col-span-3">
+        <div class="">
+
+          <div class="flex lg:flex-col flex-grow ml-4">
+            <div class="text-lg text-gray-500">Rating</div>
+            <div class="font-semibold text-lg sm:ml-2">4.5</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-12 sm:col-span-6 md:col-span-3">
+        <div class="">
+
+          <div class="flex lg:flex-col  ml-4">
+            <div class="text-lg text-gray-500 ">Revenue</div>
+            <div class="font-semibold text-lg sm:ml-2">$32k</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+</section>
       <section className="lg:container md:container mx-auto ">
         <div className="lg:container md:container lg:px-9 md:px-9 sm:px-3 xs:px-4 mx-auto mt-10 bg-gray-50 lg:flex ">
           {/*Comment section */}
@@ -87,73 +157,8 @@ export default function TestingPage() {
         </div>
       </section>
 
-
-      <section className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
-
-        <div class="flex items-center text-gray-800">
-          <div className="flex  my-8 w-2/5 items-center">
-
-            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" />
-            <div className="ml-4">
-              <div className="font-bold text-2xl mb-2">Appliances Shop</div>
-              <div className="flex">
-                <button class=" mr-2 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200  inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
-                  <MessagesSquare size={21}/>
-                  <div className="ml-1 ">Chat Now</div>
-
-                </button>
-                <button class="mr-2 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200    inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
-                <Store size={20}/>
-                  <div className="ml-1">View Shop</div>
-
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="p-4 w-full">
-            <div class="grid grid-cols-12 gap-4">
-              <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                <div class="flex flex-row bg-white shadow-sm rounded p-4">
-
-                  <div class="flex flex-col flex-grow ml-4">
-                    <div class="text-sm text-gray-500">Users</div>
-                    <div class="font-bold text-lg">1259</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                <div class="flex flex-row bg-white shadow-sm rounded p-4">
-
-                  <div class="flex flex-col flex-grow ml-4">
-                    <div class="text-sm text-gray-500">Orders</div>
-                    <div class="font-bold text-lg">230</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                <div class="flex flex-row bg-white shadow-sm rounded p-4">
-
-                  <div class="flex flex-col flex-grow ml-4">
-                    <div class="text-sm text-gray-500">New Clients</div>
-                    <div class="font-bold text-lg">190</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-span-12 sm:col-span-6 md:col-span-3">
-                <div class="flex flex-row bg-white shadow-sm rounded p-4">
-
-                  <div class="flex flex-col flex-grow ml-4">
-                    <div class="text-sm text-gray-500">Revenue</div>
-                    <div class="font-bold text-lg">$ 32k</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
+     
       <div className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
         <div className="lg:py-12 md:py-12 sm:py-8 xs:py-4">
           <h2 className="lg:text-2xl md:text-2xl  sm:xs:text-xl font-bold text-gray-600 mb-8 xs:mb-3 sm:mb-3 ">
