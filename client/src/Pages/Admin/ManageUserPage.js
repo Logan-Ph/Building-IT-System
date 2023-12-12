@@ -58,7 +58,7 @@ export default function ManageUserPage() {
   }
 
   return (
-    <div class="container mx-auto my-5">
+    <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       {user && user.role === "User" && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
       {error && <Navigate to={"/login"} replace />}
@@ -108,7 +108,7 @@ function UserTable({ users, usersImage }) {
                 .map((user, i) => (
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                      <img src={(usersImage[i]) ? `data:image/jpeg;base64,${usersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                      <img src={(usersImage[i]) ? `data:image/jpeg;base64,${usersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
                         <div class="text-base font-medium">{user.name}</div>
                         <div class="font-normal text-gray-500">
@@ -191,7 +191,7 @@ function VendorTable({ vendors, vendorsImage }) {
             {vendors && vendors.map((vendor, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                  <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                   <div class="ps-3">
                     <div class="text-base font-medium">{vendor.businessName}</div>
                     <div class="font-normal text-gray-500">
@@ -274,7 +274,7 @@ function ShipperTable({ shippers, shippersImage }) {
             {shippers && shippers.map((shipper, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                  <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                   <div class="ps-3">
                     <div class="text-base font-medium">{shipper.name}</div>
                     <div class="font-normal text-gray-500">
@@ -305,7 +305,7 @@ function ShipperTable({ shippers, shippersImage }) {
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
+                  src={require("../../Components/images/defaultUserImage.png")}
                   alt="Jese image"
                 />
                 <div class="ps-3">
@@ -455,7 +455,7 @@ function ReportedTable() {
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
+                  src={require("../../Components/images/defaultUserImage.png")}
                   alt="Jese image"
                 />
                 <div class="ps-3">
@@ -485,9 +485,8 @@ function ReportedTable() {
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
-                  alt="Jese image"
-                />
+                  src={require("../../Components/images/defaultUserImage.png")}
+                  alt="Jese image"/>
                 <div class="ps-3">
                   <div class="text-base font-medium">Name</div>
                   <div class="font-normal text-gray-500">
