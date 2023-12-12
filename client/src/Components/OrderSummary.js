@@ -70,24 +70,12 @@ export default function OrderSummary({ checkoutInfo, price }) {
         setError("Your cart is empty");
         return;
       }
-      if (
-        !(
-          checkoutInfo["phoneNumber"] &&
-          checkoutInfo["city"] &&
-          checkoutInfo["district"] &&
-          checkoutInfo["ward"] &&
-          checkoutInfo["streetAddress"]
-        )
-      ) {
+      if (!(checkoutInfo["phoneNumber"] && checkoutInfo["city"] && checkoutInfo["district"] && checkoutInfo["ward"] && checkoutInfo["streetAddress"])) {
         setError("The field is empty");
         setMsg();
         return;
       }
-      const res = await axios.post(
-        "http://localhost:4000/checkout",
-        checkoutInfo,
-        { withCredentials: true }
-      );
+      const res = await axios.post("http://localhost:4000/checkout", checkoutInfo, { withCredentials: true });
       setMsg(res.data.message);
       setError("");
     } catch (er) {
