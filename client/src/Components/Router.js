@@ -54,6 +54,16 @@ export default function Router() {
     )
   }
 
+  const LoginLayout = () => {
+    return (
+      <>
+        <LogInHeader />
+        <Outlet />
+        <Footer />
+      </>
+    )
+  }
+
   const VendorLayout = () => {
     return (
       <>
@@ -166,7 +176,7 @@ export default function Router() {
     },
     {
       path: "/",
-      element: <UserLayout header={<LogInHeader />} />,
+      element: <LoginLayout />,
       children: [
         {
           path: "/login",

@@ -5,7 +5,8 @@ const userController = require('../controllers/userController');
 const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
-
+const { OpenAI } = require('openai')
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 require('dotenv').config
 
 const storage = multer.diskStorage({
@@ -141,6 +142,9 @@ router.get('/admin/:id/report', userController.reportPage);
 // admin ban user route
 router.post("/ban-user", userController.banUser);
 
+// get reponse message from chatbot
+router.post("/api/chatbot/message", userController.chatbotMessage);
+
 // authentication route via login function
 router.get('/login', userController.loginPage);
 router.post('/login', (req, res, next) => {
@@ -154,7 +158,7 @@ router.post('/login', (req, res, next) => {
         }
 
         // Authentication sucess
-        req.logIn(user, (err) => {
+        req.logIn(user, async (err) => {
             if (err) {
                 return next(err);
             }
@@ -176,7 +180,7 @@ router.get('/auth/google/callback', (req, res, next) => {
         }
 
         // Authentication success
-        req.logIn(user, (err) => {
+        req.logIn(user, async (err) => {
             if (err) {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
                 return;

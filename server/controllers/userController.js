@@ -11,13 +11,11 @@ const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
-// const OpenAI = require('openai')
-// const API_KEY = "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"
-// const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
-
 // Connect and authenticate with your Algolia app
 const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
 const index = client.initIndex('rBuy_test')
+const { OpenAI } = require('openai')
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const imagekit = new ImageKit({
   publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
@@ -91,12 +89,49 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
+    // const assistant = await openai.beta.assistants.retrieve("asst_nu4ES4sZ8unUKF3MxWmrX8ZQ")
+    // const thread = await openai.beta.threads.create();
+    // const message = await openai.beta.threads.messages.create(thread.id, {
+    //   role:"user",
+    //   content: "Who are you?"
+    // })
+    // const run = await openai.beta.threads.runs.create(thread.id, {assistant_id:assistant.id})
+    // console.log(run)
+
+    // const run = await openai.beta.threads.runs.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","run_CDh8qNB2FLdLZKqovgTO9rPO")
+    // console.log(run)
+
+    // const message = await openai.beta.threads.messages.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","msg_pSWfadQt9HZ4Ecg2wkzHt0Qo")
+    // messages.body.data.forEach(message => { console.log(message.content) })
+    // console.log(message.content[0].text.value)
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
     console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
   }
+}
+
+exports.chatbotMessage = async (req, res) => {
+  if (!req.cookies.threadId) {
+    const thread = await openai.beta.threads.create();
+    res.cookie('threadId', thread.id, { httpOnly: true }); // pass thread id into the cookies
+  }
+  const threadId = req.cookies.threadId;
+  let messages
+  await openai.beta.threads.messages.create(threadId, {
+    role: "user",
+    content: req.body.message
+  });
+  const run = await openai.beta.threads.runs.create(threadId, { assistant_id: process.env.ASSISTANT_ID });
+  while (true) {
+    const runRetreive = await openai.beta.threads.runs.retrieve(threadId, run.id);
+    if (runRetreive.status === "completed") {
+      messages = await openai.beta.threads.messages.list(threadId);
+      break;
+    }
+  }
+  return res.json({ message: messages.data[0].content[0].text.value });
 }
 
 exports.productPage = async (req, res) => {
@@ -716,7 +751,7 @@ exports.addNewProduct = async (req, res) => {
     });
 
     await newProduct.save()
-      .then(() => {})
+      .then(() => { })
       .catch(err => console.log(err));
 
     const object = {
@@ -733,8 +768,8 @@ exports.addNewProduct = async (req, res) => {
     };
 
     index.saveObject(object).wait()
-    .then(() => {})
-    .catch(err => console.log(err));
+      .then(() => { })
+      .catch(err => console.log(err));
     return res.json("Product has been uploaded.")
   } catch (error) {
     res.status(500).json({ message: error.message || "Error Occured" });
@@ -752,9 +787,9 @@ exports.deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(productID);
     console.log(productID);
     index.deleteObject(productID)
-      .then(() => {})
+      .then(() => { })
       .catch(err => res.json(err));
-      return res.status(200).json('Product deleted successfully');
+    return res.status(200).json('Product deleted successfully');
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -814,7 +849,7 @@ exports.updateProduct = async (req, res) => {
       object.stock = req.body.stock;
     }
     await productToUpdate.save();
-    index.partialUpdateObject(object).then(() => {});
+    index.partialUpdateObject(object).then(() => { });
     return res.json('Product has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });

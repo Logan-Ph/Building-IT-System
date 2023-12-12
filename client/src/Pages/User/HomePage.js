@@ -110,7 +110,7 @@ function MiddleBanner({ setNavigateTo }) {
             <div className='bg-white grid grid-cols-3 gap-x-4 px-4 py-6'>
 
                 <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>
-                    <img src={require("../../Components/images/tv.png")} alt="tv"
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
                     <div
