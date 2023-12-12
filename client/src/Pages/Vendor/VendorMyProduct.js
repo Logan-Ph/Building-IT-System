@@ -5,21 +5,10 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 export default function VendorMyProduct() {
-  const { setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)  
   const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState();
   const [products, setProducts] = useState([]);
-
-  const fetchUser = async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-      setUser(res.data.user);
-      setUserImage(res.data.userImage);
-    }
-    catch (er) {
-      setError(er)
-    }
-  }
 
   const fetchProducts = async () => {
     try {
@@ -31,9 +20,12 @@ export default function VendorMyProduct() {
   };
 
   useEffect(() => {
-    fetchUser();
     fetchProducts();
   }, []);
+
+  if (user === undefined) {
+    return <div>Loading....</div>
+  }
 
   return (
     <>

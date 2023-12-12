@@ -12,8 +12,6 @@ export default function VendorPostingProduct() {
   const [description, setDescription] = useState('');
   const [file, setFile] = useState('');
   const { user } = useContext(UserContext);
-  const { setUser } = useContext(UserContext)
-  const { setUserImage } = useContext(UserImageContext)
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -67,16 +65,6 @@ export default function VendorPostingProduct() {
     });
   }
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setUserImage(res.data.userImage)
-    } catch (er) {
-      setError(er);
-    }
-  }, [setUser, setUserImage])
-
   async function axiosPostData() {
     try {
       setLoading(true);
@@ -101,8 +89,7 @@ export default function VendorPostingProduct() {
   }
 
   if (user === undefined) {
-    console.log(user)
-    return <div>Loading....</div>
+    return <div>Loading...</div>
   }
 
   return (
@@ -124,7 +111,7 @@ export default function VendorPostingProduct() {
                 <div class="max-w-sm mx-auto items-center">
                   <div class="px-4 py-6">
                     <div id="image-preview" class="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">
-                      <input id="upload" onChange={handleFileChange} type="file" class="hidden" accept="image/*" />
+                      <input id="upload" onChange={handleFileChange} type="file" class="hidden" accept="image/*" required/>
                       <label for="upload" class="cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700 mx-auto mb-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
@@ -163,16 +150,13 @@ export default function VendorPostingProduct() {
                   <option value="Beauty & Personal Care">Beauty & Personal Care</option>
                   <option value="Baby toys">Baby toys</option>
                 </select>
-                {/* <div class="mt-2">
-                  <input onChange={(e) => setCategory(e.target.value)} type="text" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
-                </div> */}
               </div>
 
               <div class="col-span-3">
                 <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Price</label>
                 <p class="mt-3 text-sm leading-6 text-gray-600">Product's price must be in dollar.</p>
                 <div class="mt-2">
-                  <input onChange={(e) => setPrice(e.target.value)} type="number" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
+                  <input onChange={(e) => setPrice(e.target.value)} type="number" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" required />
                 </div>
               </div>
 
@@ -180,7 +164,7 @@ export default function VendorPostingProduct() {
                 <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Stock</label>
                 <p class="mt-3 text-sm leading-6 text-gray-600">Quantity of goods in stock.</p>
                 <div class="mt-2">
-                  <input type="Number" name="number" id="number" autocomplete="number" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
+                  <input type="Number" name="number" id="number" autocomplete="number" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" required />
                 </div>
               </div>
 
