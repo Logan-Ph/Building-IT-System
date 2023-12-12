@@ -31,6 +31,7 @@ import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
+import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import { UserImageProvider } from '../Context/UserImageContext';
 
@@ -68,8 +69,8 @@ export default function Router() {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
+          <AdminHeader />
           <div className="flex  ">
-            <VendorSidebar />
             <Outlet />
           </div>
         </InstantSearch>
