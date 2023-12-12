@@ -41,10 +41,6 @@ export default function Header() {
     }
   }
 
-  function applyCategory(category) {
-    refine("")
-    setNavigateTo(`/search/query=/category=${category}/price=`)
-  }
 
   useEffect(() => {
     fetchUser();
@@ -234,7 +230,7 @@ export default function Header() {
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
               Electronics
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
@@ -247,7 +243,7 @@ export default function Header() {
               Fashion
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
-              Toys & Games
+              Entertainment
             </span>
           </div>
           <div>

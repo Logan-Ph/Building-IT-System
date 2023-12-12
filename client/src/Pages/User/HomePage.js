@@ -17,6 +17,8 @@ export default function Homepage() {
     const { user } = useContext(UserContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [navigateTo, setNavigateTo] = useState("");
+
 
     const fetchProduct = useCallback(async () => {
         try {
@@ -41,6 +43,7 @@ export default function Homepage() {
         <>
             {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
             {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+            {navigateTo && <Navigate to={navigateTo} replace={true} />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -63,7 +66,7 @@ export default function Homepage() {
                     <Banner />
 
                     {/* Category */}
-                    <MiddleBanner />
+                    <MiddleBanner setNavigateTo={setNavigateTo} />
 
                     <div className="flex flex-col justify-around my-10 pb-32">
                         {/* Trending Product */}
@@ -92,7 +95,7 @@ export default function Homepage() {
     )
 }
 
-function MiddleBanner() {
+function MiddleBanner({ setNavigateTo }) {
     return <>
         <div className='grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid sm:hidden xs:hidden'>
 
@@ -106,7 +109,7 @@ function MiddleBanner() {
 
             <div className='bg-white grid grid-cols-3 gap-x-4 px-4 py-6'>
 
-                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>
                     <img src={require("../../Components/images/tv.png")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
@@ -116,7 +119,7 @@ function MiddleBanner() {
                     > Household Appliances</div>
                 </div>
 
-                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
                     <img src={require("../../Components/images/laptop.jpg")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
@@ -126,7 +129,7 @@ function MiddleBanner() {
                     > Electronics</div>
                 </div>
 
-                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}>
                     <img src={require("../../Components/images/fashion.jpg")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
@@ -136,7 +139,7 @@ function MiddleBanner() {
                     > Fashion</div>
                 </div>
 
-                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
                     <img src={require("../../Components/images/game.jpg")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
@@ -146,17 +149,17 @@ function MiddleBanner() {
                     > Toys & Game</div>
                 </div>
 
-                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
                     <img src={require("../../Components/images/beauty.jpg")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
                     <div
                         className="transition duration-300 group-hover:-translate-y-1 mt-2 "
                         style={{ transformOrigin: "center center" }}
-                    > Beauty & Care</div>
+                    > Beauty & Personal Care</div>
                 </div>
 
-                <div className='flex items-center flex-col group cursor-pointer overflow-hidden'>
+                <div className='flex items-center flex-col group cursor-pointer overflow-hidden' onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
                     <img src={require("../../Components/images/enter.jpg")} alt="tv"
                         className='w-[100px] h-[100px] object-fit transition duration-300 group-hover:-translate-y-1 scale-95'
                         style={{ transformOrigin: "center center" }} />
