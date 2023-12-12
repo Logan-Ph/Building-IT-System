@@ -211,7 +211,6 @@ export default function CheckoutInfo({ setCheckoutInfo, products, price, checkou
                                     role="tab"
                                     aria-controls="cod"
                                     aria-selected="false"
-                                    checked
                                 />
                                 <label for="COD" class="font-semibold">
                                     Cash On Delivery (COD)

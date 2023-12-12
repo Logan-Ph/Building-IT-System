@@ -11,13 +11,11 @@ const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
-// const OpenAI = require('openai')
-// const API_KEY = "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"
-// const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
-
 // Connect and authenticate with your Algolia app
 const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
-const index = client.initIndex('rBuy')
+const index = client.initIndex('rBuy_test')
+const { OpenAI } = require('openai')
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const imagekit = new ImageKit({
   publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
@@ -91,12 +89,49 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
+    // const assistant = await openai.beta.assistants.retrieve("asst_nu4ES4sZ8unUKF3MxWmrX8ZQ")
+    // const thread = await openai.beta.threads.create();
+    // const message = await openai.beta.threads.messages.create(thread.id, {
+    //   role:"user",
+    //   content: "Who are you?"
+    // })
+    // const run = await openai.beta.threads.runs.create(thread.id, {assistant_id:assistant.id})
+    // console.log(run)
+
+    // const run = await openai.beta.threads.runs.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","run_CDh8qNB2FLdLZKqovgTO9rPO")
+    // console.log(run)
+
+    // const message = await openai.beta.threads.messages.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","msg_pSWfadQt9HZ4Ecg2wkzHt0Qo")
+    // messages.body.data.forEach(message => { console.log(message.content) })
+    // console.log(message.content[0].text.value)
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
     console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
   }
+}
+
+exports.chatbotMessage = async (req, res) => {
+  if (!req.cookies.threadId) {
+    const thread = await openai.beta.threads.create();
+    res.cookie('threadId', thread.id, { httpOnly: true }); // pass thread id into the cookies
+  }
+  const threadId = req.cookies.threadId;
+  let messages
+  await openai.beta.threads.messages.create(threadId, {
+    role: "user",
+    content: req.body.message
+  });
+  const run = await openai.beta.threads.runs.create(threadId, { assistant_id: process.env.ASSISTANT_ID });
+  while (true) {
+    const runRetreive = await openai.beta.threads.runs.retrieve(threadId, run.id);
+    if (runRetreive.status === "completed") {
+      messages = await openai.beta.threads.messages.list(threadId);
+      break;
+    }
+  }
+  return res.json({ message: messages.data[0].content[0].text.value });
 }
 
 exports.productPage = async (req, res) => {
@@ -685,11 +720,15 @@ exports.addNewProduct = async (req, res) => {
     const id = new mongoose.Types.ObjectId();
     const uploadImage = async () => {
       try {
-        const response = await imagekit.upload({
-          file: fs.readFileSync("uploads/" + req.file.filename),
-          fileName: id + ".jpg",
-        });
-        return response.url;
+        if (req.file) {
+          const response = await imagekit.upload({
+            file: fs.readFileSync("uploads/" + req.file.filename),
+            fileName: id + ".jpg",
+          });
+          return response.url;
+        } else {
+          return null;
+        }
       } catch (err) {
         console.log("Error uploading image:", err);
         return null;
@@ -705,13 +744,14 @@ exports.addNewProduct = async (req, res) => {
       category: req.body.category,
       price: req.body.price,
       description: req.body.description,
+      stock: req.body.stock,
       image_link: imageURL,
       no_of_ratings: 0,
       ratings: 0.0,
     });
 
     await newProduct.save()
-      .then(() => res.json("Product added."))
+      .then(() => { })
       .catch(err => console.log(err));
 
     const object = {
@@ -721,33 +761,35 @@ exports.addNewProduct = async (req, res) => {
       owner: req.user.businessName,
       price: parseInt(req.body.price, 10),
       description: req.body.description,
+      stock: req.body.stock,
       image_link: imageURL,
       no_of_ratings: 0,
       ratings: 0.0,
     };
 
     index.saveObject(object).wait()
-      .then(() => console.log("updated to algolia: " + imageURL))
+      .then(() => { })
       .catch(err => console.log(err));
+    return res.json("Product has been uploaded.")
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).json({ message: error.message || "Error Occured" });
   }
 };
 
 // Function to delete a product
 exports.deleteProduct = async (req, res) => {
   try {
-    const productID = req.query.id;
-    const productToDelete = await Product.findById(productId);
+    const productID = req.params.id;
+    const productToDelete = await Product.findById(productID);
     if (!productToDelete) {
       return res.status(404).json('Product not found');
     }
-    await Product.findByIdAndDelete(productId);
+    await Product.findByIdAndDelete(productID);
     console.log(productID);
     index.deleteObject(productID)
       .then(() => { })
       .catch(err => res.json(err));
-    return res.json('Product deleted successfully');
+    return res.status(200).json('Product deleted successfully');
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -755,7 +797,7 @@ exports.deleteProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const productID = req.body.id;
+    const productID = req.params.id;
     const productToUpdate = await Product.findById(productID);
 
     let object = { objectID: productID };
@@ -802,15 +844,36 @@ exports.updateProduct = async (req, res) => {
       productToUpdate.description = req.body.description;
       object.description = req.body.description;
     }
-    // await productToUpdate.save();
-    index.partialUpdateObject(object).then(({ objectID }) => {
-      console.log(objectID);
-    });
-    return res.json('Profile has been updated!')
+    if (req.body.stock) {
+      productToUpdate.stock = req.body.stock;
+      object.stock = req.body.stock;
+    }
+    await productToUpdate.save();
+    index.partialUpdateObject(object).then(() => { });
+    return res.json('Product has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }
+
+exports.manageProduct = async (req, res) => {
+  try {
+    const products = await Product.find({ owner: req.user._id })
+    return res.status(200).json((products) ? { products: products } : { products: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find products." })
+  }
+}
+
+exports.getSingleProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.json({ product: product });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
 
 exports.manageUser = async (req, res) => {
   try {

@@ -1,23 +1,24 @@
-import { Carousel } from 'flowbite-react';
-export default function Slider() {
-    return (
-        < Carousel >
-            <img
-                src={require("../Components/images/banner2.png")}
-                alt="..."
-                className='legend md-h-[50px]'
-            />
-            <img
-                src={require("../Components/images/banner2.png")}
-                alt="..."
-                className='legend'
-            />
-            <img
-                src={require("../Components/images/BIS-banner-1.png")}
-                alt="..."
-                className='legend'
-            />
+import React, { useRef, useState } from 'react';
+import { Swiper, SwiperSlide } from "swiper/react";
+import 'swiper/css/navigation';
+import "swiper/css";
+import '../css/homepage.css'
 
-        </Carousel >
-    )
+// import required modules
+import { Navigation } from 'swiper/modules';
+
+
+export default function Slider() {
+    return <>
+        <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+        <SwiperSlide className='w-[!600px]'>
+            <img src={require("../Components/images/bannerN1.jpg")}
+            alt="..." className='object-cover'/>
+        </SwiperSlide>
+        <SwiperSlide>
+            <img src={require("../Components/images/bannerN4.jpg")}
+            alt="..." className='object-cover'/>
+        </SwiperSlide>
+        </Swiper>
+    </>
 }
