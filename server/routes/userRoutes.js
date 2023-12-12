@@ -101,6 +101,10 @@ router.get('/add-product/:id', userController.addProduct);
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
 
+// user follow/unfolow vendor route
+router.post('/follow-vendor', userController.followVendor);
+router.post('/unfollow-vendor', userController.unfollowVendor);
+
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
