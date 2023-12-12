@@ -29,6 +29,7 @@ import { UserProvider } from '../Context/UserContext';
 import Chatbot from "./Chatbot";
 import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
+import VendorEditPostingProduct from '../Pages/Vendor/VendorEditPostingProduct';
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
@@ -149,6 +150,10 @@ export default function Router() {
         {
           path: "/manage-product",
           element: <VendorMyProduct />,
+        },
+        {
+          path: "/edit-product",
+          element: <VendorEditPostingProduct />,
         },
       ],
     },
