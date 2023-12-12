@@ -103,9 +103,10 @@ router.post('/update-user', upload.single('file'), userController.updateUser);
 
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
-router.post('/update-product', upload.single('file'), userController.updateProduct);
-router.delete('/delete-product', userController.deleteProduct);
+router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
+router.delete('/delete-product/:id', userController.deleteProduct);
 router.get('/manage-product', userController.manageProduct);
+router.get('/edit-product/:id', userController.getSingleProduct);
 
 // vendor homepage (user side)
 router.get('/vendor/:id', userController.vendorHomepage)

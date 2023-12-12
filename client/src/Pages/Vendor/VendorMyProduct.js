@@ -7,8 +7,8 @@ import { Navigate } from "react-router-dom";
 export default function VendorMyProduct() {
   const { user } = useContext(UserContext)  
   const { setUserImage } = useContext(UserImageContext)
-  const [error, setError] = useState();
-  const [products, setProducts] = useState([]);
+  const [error, setError] = useState()
+  const [products, setProducts] = useState([])
 
   const fetchProducts = async () => {
     try {
@@ -19,12 +19,26 @@ export default function VendorMyProduct() {
     }
   };
 
+  const handleDelete = async (productID) => {
+    console.log('Product ID:', productID);
+    const apiUrl = `http://localhost:4000/delete-product/${productID}`;
+    try {
+       await axios.delete(apiUrl, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then().catch(console.log.error)
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
   if (user === undefined) {
-    return <div>Loading....</div>
+    return <div>Loading...</div>
   }
 
   return (
@@ -128,14 +142,14 @@ export default function VendorMyProduct() {
                       ${product.price}
                     </td>
                     <td className="px-6 py-4">
-                      {product.quantity}
+                      {product.stock}
                     </td>
                     <td className="px-6 py-4">
                       {product.description}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
+                        <a href={`/edit-product/${product._id}`} class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <button onClick={() => handleDelete(product._id)} class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
                     </td>
                   </tr>
                 ))}
