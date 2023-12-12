@@ -17,7 +17,7 @@ const ImageKit = require("imagekit")
 
 // Connect and authenticate with your Algolia app
 const client = algoliasearch('IZX7MYSNRD', '37f3c21ce9ab70964e1d85cd542e61b8')
-const index = client.initIndex('rBuy')
+const index = client.initIndex('rBuy_test')
 
 const imagekit = new ImageKit({
   publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
@@ -685,11 +685,15 @@ exports.addNewProduct = async (req, res) => {
     const id = new mongoose.Types.ObjectId();
     const uploadImage = async () => {
       try {
-        const response = await imagekit.upload({
-          file: fs.readFileSync("uploads/" + req.file.filename),
-          fileName: id + ".jpg",
-        });
-        return response.url;
+        if (req.file) {
+          const response = await imagekit.upload({
+            file: fs.readFileSync("uploads/" + req.file.filename),
+            fileName: id + ".jpg",
+          });
+          return response.url;
+        } else {
+          return null;
+        }
       } catch (err) {
         console.log("Error uploading image:", err);
         return null;
@@ -705,13 +709,14 @@ exports.addNewProduct = async (req, res) => {
       category: req.body.category,
       price: req.body.price,
       description: req.body.description,
+      stock: req.body.stock,
       image_link: imageURL,
       no_of_ratings: 0,
       ratings: 0.0,
     });
 
     await newProduct.save()
-      .then(() => res.json("Product added."))
+      .then(() => {})
       .catch(err => console.log(err));
 
     const object = {
@@ -721,33 +726,35 @@ exports.addNewProduct = async (req, res) => {
       owner: req.user.businessName,
       price: parseInt(req.body.price, 10),
       description: req.body.description,
+      stock: req.body.stock,
       image_link: imageURL,
       no_of_ratings: 0,
       ratings: 0.0,
     };
 
     index.saveObject(object).wait()
-      .then(() => console.log("updated to algolia: " + imageURL))
-      .catch(err => console.log(err));
+    .then(() => {})
+    .catch(err => console.log(err));
+    return res.json("Product has been uploaded.")
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).json({ message: error.message || "Error Occured" });
   }
 };
 
 // Function to delete a product
 exports.deleteProduct = async (req, res) => {
   try {
-    const productID = req.query.id;
-    const productToDelete = await Product.findById(productId);
+    const productID = req.params.id;
+    const productToDelete = await Product.findById(productID);
     if (!productToDelete) {
       return res.status(404).json('Product not found');
     }
-    await Product.findByIdAndDelete(productId);
+    await Product.findByIdAndDelete(productID);
     console.log(productID);
     index.deleteObject(productID)
-      .then(() => { })
+      .then(() => {})
       .catch(err => res.json(err));
-    return res.json('Product deleted successfully');
+      return res.status(200).json('Product deleted successfully');
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -755,7 +762,7 @@ exports.deleteProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const productID = req.body.id;
+    const productID = req.params.id;
     const productToUpdate = await Product.findById(productID);
 
     let object = { objectID: productID };
@@ -802,15 +809,36 @@ exports.updateProduct = async (req, res) => {
       productToUpdate.description = req.body.description;
       object.description = req.body.description;
     }
-    // await productToUpdate.save();
-    index.partialUpdateObject(object).then(({ objectID }) => {
-      console.log(objectID);
-    });
-    return res.json('Profile has been updated!')
+    if (req.body.stock) {
+      productToUpdate.stock = req.body.stock;
+      object.stock = req.body.stock;
+    }
+    await productToUpdate.save();
+    index.partialUpdateObject(object).then(() => {});
+    return res.json('Product has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 }
+
+exports.manageProduct = async (req, res) => {
+  try {
+    const products = await Product.find({ owner: req.user._id })
+    return res.status(200).json((products) ? { products: products } : { products: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find products." })
+  }
+}
+
+exports.getSingleProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.json({ product: product });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
 
 exports.manageUser = async (req, res) => {
   try {
