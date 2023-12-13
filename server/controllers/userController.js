@@ -592,8 +592,7 @@ exports.updateUser = async (req, res) => {
 
 exports.updateVendor = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ email: req.body.email });
-
+    const vendor = await Vendor.findById(req.user._id);
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),
@@ -699,9 +698,10 @@ exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
 }
 
-exports.updateVendorWallpaper = async (req, res) => {
+exports.editStore = async (req, res) => {
   try {
     const vendor = await Vendor.findOne({ email: req.body.email });
+    const coverPhoto = req.body.coverPhoto;
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),

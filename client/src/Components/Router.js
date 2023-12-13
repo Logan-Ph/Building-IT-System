@@ -30,6 +30,8 @@ import Chatbot from "./Chatbot";
 import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorEditingProduct from '../Pages/Vendor/VendorEditingProduct';
+import VendorEditProfile from '../Pages/Vendor/VendorEditProfile';
+import VendorEditStore from '../Pages/Vendor/VendorEditStore';
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
 import AdminHeader from '../Components/AdminHeader'
@@ -171,6 +173,14 @@ export default function Router() {
         {
           path: "/edit-product/:id",
           element: <VendorEditingProduct />,
+        },
+        {
+          path: "/edit-store",
+          element: <VendorEditStore />,
+        },
+        {
+          path: "/vendor-profile",
+          element: <VendorEditProfile />,
         },
       ],
     },

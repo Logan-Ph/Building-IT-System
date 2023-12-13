@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useContext, useState, useEffect, useCallback } from 'react'
 import { UserContext } from "../../Context/UserContext";
+import { ToastContainer, toast } from 'react-toastify'
 import { UserImageContext } from '../../Context/UserImageContext';
 import { Navigate, useParams } from 'react-router-dom';
 
@@ -14,8 +15,35 @@ export default function VendorEditPostingProduct() {
   const [file, setFile] = useState('');
   const { user } = useContext(UserContext);
   const [error, setError] = useState('');
+  const [msg, setMsg] = useState('')
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const notify = (error) => {
+    toast.error(error, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
+  }
+
+  const success = (success) => {
+    toast.success(success, {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
+  }
 
   const fetchProduct = async () => {
     try {
@@ -45,22 +73,29 @@ export default function VendorEditPostingProduct() {
   };
 
   async function axiosPostData() {
+    setLoading(true)
     await axios.post(`http://localhost:4000/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
+        setMsg(res.data)
         setError('')
         setLoading(false)
       })
-      .catch(er => { setError(er.response.data)});
+      .catch(er => { setError(er.response.data); setMsg() });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axiosPostData();
+    if (error) {
+      notify(error);
+    }
   }
 
   useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
     fetchProduct();
-  }, []);
+  }, [error, msg]);
 
   if (user === undefined) {
     console.log(user)
@@ -72,6 +107,18 @@ export default function VendorEditPostingProduct() {
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {(error || !user) && <Navigate to='/login' replace={true} />}
+      <ToastContainer
+          position="top-center"
+          autoClose={10000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+          theme="light"
+      />
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Edit Product</h2>
         <div class="space-y-12">

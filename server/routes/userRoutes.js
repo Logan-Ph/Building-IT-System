@@ -102,6 +102,9 @@ router.get('/add-product/:id', userController.addProduct);
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
 
+// vendor update profile route
+router.post('/update-vendor', upload.single('file'), userController.updateVendor);
+
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
