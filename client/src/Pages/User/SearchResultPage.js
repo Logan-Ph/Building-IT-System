@@ -61,12 +61,7 @@ export default function Example() {
     return <div>Loading....</div>
   }
 
-  function YourComponent() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
-  const handleToggleSidebar = () => {
-      setIsSidebarOpen(!isSidebarOpen);
-  };
+
 
   return (
     <div className="bg-gray-100">
@@ -92,6 +87,8 @@ export default function Example() {
                 <span className="sr-only">Filters</span>
                 <FunnelIcon className="h-5 w-5" aria-hidden="true" />
               </button>
+              
+
             </div>
           </div>
 
@@ -148,4 +145,7 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
 
   );
 }
+
+
+
 
