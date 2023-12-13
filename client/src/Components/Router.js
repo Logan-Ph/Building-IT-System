@@ -36,6 +36,8 @@ import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import { UserImageProvider } from '../Context/UserImageContext';
 import CartPage from "../Pages/User/CartPage";
+import ChatPage from "../Pages/User/ChatPage";
+
 
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
@@ -125,6 +127,10 @@ export default function Router() {
         {
           path: "/cart",
           element: <CartPage />,
+        },
+        {
+          path: "/chat",
+          element: <ChatPage />,
         },
         {
           path: "/product/:id",
