@@ -96,8 +96,14 @@ router.get('/product/:id', userController.productPage);
 router.get('/checkout', authenticateToken, authorizeUser, userController.checkout);
 router.post('/checkout', authenticateToken, authorizeUser, userController.placeOrder);
 
+// user cart route
+router.get('/cart', userController.cartPage);
+
 // user add to cart route
 router.get('/add-product/:id', userController.addProduct);
+
+// user remove product from cart route
+router.get('/remove-product/:id', userController.removeProduct);
 
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
