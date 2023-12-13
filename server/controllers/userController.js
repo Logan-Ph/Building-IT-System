@@ -113,12 +113,13 @@ exports.homePage = async (req, res) => {
 }
 
 exports.chatbotMessage = async (req, res) => {
-  if (!req.cookies.threadId) {
+  let threadId = req.cookies.threadId;
+  if (!threadId) {
     const thread = await openai.beta.threads.create();
-    res.cookie('threadId', thread.id, { httpOnly: true }); // pass thread id into the cookies
+    threadId = thread.id;
+    res.cookie("threadId", threadId, { httpOnly: true }); // pass thread id into the cookies
   }
-  const threadId = req.cookies.threadId;
-  let messages
+  let messages;
   await openai.beta.threads.messages.create(threadId, {
     role: "user",
     content: req.body.message
