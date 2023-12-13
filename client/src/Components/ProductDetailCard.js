@@ -2,11 +2,13 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
+import { Navigate } from 'react-router-dom';
 
 export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
     const { setCart } = useContext(CartContext)
     const [error, setError] = useState('')
+    const [navigateTo, setNavigateTo] = useState('')
     const [msg, setMsg] = useState('')
 
     const notify = useCallback(() => {
@@ -43,13 +45,18 @@ export default function ProductDetailCard({ product, vendorName }) {
         }
     }, [error, msg, notify]);
 
+    const handleBuyNow = async () => {
+        const formatedProduct = { ...product, product: product._id, quantity: quantity, owner: product.owner, checked: true }
+        localStorage.setItem('products', JSON.stringify([formatedProduct]));
+        setNavigateTo('/checkout');
+    }
 
     const addProduct = async (productId) => {
         error && notify();
         msg && notify();
         try {
             const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
-            setCart(res.data.length)
+            setCart(res.data.cart)
             setMsg(res.data.msg);
             setError('');
             setQuantity(1);
@@ -60,6 +67,7 @@ export default function ProductDetailCard({ product, vendorName }) {
     }
     return (
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
+            {navigateTo && <Navigate to={navigateTo} replace />}
             <img
                 alt="ecommerce"
                 className="lg:w-[550px] lg:h-[510px] md:h-auto sm:h-auto xs:h-auto  rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
@@ -290,7 +298,7 @@ export default function ProductDetailCard({ product, vendorName }) {
                         <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[12.5px]  text-black font-medium bg-[#EAB308] border-0 py-2 px-6 focus:outline-none hover:bg-[#EAA000] rounded-lg">
                             Add to Cart
                         </button>
-                        <button className="w-48 h-12 xs:text-[12.5px]  ml-10 text-black font-medium bg-[#FF9209] border-0 py-2 px-6 focus:outline-none hover:bg-[#FF6C22] rounded-lg">
+                        <button className="w-48 h-12 xs:text-[12.5px]  ml-10 text-black font-medium bg-[#FF9209] border-0 py-2 px-6 focus:outline-none hover:bg-[#FF6C22] rounded-lg" onClick={(e) => handleBuyNow(e)}>
                             Buy Now
                         </button>
                     </div>
