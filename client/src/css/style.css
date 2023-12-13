@@ -20,6 +20,7 @@ body {
 .order-info-product {
   flex: 1;
   order: 2;
+  align-content: flex-end;
 }
 
 
@@ -249,3 +250,5 @@ body {
 .vendor-avatar {
   width: 30% !important; 
 }
+
+/* Shopping cart */

@@ -5,7 +5,8 @@ const userController = require('../controllers/userController');
 const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
-
+const { OpenAI } = require('openai')
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 require('dotenv').config
 
 const storage = multer.diskStorage({
@@ -95,16 +96,24 @@ router.get('/product/:id', userController.productPage);
 router.get('/checkout', authenticateToken, authorizeUser, userController.checkout);
 router.post('/checkout', authenticateToken, authorizeUser, userController.placeOrder);
 
+// user cart route
+router.get('/cart', userController.cartPage);
+
 // user add to cart route
 router.get('/add-product/:id', userController.addProduct);
+
+// user remove product from cart route
+router.get('/remove-product/:id', userController.removeProduct);
 
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
 
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
-router.post('/update-product', upload.single('file'), userController.updateProduct);
-router.delete('/delete-product', userController.deleteProduct);
+router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
+router.delete('/delete-product/:id', userController.deleteProduct);
+router.get('/manage-product', userController.manageProduct);
+router.get('/edit-product/:id', userController.getSingleProduct);
 
 // vendor homepage (user side)
 router.get('/vendor/:id', userController.vendorHomepage)
@@ -139,6 +148,9 @@ router.get('/admin/:id/report', userController.reportPage);
 // admin ban user route
 router.post("/ban-user", userController.banUser);
 
+// get reponse message from chatbot
+router.post("/api/chatbot/message", userController.chatbotMessage);
+
 // authentication route via login function
 router.get('/login', userController.loginPage);
 router.post('/login', (req, res, next) => {
@@ -152,7 +164,7 @@ router.post('/login', (req, res, next) => {
         }
 
         // Authentication sucess
-        req.logIn(user, (err) => {
+        req.logIn(user, async (err) => {
             if (err) {
                 return next(err);
             }
@@ -174,7 +186,7 @@ router.get('/auth/google/callback', (req, res, next) => {
         }
 
         // Authentication success
-        req.logIn(user, (err) => {
+        req.logIn(user, async (err) => {
             if (err) {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
                 return;

@@ -1,12 +1,46 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
+import { UserImageContext } from "../../Context/UserImageContext";
+import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 export default function VendorMyProduct() {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext)  
+  const { setUserImage } = useContext(UserImageContext)
+  const [error, setError] = useState()
+  const [products, setProducts] = useState([])
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/manage-product", {withCredentials: true});
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  const handleDelete = async (productID) => {
+    console.log('Product ID:', productID);
+    const apiUrl = `http://localhost:4000/delete-product/${productID}`;
+    try {
+       await axios.delete(apiUrl, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then().catch(console.log.error)
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   if (user === undefined) {
-    return <div>Loading....</div>
+    return <div>Loading...</div>
   }
+
   return (
     <>
       {user && user.role === "User" && <Navigate to={'/'} replace />}
@@ -99,64 +133,26 @@ export default function VendorMyProduct() {
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white flex items-center space-x-4 mb-4">
-                    <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded mr-5 " alt="" />
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">
-                        $20000
+                {products.map((product) => (
+                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {product.product_name}
                     </td>
-                    <td class="px-6 py-4">
-                        50
+                    <td className="px-6 py-4">
+                      ${product.price}
                     </td>
-                    <td class="px-6 py-4">
-                        $2999
+                    <td className="px-6 py-4">
+                      {product.stock}
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center space-x-4 mb-4">
-                    <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded mr-5 " alt="" />
-                        Microsoft Surface Pro
-                    </th>
-                    <td class="px-6 py-4">
-                        $1000
-                    </td>
-                    <td class="px-6 py-4">
-                        200
-                    </td>
-                    <td class="px-6 py-4">
-                        $1999
+                    <td className="px-6 py-4">
+                      {product.description}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
+                        <a href={`/edit-product/${product._id}`} class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                        <button onClick={() => handleDelete(product._id)} class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
                     </td>
-                </tr>
-                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center space-x-4 mb-4">
-                    <img src="https://www.newsnationnow.com/wp-content/uploads/sites/108/2022/07/Cat.jpg?w=2560&h=1440&crop=1" className="w-16 aspect-square object-cover rounded mr-5 " alt="" />
-                        Magic Mouse 2
-                    </th>
-                    <td class="px-6 py-4">
-                        $100
-                    </td>
-                    <td class="px-6 py-4">
-                        200
-                    </td>
-                    <td class="px-6 py-4">
-                        $1000
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <a href="#" class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        <a href="#" class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</a>
-
-                    </td>
-                </tr>
+                  </tr>
+                ))}
             </tbody>
         </table>
       </div>

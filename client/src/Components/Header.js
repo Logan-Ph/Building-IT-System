@@ -41,10 +41,6 @@ export default function Header() {
     }
   }
 
-  function applyCategory(category) {
-    refine("")
-    setNavigateTo(`/search/query=/category=${category}/price=`)
-  }
 
   useEffect(() => {
     fetchUser();
@@ -188,7 +184,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <a href='/checkout' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -224,7 +220,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
+        <div className="flex items-center justify-between py-2">
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
@@ -234,7 +230,7 @@ export default function Header() {
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
               Electronics
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
@@ -247,7 +243,7 @@ export default function Header() {
               Fashion
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
-              Toys & Games
+              Entertainment
             </span>
           </div>
           <div>
