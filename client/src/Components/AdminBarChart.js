@@ -1,61 +1,58 @@
-import React from 'react'
-import { Line, defaults } from 'react-chartjs-2'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import 'chart.js/auto' //khong duoc xoa
+import * as React from 'react';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { ChartContainer } from '@mui/x-charts/ChartContainer';
+import { ResponsiveChartContainer } from '@mui/x-charts/ResponsiveChartContainer';
+import { BarPlot } from '@mui/x-charts/BarChart';
+import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart';
+import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
 
+export default function BasicComposition() {
+  const [isResponsive, setIsResponsive] = React.useState(false);
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-
-export default function AdminBarChart() {
-  
+  const Container = isResponsive ? ResponsiveChartContainer : ChartContainer;
+  const sizingProps = isResponsive ? {} : { width: 500, height: 300 };
   return (
-    <div>
-        
-      <Line
-      
-        data={{
-            
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [
-            {
-              label: "First Year",
-              data: [33, 53, 85, 41, 44, 65,12,42,112, 10, 14, 20],
-              fill: true,
-              backgroundColor: "transparent",
-              borderColor: "black"
-            },
-            {
-              label: "Second Year",
-              data: [33, 25, 35, 51, 54, 76, 85, 41, 44, 65, 35, 51],
-              fill: false,
-              borderColor: "#742774"
-            },
-            // {
-            //   label: 'Quantity',
-            //   data: [47, 52, 67, 58, 9, 50],
-            //   backgroundColor: 'orange',
-            //   borderColor: 'red',
-            // },
-          ],
-        }}
-        height={400}
-        width={600}
-        options={{
-          maintainAspectRatio: false,
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                },
-              },
-            ],
-          },
-          
-        }}
+    <Box sx={{ width: '100%' }}>
+      <FormControlLabel
+        checked={isResponsive}
+        control={
+          <Checkbox onChange={(event) => setIsResponsive(event.target.checked)} />
+        }
+        label="Use responsive container"
+        labelPlacement="end"
       />
-    </div>
-  )
-}
 
+      <Paper sx={{ width: '100%', height: 300 }} elevation={3}>
+        {/* @ts-ignore */}
+        <Container
+          series={[
+            {
+              type: 'bar',
+              data: [1, 2, 3, 2, 1],
+            },
+            {
+              type: 'line',
+              data: [4, 3, 1, 3, 4],
+            },
+          ]}
+          xAxis={[
+            {
+              data: ['A', 'B', 'C', 'D', 'E'],
+              scaleType: 'band',
+              id: 'x-axis-id',
+            },
+          ]}
+          {...sizingProps}
+        >
+          <BarPlot />
+          <LinePlot />
+          <MarkPlot />
+          <ChartsXAxis label="X axis" position="bottom" axisId="x-axis-id" />
+        </Container>
+      </Paper>
+    </Box>
+  );
+}

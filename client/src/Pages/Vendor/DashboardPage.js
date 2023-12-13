@@ -1,4 +1,6 @@
 import BarChart from "../../Components/BarChart";
+import AdminBarChart from "../../Components/AdminBarChart";
+
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -75,7 +77,7 @@ export default function DashboardPage() {
 
             </div>
             <div className="relative">
-              {/* <BarChart /> */}
+              <AdminBarChart />
             </div>
           </div>
         </div>
