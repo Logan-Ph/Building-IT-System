@@ -384,7 +384,7 @@ export default function CheckoutInfo({ setCheckoutInfo, products, price, checkou
                             </div>
                             <hr class="h-px my-5 border-0 bg-gray-700" />
                             <div class="order-total mb-3 text-right font-semibold">
-                                Total: ${price.current}
+                                Total: ${price}
                             </div>
                         </div>
                     </div>

@@ -3,10 +3,11 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
 
-export default function OrderSummary({ checkoutInfo, price }) {
+export default function OrderSummary({ checkoutInfo, price, products }) {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
   const { cart } = useContext(CartContext);
+  const [shippingFee, setShippingFee] = useState(5); // Default to standard delivery
   const date = new Date(new Date().setDate(new Date().getDate() + 7));
   const days = [
     "Sunday",
@@ -18,17 +19,7 @@ export default function OrderSummary({ checkoutInfo, price }) {
     "Saturday",
   ];
   const dayOfWeek = days[date.getDay()];
-  const [shippingFee, setShippingFee] = useState(5); // Default to standard delivery
 
-  // Call this function when the standard delivery radio button is selected
-  const selectStandardDelivery = () => {
-    setShippingFee(5);
-  };
-
-  // Call this function when the fast delivery radio button is selected
-  const selectFastDelivery = () => {
-    setShippingFee(20);
-  };
 
   const notify = useCallback(() => {
     if (error) {
@@ -75,7 +66,7 @@ export default function OrderSummary({ checkoutInfo, price }) {
         setMsg();
         return;
       }
-      const res = await axios.post("http://localhost:4000/checkout", checkoutInfo, { withCredentials: true });
+      const res = await axios.post("http://localhost:4000/checkout", {checkoutInfo: checkoutInfo, products: products}, { withCredentials: true });
       setMsg(res.data.message);
       setError("");
     } catch (er) {
@@ -110,11 +101,11 @@ export default function OrderSummary({ checkoutInfo, price }) {
         <div class="text-3xl font-semibold my-3">Order Summary</div>
         <div class="flex items-center justify-between">
           <span class="text-lg text-gray-900">Items:</span>
-          <span class="text-lg text-gray-900">{cart}</span>
+          <span class="text-lg text-gray-900">{products.length}</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-lg text-gray-900">Subtotal:</span>
-          <span class="text-lg text-gray-900">${price.current}</span>
+          <span class="text-lg text-gray-900">${price}</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-lg text-gray-900">Shipping fee:</span>
@@ -128,7 +119,8 @@ export default function OrderSummary({ checkoutInfo, price }) {
               value=""
               name="default-radio"
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-              onClick={selectStandardDelivery}
+              onClick={() => setShippingFee(5)}
+              checked={shippingFee === 5}
             />
             <div class="ms-2 text-sm">
               <label for="standardDelivery" class="font-medium text-gray-900">
@@ -150,7 +142,8 @@ export default function OrderSummary({ checkoutInfo, price }) {
               value=""
               name="default-radio"
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-              onClick={selectFastDelivery}
+              onClick={() => setShippingFee(20)}
+              checked={shippingFee === 20}
             />
             <div class="ms-2 text-sm">
               <label for="fastDelivery" class="font-medium text-gray-900">
@@ -170,7 +163,7 @@ export default function OrderSummary({ checkoutInfo, price }) {
         <div class="flex items-center justify-between">
           <span class="text-xl font-semibold text-[#E61E2A]">Order total:</span>
           <span class="text-xl font-semibold text-[#E61E2A]">
-            ${price.current + shippingFee}
+            ${price + shippingFee}
           </span>
         </div>
 
