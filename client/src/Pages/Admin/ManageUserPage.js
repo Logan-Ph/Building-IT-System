@@ -10,6 +10,10 @@ import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
 import AdminManageVendorProduct from "./AdminManageVendorProduct";
 
+import { Fragment } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
   const [usersInfo, setUsersInfo] = useState([]);

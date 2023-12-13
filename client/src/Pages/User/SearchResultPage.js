@@ -7,6 +7,7 @@ import SRProductCard from '../../Components/SRProductCard'
 import SRPagination from '../../Components/SRPagination'
 import SRPriceRange from '../../Components/SRPriceRange'
 import SRStarRating from '../../Components/SRStarRating'
+import SRSideBar from '../../Components/SRSideBar'
 import { useHits, useRefinementList } from 'react-instantsearch';
 import { Navigate, useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
@@ -64,6 +65,7 @@ export default function Example() {
     <div className="bg-white">
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -157,8 +159,30 @@ export default function Example() {
             </div>
             <SRPagination />
           </section>
+
+          <section className='flex divide-y-2'>
+            <div className='border border-gray-900 bg-gray-100 divide-y-2'>
+              <div className=' bg-gray-100 border-b-white pr-4 py-4'>
+                  <div className='ps-0'>
+                    <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine}/>
+                  </div>
+              </div>
+              <div className=' bg-gray-100 border-b-white pr-4 py-4'>
+                  <div className='ps-0'>
+                    <SRPriceRange />
+                  </div>
+              </div>
+            </div>
+            <div className='border border-black'></div>
+
+          </section>
         </main>
       </div>
+      
+                    
+
+
+
     </div>
   )
 }
@@ -171,7 +195,7 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
   }
 
   return (
-    <div className='flex mb-3 pb-6 xs:px-4 sm:px-4'>
+    <div className='flex px-6'>
       <div className='w-full'>
         <h3 className='font-medium mb-2 mt-3'>Categories</h3>
         {valueFilter.map(option => (
@@ -184,3 +208,4 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
     </div>
   );
 }
+

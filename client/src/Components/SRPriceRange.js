@@ -21,7 +21,7 @@ export default function SRPriceRange() {
   };
 
   return (
-    <div className='flex mb-3 border-b border-gray-200 pb-6 xs:px-4 sm:px-4'>
+    <div className='flex px-6'>
       <div className='w-full'>
         <h3 className='font-medium mb-2 mt-3'>Price <span className='font-medium'>Range</span></h3>
         <div className={"values"}>${values[0]}- ${values[1]}</div>
@@ -35,6 +35,13 @@ export default function SRPriceRange() {
           value={values}
           min={MIN}
           max={MAX} />
+          
+          
+        <form class="max-w-sm mx-auto">
+            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a number:</label>
+            <input type="number" id="number-input" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="90210" required/>
+        </form>
+
       </div>
     </div>
 
