@@ -113,12 +113,13 @@ exports.homePage = async (req, res) => {
 }
 
 exports.chatbotMessage = async (req, res) => {
-  if (!req.cookies.threadId) {
+  let threadId = req.cookies.threadId;
+  if (!threadId) {
     const thread = await openai.beta.threads.create();
-    res.cookie('threadId', thread.id, { httpOnly: true }); // pass thread id into the cookies
+    threadId = thread.id;
+    res.cookie("threadId", threadId, { httpOnly: true }); // pass thread id into the cookies
   }
-  const threadId = req.cookies.threadId;
-  let messages
+  let messages;
   await openai.beta.threads.messages.create(threadId, {
     role: "user",
     content: req.body.message
@@ -359,8 +360,9 @@ exports.placeOrder = async (req, res) => {
   try {
     const userID = req.user._id;
     if (req.body.isRemember) {
-      await User.findByIdAndUpdate(userID, { city: req.body.city, phoneNumber: req.body.phoneNumber, district: req.body.district, ward: req.body.ward, streetAddress: req.body.streetAddress })
+      await User.findByIdAndUpdate(userID, { city: req.body.checkoutInfo.city, phoneNumber: req.body.checkoutInfo.phoneNumber, district: req.body.checkoutInfo.district, ward: req.body.checkoutInfo.ward, streetAddress: req.body.checkoutInfo.streetAddress })
     }
+    const products = req.body.products
 
     // Find the user's cart
     const userCart = await Cart.findOne({ userID }).populate('products.product');
@@ -368,38 +370,40 @@ exports.placeOrder = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
 
-    // Group products by owner
-    const productsByOwner = userCart.products.reduce((groups, cartItem) => {
-      const ownerID = cartItem.product.owner.toString();
-      if (!groups[ownerID]) {
-        groups[ownerID] = [];
-      }
-      groups[ownerID].push(cartItem);
-      return groups;
-    }, {});
+    console.log(products)
 
-    // Create an order for each owner
-    for (const ownerID in productsByOwner) {
-      const order = new Order({
-        userId: userID,
-        vendorID: ownerID,
-        products: productsByOwner[ownerID].map((cartItem) => ({
-          productId: cartItem.product._id,
-          quantity: cartItem.quantity,
-          image_link: cartItem.product.image_link,
-          price: cartItem.product.price,
-          product_name: cartItem.product.product_name
-        })),
-        userName: req.user.name,
-        shippingAddress: req.body.streetAddress,
-        contactNumber: req.body.phoneNumber
-      });
+    // // Group products by owner
+    // const productsByOwner = userCart.products.reduce((groups, cartItem) => {
+    //   const ownerID = cartItem.product.owner.toString();
+    //   if (!groups[ownerID]) {
+    //     groups[ownerID] = [];
+    //   }
+    //   groups[ownerID].push(cartItem);
+    //   return groups;
+    // }, {});
 
-      await order.save();
-    }
+    // // Create an order for each owner
+    // for (const ownerID in productsByOwner) {
+    //   const order = new Order({
+    //     userId: userID,
+    //     vendorID: ownerID,
+    //     products: productsByOwner[ownerID].map((cartItem) => ({
+    //       productId: cartItem.product._id,
+    //       quantity: cartItem.quantity,
+    //       image_link: cartItem.product.image_link,
+    //       price: cartItem.product.price,
+    //       product_name: cartItem.product.product_name
+    //     })),
+    //     userName: req.user.name,
+    //     shippingAddress: req.body.streetAddress,
+    //     contactNumber: req.body.phoneNumber
+    //   });
 
-    // Clear the user's cart
-    await userCart.clearCart();
+    //   await order.save();
+    // }
+
+    // // Clear the user's cart
+    // await userCart.clearCart();
 
     res.status(200).json({ message: 'Orders placed successfully!' });
   } catch (error) {
@@ -407,8 +411,6 @@ exports.placeOrder = async (req, res) => {
     res.status(500).json({ error: 'Error placing order' });
   }
 };
-
-
 
 exports.addProduct = async (req, res) => {
   if (!req.user) {
@@ -441,6 +443,10 @@ exports.addProduct = async (req, res) => {
     );
   }
   return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
+}
+
+exports.removeProduct = async (req, res) => {
+
 }
 
 exports.searchOrder = async (req, res) => {
@@ -538,8 +544,17 @@ exports.postVendorDashboard = async (req, res) => {
 
 }
 
+exports.cartPage = async (req, res) => {
+  try {
+    const cart = await Cart.find({ userID: req.user._id })
+    const products = cart[0].products
+    return res.status(200).json({ products: products })
+  } catch {
+    return res.status(500).json({ error: "Cannot find cart" })
+  }
+}
+
 exports.checkout = async (req, res) => {
-  const cart = await Cart.find({ userID: req.user._id })
   const checkoutInfo = {
     phoneNumber: req.user.phoneNumber,
     city: req.user.city,
@@ -547,7 +562,7 @@ exports.checkout = async (req, res) => {
     ward: req.user.ward,
     streetAddress: req.user.streetAddress,
   }
-  return res.status(200).json({ products: cart[0].products, checkoutInfo: checkoutInfo })
+  return res.status(200).json({ checkoutInfo: checkoutInfo })
 }
 
 exports.logout = (req, res) => {
