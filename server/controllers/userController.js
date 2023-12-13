@@ -81,9 +81,9 @@ exports.loginSuccess = async (req, res) => {
       ).toString("base64");
     }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.status(200).json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
+    res.status(200).json({ user: user, cart: (cart) ? cart : null, userImage: userImage });
   } else {
-    res.status(500).json({ user: "", length: 0 })
+    res.status(500).json({ user: "", cart: null })
   }
 }
 
@@ -113,12 +113,13 @@ exports.homePage = async (req, res) => {
 }
 
 exports.chatbotMessage = async (req, res) => {
-  if (!req.cookies.threadId) {
+  let threadId = req.cookies.threadId;
+  if (!threadId) {
     const thread = await openai.beta.threads.create();
-    res.cookie('threadId', thread.id, { httpOnly: true }); // pass thread id into the cookies
+    threadId = thread.id;
+    res.cookie("threadId", threadId, { httpOnly: true }); // pass thread id into the cookies
   }
-  const threadId = req.cookies.threadId;
-  let messages
+  let messages;
   await openai.beta.threads.messages.create(threadId, {
     role: "user",
     content: req.body.message
@@ -359,8 +360,9 @@ exports.placeOrder = async (req, res) => {
   try {
     const userID = req.user._id;
     if (req.body.isRemember) {
-      await User.findByIdAndUpdate(userID, { city: req.body.city, phoneNumber: req.body.phoneNumber, district: req.body.district, ward: req.body.ward, streetAddress: req.body.streetAddress })
+      await User.findByIdAndUpdate(userID, { city: req.body.checkoutInfo.city, phoneNumber: req.body.checkoutInfo.phoneNumber, district: req.body.checkoutInfo.district, ward: req.body.checkoutInfo.ward, streetAddress: req.body.checkoutInfo.streetAddress })
     }
+    const products = req.body.products
 
     // Find the user's cart
     const userCart = await Cart.findOne({ userID }).populate('products.product');
@@ -398,17 +400,16 @@ exports.placeOrder = async (req, res) => {
       await order.save();
     }
 
-    // Clear the user's cart
-    await userCart.clearCart();
+    for (const product of products) {
+      await userCart.removeProduct(product.product); // Remove each product from the cart
+    }
 
-    res.status(200).json({ message: 'Orders placed successfully!' });
+    res.status(200).json({ message: 'Orders placed successfully!', cart: userCart });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error placing order' });
   }
 };
-
-
 
 exports.addProduct = async (req, res) => {
   if (!req.user) {
@@ -440,7 +441,19 @@ exports.addProduct = async (req, res) => {
       (req.query.quantity) ? req.query.quantity : 1
     );
   }
-  return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
+  return res.status(200).json({ msg: "added to cart", cart: (cart) ? cart : null })
+}
+
+exports.removeProduct = async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ userID: req.user._id })
+    const product = await Product.findById(req.params.id);
+    cart.removeProduct(product._id);
+    return res.status(200).json({ cart: cart })
+  }
+  catch {
+    return res.status(500).json({ error: "Cannot find the product." })
+  }
 }
 
 exports.searchOrder = async (req, res) => {
@@ -538,8 +551,17 @@ exports.postVendorDashboard = async (req, res) => {
 
 }
 
+exports.cartPage = async (req, res) => {
+  try {
+    const cart = await Cart.find({ userID: req.user._id })
+    const products = cart[0].products
+    return res.status(200).json({ products: products })
+  } catch {
+    return res.status(500).json({ error: "Cannot find cart" })
+  }
+}
+
 exports.checkout = async (req, res) => {
-  const cart = await Cart.find({ userID: req.user._id })
   const checkoutInfo = {
     phoneNumber: req.user.phoneNumber,
     city: req.user.city,
@@ -547,7 +569,7 @@ exports.checkout = async (req, res) => {
     ward: req.user.ward,
     streetAddress: req.user.streetAddress,
   }
-  return res.status(200).json({ products: cart[0].products, checkoutInfo: checkoutInfo })
+  return res.status(200).json({ checkoutInfo: checkoutInfo })
 }
 
 exports.logout = (req, res) => {

@@ -109,7 +109,7 @@ export default function Example() {
                   <span className="mt-4 border-t border-gray-200">
                     <SRPriceRange className="pt-6 px-4" />
                     <SRStarRating className="pt-6 px-4" />
-                    <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} />
+                    <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
                   </span>
                 </Dialog.Panel>
               </Transition.Child>
