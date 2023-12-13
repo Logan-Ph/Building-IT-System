@@ -33,17 +33,15 @@ import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import { UserImageProvider } from '../Context/UserImageContext';
-import UserProfileSidebar from '../Components/UserProfileSidebar';
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
 export default function Router() {
-  const UserLayout = ({ header, sidebar }) => {
+  const UserLayout = ({ header }) => {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
           {header}
-          {sidebar}
           <Outlet />
           <Chatbot />
           <Footer />
@@ -59,20 +57,6 @@ export default function Router() {
           <VendorHeader />
           <div className="flex  ">
             <VendorSidebar />
-            <Outlet />
-          </div>
-        </InstantSearch>
-      </>
-    )
-  }
-
-  const UserProfileLayout = () => {
-    return (
-      <>
-        <InstantSearch searchClient={searchClient} indexName="rBuy">
-          <VendorHeader />
-          <div className="flex  ">
-            <UserProfileSidebar />
             <Outlet />
           </div>
         </InstantSearch>
@@ -111,20 +95,6 @@ export default function Router() {
           <VerifyEmailPage />
         </>
       ),
-    },
-    {
-      path: "/",
-      element: <UserProfileLayout />,
-      children: [
-        {
-          path: "/profile",
-          element: <UserProfile />,
-        },
-        {
-          path: "/manage-product",
-          element: <VendorMyProduct />,
-        },
-      ],
     },
     {
       path: "/",
