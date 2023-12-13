@@ -28,6 +28,7 @@ export default function CheckoutPage() {
     const storedProducts = localStorage.getItem('products');
     if (storedProducts) {
       setProducts(JSON.parse(storedProducts));
+      console.log(JSON.parse(storedProducts));
     }
   }, [fetchData]);
 
@@ -45,10 +46,10 @@ export default function CheckoutPage() {
           <h1 class="text-center text-5xl">Checkout</h1>
           <div class="grid md:grid-cols-3 md:gap-5 my-3">
             <div class="md:col-span-2 row-span-2 my-3">
-              <CheckoutInfo setCheckoutInfo={setCheckoutInfo} products={products} price={products.reduce((total, product) => product.checked ? total + product.price * product.quantity : total, 0)} checkoutInfo={checkoutInfo} />
+              <CheckoutInfo setCheckoutInfo={setCheckoutInfo} products={products} price={(products) ? products.reduce((total, product) => product.checked ? total + product.price * product.quantity : total, 0) : 0} checkoutInfo={checkoutInfo} />
             </div>
             <div class="md:col-span-1">
-              <OrderSummary checkoutInfo={checkoutInfo} products={products} price={products.reduce((total, product) => product.checked ? total + product.price * product.quantity : total, 0)} />
+              <OrderSummary checkoutInfo={checkoutInfo} products={products} price={(products) ? products.reduce((total, product) => product.checked ? total + product.price * product.quantity : total, 0) : 0} />
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ import { CartContext } from "../Context/CartContext";
 export default function OrderSummary({ checkoutInfo, price, products }) {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
-  const { cart } = useContext(CartContext);
+  const { cart, setCart } = useContext(CartContext);
   const [shippingFee, setShippingFee] = useState(5); // Default to standard delivery
   const date = new Date(new Date().setDate(new Date().getDate() + 7));
   const days = [
@@ -57,7 +57,11 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
 
   const postData = async () => {
     try {
-      if (cart === 0) {
+      if (!products) {
+        setError("There are no products to checkout");
+      }
+
+      if (cart.products.length === 0) {
         setError("Your cart is empty");
         return;
       }
@@ -66,8 +70,10 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
         setMsg();
         return;
       }
-      const res = await axios.post("http://localhost:4000/checkout", {checkoutInfo: checkoutInfo, products: products}, { withCredentials: true });
+      const res = await axios.post("http://localhost:4000/checkout", { checkoutInfo: checkoutInfo, products: products }, { withCredentials: true });
       setMsg(res.data.message);
+      setCart(res.data.cart);
+      localStorage.setItem('products', JSON.stringify([]));
       setError("");
     } catch (er) {
       setError(er);
@@ -101,7 +107,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
         <div class="text-3xl font-semibold my-3">Order Summary</div>
         <div class="flex items-center justify-between">
           <span class="text-lg text-gray-900">Items:</span>
-          <span class="text-lg text-gray-900">{products.length}</span>
+          <span class="text-lg text-gray-900">{(products) ? products.length : 0}</span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-lg text-gray-900">Subtotal:</span>

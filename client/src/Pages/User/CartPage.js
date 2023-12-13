@@ -3,12 +3,15 @@ import { UserContext } from "../../Context/UserContext";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function CartPage() {
   const { user } = useContext(UserContext);
-  const { cart } = useContext(CartContext);
+  const { cart, setCart } = useContext(CartContext);
   const [error, setError] = useState("");
+  const [navigateTo, setNavigateTo] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [checkedProducts, setCheckedProducts] = useState([]); // Array of products that are checked [
   const [products, setProducts] = useState([]); // Array of products in the cart
 
   const fetchCart = useCallback(async () => {
@@ -22,21 +25,31 @@ export default function CartPage() {
     }
   }, [])
 
+  const removeProduct = async (id) => {
+    try {
+      const res = await axios.get(`http://localhost:4000/remove-product/${id}`, { withCredentials: true });
+      setProducts(prevProducts => prevProducts.filter(product => product.product !== id));
+      setCart(res.data.cart);
+    } catch (error) {
+      setError(error);
+    }
+  }
+
   const incrementQuantity = (id) => {
     setProducts(products.map(product =>
-      product._id === id ? { ...product, quantity: product.quantity + 1 } : product
+      product.product === id ? { ...product, quantity: product.quantity + 1 } : product
     ));
   };
 
   const decrementQuantity = (id) => {
     setProducts(products.map(product =>
-      product._id === id ? { ...product, quantity: (product.quantity - 1) > 0 ? product.quantity - 1 : 1 } : product
+      product.product === id ? { ...product, quantity: (product.quantity - 1) > 0 ? product.quantity - 1 : 1 } : product
     ));
   };
 
   const toggleChecked = (id) => {
     setProducts(products.map(product =>
-      product._id === id ? { ...product, checked: !product.checked } : product
+      product.product === id ? { ...product, checked: !product.checked } : product
     ));
   };
 
@@ -50,9 +63,26 @@ export default function CartPage() {
 
   // Save products to local storage whenever they change
   useEffect(() => {
-    const checkedProducts = products.filter(product => product.checked);
-    localStorage.setItem('products', JSON.stringify(checkedProducts));
+    setCheckedProducts(products.filter(product => product.checked));
   }, [products]);
+
+  const handleCheckout = async () => {
+    if (checkedProducts.length === 0) {
+      toast.error("Please select at least one product to checkout", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+      return;
+    }
+    localStorage.setItem('products', JSON.stringify(checkedProducts));
+    setNavigateTo('/checkout')
+  }
 
   if (user === undefined || isLoading) {
     return <div>isLoading...</div>;
@@ -62,9 +92,22 @@ export default function CartPage() {
     <>
       {!user && <Navigate to="/" />}
       {error && <Navigate to="/" />}
-      {console.log(products)}
+      {navigateTo && <Navigate to={navigateTo} />}
+      <ToastContainer
+        position="top-center"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
+
       <div class="text-center text-3xl my-5 sticky top-0">
-        Shopping Cart <span class="text-xl">({cart})</span>
+        Shopping Cart <span class="text-xl">({cart.products?.length})</span>
       </div>
       <div class="md:container mx-auto md:px-6 px-2">
         <div class="grid md:grid-cols-3 md:gap-5 my-3">
@@ -77,14 +120,14 @@ export default function CartPage() {
                     <div class="flow-root">
                       <ul class="-my-6 divide-y divide-gray-200">
                         {products.map((product) => (
-                          <li class="flex py-6" key={product._id}>
+                          <li class="flex py-6" key={product.product}>
                             <div>
                               <input
                                 id="default-checkbox"
                                 type="checkbox"
                                 value=""
                                 class="w-5 h-5 text-black bg-gray-100 border-gray-300 rounded mr-3"
-                                onClick={() => toggleChecked(product._id)}
+                                onClick={() => toggleChecked(product.product)}
                               />
                             </div>
                             <div class="order-product-img">
@@ -107,7 +150,7 @@ export default function CartPage() {
                                     id="decrement-button"
                                     data-input-counter-decrement="quantity-input"
                                     class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-2 h-6 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                                    onClick={() => decrementQuantity(product._id)}
+                                    onClick={() => decrementQuantity(product.product)}
                                   >
                                     <svg
                                       class="w-2 h-2 text-gray-900"
@@ -139,7 +182,7 @@ export default function CartPage() {
                                     id="increment-button"
                                     data-input-counter-increment="quantity-input"
                                     class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-2 h-6 focus:ring-gray-100 focus:ring-2 focus:outline-none"
-                                    onClick={() => incrementQuantity(product._id)}
+                                    onClick={() => incrementQuantity(product.product)}
                                   >
                                     <svg
                                       class="w-2 h-2 text-gray-900"
@@ -163,6 +206,7 @@ export default function CartPage() {
                                   <button
                                     type="button"
                                     class="font-medium text-indigo-600 hover:text-indigo-500"
+                                    onClick={() => removeProduct(product.product)}
                                   >
                                     Remove
                                   </button>
@@ -192,12 +236,12 @@ export default function CartPage() {
                   <span class="text-lg text-gray-900">${products.reduce((total, product) => product.checked ? total + product.price * product.quantity : total, 0)}</span>
                 </div>
                 <div class="my-5">
-                  <a
+                  <span
                     class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-lg font-medium leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]"
-                    href="/checkout"
+                    onClick={handleCheckout}
                   >
                     Proceed to checkout
-                  </a>
+                  </span>
                 </div>
               </div>
             </div>
