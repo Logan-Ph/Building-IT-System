@@ -57,6 +57,11 @@ cartSchema.methods.getTotalProducts = function () {
     }, 0);
 }
 
+cartSchema.methods.removeProduct = function (productId) {
+    this.products = this.products.filter(p => p.product._id.toString() !== productId.toString());
+    return this.save();
+};
+
 cartSchema.methods.clearCart = function () {
     this.products = [];
     return this.save();

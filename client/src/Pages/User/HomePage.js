@@ -9,7 +9,6 @@ import Banner from '../../Components/Banner';
 import { UserContext } from '../../Context/UserContext';
 import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
-
 import { Carousel } from 'flowbite-react';
 
 

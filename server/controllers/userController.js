@@ -81,9 +81,9 @@ exports.loginSuccess = async (req, res) => {
       ).toString("base64");
     }
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.status(200).json({ user: user, length: (cart) ? cart.getTotalProducts() : 0, userImage: userImage });
+    res.status(200).json({ user: user, cart: (cart) ? cart : null, userImage: userImage });
   } else {
-    res.status(500).json({ user: "", length: 0 })
+    res.status(500).json({ user: "", cart: null })
   }
 }
 
@@ -370,42 +370,41 @@ exports.placeOrder = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
 
-    console.log(products)
+    // Group products by owner
+    const productsByOwner = userCart.products.reduce((groups, cartItem) => {
+      const ownerID = cartItem.product.owner.toString();
+      if (!groups[ownerID]) {
+        groups[ownerID] = [];
+      }
+      groups[ownerID].push(cartItem);
+      return groups;
+    }, {});
 
-    // // Group products by owner
-    // const productsByOwner = userCart.products.reduce((groups, cartItem) => {
-    //   const ownerID = cartItem.product.owner.toString();
-    //   if (!groups[ownerID]) {
-    //     groups[ownerID] = [];
-    //   }
-    //   groups[ownerID].push(cartItem);
-    //   return groups;
-    // }, {});
+    // Create an order for each owner
+    for (const ownerID in productsByOwner) {
+      const order = new Order({
+        userId: userID,
+        vendorID: ownerID,
+        products: productsByOwner[ownerID].map((cartItem) => ({
+          productId: cartItem.product._id,
+          quantity: cartItem.quantity,
+          image_link: cartItem.product.image_link,
+          price: cartItem.product.price,
+          product_name: cartItem.product.product_name
+        })),
+        userName: req.user.name,
+        shippingAddress: req.body.streetAddress,
+        contactNumber: req.body.phoneNumber
+      });
 
-    // // Create an order for each owner
-    // for (const ownerID in productsByOwner) {
-    //   const order = new Order({
-    //     userId: userID,
-    //     vendorID: ownerID,
-    //     products: productsByOwner[ownerID].map((cartItem) => ({
-    //       productId: cartItem.product._id,
-    //       quantity: cartItem.quantity,
-    //       image_link: cartItem.product.image_link,
-    //       price: cartItem.product.price,
-    //       product_name: cartItem.product.product_name
-    //     })),
-    //     userName: req.user.name,
-    //     shippingAddress: req.body.streetAddress,
-    //     contactNumber: req.body.phoneNumber
-    //   });
+      await order.save();
+    }
 
-    //   await order.save();
-    // }
+    for (const product of products) {
+      await userCart.removeProduct(product.product); // Remove each product from the cart
+    }
 
-    // // Clear the user's cart
-    // await userCart.clearCart();
-
-    res.status(200).json({ message: 'Orders placed successfully!' });
+    res.status(200).json({ message: 'Orders placed successfully!', cart: userCart });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error placing order' });
@@ -442,11 +441,19 @@ exports.addProduct = async (req, res) => {
       (req.query.quantity) ? req.query.quantity : 1
     );
   }
-  return res.status(200).json({ msg: "added to cart", length: (cart) ? cart.getTotalProducts() : 0 })
+  return res.status(200).json({ msg: "added to cart", cart: (cart) ? cart : null })
 }
 
 exports.removeProduct = async (req, res) => {
-
+  try {
+    const cart = await Cart.findOne({ userID: req.user._id })
+    const product = await Product.findById(req.params.id);
+    cart.removeProduct(product._id);
+    return res.status(200).json({ cart: cart })
+  }
+  catch {
+    return res.status(500).json({ error: "Cannot find the product." })
+  }
 }
 
 exports.searchOrder = async (req, res) => {
