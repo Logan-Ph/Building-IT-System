@@ -25,7 +25,7 @@ export default function Header() {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
-      setCart(res.data.length)
+      setCart(res.data.cart)
       setUserImage(res.data.userImage)
     } catch (er) {
       setUser(null)
@@ -39,11 +39,6 @@ export default function Header() {
       refine(inputQuery)
       setInputQuery("")
     }
-  }
-
-  function applyCategory(category) {
-    refine("")
-    setNavigateTo(`/search/query=/category=${category}/price=`)
   }
 
   useEffect(() => {
@@ -85,7 +80,6 @@ export default function Header() {
     return <div>Loading....</div>
   }
 
-
   return (
     <section>
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
@@ -95,20 +89,18 @@ export default function Header() {
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
             {/* <!-- logo --> */}
-            <div className="flex items-center lg:ml-10 ">
-              <a href='\'>
-                <img
-                  src={require('./images/logo1.png')}
-                  className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
-                  alt="logo"
-                />
-              </a>
-              <a href='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
+            <a className="flex items-center lg:ml-10 " href='\'>
+              <img
+                src={require("./images/logo1.png")}
+                className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
+                alt="logo"
+              />
+              <span href='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
                 rBuy
-              </a>
-            </div>
+              </span>
+            </a>
 
-            <div className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
+            <form onSubmit={submitSearch} className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
               <input
                 type="text"
                 className="w-3/4 rounded-md border border-slate-400 px-3 py-2 text-md hover:border-black"
@@ -134,6 +126,7 @@ export default function Header() {
               </div>
             </form>
 
+            <div className="flex items-center">
               <div className="ml-2 flex">
                 <div className="mr-2 flex">
                   <div className="lg:hidden flex items-center">
@@ -189,7 +182,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <a href='/checkout' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +195,8 @@ export default function Header() {
 
                     {/* <!-- number on the cart --> */}
                     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      10
+                      {cart.products && (cart.products?.length > 99) ? "99+" : cart.products?.length}
+                      {!cart.products && "0"}
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
@@ -219,13 +213,13 @@ export default function Header() {
               </div>
             </div>
             {/* if the user login this will disappear */}
-            <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
+            {!user && <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
               <a href='\login' className="text-md font-medium text-black">Sign in</a>
-            </div>
+            </div>}
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
+        <div className="flex items-center justify-between py-2">
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
@@ -235,7 +229,7 @@ export default function Header() {
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
               Electronics
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
@@ -248,7 +242,7 @@ export default function Header() {
               Fashion
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
-              Toys & Games
+              Entertainment
             </span>
           </div>
           <div>
@@ -275,7 +269,7 @@ export default function Header() {
                 >
                   <img
                     alt="Logo"
-                    src={require('./images/logo1.png')}
+                    src={require("./images/logo1.png")}
                     className="inline xs:w-8 sm:w-10 md:w-12 mb-2 "
                   />
                   <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
@@ -326,7 +320,7 @@ export default function Header() {
                 </div>
               </div>
 
-              <div className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 mr-3 ml-3 h-10">
+              <form onSubmit={submitSearch} className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 mr-3 ml-3 h-10">
                 <input
                   type="text"
                   className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-xs text-gray-600 focus:outline-none"
@@ -347,7 +341,7 @@ export default function Header() {
                     ></path>
                   </svg>
                 </button>
-              </div>
+              </form>
 
               <div className="  lg:block  border-neutral-200">
 

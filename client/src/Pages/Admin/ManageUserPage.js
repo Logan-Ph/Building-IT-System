@@ -3,8 +3,12 @@ import { Tabs } from "flowbite-react";
 import { Table } from "flowbite-react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
+import { AiFillDelete } from "react-icons/ai";
+import { FaShoppingBag } from "react-icons/fa";
+
 import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
+import AdminManageVendorProduct from "./AdminManageVendorProduct";
 
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
@@ -54,16 +58,16 @@ export default function ManageUserPage() {
   }
 
   return (
-    <div class="container mx-auto my-5">
+    <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       {user && user.role === "User" && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
       {error && <Navigate to={"/login"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
-          <Tabs.Item active title="Customer">
+          <Tabs.Item active title="Customer" icon={HiUserCircle}>
             <UserTable users={usersInfo} usersImage={usersImage} />
           </Tabs.Item>
-          <Tabs.Item title="Vendor">
+          <Tabs.Item title="Vendor" icon={FaShoppingBag}>
             <VendorTable vendors={vendors} vendorsImage={vendorsImage} />
           </Tabs.Item>
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
@@ -71,6 +75,11 @@ export default function ManageUserPage() {
           </Tabs.Item>
           <Tabs.Item title="Reported Account" icon={HiClipboardList}>
             <ReportedTable />
+          </Tabs.Item>
+
+          {/* Admin manage product */}
+          <Tabs.Item title="Product" icon={AiFillDelete}>
+            <AdminManageVendorProduct/>
           </Tabs.Item>
         </Tabs>
       </div>
@@ -81,7 +90,7 @@ export default function ManageUserPage() {
 function UserTable({ users, usersImage }) {
   return (
     <>
-      <div className="p-4 bg-gray-200">
+      <div className="p-4 bg-gray-100">
         <div className="relative overflow-x-auto">
           <Table hoverable>
             <Table.Head>
@@ -99,7 +108,7 @@ function UserTable({ users, usersImage }) {
                 .map((user, i) => (
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                      <img src={(usersImage[i]) ? `data:image/jpeg;base64,${usersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                      <img src={(usersImage[i]) ? `data:image/jpeg;base64,${usersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
                         <div class="text-base font-medium">{user.name}</div>
                         <div class="font-normal text-gray-500">
@@ -166,7 +175,7 @@ function UserTable({ users, usersImage }) {
 
 function VendorTable({ vendors, vendorsImage }) {
   return (<>
-    <div className="p-4 bg-gray-200">
+    <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <Table hoverable>
           <Table.Head>
@@ -182,7 +191,7 @@ function VendorTable({ vendors, vendorsImage }) {
             {vendors && vendors.map((vendor, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                  <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                   <div class="ps-3">
                     <div class="text-base font-medium">{vendor.businessName}</div>
                     <div class="font-normal text-gray-500">
@@ -248,7 +257,7 @@ function VendorTable({ vendors, vendorsImage }) {
 
 function ShipperTable({ shippers, shippersImage }) {
   return (<>
-    <div className="p-4 bg-gray-200">
+    <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <Table hoverable>
           <Table.Head>
@@ -265,7 +274,7 @@ function ShipperTable({ shippers, shippersImage }) {
             {shippers && shippers.map((shipper, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                  <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                   <div class="ps-3">
                     <div class="text-base font-medium">{shipper.name}</div>
                     <div class="font-normal text-gray-500">
@@ -296,7 +305,7 @@ function ShipperTable({ shippers, shippersImage }) {
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
+                  src={require("../../Components/images/defaultUserImage.png")}
                   alt="Jese image"
                 />
                 <div class="ps-3">
@@ -333,7 +342,7 @@ function ShipperTable({ shippers, shippersImage }) {
 
 function ReportedTable() {
   return (<>
-    <div className="p-4 bg-gray-200">
+    <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
           <div>
@@ -446,7 +455,7 @@ function ReportedTable() {
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
+                  src={require("../../Components/images/defaultUserImage.png")}
                   alt="Jese image"
                 />
                 <div class="ps-3">
@@ -476,9 +485,8 @@ function ReportedTable() {
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
-                  alt="Jese image"
-                />
+                  src={require("../../Components/images/defaultUserImage.png")}
+                  alt="Jese image"/>
                 <div class="ps-3">
                   <div class="text-base font-medium">Name</div>
                   <div class="font-normal text-gray-500">

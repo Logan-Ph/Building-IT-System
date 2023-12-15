@@ -1,39 +1,38 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChatContainer, MainContainer, MessageList, TypingIndicator } from "@chatscope/chat-ui-kit-react"
-import { OpenAI } from 'openai'
-const API_KEY = "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"
-const openai = new OpenAI({ apiKey: API_KEY, dangerouslyAllowBrowser: true });
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import axios from 'axios';
+import { UserContext } from '../Context/UserContext';
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const { user } = useContext(UserContext)
+  const messages = useRef([{ text: "Hi my name is rBuddy! How can I help you?", sender: "assistant" }]);
   const [inputMessage, setInputMessage] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showImage, setShowImage] = useState(false);
   const [typing, setTyping] = useState(false)
   const messageBoxRef = useRef();
 
-  const send = () => {
+  const send = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      messages.current = [...messages.current, { text: inputMessage, sender: "user" }];
+      setInputMessage('');
+      messages.current = [...messages.current, { text: "Please login to use rBuddy!", sender: "assistant" }];
+      return;
+    }
+
     if (inputMessage !== '') {
       setTyping(true)
-      addMsg(inputMessage);
+      messages.current = [...messages.current, { text: inputMessage, sender: "user" }];
       setInputMessage('');
-      setTimeout(() => addResponseMsg(inputMessage), 1000);
+      handleResponse(inputMessage);
     }
   };
 
-  const createThread = async () => {
-    const emptyThread = await openai.beta.threads.create();
-    console.log(emptyThread)
+  const handleResponse = async (message) => {
+    const res = await axios.post('http://localhost:4000/api/chatbot/message', { message: message }, { withCredentials: true });
+    messages.current = [...messages.current, { text: res.data.message, sender: "assistant" }];
+    setTyping(false)
   }
-
-
-  const addMsg = (msg) => {
-    setMessages((prevMessages) => [...prevMessages, { text: msg, sent: true }]);
-  };
-
-  const addResponseMsg = (msg) => {
-    setMessages((prevMessages) => [...prevMessages, { text: msg, sent: false }]);
-  };
 
   useEffect(() => {
     if (messageBoxRef.current) {
@@ -76,19 +75,13 @@ export default function Chatbot() {
           <span>rBuddy</span>
         </div>
         <div className="chat-area" id="message-box" ref={messageBoxRef}>
-          {messages.map((message, index) => (
-            <div key={index} className={`chat-message-div ${message.sent ? 'chat-message-sent' : 'chat-message-received'}`}>
+          {messages.current.map((message, index) => (
+            <div key={index} className={`chat-message-div ${(message.sender === 'user') ? 'chat-message-sent' : 'chat-message-received'}`}>
               {message.text}
             </div>
           ))}
         </div>
-        <div className="line">
-          <MainContainer>
-            <ChatContainer>
-              <MessageList typingIndicator={typing ? <TypingIndicator content="rBuddy is typing" /> : null} />
-            </ChatContainer>
-          </MainContainer>
-        </div>
+        {typing && <span className='text-gray-800'>rBuddy is typing...</span>}
         <div className="input-div">
           <input
             className="input-message"
@@ -98,14 +91,15 @@ export default function Chatbot() {
             placeholder="Type your message ..."
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
+            disabled={typing}
             onKeyUp={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                send();
+                send(e);
               }
             }}
           />
-          <button className="input-send" onClick={() => { send() }}>
+          <button className="input-send" disabled={typing} onClick={(e) => { send(e) }}>
             <svg style={{ width: "24px", height: "24px" }}>
               <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
             </svg>

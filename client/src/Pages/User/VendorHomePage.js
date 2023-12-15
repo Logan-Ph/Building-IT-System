@@ -36,7 +36,7 @@ export default function VendorHomePage() {
       {error && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-      <section>
+      <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
         <VendorNav vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} />
 
