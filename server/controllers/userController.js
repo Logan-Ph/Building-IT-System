@@ -893,47 +893,33 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
-    const users = (await User.find({})).filter(user => user.role !== "Admin");
-    const vendors = await Vendor.find({});
-    const shippers = await Shipper.find({});
+    const usersData = await User.find({});
+    const vendorsData = await Vendor.find({});
+    const shippersData = await Shipper.find({});
 
-    let usersImage = [];
-    let vendorsImage = [];
-    let shippersImage = [];
+    const users = usersData.filter(user => user.role !== "Admin").map(user => user.toJSON());
+    const vendors = vendorsData.map(user => user.toJSON());
+    const shippers = shippersData.map(user => user.toJSON());
 
-    users.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
+    users.forEach((user, i) => {
+      if (user.img && user.img.data) {
+        user.userImage = Buffer.from(user.img.data).toString("base64");
       }
-      usersImage.push(userImage);
     })
 
-    vendors.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
+    vendors.forEach((vendor, i) => {
+      if (vendor.img && vendor.img.data) {
+        vendor.userImage = Buffer.from(vendor.img.data).toString("base64");
       }
-      vendorsImage.push(userImage);
     })
 
-    shippers.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
+    shippers.forEach((shipper, i) => {
+      if (shipper.img && shipper.img.data) {
+        shipper.userImage = Buffer.from(shipper.img.data).toString("base64");
       }
-      shippersImage.push(userImage);
     })
 
-
-
-    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers, usersImage: usersImage, vendorsImage: vendorsImage, shippersImage: shippersImage });
+    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
   } catch {
     return res.status(500).json({ error: "Cannot find user. " })
   }
