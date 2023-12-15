@@ -6,7 +6,6 @@ import AllTableComponent from "../../Components/VMOAllTableComponent";
 export default function VendorCard({ user, userImage, categorizedOrder, orders }) {
   return (
     <>
-      {console.log(user)}
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
         <div class="flex items-center gap-4 mt-4">
           <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />

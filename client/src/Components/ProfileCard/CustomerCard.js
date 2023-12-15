@@ -119,7 +119,7 @@ export default function CustomerCard({ user, userImage, categorizedOrder, orders
                 <div className="w-[100px] h-[80px]">
                   <img
                     src={require("../../Components/images/noorder.png")}
-                    alt="No Order image"
+                    alt="No Orders"
                     className="w-full h-full"
                   />
                 </div>

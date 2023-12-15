@@ -27,43 +27,42 @@ const fs = require("fs");
 require('dotenv').config()
 
 function sendEmailVerification(userEmail) {
-  let config = {
-    service: 'gmail',
-    auth: {
-      user: process.env.GOOGLE_USER,
-      pass: process.env.GOOGLE_PASS
-    }
-  }
-
-  let transporter = nodemailer.createTransport(config);
-
-  let mailgenerator = new Mailgen({
-    theme: "default",
-    product: {
-      name: "Mailgen",
-      link: "https://mailgen.js"
-    }
-  })
-
-  const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
-  const url = `http://localhost:3000/user/${userToken}/verify-email`;
-
-  let response = {
-    body: {
-      intro: "Email verification",
-      outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
-    }
-  }
-
-  let mail = mailgenerator.generate(response);
-
-  let message = {
-    from: "rBuy@gmail.com",
-    to: userEmail,
-    subject: "Forgot password verification",
-    html: mail
-  }
   try {
+    let config = {
+      service: 'gmail',
+      auth: {
+        user: process.env.GOOGLE_USER,
+        pass: process.env.GOOGLE_PASS
+      }
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let mailgenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "Mailgen",
+        link: "https://mailgen.js"
+      }
+    })
+    const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
+    const url = `http://localhost:3000/user/${userToken}/verify-email`;
+
+    let response = {
+      body: {
+        intro: "Email verification",
+        outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
+      }
+    }
+
+    let mail = mailgenerator.generate(response);
+
+    let message = {
+      from: "rBuy@gmail.com",
+      to: userEmail,
+      subject: "Forgot password verification",
+      html: mail
+    }
     transporter.sendMail(message)
   }
   catch {
@@ -89,21 +88,6 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    // const assistant = await openai.beta.assistants.retrieve("asst_nu4ES4sZ8unUKF3MxWmrX8ZQ")
-    // const thread = await openai.beta.threads.create();
-    // const message = await openai.beta.threads.messages.create(thread.id, {
-    //   role:"user",
-    //   content: "Who are you?"
-    // })
-    // const run = await openai.beta.threads.runs.create(thread.id, {assistant_id:assistant.id})
-    // console.log(run)
-
-    // const run = await openai.beta.threads.runs.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","run_CDh8qNB2FLdLZKqovgTO9rPO")
-    // console.log(run)
-
-    // const message = await openai.beta.threads.messages.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","msg_pSWfadQt9HZ4Ecg2wkzHt0Qo")
-    // messages.body.data.forEach(message => { console.log(message.content) })
-    // console.log(message.content[0].text.value)
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
@@ -156,11 +140,10 @@ exports.registerpage = (req, res) => {
 exports.userRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
-
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
     const checkEmail =
       (await User.findOne({ email: email })) ||
       (await Vendor.findOne({ email: email })) ||
@@ -183,6 +166,9 @@ exports.userRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newUser.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -194,6 +180,7 @@ exports.userRegister = async (req, res) => {
 exports.vendorRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const businessName = req.body.businessName;
@@ -227,6 +214,9 @@ exports.vendorRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newVendor.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -238,6 +228,7 @@ exports.vendorRegister = async (req, res) => {
 exports.shipperRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const distributionHub = req.body.distributionHub
@@ -269,6 +260,9 @@ exports.shipperRegister = async (req, res) => {
         distributionHub: distributionHub,
       });
       await newShipper.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -899,7 +893,7 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = (await User.find({})).filter(user => user.role !== "Admin");
     const vendors = await Vendor.find({});
     const shippers = await Shipper.find({});
 
