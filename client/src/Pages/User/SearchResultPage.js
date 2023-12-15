@@ -47,10 +47,11 @@ export default function Example() {
               <div className='w-full'>
                 {/* Filters */}
                 <div className="xs:hidden sm:hidden md:block lg:block wi">
+
                   <SRPriceRange />
                   <SRStarRating />
-                  {/* <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} /> */}
                   <SRCheckBoxLabel/>
+
                   <div className='flex px-6 border border-gray-50 pb-4 bg-white'>
                     <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm rounded-md px-6 py-1 mt-4 mx-auto w-full">Reset</button> 
                   </div>
@@ -73,29 +74,6 @@ export default function Example() {
     </div>
   )
 }
-
-// function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) {
-//   const handleItemClick = (value) => {
-//     if (oldCategoryRef.current && value === (oldCategoryRef.current.split('='))[1]) { oldCategoryRef.current = null; }
-//     refine(value)
-//     setValueFilter(valueFilter.map(option => option.value === value ? { ...option, isRefined: !option.isRefined } : option));
-//   }
-
-//   return (
-//     <div className='flex px-6 border border-gray-50 py-6 bg-white'>
-//       <div className='w-full'>
-//         <h3 className='font-medium mb-2'>Categories</h3>
-//         {valueFilter.map(option => (
-//           <div className='mb-2 flex items-center'>
-//             <input type="checkbox" className='rounded-md' onClick={() => handleItemClick(option.value)} checked={option.isRefined} />
-//             <span className='ml-2 text-sm'>{option.label}</span>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-
-//   );
-// }
 
 
 
@@ -132,7 +110,7 @@ function FilterSideBar({ setMobileFiltersOpen }) {
         <div className="absolute inset-0 overflow-hidden">
           <div className="fixed inset-y-0 right-0 pl-5 max-w-full flex">
             <div className="w-screen max-w-2xs">
-              <div className="h-full bg-white border-l border-gray-200 py-10">
+              <div className="h-full bg-white border-l border-gray-200 py-16">
                 {/* Sidebar content */}
                 <button
                   type="button"
@@ -143,11 +121,11 @@ function FilterSideBar({ setMobileFiltersOpen }) {
                   <span className="sr-only">Close</span>
                 </button>
                 {/* Rest of your sidebar content goes here */}
-
                 <div>
                   <SRPriceRange />
                   <SRStarRating />
                   <SRCheckBoxLabel />
+
                   <div className='flex px-6 border border-gray-50 pb-4 bg-white'>
                     <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm rounded-md px-6 py-1 mt-4 mx-auto w-full">Reset</button>
                   </div>
