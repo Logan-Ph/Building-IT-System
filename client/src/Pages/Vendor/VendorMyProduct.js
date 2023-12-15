@@ -1,18 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
-import { UserImageContext } from "../../Context/UserImageContext";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 export default function VendorMyProduct() {
-  const { user } = useContext(UserContext)  
-  const { setUserImage } = useContext(UserImageContext)
-  const [error, setError] = useState()
+  const { user } = useContext(UserContext)
   const [products, setProducts] = useState([])
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/manage-product", {withCredentials: true});
+      const response = await axios.get("http://localhost:4000/manage-product", { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -23,7 +20,7 @@ export default function VendorMyProduct() {
     console.log('Product ID:', productID);
     const apiUrl = `http://localhost:4000/delete-product/${productID}`;
     try {
-       await axios.delete(apiUrl, {
+      await axios.delete(apiUrl, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -96,43 +93,43 @@ export default function VendorMyProduct() {
         </div>
 
 
-      <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
-        <div class="mb-4 flex justify-between items-center">
-          <div class="flex space-x-2">
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">All</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Live</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Sold Out</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Reviewing</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Violation</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Delisted</button>
+        <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
+          <div class="mb-4 flex justify-between items-center">
+            <div class="flex space-x-2">
+              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">All</button>
+              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Live</button>
+              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Sold Out</button>
+              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Reviewing</button>
+              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Violation</button>
+              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Delisted</button>
+            </div>
+            <div class="space-x-2">
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
+            </div>
           </div>
-          <div class="space-x-2">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
-          </div>
-        </div>
 
-      <div class="relative overflow-x-auto sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <div class="relative overflow-x-auto sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Product name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Price
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Stock
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Sales
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Edit</span>
-                    </th>
+                  <th scope="col" class="px-6 py-3">
+                    Product name
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    Price
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    Stock
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    Sales
+                  </th>
+                  <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                  </th>
                 </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
                 {products.map((product) => (
                   <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -148,15 +145,15 @@ export default function VendorMyProduct() {
                       {product.description}
                     </td>
                     <td class="px-6 py-4 text-center">
-                        <a href={`/edit-product/${product._id}`} class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        <button onClick={() => handleDelete(product._id)} class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                      <a href={`/edit-product/${product._id}`} class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                      <button onClick={() => handleDelete(product._id)} class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
                     </td>
                   </tr>
                 ))}
-            </tbody>
-        </table>
-      </div>
-    </div>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
       </div>
 

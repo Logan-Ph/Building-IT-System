@@ -1,13 +1,11 @@
 import { Fragment, useCallback, useContext, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
-import { UserImageContext } from '../Context/UserImageContext'
 import axios from 'axios'
 import { Navigate } from 'react-router-dom'
 
 export default function VendorHeader() {
   const { user, setUser } = useContext(UserContext)
-  const { userImage, setUserImage } = useContext(UserImageContext)
   const [navigateTo, setNavigateTo] = useState("");
   const [isLoading, setIsLoading] = useState(true)
 
@@ -15,13 +13,12 @@ export default function VendorHeader() {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
-      setUserImage(res.data.userImage)
       setIsLoading(false)
     } catch (er) {
       setUser(null)
       setIsLoading(false)
     }
-  }, [setUser, setUserImage])
+  }, [setUser])
 
   const handleLogout = async () => {
     const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
@@ -71,7 +68,7 @@ export default function VendorHeader() {
               </div>
               <div className='flex items-center'>
                 {/* avatar icon */}
-                <DropdownAva user={user} userImage={userImage} handleLogout={handleLogout} />
+                <DropdownAva user={user} handleLogout={handleLogout} />
                 <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
               </div>
 
@@ -87,17 +84,17 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function DropdownAva({ user, userImage, handleLogout }) {
+function DropdownAva({ user, handleLogout }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex -space-x-2 overflow-hidden">
           <div className='w-10 h-10 rounded-full'>
-            {user && userImage && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
-              src={`data:image/jpeg;base64,${userImage}`}
+            {user && user.userImage && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+              src={`data:image/jpeg;base64,${user.userImage}`}
               alt="avatar_img" />
             }
-            {user && !userImage && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            {user && !user.userImage && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
               <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
             </div>}
           </div>

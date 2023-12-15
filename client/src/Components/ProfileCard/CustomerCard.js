@@ -3,12 +3,12 @@ import { Tabs } from "flowbite-react";
 import UnpaidTableComponent from "../../Components/VMOUnpaidTableComponent";
 import AllTableComponent from "../../Components/VMOAllTableComponent";
 
-export default function CustomerCard({ user, userImage, categorizedOrder, orders }) {
+export default function CustomerCard({ user, categorizedOrder, orders }) {
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
         <div class="flex items-center gap-4 mt-4">
-          <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+          <img src={(user.userImage) ? `data:image/jpeg;base64,${user.userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
           <div>
             <h2 class="text-2xl font-semibold mb-2">{user.name}</h2>
             <div class="text-lg text-gray-500">{user.email}</div>

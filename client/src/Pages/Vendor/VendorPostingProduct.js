@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { useContext, useState, useEffect, useCallback } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { UserContext } from "../../Context/UserContext";
-import { UserImageContext } from '../../Context/UserImageContext';
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { Navigate } from 'react-router-dom';
 
 export default function VendorPostingProduct() {

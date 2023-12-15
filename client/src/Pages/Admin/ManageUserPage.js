@@ -15,9 +15,6 @@ export default function ManageUserPage() {
   const [users, setUsers] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
-  const [usersImage, setUsersImage] = useState([]);
-  const [vendorsImage, setVendorsImage] = useState([]);
-  const [shippersImage, setShippersImage] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
 
@@ -39,9 +36,6 @@ export default function ManageUserPage() {
       setUsers(res.data.users);
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
-      setUsersImage(res.data.usersImage);
-      setVendorsImage(res.data.vendorsImage);
-      setShippersImage(res.data.shippersImage);
     }
     catch (er) {
       console.log(er);
@@ -66,20 +60,20 @@ export default function ManageUserPage() {
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
           <Tabs.Item active title="Customer" icon={HiUserCircle}>
-            <UserTable users={users} usersImage={usersImage} />
+            <UserTable data={users} type="user" />
           </Tabs.Item>
           {/* Admin manage vendor account */}
           <Tabs.Item title="Vendor" icon={FaShoppingBag}>
-            <VendorTable vendors={vendors} vendorsImage={vendorsImage} />
+            <UserTable data={vendors} type="vendor" />
           </Tabs.Item>
           {/* Admin manage shipper account */}
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
-            <ShipperTable shippers={shippers} shippersImage={shippersImage} />
+            <UserTable data={shippers} type="shipper" />
           </Tabs.Item>
           {/* Admin manage reported account */}
-          <Tabs.Item title="Reported Account" icon={HiClipboardList}>
-            <ReportedTable />
-          </Tabs.Item>
+          {/* <Tabs.Item title="Reported Account" icon={HiClipboardList}>
+            <UserTable data={shippers} type="reported user" />
+          </Tabs.Item> */}
           {/* Admin manage product */}
           <Tabs.Item title="Product" icon={AiFillDelete}>
             <AdminManageVendorProduct />
@@ -90,14 +84,70 @@ export default function ManageUserPage() {
   );
 }
 
-function UserTable({ users, usersImage }) {
-  const [usersSlice, setUsersSlice] = useState([]);
-  const [userImagesSlice, setUserImageSlice] = useState([]);
+function UserTable({ data, dataImage, type }) {
+  const [dataSlice, setDataSlice] = useState([]);
 
   useEffect(() => {
-    setUsersSlice(users.slice(0, 10));
-    setUserImageSlice(usersImage.slice(0, 10));
-  }, [users, usersImage]);
+    setDataSlice(data.slice(0, 10));
+  }, [data, dataImage]);
+
+  const getHeadCellContent = () => {
+    switch (type) {
+      case 'vendor':
+      case 'user':
+        return (
+          <>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Phone Number</Table.HeadCell>
+            <Table.HeadCell>Default Address</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>View</Table.HeadCell>
+          </>
+        );
+      case 'shipper':
+        return (
+          <>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Phone Number</Table.HeadCell>
+            <Table.HeadCell>Default Address</Table.HeadCell>
+            <Table.HeadCell>Distribution Hub</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>View</Table.HeadCell>
+          </>
+        );
+      default:
+        return null;
+    }
+  }
+
+  const getCellContent = (item) => {
+    switch (type) {
+      case 'user':
+        return (
+          <>
+            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+          </>
+        );
+      case 'vendor':
+        return (
+          <>
+            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+          </>
+        );
+      case 'shipper':
+        return (
+          <>
+            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+            <Table.Cell>{item.distributionHub}</Table.Cell>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -105,29 +155,22 @@ function UserTable({ users, usersImage }) {
         <div className="relative overflow-x-auto">
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>Name</Table.HeadCell>
-              <Table.HeadCell>Phone Number</Table.HeadCell>
-              <Table.HeadCell>Default Address</Table.HeadCell>
-              <Table.HeadCell>Status</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">View</span>
-              </Table.HeadCell>
+              {getHeadCellContent()}
             </Table.Head>
-            <Table.Body className="divide-y">
-              {usersSlice
-                .map((user, i) => (
+            {dataSlice.map((item, i) => (
+              <>
+                <Table.Body className="divide-y">
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                      <img src={(userImagesSlice[i]) ? `data:image/jpeg;base64,${userImagesSlice[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
+                      <img src={(dataSlice[i].userImage) ? `data:image/jpeg;base64,${dataSlice[i].userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
-                        <div class="text-base font-medium">{user.name}</div>
+                        <div class="text-base font-medium">{item.name}</div>
                         <div class="font-normal text-gray-500">
-                          {user.email}
+                          {item.email}
                         </div>
                       </div>
                     </Table.Cell>
-                    <Table.Cell>{user.phoneNumber}</Table.Cell>
-                    <Table.Cell>{user.address}</Table.Cell>
+                    {getCellContent(item)}
                     <Table.Cell>
                       <div class="flex items-center">
                         <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
@@ -136,172 +179,22 @@ function UserTable({ users, usersImage }) {
                     </Table.Cell>
                     <Table.Cell>
                       <a
-                        href={`/admin/${user._id}/report`}
+                        href={`/admin/${item._id}/report`}
                         className="font-medium text-cyan-600 hover:underline"
                       >
                         View
                       </a>
                     </Table.Cell>
                   </Table.Row>
-                ))}
-              {/* <Table.Row className="bg-white">
-                <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img
-                    class="w-10 h-10 rounded-full"
-                    src="/docs/images/people/profile-picture-1.jpg"
-                    alt="User"
-                  />
-                  <div class="ps-3">
-                    <div class="text-base font-medium">Name</div>
-                    <div class="font-normal text-gray-500">
-                      email@gmail.com
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>091234567</Table.Cell>
-                <Table.Cell>abc Street</Table.Cell>
-                <Table.Cell>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                    Reported
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href="#"
-                    className="font-medium text-cyan-600 hover:underline"
-                  >
-                    View
-                  </a>
-                </Table.Cell>
-              </Table.Row> */}
-            </Table.Body>
+                </Table.Body>
+              </>
+            ))}
           </Table>
         </div>
       </div>
-      {Math.floor(users.length / 10) > 1 && <Pagination pages={Math.ceil(users.length / 10)} setUsersSlice={setUsersSlice} users={users} setUserImageSlice={setUserImageSlice} usersImage={usersImage} />}
+      {Math.floor(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}
     </>
   )
-}
-
-function VendorTable({ vendors, vendorsImage }) {
-  const [usersSlice, setUsersSlice] = useState([]);
-  const [userImagesSlice, setUserImageSlice] = useState([]);
-
-  useEffect(() => {
-    setUsersSlice(vendors.slice(0, 10));
-    setUserImageSlice(vendorsImage.slice(0, 10));
-  }, [vendors, vendorsImage]);
-  return (<>
-    <div className="p-4 bg-gray-100">
-      <div className="relative overflow-x-auto">
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>Business Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Business Address</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">View</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {usersSlice.map((vendor, i) => (
-              <Table.Row className="bg-white">
-                <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(userImagesSlice[i]) ? `data:image/jpeg;base64,${userImagesSlice[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
-                  <div class="ps-3">
-                    <div class="text-base font-medium">{vendor.businessName}</div>
-                    <div class="font-normal text-gray-500">
-                      {vendor.email}
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{vendor.phoneNumber}</Table.Cell>
-                <Table.Cell>{vendor.address}</Table.Cell>
-                <Table.Cell>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                    No Report
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href={`/admin/${vendor._id}/report`}
-                    className="font-medium text-cyan-600 hover:underline"
-                  >
-                    View
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </div>
-      {Math.floor(vendors.length / 10) > 1 && <Pagination pages={Math.ceil(vendors.length / 10)} setUsersSlice={setUsersSlice} users={vendors} setUserImageSlice={setUserImageSlice} usersImage={vendorsImage} />}
-    </div>
-  </>)
-}
-
-function ShipperTable({ shippers, shippersImage }) {
-  const [usersSlice, setUsersSlice] = useState([]);
-  const [userImagesSlice, setUserImageSlice] = useState([]);
-
-  useEffect(() => {
-    setUsersSlice(shippers.slice(0, 10));
-    setUserImageSlice(shippersImage.slice(0, 10));
-  }, [shippers, shippersImage]);
-  return (<>
-    <div className="p-4 bg-gray-100">
-      <div className="relative overflow-x-auto">
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Address</Table.HeadCell>
-            <Table.HeadCell>Distribution Hub</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">View</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {usersSlice.map((shipper, i) => (
-              <Table.Row className="bg-white">
-                <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(userImagesSlice[i]) ? `data:image/jpeg;base64,${userImagesSlice[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
-                  <div class="ps-3">
-                    <div class="text-base font-medium">{shipper.name}</div>
-                    <div class="font-normal text-gray-500">
-                      {shipper.email}
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{shipper.phoneNumber}</Table.Cell>
-                <Table.Cell>{shipper.address}</Table.Cell>
-                <Table.Cell>{shipper.distributionHub}</Table.Cell>
-                <Table.Cell>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                    No Report
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href={`/admin/${shipper._id}/report`}
-                    className="font-medium text-cyan-600 hover:underline"
-                  >
-                    View
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </div>
-      {Math.floor(shippers.length / 10) > 1 && <Pagination pages={Math.ceil(shippers.length / 10)} setUsersSlice={setUsersSlice} users={shippers} setUserImageSlice={setUserImageSlice} usersImage={shippersImage} />}
-    </div>
-  </>)
 }
 
 function ReportedTable() {
@@ -309,71 +202,6 @@ function ReportedTable() {
     <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
-          <div>
-            <button
-              id="dropdownActionButton"
-              data-dropdown-toggle="dropdownAction"
-              class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5"
-              type="button"
-            >
-              <span class="sr-only">Action button</span>
-              All User
-              <svg
-                class="w-2.5 h-2.5 ms-2.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                ></path>
-              </svg>
-            </button>
-            {/* <!-- Dropdown menu --> */}
-            <div
-              id="dropdownAction"
-              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
-              data-popper-reference-hidden=""
-              data-popper-escaped=""
-              data-popper-placement="bottom"
-              style={{
-                position: "absolute",
-                inset: "0px auto auto 0px",
-                margin: "0px",
-                transform: "translate3d(0px, 10px, 0px)",
-              }}
-            >
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Customer
-                </a>
-              </div>
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Vendor
-                </a>
-              </div>
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Shipper
-                </a>
-              </div>
-            </div>
-          </div>
           <label for="table-search" class="sr-only">
             Search
           </label>
@@ -481,14 +309,13 @@ function ReportedTable() {
   </>)
 }
 
-function Pagination({ pages, setUsersSlice, users, setUserImageSlice, usersImage }) {
+function Pagination({ pages, setDataSlice, data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const maxPageNumbersToShow = 5;
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
-    setUserImageSlice(usersImage.slice((pageNumber - 1) * 10, pageNumber * 10))
+    setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
   };
 
   const getPaginationNumbers = () => {
@@ -530,8 +357,7 @@ function Pagination({ pages, setUsersSlice, users, setUserImageSlice, usersImage
                     onClick={(event) => {
                       event.preventDefault();
                       handlePageChange(pageNumber);
-                      setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
-                      setUserImageSlice(usersImage.slice((pageNumber - 1) * 10, pageNumber * 10))
+                      setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
                     }}>
                     {pageNumber}
                   </span>

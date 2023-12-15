@@ -26,6 +26,15 @@ const imagekit = new ImageKit({
 const fs = require("fs");
 require('dotenv').config()
 
+function convertUser(user) {
+  if (!user) return null;
+  const userJson = user.toJSON();
+  if (user.img && user.img.data) {
+    userJson.userImage = Buffer.from(user.img.data).toString("base64");
+  }
+  return userJson;
+}
+
 function sendEmailVerification(userEmail) {
   try {
     let config = {
@@ -72,15 +81,9 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
-    const user = (await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id));
-    let userImage;
-    if (user.img.data) {
-      userImage = Buffer.from(
-        user.img.data
-      ).toString("base64");
-    }
+    const user = convertUser((await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id)));
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.status(200).json({ user: user, cart: (cart) ? cart : null, userImage: userImage });
+    res.status(200).json({ user: user, cart: (cart) ? cart : null });
   } else {
     res.status(500).json({ user: "", cart: null })
   }
@@ -893,92 +896,48 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
-    const users = (await User.find({})).filter(user => user.role !== "Admin");
-    const vendors = await Vendor.find({});
-    const shippers = await Shipper.find({});
 
-    let usersImage = [];
-    let vendorsImage = [];
-    let shippersImage = [];
-
-    users.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      usersImage.push(userImage);
-    })
-
-    vendors.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      vendorsImage.push(userImage);
-    })
-
-    shippers.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      shippersImage.push(userImage);
-    })
-
-
-
-    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers, usersImage: usersImage, vendorsImage: vendorsImage, shippersImage: shippersImage });
-  } catch {
+    const users = (await User.find({})).filter(user => user.role !== "Admin").map(user => convertUser(user));
+    const vendors = (await Vendor.find({})).map(vendor => convertUser(vendor));
+    const shippers = (await Shipper.find({})).map(shipper => convertUser(shipper));
+    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
+  } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Cannot find user. " })
   }
 }
 
 exports.reportPage = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    const vendor = await Vendor.findById(req.params.id);
-    const shipper = await Shipper.findById(req.params.id);
+    const user = convertUser(await User.findById(req.params.id));
+    const vendor = convertUser(await Vendor.findById(req.params.id));
+    // const shipper = (await Shipper.findById(req.params.id)).map(shipper => convertUser(shipper));
 
     if (user) {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
       const orders = await Order.find({ userId: user._id })
-      return res.status(200).json({ user: user, userImage: userImage, orders: orders });
+      return res.status(200).json({ user: user, orders: orders });
     }
 
     if (vendor) {
-      let vendorImage;
-      if (vendor.img.data) {
-        vendorImage = Buffer.from(
-          vendor.img.data
-        ).toString("base64");
-      }
       const orders = await Order.find({ vendorID: vendor._id })
-      return res.status(200).json({ user: vendor, userImage: vendorImage, orders: orders });
+      return res.status(200).json({ user: vendor, orders: orders });
     };
 
-    if (shipper) {
-      let shipperImage;
-      if (shipper.img.data) {
-        shipperImage = Buffer.from(
-          shipper.img.data
-        ).toString("base64");
-      }
-      return res.status(200).json({ user: shipper, userImage: shipperImage });
-    }
+    // if (shipper) {
+    //   let shipperImage;
+    //   if (shipper.img.data) {
+    //     shipperImage = Buffer.from(
+    //       shipper.img.data
+    //     ).toString("base64");
+    //   }
+    //   return res.status(200).json({ user: shipper, userImage: shipperImage });
+    // }
 
-    if (!user && !vendor && !shipper) throw new Error("User not found");
+    if (!user && !vendor) throw new Error("User not found");
+
+    // if (!user && !vendor && !shipper) throw new Error("User not found");
   } catch (er) {
+    console.log(er)
     return res.status(500).json({ error: er })
   }
 }
