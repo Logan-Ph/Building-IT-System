@@ -26,6 +26,7 @@ export default function Header() {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
       setCart(res.data.cart)
+      console.log(res.data.cart)
       setUserImage(res.data.userImage)
     } catch (er) {
       setUser(null)
@@ -195,8 +196,8 @@ export default function Header() {
 
                     {/* <!-- number on the cart --> */}
                     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      {cart.products && (cart.products?.length > 99) ? "99+" : cart.products?.length}
-                      {!cart.products && "0"}
+                      {(!cart || !cart.products) && "0"}
+                      {cart!==null && cart.products &&( (cart.products?.length > 99) ? "99+" : cart.products?.length)}
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">

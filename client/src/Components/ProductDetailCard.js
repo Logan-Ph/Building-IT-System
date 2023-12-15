@@ -3,7 +3,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
 import { Navigate } from 'react-router-dom';
-import aa from 'search-insights'
 
 export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
