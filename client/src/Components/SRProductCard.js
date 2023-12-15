@@ -1,9 +1,11 @@
 export default function SRProductCard({ hit }) { 
   return <>
     <div className="bg-white shadow-md p-4">
+
       <a className="group relative" href={`/product/${hit.objectID}`}>
-        <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-          <img src={hit.image_link} alt="Front of men&#039;s Basic Tee in black." className="h-full w-full object-fit object-center lg:h-full lg:w-full" />
+
+        <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] sm:w-3/4 sm:mx-auto xs:w-3/4 xs:mx-auto">
+          <img src={hit.image_link} alt="Front of men&#039;s Basic Tee in black." className="h-full w-full object-fit object-center scale-90 sm:scale-75 xs:scale-75" />
         </div>
         <hr className='border border-gray-200 mt-4'></hr>
         <div className="mt-4 flex items-center">

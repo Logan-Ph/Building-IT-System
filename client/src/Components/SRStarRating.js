@@ -45,7 +45,7 @@ export default function SRStarRating() {
 
                     //Full Star
                     <FaStar 
-                      className="star w-8 h-8 md:w-6 md:h-6"
+                      className="star xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-6 md:h-6 sm:w-10 sm:h-10 xs:w-10 xs:h-10  "
                       color="#FAC800"
                       value={ratingValue} 
                       onClick={() => handleRating(ratingValue)} 
@@ -56,7 +56,7 @@ export default function SRStarRating() {
 
                     //Half Star
                     <FaStarHalfAlt
-                      className="star w-8 h-8 md:w-6 md:h-6" 
+                      className="star xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-6 md:h-6 sm:w-10 sm:h-10 xs:w-10 xs:h-10 " 
                       color="#FAC800"
                       value={ratingValue} 
                       onClick={() => handleRating(ratingValue)} 
@@ -67,7 +67,7 @@ export default function SRStarRating() {
 
                   //Empty Star
                   <FaRegStar
-                    className="star w-8 h-8 md:w-6 md:h-6"
+                    className="star xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-6 md:h-6 sm:w-10 sm:h-10 xs:w-10 xs:h-10 "
                     color="#FAC800"
                     value={ratingValue} 
                     onClick={() => handleRating(ratingValue)} 
