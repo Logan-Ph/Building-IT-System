@@ -893,32 +893,19 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
+    function convertUser(user) {
+      const userJson = user.toJSON();
+      if (user.img && user.img.data) {
+        userJson.userImage = Buffer.from(user.img.data).toString("base64");
+      }
+      return userJson;
+    }
     const usersData = await User.find({});
     const vendorsData = await Vendor.find({});
     const shippersData = await Shipper.find({});
-
-    const users = usersData.filter(user => user.role !== "Admin").map(user => user.toJSON());
-    const vendors = vendorsData.map(user => user.toJSON());
-    const shippers = shippersData.map(user => user.toJSON());
-
-    users.forEach((user, i) => {
-      if (user.img && user.img.data) {
-        user.userImage = Buffer.from(user.img.data).toString("base64");
-      }
-    })
-
-    vendors.forEach((vendor, i) => {
-      if (vendor.img && vendor.img.data) {
-        vendor.userImage = Buffer.from(vendor.img.data).toString("base64");
-      }
-    })
-
-    shippers.forEach((shipper, i) => {
-      if (shipper.img && shipper.img.data) {
-        shipper.userImage = Buffer.from(shipper.img.data).toString("base64");
-      }
-    })
-
+    const users = usersData.filter(user => user.role !== "Admin").map(user => convertUser(user));
+    const vendors = vendorsData.map(user => convertUser(user));
+    const shippers = shippersData.map(user => convertUser(user));
     return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
   } catch {
     return res.status(500).json({ error: "Cannot find user. " })
