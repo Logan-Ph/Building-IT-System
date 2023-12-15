@@ -73,11 +73,11 @@ export default function ReportInfoPage() {
             Account Information
           </h1>
           {/* <!-- Customer --> */}
-          {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} orders={orders} />}
+          {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} categorizedOrder={categorizedOrder} orders={orders} />}
           {/* <!-- Vendor --> */}
-          {userInfo && userInfo.role === "Vendor" && <VendorCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} orders={orders} />}
+          {userInfo && userInfo.role === "Vendor" && <VendorCard user={userInfo} categorizedOrder={categorizedOrder} orders={orders} />}
           {/* <!-- Shipper --> */}
-          {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} />}
+          {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} categorizedOrder={categorizedOrder} />}
           {/* Report Section */}
           <ReportInfo />
         </div>

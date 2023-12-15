@@ -34,7 +34,6 @@ import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
 import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
-import { UserImageProvider } from '../Context/UserImageContext';
 import CartPage from "../Pages/User/CartPage";
 
 
@@ -84,7 +83,7 @@ export default function Router() {
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <AdminHeader />
-            <Outlet />
+          <Outlet />
         </InstantSearch>
       </>
     )
@@ -218,9 +217,7 @@ export default function Router() {
   return (
     <CartProvider>
       <UserProvider>
-        <UserImageProvider>
-          <RouterProvider router={BrowserRoutes} />
-        </UserImageProvider>
+        <RouterProvider router={BrowserRoutes} />
       </UserProvider>
     </CartProvider>
   )
