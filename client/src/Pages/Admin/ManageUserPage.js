@@ -5,10 +5,10 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 import { FaShoppingBag } from "react-icons/fa";
-
 import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
 import AdminManageVendorProduct from "./AdminManageVendorProduct";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
@@ -16,12 +16,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
-  const [usersInfo, setUsersInfo] = useState([]);
+  const [users, setUsers] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
-  const [usersImage, setUsersImage] = useState([]);
-  const [vendorsImage, setVendorsImage] = useState([]);
-  const [shippersImage, setShippersImage] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
 
@@ -40,12 +37,9 @@ export default function ManageUserPage() {
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
-      setUsersInfo(res.data.users);
+      setUsers(res.data.users);
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
-      setUsersImage(res.data.usersImage);
-      setVendorsImage(res.data.vendorsImage);
-      setShippersImage(res.data.shippersImage);
     }
     catch (er) {
       console.log(er);
@@ -68,22 +62,25 @@ export default function ManageUserPage() {
       {error && <Navigate to={"/login"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
+          {/* Admin manage customer account */}
           <Tabs.Item active title="Customer" icon={HiUserCircle}>
-            <UserTable users={usersInfo} usersImage={usersImage} />
+            <UserTable data={users} type="user" />
           </Tabs.Item>
+          {/* Admin manage vendor account */}
           <Tabs.Item title="Vendor" icon={FaShoppingBag}>
-            <VendorTable vendors={vendors} vendorsImage={vendorsImage} />
+            <UserTable data={vendors} type="vendor" />
           </Tabs.Item>
+          {/* Admin manage shipper account */}
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
-            <ShipperTable shippers={shippers} shippersImage={shippersImage} />
+            <UserTable data={shippers} type="shipper" />
           </Tabs.Item>
-          <Tabs.Item title="Reported Account" icon={HiClipboardList}>
-            <ReportedTable />
-          </Tabs.Item>
-
+          {/* Admin manage reported account */}
+          {/* <Tabs.Item title="Reported Account" icon={HiClipboardList}>
+            <UserTable data={shippers} type="reported user" />
+          </Tabs.Item> */}
           {/* Admin manage product */}
           <Tabs.Item title="Product" icon={AiFillDelete}>
-            <AdminManageVendorProduct/>
+            <AdminManageVendorProduct />
           </Tabs.Item>
         </Tabs>
       </div>
@@ -91,37 +88,93 @@ export default function ManageUserPage() {
   );
 }
 
-function UserTable({ users, usersImage }) {
+function UserTable({ data, dataImage, type }) {
+  const [dataSlice, setDataSlice] = useState([]);
+
+  useEffect(() => {
+    setDataSlice(data.slice(0, 10));
+  }, [data, dataImage]);
+
+  const getHeadCellContent = () => {
+    switch (type) {
+      case 'vendor':
+      case 'user':
+        return (
+          <>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Phone Number</Table.HeadCell>
+            <Table.HeadCell>Default Address</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>View</Table.HeadCell>
+          </>
+        );
+      case 'shipper':
+        return (
+          <>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Phone Number</Table.HeadCell>
+            <Table.HeadCell>Default Address</Table.HeadCell>
+            <Table.HeadCell>Distribution Hub</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>View</Table.HeadCell>
+          </>
+        );
+      default:
+        return null;
+    }
+  }
+
+  const getCellContent = (item) => {
+    switch (type) {
+      case 'user':
+        return (
+          <>
+            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+          </>
+        );
+      case 'vendor':
+        return (
+          <>
+            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+          </>
+        );
+      case 'shipper':
+        return (
+          <>
+            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+            <Table.Cell>{item.distributionHub}</Table.Cell>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <div className="p-4 bg-gray-100">
         <div className="relative overflow-x-auto">
           <Table hoverable>
             <Table.Head>
-              <Table.HeadCell>Name</Table.HeadCell>
-              <Table.HeadCell>Phone Number</Table.HeadCell>
-              <Table.HeadCell>Default Address</Table.HeadCell>
-              <Table.HeadCell>Status</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">View</span>
-              </Table.HeadCell>
+              {getHeadCellContent()}
             </Table.Head>
-            <Table.Body className="divide-y">
-              {users && users
-                .filter(user => user.role !== 'Admin')
-                .map((user, i) => (
+            {dataSlice.map((item, i) => (
+              <>
+                <Table.Body className="divide-y">
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                      <img src={(usersImage[i]) ? `data:image/jpeg;base64,${usersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
+                      <img src={(dataSlice[i].userImage) ? `data:image/jpeg;base64,${dataSlice[i].userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
-                        <div class="text-base font-medium">{user.name}</div>
+                        <div class="text-base font-medium">{item.name}</div>
                         <div class="font-normal text-gray-500">
-                          {user.email}
+                          {item.email}
                         </div>
                       </div>
                     </Table.Cell>
-                    <Table.Cell>{user.phoneNumber}</Table.Cell>
-                    <Table.Cell>{user.address}</Table.Cell>
+                    {getCellContent(item)}
                     <Table.Cell>
                       <div class="flex items-center">
                         <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
@@ -130,218 +183,22 @@ function UserTable({ users, usersImage }) {
                     </Table.Cell>
                     <Table.Cell>
                       <a
-                        href={`/admin/${user._id}/report`}
+                        href={`/admin/${item._id}/report`}
                         className="font-medium text-cyan-600 hover:underline"
                       >
                         View
                       </a>
                     </Table.Cell>
                   </Table.Row>
-                ))}
-              <Table.Row className="bg-white">
-                <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img
-                    class="w-10 h-10 rounded-full"
-                    src="/docs/images/people/profile-picture-1.jpg"
-                    alt="User"
-                  />
-                  <div class="ps-3">
-                    <div class="text-base font-medium">Name</div>
-                    <div class="font-normal text-gray-500">
-                      email@gmail.com
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>091234567</Table.Cell>
-                <Table.Cell>abc Street</Table.Cell>
-                <Table.Cell>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                    Reported
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href="#"
-                    className="font-medium text-cyan-600 hover:underline"
-                  >
-                    View
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
+                </Table.Body>
+              </>
+            ))}
           </Table>
         </div>
       </div>
+      {Math.floor(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}
     </>
   )
-}
-
-function VendorTable({ vendors, vendorsImage }) {
-  return (<>
-    <div className="p-4 bg-gray-100">
-      <div className="relative overflow-x-auto">
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>Business Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Business Address</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">View</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {vendors && vendors.map((vendor, i) => (
-              <Table.Row className="bg-white">
-                <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
-                  <div class="ps-3">
-                    <div class="text-base font-medium">{vendor.businessName}</div>
-                    <div class="font-normal text-gray-500">
-                      {vendor.email}
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{vendor.phoneNumber}</Table.Cell>
-                <Table.Cell>{vendor.address}</Table.Cell>
-                <Table.Cell>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                    No Report
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href={`/admin/${vendor._id}/report`}
-                    className="font-medium text-cyan-600 hover:underline"
-                  >
-                    View
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-            <Table.Row className="bg-white">
-              <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
-                  alt="Jese image"
-                />
-                <div class="ps-3">
-                  <div class="text-base font-medium">Name</div>
-                  <div class="font-normal text-gray-500">
-                    email@gmail.com
-                  </div>
-                </div>
-              </Table.Cell>
-              <Table.Cell>091234567</Table.Cell>
-              <Table.Cell>abc Street</Table.Cell>
-              <Table.Cell>
-                <div class="flex items-center">
-                  <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                  Reported
-                </div>
-              </Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline"
-                >
-                  View
-                </a>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </div>
-    </div>
-  </>)
-}
-
-function ShipperTable({ shippers, shippersImage }) {
-  return (<>
-    <div className="p-4 bg-gray-100">
-      <div className="relative overflow-x-auto">
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Address</Table.HeadCell>
-            <Table.HeadCell>Distribution Hub</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">View</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            {shippers && shippers.map((shipper, i) => (
-              <Table.Row className="bg-white">
-                <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
-                  <div class="ps-3">
-                    <div class="text-base font-medium">{shipper.name}</div>
-                    <div class="font-normal text-gray-500">
-                      {shipper.email}
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{shipper.phoneNumber}</Table.Cell>
-                <Table.Cell>{shipper.address}</Table.Cell>
-                <Table.Cell>{shipper.distributionHub}</Table.Cell>
-                <Table.Cell>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                    No Report
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <a
-                    href={`/admin/${shipper._id}/report`}
-                    className="font-medium text-cyan-600 hover:underline"
-                  >
-                    View
-                  </a>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-            <Table.Row className="bg-white">
-              <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src={require("../../Components/images/defaultUserImage.png")}
-                  alt="Jese image"
-                />
-                <div class="ps-3">
-                  <div class="text-base font-medium">Name</div>
-                  <div class="font-normal text-gray-500">
-                    email@gmail.com
-                  </div>
-                </div>
-              </Table.Cell>
-              <Table.Cell>091234567</Table.Cell>
-              <Table.Cell>abc Street</Table.Cell>
-              <Table.Cell>distribution hub</Table.Cell>
-              <Table.Cell>
-                <div class="flex items-center">
-                  <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                  Reported
-                </div>
-              </Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline"
-                >
-                  View
-                </a>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </div>
-    </div>
-  </>)
 }
 
 function ReportedTable() {
@@ -349,71 +206,6 @@ function ReportedTable() {
     <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
-          <div>
-            <button
-              id="dropdownActionButton"
-              data-dropdown-toggle="dropdownAction"
-              class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5"
-              type="button"
-            >
-              <span class="sr-only">Action button</span>
-              All User
-              <svg
-                class="w-2.5 h-2.5 ms-2.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                ></path>
-              </svg>
-            </button>
-            {/* <!-- Dropdown menu --> */}
-            <div
-              id="dropdownAction"
-              class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
-              data-popper-reference-hidden=""
-              data-popper-escaped=""
-              data-popper-placement="bottom"
-              style={{
-                position: "absolute",
-                inset: "0px auto auto 0px",
-                margin: "0px",
-                transform: "translate3d(0px, 10px, 0px)",
-              }}
-            >
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Customer
-                </a>
-              </div>
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Vendor
-                </a>
-              </div>
-              <div class="py-1">
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Shipper
-                </a>
-              </div>
-            </div>
-          </div>
           <label for="table-search" class="sr-only">
             Search
           </label>
@@ -490,7 +282,7 @@ function ReportedTable() {
                 <img
                   class="w-10 h-10 rounded-full"
                   src={require("../../Components/images/defaultUserImage.png")}
-                  alt="Jese image"/>
+                  alt="Jese image" />
                 <div class="ps-3">
                   <div class="text-base font-medium">Name</div>
                   <div class="font-normal text-gray-500">
@@ -519,4 +311,74 @@ function ReportedTable() {
       </div>
     </div>
   </>)
+}
+
+function Pagination({ pages, setDataSlice, data }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const maxPageNumbersToShow = 5;
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+  };
+
+  const getPaginationNumbers = () => {
+    const numbers = [];
+    let start = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+    let end = Math.min(pages, start + maxPageNumbersToShow - 1);
+    if (currentPage <= Math.floor(maxPageNumbersToShow / 2)) {
+      end = Math.min(pages, maxPageNumbersToShow);
+    }
+    if (currentPage > pages - Math.floor(maxPageNumbersToShow / 2)) {
+      start = Math.max(1, pages - maxPageNumbersToShow + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      numbers.push(i);
+    }
+    return numbers;
+  };
+
+  return (
+    <div className="flex items-center justify-end py-3 mt-5">
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between lg:justify-end xl:justify-end">
+        <div>
+          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            {pages > 1 &&
+              <>
+                <span
+                  href="#"
+                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => { (currentPage - 1) > 0 && handlePageChange(currentPage - 1) }}
+                >
+                  <span className="sr-only">Previous</span>
+                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                {getPaginationNumbers().map((pageNumber) => (
+                  <span
+                    key={pageNumber}
+                    className={(pageNumber === currentPage) ? "relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"}
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handlePageChange(pageNumber);
+                      setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+                    }}>
+                    {pageNumber}
+                  </span>
+                ))}
+                <span
+                  href="#"
+                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => { (currentPage + 1) <= pages && handlePageChange(currentPage + 1) }}
+                >
+                  <span className="sr-only">Next</span>
+                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                </span>
+              </>
+            }
+          </nav>
+        </div>
+      </div>
+    </div>
+  )
 }

@@ -26,44 +26,52 @@ const imagekit = new ImageKit({
 const fs = require("fs");
 require('dotenv').config()
 
+function convertUser(user) {
+  if (!user) return null;
+  const userJson = user.toJSON();
+  if (user.img && user.img.data) {
+    userJson.userImage = Buffer.from(user.img.data).toString("base64");
+  }
+  return userJson;
+}
+
 function sendEmailVerification(userEmail) {
-  let config = {
-    service: 'gmail',
-    auth: {
-      user: process.env.GOOGLE_USER,
-      pass: process.env.GOOGLE_PASS
-    }
-  }
-
-  let transporter = nodemailer.createTransport(config);
-
-  let mailgenerator = new Mailgen({
-    theme: "default",
-    product: {
-      name: "Mailgen",
-      link: "https://mailgen.js"
-    }
-  })
-
-  const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
-  const url = `http://localhost:3000/user/${userToken}/verify-email`;
-
-  let response = {
-    body: {
-      intro: "Email verification",
-      outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
-    }
-  }
-
-  let mail = mailgenerator.generate(response);
-
-  let message = {
-    from: "rBuy@gmail.com",
-    to: userEmail,
-    subject: "Forgot password verification",
-    html: mail
-  }
   try {
+    let config = {
+      service: 'gmail',
+      auth: {
+        user: process.env.GOOGLE_USER,
+        pass: process.env.GOOGLE_PASS
+      }
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let mailgenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "Mailgen",
+        link: "https://mailgen.js"
+      }
+    })
+    const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
+    const url = `http://localhost:3000/user/${userToken}/verify-email`;
+
+    let response = {
+      body: {
+        intro: "Email verification",
+        outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
+      }
+    }
+
+    let mail = mailgenerator.generate(response);
+
+    let message = {
+      from: "rBuy@gmail.com",
+      to: userEmail,
+      subject: "Forgot password verification",
+      html: mail
+    }
     transporter.sendMail(message)
   }
   catch {
@@ -73,15 +81,9 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
-    const user = (await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id));
-    let userImage;
-    if (user.img.data) {
-      userImage = Buffer.from(
-        user.img.data
-      ).toString("base64");
-    }
+    const user = convertUser((await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id)));
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.status(200).json({ user: user, cart: (cart) ? cart : null, userImage: userImage });
+    res.status(200).json({ user: user, cart: (cart) ? cart : null });
   } else {
     res.status(500).json({ user: "", cart: null })
   }
@@ -89,21 +91,6 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    // const assistant = await openai.beta.assistants.retrieve("asst_nu4ES4sZ8unUKF3MxWmrX8ZQ")
-    // const thread = await openai.beta.threads.create();
-    // const message = await openai.beta.threads.messages.create(thread.id, {
-    //   role:"user",
-    //   content: "Who are you?"
-    // })
-    // const run = await openai.beta.threads.runs.create(thread.id, {assistant_id:assistant.id})
-    // console.log(run)
-
-    // const run = await openai.beta.threads.runs.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","run_CDh8qNB2FLdLZKqovgTO9rPO")
-    // console.log(run)
-
-    // const message = await openai.beta.threads.messages.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","msg_pSWfadQt9HZ4Ecg2wkzHt0Qo")
-    // messages.body.data.forEach(message => { console.log(message.content) })
-    // console.log(message.content[0].text.value)
     let product = await Product.find({}).limit(32);
     return res.json({ product: product })
   } catch (error) {
@@ -156,11 +143,10 @@ exports.registerpage = (req, res) => {
 exports.userRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
-
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
     const checkEmail =
       (await User.findOne({ email: email })) ||
       (await Vendor.findOne({ email: email })) ||
@@ -183,6 +169,9 @@ exports.userRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newUser.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -194,6 +183,7 @@ exports.userRegister = async (req, res) => {
 exports.vendorRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const businessName = req.body.businessName;
@@ -227,6 +217,9 @@ exports.vendorRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newVendor.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -238,6 +231,7 @@ exports.vendorRegister = async (req, res) => {
 exports.shipperRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const distributionHub = req.body.distributionHub
@@ -269,6 +263,9 @@ exports.shipperRegister = async (req, res) => {
         distributionHub: distributionHub,
       });
       await newShipper.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -899,92 +896,48 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
-    const users = await User.find({});
-    const vendors = await Vendor.find({});
-    const shippers = await Shipper.find({});
 
-    let usersImage = [];
-    let vendorsImage = [];
-    let shippersImage = [];
-
-    users.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      usersImage.push(userImage);
-    })
-
-    vendors.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      vendorsImage.push(userImage);
-    })
-
-    shippers.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      shippersImage.push(userImage);
-    })
-
-
-
-    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers, usersImage: usersImage, vendorsImage: vendorsImage, shippersImage: shippersImage });
-  } catch {
+    const users = (await User.find({})).filter(user => user.role !== "Admin").map(user => convertUser(user));
+    const vendors = (await Vendor.find({})).map(vendor => convertUser(vendor));
+    const shippers = (await Shipper.find({})).map(shipper => convertUser(shipper));
+    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
+  } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Cannot find user. " })
   }
 }
 
 exports.reportPage = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    const vendor = await Vendor.findById(req.params.id);
-    const shipper = await Shipper.findById(req.params.id);
+    const user = convertUser(await User.findById(req.params.id));
+    const vendor = convertUser(await Vendor.findById(req.params.id));
+    // const shipper = (await Shipper.findById(req.params.id)).map(shipper => convertUser(shipper));
 
     if (user) {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
       const orders = await Order.find({ userId: user._id })
-      return res.status(200).json({ user: user, userImage: userImage, orders: orders });
+      return res.status(200).json({ user: user, orders: orders });
     }
 
     if (vendor) {
-      let vendorImage;
-      if (vendor.img.data) {
-        vendorImage = Buffer.from(
-          vendor.img.data
-        ).toString("base64");
-      }
       const orders = await Order.find({ vendorID: vendor._id })
-      return res.status(200).json({ user: vendor, userImage: vendorImage, orders: orders });
+      return res.status(200).json({ user: vendor, orders: orders });
     };
 
-    if (shipper) {
-      let shipperImage;
-      if (shipper.img.data) {
-        shipperImage = Buffer.from(
-          shipper.img.data
-        ).toString("base64");
-      }
-      return res.status(200).json({ user: shipper, userImage: shipperImage });
-    }
+    // if (shipper) {
+    //   let shipperImage;
+    //   if (shipper.img.data) {
+    //     shipperImage = Buffer.from(
+    //       shipper.img.data
+    //     ).toString("base64");
+    //   }
+    //   return res.status(200).json({ user: shipper, userImage: shipperImage });
+    // }
 
-    if (!user && !vendor && !shipper) throw new Error("User not found");
+    if (!user && !vendor) throw new Error("User not found");
+
+    // if (!user && !vendor && !shipper) throw new Error("User not found");
   } catch (er) {
+    console.log(er)
     return res.status(500).json({ error: er })
   }
 }

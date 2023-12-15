@@ -14,7 +14,7 @@ passport.use(new GoogleStrategy({
   scope: ['profile', 'email'],
 },
   async function verify(accessToken, refreshToken, profile, cb) {
-    let user = (await User.find({ googleId: profile.id }, { _id: 1, banEndDate: 1 }))[0]
+    let user = (await User.find({ googleId: profile.id }, { _id: 1, banEndDate: 1, role: 1 }))[0]
     if (user && user.banEndDate > new Date()) return cb(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
     if (user) {
       return cb(null, user)
@@ -25,7 +25,8 @@ passport.use(new GoogleStrategy({
       let newUser = new User({
         googleId: profile.id,
         email: profile.emails[0].value,
-        verify: true
+        verify: true,
+        role: "User"
       })
       await newUser.save()
       return cb(null, newUser)
@@ -34,7 +35,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, async function verify(email, password, done) {
-  const user = (await User.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role:1 }))[0] || (await Vendor.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role:1 }))[0] || (await Shipper.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role:1 }))[0]
+  const user = (await User.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1 }))[0] || (await Vendor.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1 }))[0] || (await Shipper.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1 }))[0]
   if (!user) return done(null, false, { message: "Please check the email and password again" }) // check if the user did not exist
   if (!user.password) return done(null, false, { message: "Please check the email and password again" }) // check if the account is gmail account 
   if (!user.verify) return done(null, false, { message: "You need to verify your account with gmail" }) // check if the user email is verify

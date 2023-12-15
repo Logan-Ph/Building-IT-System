@@ -1,5 +1,5 @@
-.legend{
-    object-fit: cover; 
+.legend {
+    object-fit: cover;
     width: 678px !important;
     height: 384px !important;
     /* display: block !important;
@@ -12,17 +12,29 @@
     display: block !important;
     position: relative !important;
 }
-  
+
 .swiper-slide {
     text-align: center;
     font-size: 18px;
     background: #fff;
 
-  
+
     /* Center slide text vertically */
     display: flex;
     justify-content: center;
     align-items: center;
 }
-  
 
+/* Typing indicator */
+.indicator {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.typing {
+    width: 50px;
+    height: 50px;
+    color: black;
+    display: inline-block;
+}

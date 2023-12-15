@@ -35,7 +35,7 @@ export default function LogInPage() {
         }
 
         await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
-            .then(res => { setUser(res.data.user); setError(res.data.message); console.log(user) })
+            .then(res => { setUser(res.data.user); setError(res.data.message);})
             .catch(er => {
                 console.log(er);
             });
@@ -51,6 +51,7 @@ export default function LogInPage() {
             const { data } = event;
             if (data.user) {
                 setUser(data.user);
+                console.log(user);
             } else if (data.error) {
                 setError(data.error);
             }
@@ -80,9 +81,9 @@ export default function LogInPage() {
                 pauseOnHover={false}
                 theme="light"
             />
+            {user && user.role === "User" && <Navigate to="/" replace={true} />}
             {user && user.role === "Admin" && <Navigate to="/admin/manage-user" replace={true} />}
             {user && user.role === "Vendor" && <Navigate to="/dashboard" replace={true} />}
-            {user && user.role === "User" && <Navigate to="/" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign In</h2>
