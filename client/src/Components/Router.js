@@ -29,10 +29,14 @@ import { UserProvider } from '../Context/UserContext';
 import Chatbot from "./Chatbot";
 import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
+import VendorEditingProduct from '../Pages/Vendor/VendorEditingProduct';
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
+import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import { UserImageProvider } from '../Context/UserImageContext';
+import CartPage from "../Pages/User/CartPage";
+
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 
@@ -46,6 +50,16 @@ export default function Router() {
           <Chatbot />
           <Footer />
         </InstantSearch>
+      </>
+    )
+  }
+
+  const LoginLayout = () => {
+    return (
+      <>
+        <LogInHeader />
+        <Outlet />
+        <Footer />
       </>
     )
   }
@@ -68,8 +82,8 @@ export default function Router() {
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy">
+          <AdminHeader />
           <div className="flex  ">
-            <VendorSidebar />
             <Outlet />
           </div>
         </InstantSearch>
@@ -107,6 +121,10 @@ export default function Router() {
         {
           path: "/checkout",
           element: <CheckoutPage />,
+        },
+        {
+          path: "/cart",
+          element: <CartPage />,
         },
         {
           path: "/product/:id",
@@ -150,11 +168,15 @@ export default function Router() {
           path: "/manage-product",
           element: <VendorMyProduct />,
         },
+        {
+          path: "/edit-product/:id",
+          element: <VendorEditingProduct />,
+        },
       ],
     },
     {
       path: "/",
-      element: <UserLayout header={<LogInHeader />} />,
+      element: <LoginLayout />,
       children: [
         {
           path: "/login",

@@ -23,8 +23,8 @@
     top: -1.5px;
 }
 
-input[type="radio"]{
-    display: none;
+.rating {
+    display: none !important;
 }
 
 .star{

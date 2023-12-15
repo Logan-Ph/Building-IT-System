@@ -25,7 +25,7 @@ export default function Header() {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
-      setCart(res.data.length)
+      setCart(res.data.cart)
       setUserImage(res.data.userImage)
     } catch (er) {
       setUser(null)
@@ -39,11 +39,6 @@ export default function Header() {
       refine(inputQuery)
       setInputQuery("")
     }
-  }
-
-  function applyCategory(category) {
-    refine("")
-    setNavigateTo(`/search/query=/category=${category}/price=`)
   }
 
   useEffect(() => {
@@ -84,7 +79,6 @@ export default function Header() {
   if (user === undefined) {
     return <div>Loading....</div>
   }
-
 
   return (
     <section>
@@ -188,7 +182,7 @@ export default function Header() {
                   </span>
                 </div>
 
-                <a href='/checkout' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
                   <div className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -201,7 +195,8 @@ export default function Header() {
 
                     {/* <!-- number on the cart --> */}
                     <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
-                      {(cart > 99) ? '99+' : cart}
+                      {cart.products && (cart.products?.length > 99) ? "99+" : cart.products?.length}
+                      {!cart.products && "0"}
                     </span>
                   </div>
                   <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
@@ -224,7 +219,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="mt-2 flex items-center justify-between">
+        <div className="flex items-center justify-between py-2">
           <div className="flex gap-x-2 py-1 px-2"></div>
 
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
@@ -234,7 +229,7 @@ export default function Header() {
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
               New Releases
             </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => applyCategory("Electronics")}>
+            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
               Electronics
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>
@@ -247,7 +242,7 @@ export default function Header() {
               Fashion
             </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>
-              Toys & Games
+              Entertainment
             </span>
           </div>
           <div>
