@@ -92,10 +92,12 @@ export default function ManageUserPage() {
 
 function UserTable({ users, usersImage }) {
   const [usersSlice, setUsersSlice] = useState([]);
+  const [userImagesSlice, setUserImageSlice] = useState([]);
 
   useEffect(() => {
     setUsersSlice(users.slice(0, 10));
-  }, [users]);
+    setUserImageSlice(usersImage.slice(0, 10));
+  }, [users, usersImage]);
 
   return (
     <>
@@ -116,7 +118,7 @@ function UserTable({ users, usersImage }) {
                 .map((user, i) => (
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                      <img src={(usersImage[i]) ? `data:image/jpeg;base64,${usersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
+                      <img src={(userImagesSlice[i]) ? `data:image/jpeg;base64,${userImagesSlice[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
                         <div class="text-base font-medium">{user.name}</div>
                         <div class="font-normal text-gray-500">
@@ -177,17 +179,19 @@ function UserTable({ users, usersImage }) {
           </Table>
         </div>
       </div>
-      {Math.floor(users.length / 10) > 1 && <Pagination pages={Math.ceil(users.length / 1)} setUsersSlice={setUsersSlice} users={users} />}
+      {Math.floor(users.length / 10) > 1 && <Pagination pages={Math.ceil(users.length / 10)} setUsersSlice={setUsersSlice} users={users} setUserImageSlice={setUserImageSlice} usersImage={usersImage} />}
     </>
   )
 }
 
 function VendorTable({ vendors, vendorsImage }) {
   const [usersSlice, setUsersSlice] = useState([]);
+  const [userImagesSlice, setUserImageSlice] = useState([]);
 
   useEffect(() => {
     setUsersSlice(vendors.slice(0, 10));
-  }, [vendors]);
+    setUserImageSlice(vendorsImage.slice(0, 10));
+  }, [vendors, vendorsImage]);
   return (<>
     <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
@@ -205,7 +209,7 @@ function VendorTable({ vendors, vendorsImage }) {
             {usersSlice.map((vendor, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
+                  <img src={(userImagesSlice[i]) ? `data:image/jpeg;base64,${userImagesSlice[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                   <div class="ps-3">
                     <div class="text-base font-medium">{vendor.businessName}</div>
                     <div class="font-normal text-gray-500">
@@ -231,51 +235,22 @@ function VendorTable({ vendors, vendorsImage }) {
                 </Table.Cell>
               </Table.Row>
             ))}
-            {/* <Table.Row className="bg-white">
-              <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
-                  alt="Jese image"
-                />
-                <div class="ps-3">
-                  <div class="text-base font-medium">Name</div>
-                  <div class="font-normal text-gray-500">
-                    email@gmail.com
-                  </div>
-                </div>
-              </Table.Cell>
-              <Table.Cell>091234567</Table.Cell>
-              <Table.Cell>abc Street</Table.Cell>
-              <Table.Cell>
-                <div class="flex items-center">
-                  <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                  Reported
-                </div>
-              </Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline"
-                >
-                  View
-                </a>
-              </Table.Cell>
-            </Table.Row> */}
           </Table.Body>
         </Table>
       </div>
-      {Math.floor(vendors.length / 10) > 1 && <Pagination pages={Math.ceil(vendors.length / 10)} setUsersSlice={setUsersSlice} users={vendors} />}
+      {Math.floor(vendors.length / 10) > 1 && <Pagination pages={Math.ceil(vendors.length / 10)} setUsersSlice={setUsersSlice} users={vendors} setUserImageSlice={setUserImageSlice} usersImage={vendorsImage} />}
     </div>
   </>)
 }
 
 function ShipperTable({ shippers, shippersImage }) {
   const [usersSlice, setUsersSlice] = useState([]);
+  const [userImagesSlice, setUserImageSlice] = useState([]);
 
   useEffect(() => {
     setUsersSlice(shippers.slice(0, 10));
-  }, [shippers]);
+    setUserImageSlice(shippersImage.slice(0, 10));
+  }, [shippers, shippersImage]);
   return (<>
     <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
@@ -294,7 +269,7 @@ function ShipperTable({ shippers, shippersImage }) {
             {usersSlice.map((shipper, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                  <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
+                  <img src={(userImagesSlice[i]) ? `data:image/jpeg;base64,${userImagesSlice[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                   <div class="ps-3">
                     <div class="text-base font-medium">{shipper.name}</div>
                     <div class="font-normal text-gray-500">
@@ -321,42 +296,10 @@ function ShipperTable({ shippers, shippersImage }) {
                 </Table.Cell>
               </Table.Row>
             ))}
-            {/* <Table.Row className="bg-white">
-              <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src={require("../../Components/images/defaultUserImage.png")}
-                  alt="Jese image"
-                />
-                <div class="ps-3">
-                  <div class="text-base font-medium">Name</div>
-                  <div class="font-normal text-gray-500">
-                    email@gmail.com
-                  </div>
-                </div>
-              </Table.Cell>
-              <Table.Cell>091234567</Table.Cell>
-              <Table.Cell>abc Street</Table.Cell>
-              <Table.Cell>distribution hub</Table.Cell>
-              <Table.Cell>
-                <div class="flex items-center">
-                  <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-                  Reported
-                </div>
-              </Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  className="font-medium text-cyan-600 hover:underline"
-                >
-                  View
-                </a>
-              </Table.Cell>
-            </Table.Row> */}
           </Table.Body>
         </Table>
       </div>
-      {Math.floor(shippers.length / 10) > 1 && <Pagination pages={Math.ceil(shippers.length / 10)} setUsersSlice={setUsersSlice} users={shippers} />}
+      {Math.floor(shippers.length / 10) > 1 && <Pagination pages={Math.ceil(shippers.length / 10)} setUsersSlice={setUsersSlice} users={shippers} setUserImageSlice={setUserImageSlice} usersImage={shippersImage} />}
     </div>
   </>)
 }
@@ -538,11 +481,30 @@ function ReportedTable() {
   </>)
 }
 
-function Pagination({ pages, setUsersSlice, users }) {
+function Pagination({ pages, setUsersSlice, users, setUserImageSlice, usersImage }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const maxPageNumbersToShow = 5;
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setUsersSlice(users.slice((pageNumber - 1) * 1, pageNumber * 1))
+    setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
+    setUserImageSlice(usersImage.slice((pageNumber - 1) * 10, pageNumber * 10))
+  };
+
+  const getPaginationNumbers = () => {
+    const numbers = [];
+    let start = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+    let end = Math.min(pages, start + maxPageNumbersToShow - 1);
+    if (currentPage <= Math.floor(maxPageNumbersToShow / 2)) {
+      end = Math.min(pages, maxPageNumbersToShow);
+    }
+    if (currentPage > pages - Math.floor(maxPageNumbersToShow / 2)) {
+      start = Math.max(1, pages - maxPageNumbersToShow + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      numbers.push(i);
+    }
+    return numbers;
   };
 
   return (
@@ -560,7 +522,7 @@ function Pagination({ pages, setUsersSlice, users }) {
                   <span className="sr-only">Previous</span>
                   <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </span>
-                {Array.from({ length: pages }, (_, i) => i + 1).map((pageNumber) => (
+                {getPaginationNumbers().map((pageNumber) => (
                   <span
                     key={pageNumber}
                     className={(pageNumber === currentPage) ? "relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"}
@@ -568,7 +530,8 @@ function Pagination({ pages, setUsersSlice, users }) {
                     onClick={(event) => {
                       event.preventDefault();
                       handlePageChange(pageNumber);
-                      setUsersSlice(users.slice((pageNumber - 1) * 1, pageNumber * 1))
+                      setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
+                      setUserImageSlice(usersImage.slice((pageNumber - 1) * 10, pageNumber * 10))
                     }}>
                     {pageNumber}
                   </span>
