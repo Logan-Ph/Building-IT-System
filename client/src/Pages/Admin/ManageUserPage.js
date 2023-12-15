@@ -177,7 +177,7 @@ function UserTable({ users, usersImage }) {
           </Table>
         </div>
       </div>
-      {Math.floor(users.length / 10) > 1 && <Pagination pages={Math.ceil(users.length / 10)} setUsersSlice={setUsersSlice} users={users} />}
+      {Math.floor(users.length / 10) > 1 && <Pagination pages={Math.ceil(users.length / 1)} setUsersSlice={setUsersSlice} users={users} />}
     </>
   )
 }
@@ -542,7 +542,7 @@ function Pagination({ pages, setUsersSlice, users }) {
   const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
+    setUsersSlice(users.slice((pageNumber - 1) * 1, pageNumber * 1))
   };
 
   return (
@@ -568,7 +568,7 @@ function Pagination({ pages, setUsersSlice, users }) {
                     onClick={(event) => {
                       event.preventDefault();
                       handlePageChange(pageNumber);
-                      setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
+                      setUsersSlice(users.slice((pageNumber - 1) * 1, pageNumber * 1))
                     }}>
                     {pageNumber}
                   </span>
