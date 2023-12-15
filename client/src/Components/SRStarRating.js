@@ -39,7 +39,7 @@ export default function SRStarRating() {
                 onClick={() => handleRating(ratingValue)} 
               /> */}
 
-              <div className="starRating">
+              <div className="starRating gap-2">
                 {ratingValue <= (hover || rating) ? (
                   index + 0.5 <= (hover || rating) ? (
 

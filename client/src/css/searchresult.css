@@ -35,6 +35,7 @@
 .star-rating {
     position: relative;
     display: inline-block; 
+
 }
   
 .star-rating input[type="radio"] {
