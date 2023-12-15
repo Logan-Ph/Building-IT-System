@@ -5,14 +5,14 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 import { FaShoppingBag } from "react-icons/fa";
-
 import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
 import AdminManageVendorProduct from "./AdminManageVendorProduct";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
-  const [usersInfo, setUsersInfo] = useState([]);
+  const [users, setUsers] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
   const [usersImage, setUsersImage] = useState([]);
@@ -36,7 +36,7 @@ export default function ManageUserPage() {
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
-      setUsersInfo(res.data.users);
+      setUsers(res.data.users);
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
       setUsersImage(res.data.usersImage);
@@ -64,22 +64,25 @@ export default function ManageUserPage() {
       {error && <Navigate to={"/login"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
+          {/* Admin manage customer account */}
           <Tabs.Item active title="Customer" icon={HiUserCircle}>
-            <UserTable users={usersInfo} usersImage={usersImage} />
+            <UserTable users={users} usersImage={usersImage} />
           </Tabs.Item>
+          {/* Admin manage vendor account */}
           <Tabs.Item title="Vendor" icon={FaShoppingBag}>
             <VendorTable vendors={vendors} vendorsImage={vendorsImage} />
           </Tabs.Item>
+          {/* Admin manage shipper account */}
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
             <ShipperTable shippers={shippers} shippersImage={shippersImage} />
           </Tabs.Item>
+          {/* Admin manage reported account */}
           <Tabs.Item title="Reported Account" icon={HiClipboardList}>
             <ReportedTable />
           </Tabs.Item>
-
           {/* Admin manage product */}
           <Tabs.Item title="Product" icon={AiFillDelete}>
-            <AdminManageVendorProduct/>
+            <AdminManageVendorProduct />
           </Tabs.Item>
         </Tabs>
       </div>
@@ -88,6 +91,12 @@ export default function ManageUserPage() {
 }
 
 function UserTable({ users, usersImage }) {
+  const [usersSlice, setUsersSlice] = useState([]);
+
+  useEffect(() => {
+    setUsersSlice(users.slice(0, 10));
+  }, [users]);
+
   return (
     <>
       <div className="p-4 bg-gray-100">
@@ -103,8 +112,7 @@ function UserTable({ users, usersImage }) {
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
-              {users && users
-                .filter(user => user.role !== 'Admin')
+              {usersSlice
                 .map((user, i) => (
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
@@ -134,7 +142,7 @@ function UserTable({ users, usersImage }) {
                     </Table.Cell>
                   </Table.Row>
                 ))}
-              <Table.Row className="bg-white">
+              {/* <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                   <img
                     class="w-10 h-10 rounded-full"
@@ -164,16 +172,22 @@ function UserTable({ users, usersImage }) {
                     View
                   </a>
                 </Table.Cell>
-              </Table.Row>
+              </Table.Row> */}
             </Table.Body>
           </Table>
         </div>
       </div>
+      {Math.floor(users.length / 10) > 1 && <Pagination pages={Math.ceil(users.length / 10)} setUsersSlice={setUsersSlice} users={users} />}
     </>
   )
 }
 
 function VendorTable({ vendors, vendorsImage }) {
+  const [usersSlice, setUsersSlice] = useState([]);
+
+  useEffect(() => {
+    setUsersSlice(vendors.slice(0, 10));
+  }, [vendors]);
   return (<>
     <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
@@ -188,7 +202,7 @@ function VendorTable({ vendors, vendorsImage }) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {vendors && vendors.map((vendor, i) => (
+            {usersSlice.map((vendor, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                   <img src={(vendorsImage[i]) ? `data:image/jpeg;base64,${vendorsImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
@@ -217,7 +231,7 @@ function VendorTable({ vendors, vendorsImage }) {
                 </Table.Cell>
               </Table.Row>
             ))}
-            <Table.Row className="bg-white">
+            {/* <Table.Row className="bg-white">
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
@@ -247,15 +261,21 @@ function VendorTable({ vendors, vendorsImage }) {
                   View
                 </a>
               </Table.Cell>
-            </Table.Row>
+            </Table.Row> */}
           </Table.Body>
         </Table>
       </div>
+      {Math.floor(vendors.length / 10) > 1 && <Pagination pages={Math.ceil(vendors.length / 10)} setUsersSlice={setUsersSlice} users={vendors} />}
     </div>
   </>)
 }
 
 function ShipperTable({ shippers, shippersImage }) {
+  const [usersSlice, setUsersSlice] = useState([]);
+
+  useEffect(() => {
+    setUsersSlice(shippers.slice(0, 10));
+  }, [shippers]);
   return (<>
     <div className="p-4 bg-gray-100">
       <div className="relative overflow-x-auto">
@@ -271,7 +291,7 @@ function ShipperTable({ shippers, shippersImage }) {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {shippers && shippers.map((shipper, i) => (
+            {usersSlice.map((shipper, i) => (
               <Table.Row className="bg-white">
                 <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                   <img src={(shippersImage[i]) ? `data:image/jpeg;base64,${shippersImage[i]}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
@@ -301,7 +321,7 @@ function ShipperTable({ shippers, shippersImage }) {
                 </Table.Cell>
               </Table.Row>
             ))}
-            <Table.Row className="bg-white">
+            {/* <Table.Row className="bg-white">
               <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                 <img
                   class="w-10 h-10 rounded-full"
@@ -332,10 +352,11 @@ function ShipperTable({ shippers, shippersImage }) {
                   View
                 </a>
               </Table.Cell>
-            </Table.Row>
+            </Table.Row> */}
           </Table.Body>
         </Table>
       </div>
+      {Math.floor(shippers.length / 10) > 1 && <Pagination pages={Math.ceil(shippers.length / 10)} setUsersSlice={setUsersSlice} users={shippers} />}
     </div>
   </>)
 }
@@ -486,7 +507,7 @@ function ReportedTable() {
                 <img
                   class="w-10 h-10 rounded-full"
                   src={require("../../Components/images/defaultUserImage.png")}
-                  alt="Jese image"/>
+                  alt="Jese image" />
                 <div class="ps-3">
                   <div class="text-base font-medium">Name</div>
                   <div class="font-normal text-gray-500">
@@ -515,4 +536,56 @@ function ReportedTable() {
       </div>
     </div>
   </>)
+}
+
+function Pagination({ pages, setUsersSlice, users }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
+  };
+
+  return (
+    <div className="flex items-center justify-end py-3 mt-5">
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between lg:justify-end xl:justify-end">
+        <div>
+          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            {pages > 1 &&
+              <>
+                <span
+                  href="#"
+                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => { (currentPage - 1) > 0 && handlePageChange(currentPage - 1) }}
+                >
+                  <span className="sr-only">Previous</span>
+                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                {Array.from({ length: pages }, (_, i) => i + 1).map((pageNumber) => (
+                  <span
+                    key={pageNumber}
+                    className={(pageNumber === currentPage) ? "relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"}
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handlePageChange(pageNumber);
+                      setUsersSlice(users.slice((pageNumber - 1) * 10, pageNumber * 10))
+                    }}>
+                    {pageNumber}
+                  </span>
+                ))}
+                <span
+                  href="#"
+                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => { (currentPage + 1) <= pages && handlePageChange(currentPage + 1) }}
+                >
+                  <span className="sr-only">Next</span>
+                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                </span>
+              </>
+            }
+          </nav>
+        </div>
+      </div>
+    </div>
+  )
 }

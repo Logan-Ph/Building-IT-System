@@ -44,7 +44,7 @@ export default function Router() {
   const UserLayout = ({ header }) => {
     return (
       <>
-        <InstantSearch searchClient={searchClient} indexName="rBuy">
+        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           {header}
           <Outlet />
           <Chatbot />
@@ -67,13 +67,14 @@ export default function Router() {
   const VendorLayout = () => {
     return (
       <>
-        <InstantSearch searchClient={searchClient} indexName="rBuy">
+        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <VendorHeader />
           <div className="flex  ">
             <VendorSidebar />
             <Outlet />
           </div>
         </InstantSearch>
+
       </>
     )
   }
@@ -81,11 +82,9 @@ export default function Router() {
   const AdminLayout = () => {
     return (
       <>
-        <InstantSearch searchClient={searchClient} indexName="rBuy">
+        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <AdminHeader />
-          <div className="flex  ">
             <Outlet />
-          </div>
         </InstantSearch>
       </>
     )
