@@ -36,6 +36,8 @@ import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import { UserImageProvider } from '../Context/UserImageContext';
 import CartPage from "../Pages/User/CartPage";
+import VendorEditProfile from '../Pages/Vendor/VendorEditProfile';
+import VendorEditStore from '../Pages/Vendor/VendorEditStore';
 
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
@@ -170,6 +172,14 @@ export default function Router() {
         {
           path: "/edit-product/:id",
           element: <VendorEditingProduct />,
+        },
+        {
+          path: "/edit-vendor-profile",
+          element: <VendorEditProfile />
+        },
+        {
+          path: "/edit-vendor-store",
+          element: <VendorEditStore />
         },
       ],
     },
