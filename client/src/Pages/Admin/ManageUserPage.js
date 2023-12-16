@@ -86,7 +86,7 @@ export default function ManageUserPage() {
 
 function filterUsers(users, searchTerm) {
   const regex = new RegExp(searchTerm, 'i');
-  return users.filter(user => regex.test(user.email) || regex.test(user.name));
+  return users.filter(user => regex.test(user.email) || regex.test(user.name) || regex.test(user.phoneNumber) || regex.test(user.address) || regex.test(user.distributionHub));
 }
 
 function UserTable({ data, dataImage, type }) {
