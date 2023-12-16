@@ -12,7 +12,7 @@ import SRPagination from '../../Components/SRPagination'
 import SRPriceRange from '../../Components/SRPriceRange'
 import SRStarRating from '../../Components/SRStarRating'
 
-import { useHits, useRefinementList } from 'react-instantsearch';
+import { useHits, useRange, useRefinementList } from 'react-instantsearch';
 import { Navigate, useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
 import { UserContext } from '../../Context/UserContext';
@@ -89,8 +89,8 @@ export default function Example() {
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden">
                 <span className="sr-only">Filters</span> */}
-                {/* Filter button */}
-                {/* <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+              {/* Filter button */}
+              {/* <FunnelIcon className="h-5 w-5" aria-hidden="true" />
               </button> */}
 
               <FilterSideBar />
@@ -127,7 +127,7 @@ export default function Example() {
                   <SRStarRating />
                   <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
                   <div className='flex px-6 border border-gray-50 pb-4 bg-white'>
-                    <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm rounded-md px-6 py-1 mt-4 mx-auto w-full">Reset</button> 
+                    <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm rounded-md px-6 py-1 mt-4 mx-auto w-full">Reset</button>
                   </div>
                 </div>
               </div>
@@ -231,15 +231,14 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
 // }
 
 function FilterSideBar({ setMobileFiltersOpen }) {
-  const open = useRef(true);
+  const [open, setOpen] = useState(false);
 
   const handleFilterSidebar = () => {
-    console.log(!open.current)
-    open.current = !open.current;
+    setOpen((open) => !open)
   };
 
   const handleCloseSidebar = () => {
-    open.current = false;
+    setOpen(false);
   };
 
   return (
@@ -249,16 +248,15 @@ function FilterSideBar({ setMobileFiltersOpen }) {
         className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden md:inline-flex items-center justify-center"
         onClick={handleFilterSidebar}
       >
-         {open.current ? (
-        <span className="sr-only">Close</span>
+        {open.current ? (
+          <span className="sr-only">Close</span>
         ) : (
-        <FunnelIcon className="h-5 w-5" aria-hidden="true" />
-  )}
+          <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+        )}
       </button>
 
       {/* mobile menu */}
-      {open.current && (
-      <div className="relative inset-0 z-50 overflow-hidden">
+      <div className={open ? "relative inset-0 z-50 overflow-hidden" : "relative inset-0 z-50 overflow-hidden hidden"}>
         <div className="absolute inset-0 overflow-hidden">
           <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
             <div className="w-screen max-w-md">
@@ -273,13 +271,13 @@ function FilterSideBar({ setMobileFiltersOpen }) {
                   <span className="sr-only">Close</span>
                 </button>
                 {/* Rest of your sidebar content goes here */}
-                
+
                 <div>
                   <SRPriceRange />
                   <SRStarRating />
                   {/* <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} /> */}
                   <div className='flex px-6 border border-gray-50 pb-4 bg-white'>
-                    <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm rounded-md px-6 py-1 mt-4 mx-auto w-full">Reset</button> 
+                    <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium text-sm rounded-md px-6 py-1 mt-4 mx-auto w-full">Reset</button>
                   </div>
                 </div>
               </div>
@@ -287,7 +285,6 @@ function FilterSideBar({ setMobileFiltersOpen }) {
           </div>
         </div>
       </div>
-      )}
     </div>
   );
 }
