@@ -38,6 +38,7 @@ import { UserImageProvider } from '../Context/UserImageContext';
 import CartPage from "../Pages/User/CartPage";
 import VendorEditProfile from '../Pages/Vendor/VendorEditProfile';
 import VendorEditStore from '../Pages/Vendor/VendorEditStore';
+import UserOrder from '../Pages/User/UserOrder';
 
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
@@ -134,6 +135,10 @@ export default function Router() {
         {
           path: "/profile",
           element: <UserProfile />,
+        },
+        {
+          path: "/user-order",
+          element: <UserOrder />,
         },
         {
           path: "/vendor/:id/product",

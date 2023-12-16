@@ -98,13 +98,24 @@ export default function VendorMyProduct() {
 
       <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
         <div class="mb-4 flex justify-between items-center">
-          <div class="flex space-x-2">
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">All</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Live</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Sold Out</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Reviewing</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Violation</button>
-            <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Delisted</button>
+          <div class="flex space-x-2 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                <ul class="flex flex-wrap -mb-px">
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</a>
+                    </li>
+                </ul>
           </div>
           <div class="space-x-2">
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
