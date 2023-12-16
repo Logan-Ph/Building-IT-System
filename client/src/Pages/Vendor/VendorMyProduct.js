@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
 import { UserImageContext } from "../../Context/UserImageContext";
+import ReactPaginate from 'react-paginate';
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 
@@ -31,6 +32,20 @@ export default function VendorMyProduct() {
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const itemsPerPage = 2;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Calculate the index range for the current page
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  // Get the products to display for the current page
+  const currentProducts = products.slice(startIndex, endIndex);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
   };
 
   useEffect(() => {
@@ -133,28 +148,51 @@ export default function VendorMyProduct() {
                 </tr>
             </thead>
             <tbody>
-                {products.map((product) => (
-                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {product.product_name}
-                    </td>
-                    <td className="px-6 py-4">
-                      ${product.price}
-                    </td>
-                    <td className="px-6 py-4">
-                      {product.stock}
-                    </td>
-                    <td className="px-6 py-4">
-                      {product.description}
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                        <a href={`/edit-product/${product._id}`} class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        <button onClick={() => handleDelete(product._id)} class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
-                    </td>
-                  </tr>
-                ))}
+              {currentProducts.map((product) => (
+                <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  {/* ... Table data goes here ... */}
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {product.product_name}
+                  </td>
+                  <td className="px-6 py-4">
+                    ${product.price}
+                  </td>
+                  <td className="px-6 py-4">
+                    {product.stock}
+                  </td>
+                  <td className="px-6 py-4">
+                    {product.description}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
-        </table>
+          </table>
+
+          <ReactPaginate
+          previousLabel={<i className="fas fa-chevron-left"></i>}
+          nextLabel={<i className="fas fa-chevron-right"></i>}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={Math.ceil(products.length / itemsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination flex justify-center mt-4'}
+          subContainerClassName={'pages pagination'}
+          activeClassName={'active display'}
+          previousClassName={'rounded-md px-3 py-2 bg-blue-600 text-white mr-2 cursor-pointer'}
+          nextClassName={'rounded-md px-3 py-2 bg-blue-600 text-white ml-2 cursor-pointer'}
+          pageClassName={'px-3 py-2'} // Hide individual page numbers
+        />
+
+
+
+
+
       </div>
     </div>
 

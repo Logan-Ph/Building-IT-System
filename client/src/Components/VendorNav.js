@@ -14,7 +14,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
         <img class="h-auto max-w-full" src="/images/cover.jpg" alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full" alt="" />
+            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
 
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>

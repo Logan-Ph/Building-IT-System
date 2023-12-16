@@ -118,6 +118,14 @@ router.get('/vendor/:id', userController.vendorHomepage)
 // vendor product page (user side)
 router.get('/vendor/:id/product', userController.vendorProductPage);
 
+// vendor edit storefront 
+router.post('/edit-store', upload.fields([
+    { name: 'coverPhoto', maxCount: 1 },
+    { name: 'bigBanner', maxCount: 1 },
+    { name: 'smallBanner1', maxCount: 1 },
+    { name: 'smallBanner2', maxCount: 1 },
+  ]), userController.editStore);
+
 //vendor manage order (vendor side)
 router.post('/search-order', userController.searchOrder);
 router.post('/confirm-order', userController.confirmOrder);

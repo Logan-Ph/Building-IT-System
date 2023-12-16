@@ -476,13 +476,33 @@ exports.manageOrder = async (req, res) => {
 exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    let vendorImage;
+    let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
+    if (vendor.coverPhoto.data) {
+      coverPhoto = Buffer.from(
+        vendor.coverPhoto.data
+      ).toString("base64");
+    }
+    if (vendor.bigBanner.data) {
+      bigBanner = Buffer.from(
+        vendor.bigBanner.data
+      ).toString("base64");
+    }
+    if (vendor.smallBanner1.data) {
+      smallBanner1 = Buffer.from(
+        vendor.smallBanner1.data
+      ).toString("base64");
+    }
+    if (vendor.smallBanner2.data) {
+      smallBanner2 = Buffer.from(
+        vendor.smallBanner2.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2 });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -700,16 +720,30 @@ exports.userProfile = async (req, res) => {
 
 exports.editStore = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ email: req.body.email });
-    const coverPhoto = req.body.coverPhoto;
-    if (req.file) {
-      const image = {
-        data: fs.readFileSync("uploads/" + req.file.filename),
-      };
-      vendor.wallpaper = image;
+    const vendor = await Vendor.findById(req.body.vendorID);
+    if (req.files) {
+      if (req.files.coverPhoto) {
+        vendor.coverPhoto.data = fs.readFileSync(req.files.coverPhoto[0].path);
+      }
+
+      if (req.files.bigBanner) {
+        vendor.bigBanner.data = fs.readFileSync(req.files.bigBanner[0].path);
+      }
+
+      if (req.files.smallBanner1 && req.files.smallBanner2) {
+        const smallBanner1Buffer = fs.readFileSync(req.files.smallBanner1[0].path);
+        vendor.smallBanner1.data = smallBanner1Buffer;
+        const smallBanner2Buffer = fs.readFileSync(req.files.smallBanner2[0].path);
+        vendor.smallBanner2.data = smallBanner2Buffer;
+      }
+
+      if ((req.files.smallBanner1 && !req.files.smallBanner2) || (!req.files.smallBanner1 && req.files.smallBanner2)) {
+        return res.json("Must include 2 images file for 2 small banner.")
+      }
+
     }
     await vendor.save();
-    return res.json('Profile has been updated!')
+    return res.json('Storefront has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }

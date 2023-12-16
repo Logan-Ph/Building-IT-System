@@ -10,12 +10,20 @@ export default function VendorHomePage() {
   const { user } = useContext(UserContext)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
+  const [coverPhoto, setCoverPhoto] = useState();
+  const [bigBanner, setBigBanner] = useState();
+  const [smallBanner1, setSmallBanner1] = useState();
+  const [smallBanner2, setSmallBanner2] = useState();
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/vendor/${params.id}`, { withCredentials: true })
       setVendor(res.data.vendor)
       setVendorImage(res.data.vendorImage)
+      setCoverPhoto(res.data.coverPhoto)
+      setBigBanner(res.data.bigBanner)
+      setSmallBanner1(res.data.smallBanner1)
+      setSmallBanner2(res.data.smallBanner2)
       setIsLoading(false)
     } catch (error) {
       setError(error)
@@ -136,35 +144,41 @@ export default function VendorHomePage() {
         </div>
 
         {/* <!-- Banner --> */}
+        
         <div class="md:container mx-auto grid grid-cols-4 gap-4">
+          {coverPhoto && 
           <div class="col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../../Components/images/banner1.jpg")}
+              src={`data:image/jpeg;base64,${coverPhoto}`}
               alt=""
             />
-          </div>
+          </div>}
+          {smallBanner1 && 
           <div class="md:col-span-2 col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../../Components/images/banner2.webp")}
+              src={`data:image/jpeg;base64,${smallBanner1}`}
               alt=""
             />
-          </div>
+          </div>}
+          {smallBanner2 && 
           <div class="md:col-span-2 col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../../Components/images/banner3.jpeg")}
+              src={`data:image/jpeg;base64,${smallBanner2}`}              
               alt=""
             />
-          </div>
+          </div>}
+
+          {bigBanner && 
           <div class="col-span-4">
             <img
               class="object-fill h-full w-full"
-              src={require("../../Components/images/banner1.jpg")}
+              src={`data:image/jpeg;base64,${bigBanner}`}             
               alt=""
             />
-          </div>
+          </div>}
         </div>
       </section>
     </>
