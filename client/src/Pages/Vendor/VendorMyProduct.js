@@ -89,7 +89,7 @@ export default function VendorMyProduct() {
               </div>
               <div className="mt-4">
                 <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">Search</button>
-                <button type="reset" className=" border-solid border-2 hover:bg-gray-100 px-3 py-1 rounded-md ">Reset</button>
+                <button type="reset" className=" border-solid border-2 hover:bg-gray-100 ml-2 px-3 py-1 rounded-md ">Reset</button>
               </div>
             </form>
           </div>
@@ -98,7 +98,7 @@ export default function VendorMyProduct() {
 
       <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
         <div class="mb-4 flex justify-between items-center">
-          <div class="flex space-x-2 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+          <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
                 <ul class="flex flex-wrap -mb-px">
                     <li class="me-2">
                         <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
@@ -146,7 +146,7 @@ export default function VendorMyProduct() {
             <tbody>
                 {products.map((product) => (
                   <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate ...">
                       {product.product_name}
                     </td>
                     <td className="px-6 py-4">
