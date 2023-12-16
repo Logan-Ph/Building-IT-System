@@ -108,6 +108,9 @@ router.get('/remove-product/:id', userController.removeProduct);
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
 
+// vendor update profile route
+router.post('/update-vendor', upload.single('file'), userController.updateVendor);
+
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
@@ -120,6 +123,14 @@ router.get('/vendor/:id', userController.vendorHomepage)
 
 // vendor product page (user side)
 router.get('/vendor/:id/product', userController.vendorProductPage);
+
+// vendor edit storefront 
+router.post('/edit-store', upload.fields([
+    { name: 'coverPhoto', maxCount: 1 },
+    { name: 'bigBanner', maxCount: 1 },
+    { name: 'smallBanner1', maxCount: 1 },
+    { name: 'smallBanner2', maxCount: 1 },
+  ]), userController.editStore);
 
 //vendor manage order (vendor side)
 router.post('/search-order', userController.searchOrder);

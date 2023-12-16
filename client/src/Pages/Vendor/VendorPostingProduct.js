@@ -16,6 +16,32 @@ export default function VendorPostingProduct() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const notify = (error) => {
+    toast.error(error, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
+  }
+
+  const success = (success) => {
+    toast.success(success, {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
+  }
+
   const data = {
     productName: productName,
     category: category,
@@ -33,37 +59,6 @@ export default function VendorPostingProduct() {
   const handleDropdownChange = (event) => {
     setCategory(event.target.value);
   };
-
-  useEffect(() => {
-    error && notify(error)
-    msg && success(msg)
-  }, [error, msg]);
-
-  const notify = (error) => {
-      toast.error(error, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          pauseOnHover: false,
-          theme: "light",
-      });
-  }
-
-  const success = (success) => {
-    toast.success(success, {
-        position: "top-center",
-        autoClose: 10000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        pauseOnHover: false,
-        theme: "light",
-    });
-  }
 
   async function axiosPostData() {
     try {
@@ -88,6 +83,11 @@ export default function VendorPostingProduct() {
     }
   }
 
+  useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
+  }, [error, msg]);
+
   if (user === undefined) {
     return <div>Loading...</div>
   }
@@ -97,6 +97,18 @@ export default function VendorPostingProduct() {
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {(error || !user) && <Navigate to='/login' replace={true} />}
+      <ToastContainer
+          position="top-center"
+          autoClose={10000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+          theme="light"
+      />
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">
