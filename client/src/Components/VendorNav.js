@@ -11,10 +11,22 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
     <>
       {/* Profile Section */}
       <div class="md:container mx-auto">
-        <img class="h-auto max-w-full" src="/images/cover.jpg" alt="" />
+        <img
+          class="h-auto max-w-full"
+          src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/cd1707cc-cbfa-4ad9-9c64-b92f7bf2dc42._CR0%2C0%2C3000%2C600_SX3000_.jpg"
+          alt=""
+        />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full" alt="" />
+            <img
+              src={
+                vendorImage
+                  ? `data:image/jpeg;base64,${vendorImage}`
+                  : require("../Components/images/defaultUserImage.png")
+              }
+              className="vendor-avatar md:w- rounded-full"
+              alt=""
+            />
 
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
@@ -47,7 +59,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
           <div class="md:order-last drop-shadow-md mt-2">
             <form>
               <div class="relative">
-                {activeTab === "PRODUCTS" &&
+                {activeTab === "PRODUCTS" && (
                   <>
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                       <svg
@@ -73,25 +85,26 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
                       placeholder={`Search in ${vendor && vendor.businessName}`}
                       onChange={(e) => refine(e.target.value)}
                     />
-                  </>}
+                  </>
+                )}
               </div>
             </form>
           </div>
 
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
-              <li className={getTabClass('HOME')}>
-                <a href={(vendor) ? `/vendor/${vendor._id}/home` : ""}
-
+              <li className={getTabClass("HOME")}>
+                <a
+                  href={vendor ? `/vendor/${vendor._id}/home` : ""}
                   class="text-gray-900hover:underline text-sm font-light md:text-lg"
                   aria-current="page"
                 >
                   HOME
                 </a>
               </li>
-              <li className={getTabClass('PRODUCTS')}>
+              <li className={getTabClass("PRODUCTS")}>
                 <a
-                  href={(vendor) ? `/vendor/${vendor._id}/product` : ""}
+                  href={vendor ? `/vendor/${vendor._id}/product` : ""}
                   class="text-gray-900hover:underline text-sm md:text-lg font-light"
                 >
                   PRODUCTS
