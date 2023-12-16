@@ -7393,6 +7393,10 @@ input:checked + .toggle-bg {
     margin-left: 1.5rem;
   }
 
+  .sm\:ml-4 {
+    margin-left: 1rem;
+  }
+
   .sm\:line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -7724,6 +7728,10 @@ input:checked + .toggle-bg {
 
   .md\:mt-0 {
     margin-top: 0px;
+  }
+
+  .md\:ml-6 {
+    margin-left: 1.5rem;
   }
 
   .md\:block {
@@ -8412,6 +8420,14 @@ input:checked + .toggle-bg {
 
   .xs\:mt-0 {
     margin-top: 0px;
+  }
+
+  .xs\:ml-6 {
+    margin-left: 1.5rem;
+  }
+
+  .xs\:ml-4 {
+    margin-left: 1rem;
   }
 
   .xs\:line-clamp-1 {

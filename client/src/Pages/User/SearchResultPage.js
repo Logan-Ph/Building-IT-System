@@ -95,7 +95,7 @@ function FilterSideBar({ setMobileFiltersOpen }) {
     <div className="flex">
       <button
         type="button"
-        className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden md:inline-flex items-center justify-center"
+        className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 xs:ml-4 sm:ml-4 md:ml-4 lg:hidden  xl:hidden items-center justify-center"
         onClick={handleFilterSidebar}
       >
         {open.current ? (
