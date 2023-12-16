@@ -1,17 +1,14 @@
 export default function VendorEditProfile() {
     return (
-        <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
+        <div className="container mx-auto my-8 px-4 rounded-lg bg-gray-100 shadow p-4 max-w-4xl">
             <h2 className="text-2xl font-semibold">Shop Profile</h2>
             <div className="border-b border-gray-900/10 pb-12">
 
                 <div className="mt-5">
                   <label for="photo" className="block text-sm font-medium leading-6 text-gray-900">Avatar picture</label>
                   <div className="mt-2 flex items-center gap-x-3">
-                    <input type="file" id="fileUpload" name="photo" accept="image/*" style="display: none;" />
-                    <img src="https://as1.ftcdn.net/v2/jpg/01/63/11/70/1000_F_163117064_syJkTuCddASYjvl4WqyRmnuy8cDXpoQY.jpg" onclick="document.getElementById('fileUpload').click()" className="w-14 h-14 rounded-full cursor-pointer" alt="/" />
-                    <button type="button" onclick="document.getElementById('fileUpload').click()" className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                      Change
-                    </button>
+                  <img src="https://as1.ftcdn.net/v2/jpg/01/63/11/70/1000_F_163117064_syJkTuCddASYjvl4WqyRmnuy8cDXpoQY.jpg" onclick="document.getElementById('fileUpload').click()" className="w-32 h-32 rounded-full cursor-pointer" alt="/" />
+                    <input type="file" id="fileUpload" name="photo" accept="image/*" />
                   </div>
                 </div>
             
