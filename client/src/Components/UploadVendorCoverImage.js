@@ -15,8 +15,6 @@ export default function UploadVendorCoverImage({ vendor, activeTab, vendorImage 
   };
   return (
     <>
-      {/* Profile Section */}
-
       <div class="md:container mx-auto">
         
         {/* Upload Cover Image */}
