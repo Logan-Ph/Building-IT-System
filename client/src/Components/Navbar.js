@@ -11,8 +11,6 @@ export default function Navbar() {
                     <img src="/images/logo1.png" className="mr-3 w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8" alt="logo" />
                     <span className="font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy</span>
                   </div>
-
-
                   <p className="max-w-xs mt-4 text-sm text-white">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, accusantium.
                   </p>
@@ -99,13 +97,9 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-
             </div>
-
-
           </div>
         </div>
-
         <hr className="my-6 w-[1300px] mx-auto border-white border-[1px] rounded"></hr>
         <div className="flex flex-wrap items-center md:justify-between justify-center">
           <div className="w-full md:w-4/12 px-4 mx-auto text-center">

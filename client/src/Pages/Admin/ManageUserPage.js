@@ -9,6 +9,8 @@ import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
 import AdminManageVendorProduct from "./AdminManageVendorProduct";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import Pagination from "../../Components/Pagination";
+import SearchBox from "../../Components/SearchBox";
 
 export default function ManageUserPage() {
   const { user, setUser } = useContext(UserContext)
@@ -90,11 +92,11 @@ function filterUsers(users, searchTerm) {
 }
 
 function UserTable({ data, dataImage, type }) {
-  const [dataSlice, setDataSlice] = useState([]);
+  const [dataSlice, setDataSlice] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    setDataSlice(filterUsers(data, searchTerm));
+    (searchTerm) ? setDataSlice(filterUsers(data, searchTerm)) : setDataSlice(data.slice(0, 10))
   }, [searchTerm, data])
 
   useEffect(() => {
@@ -175,7 +177,7 @@ function UserTable({ data, dataImage, type }) {
                 <Table.Body className="divide-y">
                   <Table.Row className="bg-white">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                      <img src={(dataSlice[i].userImage) ? `data:image/jpeg;base64,${dataSlice[i].userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
+                      <img src={(dataSlice[i].img) ? `data:image/jpeg;base64,${dataSlice[i].img}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
                         <div class="text-base font-medium">{item.name}</div>
                         <div class="font-normal text-gray-500">
@@ -205,7 +207,7 @@ function UserTable({ data, dataImage, type }) {
           </Table>
         </div>
       </div>
-      {Math.floor(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}
+      {!searchTerm && Math.floor(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}
     </>
   )
 }
@@ -293,109 +295,4 @@ function ReportedTable() {
       </div>
     </div>
   </>)
-}
-
-function Pagination({ pages, setDataSlice, data }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const maxPageNumbersToShow = 5;
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
-  };
-
-  const getPaginationNumbers = () => {
-    const numbers = [];
-    let start = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
-    let end = Math.min(pages, start + maxPageNumbersToShow - 1);
-    if (currentPage <= Math.floor(maxPageNumbersToShow / 2)) {
-      end = Math.min(pages, maxPageNumbersToShow);
-    }
-    if (currentPage > pages - Math.floor(maxPageNumbersToShow / 2)) {
-      start = Math.max(1, pages - maxPageNumbersToShow + 1);
-    }
-    for (let i = start; i <= end; i++) {
-      numbers.push(i);
-    }
-    return numbers;
-  };
-
-  return (
-    <div className="flex items-center justify-end py-3 mt-5">
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between lg:justify-end xl:justify-end">
-        <div>
-          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            {pages > 1 &&
-              <>
-                <span
-                  href="#"
-                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  onClick={() => { (currentPage - 1) > 0 && handlePageChange(currentPage - 1) }}
-                >
-                  <span className="sr-only">Previous</span>
-                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                </span>
-                {getPaginationNumbers().map((pageNumber) => (
-                  <span
-                    key={pageNumber}
-                    className={(pageNumber === currentPage) ? "relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"}
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handlePageChange(pageNumber);
-                      setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
-                    }}>
-                    {pageNumber}
-                  </span>
-                ))}
-                <span
-                  href="#"
-                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  onClick={() => { (currentPage + 1) <= pages && handlePageChange(currentPage + 1) }}
-                >
-                  <span className="sr-only">Next</span>
-                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                </span>
-              </>
-            }
-          </nav>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function SearchBox({ setSearchTerm }) {
-  return (
-    <>
-      <label for="table-search" class="sr-only">
-        Search
-      </label>
-      <div class="relative">
-        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg
-            class="w-4 h-4 text-gray-500"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            ></path>
-          </svg>
-        </div>
-        <input
-          type="text"
-          id="table-search-users"
-          class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Search for users"
-          onChange={(event) => setSearchTerm(event.target.value)}
-        />
-      </div></>
-  )
 }

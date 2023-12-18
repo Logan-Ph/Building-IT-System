@@ -48,7 +48,7 @@ export default function AdminHeader() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {/* <!-- logo --> */}
-                <a className="flex items-center lg:ml-10 " href='\dashboard'>
+                <a className="flex items-center lg:ml-10 " href='\admin\manage-user'>
                   <img
                     src={require("./images/logo1.png")}
                     className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"

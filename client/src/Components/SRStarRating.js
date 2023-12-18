@@ -31,18 +31,9 @@ export default function SRStarRating() {
             const ratingValue = index + 1;
             return (
               <label className="flex flex-col justify-center items-center">
-                {/* <input 
-                type="radio" 
-                name="rating" 
-                size={10}
-                value={ratingValue} 
-                onClick={() => handleRating(ratingValue)} 
-              /> */}
-
                 <div className="starRating gap-2">
                   {ratingValue <= (hover || rating) ? (
                     index + 0.5 <= (hover || rating) ? (
-
                       //Full Star
                       <FaStar
                         className="star w-8 h-8 md:w-6 md:h-6"
@@ -53,7 +44,6 @@ export default function SRStarRating() {
 
                       />
                     ) : (
-
                       //Half Star
                       <FaStarHalfAlt
                         className="star w-8 h-8 md:w-6 md:h-6"
@@ -64,7 +54,6 @@ export default function SRStarRating() {
                       />
                     )
                   ) : (
-
                     //Empty Star
                     <FaRegStar
                       className="star w-8 h-8 md:w-6 md:h-6"

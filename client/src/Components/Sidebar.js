@@ -15,25 +15,15 @@ export default function Sidebar({ children }) {
     setWidth(window.innerWidth);
   }
 
-  // This function will run whenever the window size changes
   useEffect(() => {
     window.addEventListener("resize", getSize);
-    // Get the current window width
 
-    // Set the expanded state to false if the width is less than 768 pixels
-    // if (width < 768) {
-    //   setExpanded(false);
-
-    // }
     if (width > 898) {
       setExpanded(true);
     } else {
       setExpanded(false);
     }
-    // else {
-    //   // Otherwise, set it to true
-    //   setExpanded(false);
-    // }
+    
     return () => {
       window.removeEventListener("resize", getSize);
     };
