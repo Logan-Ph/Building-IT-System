@@ -132,7 +132,7 @@ export default function UserProfile() {
                         </button>
                     </div>
                     <span href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50" onClick={handleSidebarToggle}>
-                        <img src={(user.userImage) ? `data:image/jpeg;base64,${user.userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                        <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
                         <div className="whitespace-nowrap sidebar-user-profile">
                             <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
                         </div>
@@ -196,7 +196,7 @@ export default function UserProfile() {
 
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
-                            <img src={(user.userImage) ? `data:image/jpeg;base64,${user.userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
+                            <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
                                 <h2 className="text-2xl font-semibold mb-2">{user && user.name}</h2>
                                 <span className="text-lg text-gray-500">{user && user.email}</span>
