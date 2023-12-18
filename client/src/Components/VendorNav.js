@@ -11,11 +11,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
     <>
       {/* Profile Section */}
       <div class="md:container mx-auto">
-        <img
-          class="h-auto max-w-full"
-          src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/cd1707cc-cbfa-4ad9-9c64-b92f7bf2dc42._CR0%2C0%2C3000%2C600_SX3000_.jpg"
-          alt=""
-        />
+        <img class="h-auto max-w-full" src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/cd1707cc-cbfa-4ad9-9c64-b92f7bf2dc42._CR0%2C0%2C3000%2C600_SX3000_.jpg" alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
             <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />

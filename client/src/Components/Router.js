@@ -37,6 +37,8 @@ import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import CartPage from "../Pages/User/CartPage";
 import ChatPage from "../Pages/User/ChatPage";
 import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
+import UserOrder from '../Pages/User/UserOrder';
+
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -135,6 +137,10 @@ export default function Router() {
         {
           path: "/profile",
           element: <UserProfile />,
+        },
+        {
+          path: "/user-order",
+          element: <UserOrder />,
         },
         {
           path: "/vendor/:id/product",
