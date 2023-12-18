@@ -5,6 +5,7 @@ import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
 import { Navigate } from 'react-router';
 import UserSidebar from "../../Components/UserSidebar";
+import { UserImageContext } from '../../Context/UserImageContext';
 
 
 export default function UserProfile() {
