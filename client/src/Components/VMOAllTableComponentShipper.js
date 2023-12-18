@@ -4,6 +4,8 @@ import { useState } from 'react';
 import React from "react";
 
 export default function AllTableComponent() {
+    const [openModal, setOpenModa] = useState(false);
+
     return <>
       <div className="overflow-x-auto">
         <Table hoverable>

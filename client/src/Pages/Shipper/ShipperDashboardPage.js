@@ -1,8 +1,11 @@
 import '../../css/mangeorder.css'
 import React from "react";
 import { Tabs } from 'flowbite-react';
-import UnpaidTableComponent from '../../Components/VMOUnpaidTableComponentShipper';
+
 import AllTableComponent from '../../Components/VMOAllTableComponentShipper';
+import ConfirmTableComponent from '../../Components/VMOConfirmTableComponentShipper';
+import UnpaidTableComponentShipper from '../../Components/VMOUnpaidTableComponentShipper';
+
 
 
 
@@ -78,17 +81,17 @@ function Component(){
             <Tabs.Item active title="All">
                 <AllTableComponent />
             </Tabs.Item>
-            <Tabs.Item title="Unpaid">
-                <UnpaidTableComponent />
+            <Tabs.Item title="Confirmation">
+                <ConfirmTableComponent />
             </Tabs.Item>
             <Tabs.Item title="To Ship">
-                <UnpaidTableComponent />
+            <UnpaidTableComponentShipper />
             </Tabs.Item>
             <Tabs.Item title="Shipping">
-                 <UnpaidTableComponent />
+            <UnpaidTableComponentShipper />
             </Tabs.Item>
             <Tabs.Item title="Completed">
-                <UnpaidTableComponent />
+            <UnpaidTableComponentShipper />
             </Tabs.Item>
             <Tabs.Item title="Failed Delivery">
                 <div className='border border-gray my-1 py-32'>
