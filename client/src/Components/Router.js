@@ -35,6 +35,8 @@ import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import CartPage from "../Pages/User/CartPage";
 import ChatPage from "../Pages/User/ChatPage";
 
+import { useMediaQuery } from 'react-responsive';
+
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
   "d8ac69cc1ecc43ac91c32ca6d0fb4305"
@@ -65,16 +67,20 @@ export default function Router() {
   };
 
   const VendorLayout = () => {
+    const isWideScreen = useMediaQuery({ minWidth: 898 });
     return (
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <VendorHeader />
-          <div className="flex  ">
-            {/* <VendorSidebar /> */}
-            <Outlet />
+          <div className="flex">
+            <div className="w-[15%]">
+              <VendorSidebar />
+            </div>
+            <div className="w-[85%]">
+              <Outlet />
+            </div>
           </div>
         </InstantSearch>
-
       </>
     );
   };

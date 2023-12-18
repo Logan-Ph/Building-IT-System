@@ -46,7 +46,7 @@ export default function Sidebar({ children }) {
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
             src=""
-            className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"
+            className={`overflow-hidden transition-all ${expanded ? "w-20" : "w-0"
               }`}
             alt=""
           />
@@ -61,8 +61,6 @@ export default function Sidebar({ children }) {
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
-
-
       </nav>
     </aside>
   );

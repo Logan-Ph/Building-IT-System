@@ -4,7 +4,7 @@ import MoreDetailOrder from './MoreDetailOrder';
 
 export default function TableComponent({ orders }) {
     return <>
-        <div className='overflow-x-auto'>
+        <div className='w-full overflow-x-auto'>
             <Table hoverable>
                 <Table.Head>
                     <Table.HeadCell className='!px-4 !py-2'>
@@ -27,6 +27,51 @@ export default function TableComponent({ orders }) {
                     {orders.map((order) => {
                         const date = new Date(order.date);
                         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+                        let buttonColorClass = '';
+                        let buttonTextColor = '';
+                        let buttonBorderColor = '';
+                            switch (order.status) {
+                                case 'Unpaid':
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-[#E61E2A]';
+                                buttonBorderColor = "border-[#E61E2A]";
+                                break;
+
+                                case 'To Ship':
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-[#5C8374]';
+                                buttonBorderColor = "border-[#5C8374]";
+                                break;
+
+                                case 'Shipping':
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-[#092635]';
+                                buttonBorderColor = "border-[#092635]";
+                                break;
+
+                                case 'Completed':
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-[#FAC800]';
+                                buttonBorderColor = "border-[#FAC800]";
+                                break;
+               
+                                case 'Cancelled':
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-black';
+                                buttonBorderColor = "border-black";
+                                break;
+
+                                case 'Failed Delivery':
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-[#FF6C22]';
+                                buttonBorderColor = "border-[#FF6C22]";
+                                break;
+                       
+                                default:
+                                buttonColorClass = 'bg-white'; 
+                                buttonTextColor = 'text-gray-100';
+                                buttonBorderColor = "border-gray-100";
+                            }
                         return (
                             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                 <Table.Cell className='!px-4 !py-2'>{order._id}</Table.Cell>
@@ -37,7 +82,9 @@ export default function TableComponent({ orders }) {
                                 </Table.Cell>
                                 <Table.Cell className='!px-4 !py-2'>{order.contactNumber}</Table.Cell>
                                 <Table.Cell>
-                                    <button className="bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg whitespace-nowrap">{order.status}</button>
+                                    <button className={`rounded-lg text-sm px-2 font-bold border ${buttonBorderColor} ${buttonColorClass} ${buttonTextColor}`}>
+                                    {order.status}
+                                    </button>
                                 </Table.Cell>
                                 <Table.Cell>
                                     <MoreDetailOrder order={order} />
@@ -45,7 +92,6 @@ export default function TableComponent({ orders }) {
                             </Table.Row>
                         )
                     })}
-                    {/* <button className="bg-white text-[#FAC800] text-sm px-2 font-bold border border-[#FAC800] rounded-lg">Completed</button> */}
                 </Table.Body>
             </Table>
         </div>
