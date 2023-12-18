@@ -4,8 +4,10 @@ const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 const Order = require('../models/order')
+const HomepageBanner = require('../models/homepage-banner')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
@@ -92,7 +94,19 @@ exports.loginSuccess = async (req, res) => {
 exports.homePage = async (req, res) => {
   try {
     let product = await Product.find({}).limit(32);
-    return res.json({ product: product })
+    return res.json({ product: product });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.slider = async (req, res) => {
+  try {
+    const banner = await HomepageBanner.findOne({ title: 'Banner' })
+    const carouselImage = banner.img;
+    console.log(carouselImage);
+    return res.json({ images: carouselImage });
   } catch (error) {
     console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -973,5 +987,37 @@ exports.reportPage = async (req, res) => {
   } catch (er) {
     console.log(er)
     return res.status(500).json({ error: er })
+  }
+}
+
+exports.uploadHomepageCarousel = async (req, res) => {
+  try {
+    let banner = await HomepageBanner.findOne({ title: 'Banner' })
+    if (!banner) {
+      banner = new HomepageBanner({
+        title: 'Banner',
+      })
+    } 
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file.filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    if (req.files) {
+      const images = await Promise.all(req.files.map(async (file) => await uploadImage(file)));
+      banner.img = images.filter(url => url !== null); 
+    }
+    await banner.save();
+    return res.status(200).json("Image uploaded.")
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: error })
   }
 }

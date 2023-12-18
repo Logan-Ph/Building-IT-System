@@ -18,13 +18,17 @@ const storage = multer.diskStorage({
     }
 });
 
+
 const upload = multer({ storage });
+const uploadBanner = multer({storage}).array('files', 10);
+
 /**
  *  App routes
 */
 
 
 // authorization
+
 function authorizeUser(req, res, next) {
     try {
         (req.user && req.user.role === "User") ? next() : res.status(500).json({ error: "You are not authorized to access this route" })
@@ -88,6 +92,9 @@ router.get('/login/success', authenticateToken, userController.loginSuccess);
 
 // user homepage route
 router.get('/', userController.homePage);
+
+// fetch slider images
+router.get('/slider', userController.slider);
 
 // user product details route
 router.get('/product/:id', userController.productPage);
@@ -158,6 +165,9 @@ router.get('/admin/:id/report', userController.reportPage);
 
 // admin ban user route
 router.post("/ban-user", userController.banUser);
+
+// admin upload homepage carousel image 
+router.post("/upload-homepage-carousel", uploadBanner, userController.uploadHomepageCarousel);
 
 // get reponse message from chatbot
 router.post("/api/chatbot/message", userController.chatbotMessage);

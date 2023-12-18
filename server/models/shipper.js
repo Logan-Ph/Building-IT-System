@@ -31,7 +31,6 @@ const shipperSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
     },
 
     verify: {

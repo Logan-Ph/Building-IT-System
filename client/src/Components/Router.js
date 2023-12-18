@@ -36,6 +36,7 @@ import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import CartPage from "../Pages/User/CartPage";
 import ChatPage from "../Pages/User/ChatPage";
+import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -220,6 +221,10 @@ export default function Router() {
         {
           path: "/admin/dashboard",
           element: <AdminDashboardPage />,
+        },
+        {
+          path: "/admin/add-homepage-carousel",
+          element: <AddImageHomePageCarousel />,
         },
       ],
     },
