@@ -29,7 +29,7 @@ export default function OrdersInfo({ orders, searchTerm }) {
     }, [orders]);
 
     return (
-        <Tabs aria-label="Tabs with icon" className="tabsContainer !flex-nowrap !relative xs:!overflow-x-auto md:!overflow-x-auto sm:!overflow-x-auto">
+        <Tabs aria-label="Tabs with icon" className="!flex-nowrap !relative xs:!overflow-x-auto md:!overflow-x-auto sm:!overflow-x-auto">
         {Object.entries(categorizedOrder).map(([title, orders]) => (
             <Tabs.Item 
                 title={ title } 

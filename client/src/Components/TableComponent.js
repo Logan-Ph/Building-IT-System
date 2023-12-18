@@ -81,12 +81,12 @@ export default function TableComponent({ orders }) {
                                     <div className='whitespace-nowrap'>{order.shippingAddress}</div>
                                 </Table.Cell>
                                 <Table.Cell className='!px-4 !py-2'>{order.contactNumber}</Table.Cell>
-                                <Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>
                                     <button className={`rounded-lg text-sm px-2 font-bold border ${buttonBorderColor} ${buttonColorClass} ${buttonTextColor}`}>
                                     {order.status}
                                     </button>
                                 </Table.Cell>
-                                <Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>
                                     <MoreDetailOrder order={order} />
                                 </Table.Cell>
                             </Table.Row>
