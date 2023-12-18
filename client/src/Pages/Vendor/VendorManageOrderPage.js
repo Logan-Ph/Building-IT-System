@@ -50,16 +50,17 @@ export default function ManageOrderPage() {
                 pauseOnHover={false}
                 theme="light"
             />
-            <div className="max-w-8xl px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full mx-auto">
+            <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full mx-auto">
                 <div className="flex items-center py-10">
                     <div className="flex flex-row items-center">
                         <input type="text" name="search" placeholder="Please enter order info here "
                             className="rounded-md w-full border border-slate-400 pl-4 pr-20 py-2 text-md hover:border-black" onChange={(e) => setSearchTerm(e.target.value)} />
                     </div>
                 </div>
-                <div>
-                    <OrdersInfo orders={orders} searchTerm={searchTerm} />
+                <div className='relative'>
+                    <OrdersInfo orders={orders} searchTerm={searchTerm} className="w-full"/>
                 </div>
+
             </div>
         </>
     )

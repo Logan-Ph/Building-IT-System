@@ -70,7 +70,7 @@ export default function Router() {
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <VendorHeader />
           <div className="flex  ">
-            <VendorSidebar />
+            {/* <VendorSidebar /> */}
             <Outlet />
           </div>
         </InstantSearch>

@@ -4,15 +4,21 @@ import MoreDetailOrder from './MoreDetailOrder';
 
 export default function TableComponent({ orders }) {
     return <>
-        <div className="overflow-x-auto">
+        <div className='overflow-x-auto'>
             <Table hoverable>
                 <Table.Head>
-                    <Table.HeadCell>Order ID</Table.HeadCell>
-                    <Table.HeadCell>Customer Name</Table.HeadCell>
-                    <Table.HeadCell>Order Date</Table.HeadCell>
-                    <Table.HeadCell>Shipping Adress</Table.HeadCell>
-                    <Table.HeadCell>Contact number</Table.HeadCell>
-                    <Table.HeadCell>Status</Table.HeadCell>
+                    <Table.HeadCell className='!px-4 !py-2'>
+                        <span className='whitespace-nowrap'>Order ID</span></Table.HeadCell>
+                    <Table.HeadCell className='!px-4 !py-2'>
+                        <span className='whitespace-nowrap'>Customer Name</span></Table.HeadCell>
+                    <Table.HeadCell className='!px-4 !py-2'>
+                        <span className='whitespace-nowrap'>Order Date</span></Table.HeadCell>
+                    <Table.HeadCell className='!px-4 !py-2'>
+                        <span className='whitespace-nowrap'>Shipping Adress</span></Table.HeadCell>
+                    <Table.HeadCell className='!px-4 !py-2'>
+                        <span className='whitespace-nowrap'>Contact number</span></Table.HeadCell>
+                    <Table.HeadCell className='!px-4 !py-2'>
+                        <span className='whitespace-nowrap'></span>Status</Table.HeadCell>
                     <Table.HeadCell>
                         <span className="sr-only">Edit</span>
                     </Table.HeadCell>
@@ -23,13 +29,15 @@ export default function TableComponent({ orders }) {
                         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
                         return (
                             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell>{order._id}</Table.Cell>
-                                <Table.Cell>{order.userName}</Table.Cell>
-                                <Table.Cell>{formattedDate}</Table.Cell>
-                                <Table.Cell>{order.shippingAddress}</Table.Cell>
-                                <Table.Cell>{order.contactNumber}</Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>{order._id}</Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>{order.userName}</Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>{formattedDate}</Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>
+                                    <div className='whitespace-nowrap'>{order.shippingAddress}</div>
+                                </Table.Cell>
+                                <Table.Cell className='!px-4 !py-2'>{order.contactNumber}</Table.Cell>
                                 <Table.Cell>
-                                    <button className="bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg">{order.status}</button>
+                                    <button className="bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg whitespace-nowrap">{order.status}</button>
                                 </Table.Cell>
                                 <Table.Cell>
                                     <MoreDetailOrder order={order} />
@@ -37,20 +45,7 @@ export default function TableComponent({ orders }) {
                             </Table.Row>
                         )
                     })}
-                    {/* <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"></Table.Row>
-                    <Table.Cell>#1234-abcd</Table.Cell>
-                    <Table.Cell>5</Table.Cell>
-                    <Table.Cell>22/12/2022</Table.Cell>
-                    <Table.Cell>104 Pho Quang p2 qTB</Table.Cell>
-                    <Table.Cell>0977702769</Table.Cell>
-                    <Table.Cell>
-                        <button className="bg-white text-[#FAC800] text-sm px-2 font-bold border border-[#FAC800] rounded-lg">Completed</button>
-                    </Table.Cell>
-                    <Table.Cell>
-
-                        <CompletedMoreDetailOrdID />
-
-                    </Table.Cell> */}
+                    {/* <button className="bg-white text-[#FAC800] text-sm px-2 font-bold border border-[#FAC800] rounded-lg">Completed</button> */}
                 </Table.Body>
             </Table>
         </div>
