@@ -9008,6 +9008,10 @@ input:checked + .toggle-bg {
       width: auto;
     }
 
+    .xs\:sm\:w-36 {
+      width: 9rem;
+    }
+
     .xs\:sm\:flex-col {
       flex-direction: column;
     }
