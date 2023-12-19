@@ -753,7 +753,7 @@ exports.userProfile = async (req, res) => {
 
 exports.editStore = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.body.vendorID);
+    const vendor = await Vendor.findById(req.user._id);
     if (req.files) {
       if (req.files.coverPhoto) {
         vendor.coverPhoto.data = fs.readFileSync(req.files.coverPhoto[0].path);
