@@ -156,6 +156,34 @@ function ReportedTableComponent() {
                   <DeleteButtonPopup />
                 </Table.Cell>
               </Table.Row>
+
+              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 border-b border-gray-200">
+                <Table.Cell className='!px-4 !py-2'>
+                  <span>656f070a83e57918414548b9</span>
+                </Table.Cell>
+                <Table.Cell className='!px-4 !py-2'>
+                  <div className='w-[60px] h-[60px]'>
+                    <img src={require("../../Components/images/phanma.jpg")} alt="product_img" className='object-fit w-full h-full' />
+                  </div>
+                </Table.Cell>
+                <Table.Cell className="!px-4 !py-2 overflow-x-auto">
+                  <span className='line-clamp-1 font-medium text-gray-900 '>Son kem lì, lên màu chuẩn Hàn Quốc Romand Zero Velvet Tint </span>
+                </Table.Cell>
+  
+                <Table.Cell className='!px-4 !py-2'>
+                  <div className="flex items-center">
+                    <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2 whitespace-nowrap"></div>
+                    <span>Report</span>
+                  </div>
+                </Table.Cell>
+  
+                <Table.Cell className='!px-4 !py-2'>06-12-2023</Table.Cell>
+                <Table.Cell className='!px-4 !py-2'>16:20</Table.Cell>
+                <Table.Cell className='!px-4 !py-2'>tranphamkhanhdoan0112@gmail.com</Table.Cell>
+                <Table.Cell className='!px-4 !py-2'>
+                  <DeleteButtonPopup />
+                </Table.Cell>
+              </Table.Row>
             </Table.Body>
           </Table>
         </div>
@@ -209,11 +237,11 @@ function ReportedProductInfo() {
                   <div className="text-md font-semibold text-gray-900">
                     Logan Pham
                   </div>
-                  <div className="text-sm font-light">
+                  <div className="text-xs font-light mb-2">
                     phamphuocsang5850@gmail.com
                   </div>
                   <div className="text-sm font-normal">
-                    has reported this product:
+                    has reported product: <span>656f070a83e57918414548b9</span>
                   </div>
                   <div className="text-sm font-semibold text-red-600 mt-2">
                     Scam
@@ -255,27 +283,31 @@ function ReportedProductInfo() {
                   <div className="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
                 </div>
               </div>
+
               {/* <!-- second --> */}
               <div className="flex py-5 border-t border-gray-300">
                 <div className="relative inline-block shrink-0">
                   <img
                     className="w-12 h-12 rounded-full"
-                    src="/docs/images/people/profile-picture-3.jpg"
+                    src={require("../../Components/images/defaultUserImage.png")} 
                     alt="Jese Leos image"
                   />
                 </div>
                 <div className="ms-3 text-sm font-normal">
                   <div className="text-sm font-semibold text-gray-900">
-                    Bonnie Green
+                    tpkdoan
+                  </div>
+                  <div className="text-xs font-light mb-2">
+                    tranphamkhanhdoan0112@gmail.com
                   </div>
                   <div className="text-sm font-normal">
-                    has reported this account:
+                    has reported product: <span>656f070a83e57918414548b9</span>
                   </div>
                   <div className="text-sm font-semibold text-red-600 mt-2">
                     Prohited Item
                   </div>
                   <div className="text-sm font-normal text-gray-900 my-3">
-                    I reported this account for posting scamming products. I
+                    I reported this product for low-quality. I
                     have evidence below
                   </div>
                   <div className="grid grid-cols-3 gap-3">

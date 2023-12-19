@@ -3970,6 +3970,11 @@ input:checked + .toggle-bg {
   padding-bottom: 2rem;
 }
 
+.\!py-5 {
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
 .pb-12 {
   padding-bottom: 3rem;
 }
