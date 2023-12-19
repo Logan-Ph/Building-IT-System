@@ -32,7 +32,6 @@ function convertUser(user) {
   if (!user) return null;
   const userJson = user.toJSON();
   if (user.img && user.img.data) {
-    // userJson.img = ""
     userJson.img = Buffer.from(user.img.data).toString("base64");
   }
   return userJson;
@@ -973,7 +972,6 @@ exports.createThread = async (req, res) => {
 
     return res.status(200).json({ thread: thread });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error });
+    return res.status(500).json({ error: "You must login first!" });
   }
 }
