@@ -4,6 +4,7 @@ import { useState, useContext, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify'
 import { UserContext } from "../../Context/UserContext";
 import axios from "axios";
+import { Navigate } from 'react-router-dom';
 
 export default function VendorEditStore({ vendor, vendorImage }) {
   const [openModal, setOpenModal] = useState(false);
@@ -108,7 +109,21 @@ export default function VendorEditStore({ vendor, vendorImage }) {
     <>
       
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
-        
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {(error || !user) && <Navigate to='/login' replace={true} />}
+      <ToastContainer
+          position="top-center"
+          autoClose={10000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+          theme="light"
+      />
         <div>
         <h1 class="font-bold  lg:pl-5 text-black lg:md:text-2xl text-lg ">
               Shop Decoration
