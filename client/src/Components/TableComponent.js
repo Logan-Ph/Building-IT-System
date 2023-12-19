@@ -82,7 +82,7 @@ export default function TableComponent({ orders }) {
                                 </Table.Cell>
                                 <Table.Cell className='!px-4 !py-2'>{order.contactNumber}</Table.Cell>
                                 <Table.Cell className='!px-4 !py-2'>
-                                    <button className={`rounded-lg text-sm px-2 font-bold border ${buttonBorderColor} ${buttonColorClass} ${buttonTextColor}`}>
+                                    <button className={`rounded-lg text-sm px-2 font-bold border whitespace-nowrap ${buttonBorderColor} ${buttonColorClass} ${buttonTextColor}`}>
                                     {order.status}
                                     </button>
                                 </Table.Cell>
