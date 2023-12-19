@@ -40,6 +40,8 @@ import ChatPage from "../Pages/User/ChatPage";
 import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
+import VendorChatPage from "../Pages/Vendor/VendorChatPage";
+
 
 
 const searchClient = algoliasearch(
@@ -186,7 +188,7 @@ export default function Router() {
           element: <VendorEditingProduct />,
         },
         {
-          path: '/shipper-dashboard',
+          path: "/shipper-dashboard",
           element: <ShipperDashboardPage />,
         },
         {
@@ -255,6 +257,15 @@ export default function Router() {
                 <ChatPage />
               </div>
             </InstantSearch>
+          ),
+        },
+        {
+          path: "/vendor-chat",
+          element: (
+              <div className="h-screen overflow-hidden">
+                <VendorHeader/>
+                <VendorChatPage />
+              </div>
           ),
         },
       ],
