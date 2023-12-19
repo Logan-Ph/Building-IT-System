@@ -40,12 +40,17 @@ import ChatPage from "../Pages/User/ChatPage";
 import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
-
+import aa from 'search-insights';
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
   "d8ac69cc1ecc43ac91c32ca6d0fb4305"
 );
+
+aa('init', {
+  appId: 'IZX7MYSNRD',
+  apiKey: "d8ac69cc1ecc43ac91c32ca6d0fb4305",
+});
 
 export default function Router() {
   const UserLayout = ({ header }) => {

@@ -1,14 +1,17 @@
 'use client';
 import axios from "axios";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { CartContext } from "../Context/CartContext";
 import { Rating } from 'flowbite-react';
-export default function ProductDetailCard({ product, vendorName }) {
+import { Navigate } from "react-router";
+import aa from "search-insights";
+const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
+
+export default function ProductDetailCard({ product, vendorName, user }) {
     const [quantity, setQuantity] = useState(1)
-    const { setCart } = useContext(CartContext)
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
+    const [navigateTo, setNavigateTo] = useState('')
 
     const notify = useCallback(() => {
         if (error) {
@@ -50,7 +53,6 @@ export default function ProductDetailCard({ product, vendorName }) {
         msg && notify();
         try {
             const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
-            setCart(res.data.length)
             setMsg(res.data.msg);
             setError('');
             setQuantity(1);
@@ -59,7 +61,20 @@ export default function ProductDetailCard({ product, vendorName }) {
             setMsg('');
         }
     }
-    return (
+
+    const buyProduct = async (product) => {
+        if (user === undefined) {
+            setError("You need to login first!");
+            return;
+        }
+        product.checked = true
+        product.quantity = 1
+        localStorage.setItem('products', JSON.stringify([product]));
+        setNavigateTo('/checkout')
+    }
+
+    return (<>
+        {navigateTo && <Navigate to={navigateTo} replace />}
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
             <img
                 alt="ecommerce"
@@ -123,13 +138,13 @@ export default function ProductDetailCard({ product, vendorName }) {
                     </h1>
 
                     <div className="flex mb-2 ">
-                    <Rating size="md">
-        <Rating.Star />
-        <Rating.Star />
-        <Rating.Star />
-        <Rating.Star />
-        <Rating.Star filled={false} />
-      </Rating>
+                        <Rating size="md">
+                            <Rating.Star />
+                            <Rating.Star />
+                            <Rating.Star />
+                            <Rating.Star />
+                            <Rating.Star filled={false} />
+                        </Rating>
                     </div>
 
                     <span className=" font-medium lg:text-3xl md:text-3xl sm:text-2xl xs:text-2xl text-slate-700">
@@ -231,12 +246,13 @@ export default function ProductDetailCard({ product, vendorName }) {
                         <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-black font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
                             Add to Cart
                         </button>
-                        <button className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-black font-medium bg-[#FF9209] border-0 focus:outline-none hover:bg-[#FF6C22] rounded-lg">
+                        <button onClick={() => buyProduct(product)} className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-black font-medium bg-[#FF9209] border-0 focus:outline-none hover:bg-[#FF6C22] rounded-lg">
                             Buy Now
                         </button>
                     </div>
                 </div>
             </div>
         </div>
+    </>
     )
 }
