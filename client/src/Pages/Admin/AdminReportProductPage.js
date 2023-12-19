@@ -59,20 +59,17 @@ export default function ReportedProductPage() {
 
   return (
     <>
-      <section class="bg-gray-200">
+      <section className="bg-gray-200">
         {/* {user && user.role === "User" && <Navigate to={"/"} replace />}
         {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
         {error && <Navigate to={"/admin/manage-user"} replace />} */}
 
-        <div class="container mx-auto p-5 xs:px-2 xs:py-5">
-          <h1 class="m-5 text-3xl font-light text-center xs:text-md">
+        <div className="container mx-auto p-5 xs:px-2 xs:py-5">
+          <h1 className="m-5 text-3xl font-light text-center xs:text-md">
             Reported Product Information
           </h1>
           {/* <!-- Vendor --> */}
           <ReportedVendorCard />
-
-          {/* Report Section */}
-          <ReportInfo />
         </div>
       </section>
     </>
@@ -82,27 +79,32 @@ export default function ReportedProductPage() {
 
 function ReportedVendorCard(){
     return <>
-    <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5 xs:p-4">
+    <div className="p-6 space-y-6 bg-white rounded-lg shadow my-5 xs:p-4">
         
-        <div class="flex items-center gap-4 mt-4 xs:gap-3 ">
+        <div className="flex items-center gap-4 mt-4 xs:gap-3 ">
             <img src={require("../../Components/images/defaultUserImage.png")} className="w-16 h-16 aspect-square object-cover rounded" alt="avatar-img" />
             <div>
-                <h2 class="text-2xl font-semibold mb-2 xs:text-md">Rommand</h2>
-                <div class="text-md text-gray-500 xs:text-xs">RommandV6isthebest@gmail.com</div>
-                <div class="text-md text-gray-500 mb-2 xs:text-xs">0977702769</div>
-                <span class="bg-[#000054] text-white text-sm font-medium me-2 px-2.5 py-1 rounded-full">
+                <h2 className="text-2xl font-semibold mb-2 xs:text-md">Rommand</h2>
+                <div className="text-md text-gray-500 xs:text-xs">RommandV6isthebest@gmail.com</div>
+                <div className="text-md text-gray-500 mb-2 xs:text-xs">0977702769</div>
+                <span className="bg-[#000054] text-white text-sm font-medium me-2 px-2.5 py-1 rounded-full">
                 {" "}
-                <i class="fa-solid fa-shop"></i> Vendor
+                <i className="fa-solid fa-shop"></i> Vendor
                 </span>
             </div>
         </div>
         <div className="flex items-center mt-3 xs:flex-col xs:items-start">
-            <div class="text-md text-black font-medium whitespace-nowrap">Business Address: </div>
-            <div class="text-md text-gray-500 mx-2 whitespace-nowrap line-clamp-1 xs:mx-0 xs:text-sm">104 Pho Quang Street, Tan Binh district</div>
+            <div className="text-md text-black font-medium whitespace-nowrap">Business Address: </div>
+            <div className="text-md text-gray-500 mx-2 whitespace-nowrap line-clamp-1 xs:mx-0 xs:text-sm">104 Pho Quang Street, Tan Binh district</div>
         </div>
         <hr className="my-2"/>
+        
         <ReportedTableComponent />
+
+        <h1>Reported information in details </h1>
         <div>
+            {/* Report Section */}
+            <ReportedProductInfo />
         </div>
       </div>
     </>
@@ -141,8 +143,8 @@ function ReportedTableComponent() {
                 </Table.Cell>
   
                 <Table.Cell className='!px-4 !py-2'>
-                  <div class="flex items-center">
-                    <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2 whitespace-nowrap"></div>
+                  <div className="flex items-center">
+                    <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2 whitespace-nowrap"></div>
                     <span>Report</span>
                   </div>
                 </Table.Cell>
@@ -188,4 +190,108 @@ function ReportedTableComponent() {
         </Modal.Body>
       </Modal>
     </>)
-  }
+}
+
+function ReportedProductInfo() {
+    return (
+      <>
+        <div className="container mx-auto">
+            <div>
+              <div className="flex py-5">
+                <div className="relative inline-block shrink-0">
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={require("../../Components/images/defaultUserImage.png")}                    
+                    alt="Jese Leos image"
+                  />
+                </div>
+                <div className="ms-3 text-sm font-normal">
+                  <div className="text-md font-semibold text-gray-900">
+                    Logan Pham
+                  </div>
+                  <div className="text-sm font-light">
+                    phamphuocsang5850@gmail.com
+                  </div>
+                  <div className="text-sm font-normal">
+                    has reported this product:
+                  </div>
+                  <div className="text-sm font-semibold text-red-600 mt-2">
+                    Scam
+                  </div>
+                  <div className="text-sm font-normal text-gray-900 my-3">
+                    I reported this account for posting scamming products. I
+                    have evidence below
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <img
+                        className="object-fill h-full w-full"
+                        src="/images/banner1.jpg"
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="object-fill h-full w-full"
+                        src="/images/banner1.jpg"
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="object-fill h-full w-full"
+                        src="/images/banner1.jpg"
+                        alt=""
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="object-fill h-full w-full"
+                        src="/images/banner1.jpg"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div className="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
+                </div>
+              </div>
+              {/* <!-- second --> */}
+              <div className="flex py-5 border-t border-gray-300">
+                <div className="relative inline-block shrink-0">
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src="/docs/images/people/profile-picture-3.jpg"
+                    alt="Jese Leos image"
+                  />
+                </div>
+                <div className="ms-3 text-sm font-normal">
+                  <div className="text-sm font-semibold text-gray-900">
+                    Bonnie Green
+                  </div>
+                  <div className="text-sm font-normal">
+                    has reported this account:
+                  </div>
+                  <div className="text-sm font-semibold text-red-600 mt-2">
+                    Prohited Item
+                  </div>
+                  <div className="text-sm font-normal text-gray-900 my-3">
+                    I reported this account for posting scamming products. I
+                    have evidence below
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <img
+                        className="object-fill h-full w-full"
+                        src="/images/banner1.jpg"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div className="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </>
+    );
+}
