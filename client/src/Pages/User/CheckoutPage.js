@@ -28,7 +28,6 @@ export default function CheckoutPage() {
     const storedProducts = localStorage.getItem('products');
     if (storedProducts) {
       setProducts(JSON.parse(storedProducts));
-      console.log(JSON.parse(storedProducts));
     }
   }, [fetchData]);
 
