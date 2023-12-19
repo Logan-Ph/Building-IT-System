@@ -10,7 +10,7 @@ import { UserContext } from "../../Context/UserContext";
 
 export default function ReportInfoPage() {
   const params = useParams()
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState()
   const [orders, setOrders] = useState([])
   const [error, setError] = useState()
@@ -28,21 +28,9 @@ export default function ReportInfoPage() {
     }
   }, [params])
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setIsLoading(false)
-    } catch (er) {
-      setError(er)
-      setIsLoading(false)
-    }
-  }, [setUser])
-
   useEffect(() => {
     fetchData()
-    fetchUser()
-  }, [fetchData, fetchUser])
+  }, [fetchData])
 
 
   if (isLoading) {

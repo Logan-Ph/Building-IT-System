@@ -35,7 +35,7 @@ export default function LogInPage() {
         }
 
         await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
-            .then(res => { setUser(res.data.user); setError(res.data.message);})
+            .then(res => { setUser(res.data.user); setError(res.data.message); })
             .catch(er => {
                 console.log(er);
             });
@@ -82,7 +82,7 @@ export default function LogInPage() {
                 theme="light"
             />
             {user && user.role === "User" && <Navigate to="/" replace={true} />}
-            {user && user.role === "Admin" && <Navigate to="/admin/manage-user" replace={true} />}
+            {user && user.role === "Admin" && <Navigate to="/admin/dashboard" replace={true} />}
             {user && user.role === "Vendor" && <Navigate to="/dashboard" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">

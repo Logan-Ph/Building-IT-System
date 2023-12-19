@@ -298,13 +298,11 @@ export default function Header() {
                 <div className="flex items-center mr-5">
                   <div className="mr-5">
                     <div className="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
-                      {user && user.img && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+                      {user && (user.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
                         src={`data:image/jpeg;base64,${user.img}`}
-                        alt="avatar_img" />
-                      }
-                      {user && !user.img && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                        alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                         <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-                      </div>}
+                      </div>)}
                     </div>
                   </div>
                   <div className="mr-2 ">
@@ -466,17 +464,17 @@ export default function Header() {
                 </div>
 
               </div>
-              <div className="mt-5">
+              <a className="mt-5" href={user ? "/logout" : "/login"}>
                 <div className="mt-40 flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
-                  <a className="text-md font-medium text-black" href={user ? "/logout" : "/login"} >
+                  <span className="text-md font-medium text-black">
                     {user ? "logout" : "Sign in"}
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             </aside>
           </div>
         </div>
-        
+
       </div>
     </section>
   );
@@ -491,13 +489,11 @@ function DropdownAva({ user, handleLogout }) {
     <Menu as="div" className="relative inline-block text-left ml-2">
       <div>
         <Menu.Button className="flex">
-          {user && user.img && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+          {user && (user.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
             src={`data:image/jpeg;base64,${user.img}`}
-            alt="avatar_img" />
-          }
-          {user && !user.img && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
             <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-          </div>}
+          </div>)}
         </Menu.Button>
       </div>
 

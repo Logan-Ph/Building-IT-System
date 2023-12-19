@@ -1,25 +1,40 @@
 'use client';
-import Sidebar from "../../Components/Sidebar";
-import { SidebarItem } from "../../Components/Sidebar";
 import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
-
-
 import { Button, Modal } from 'flowbite-react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AddImageHomePageBanner from "../../Components/AddImageHomePageBanner";
 import AddImageHomePageCarousel from "../../Components/AddImageHomePageCarousel";
-import { Settings } from "lucide-react";
+import axios from "axios";
 export default function DashboardPage() {
   const [openModal1, setOpenModal1] = useState(false);
   const [openModal2, setOpenModal2] = useState(false);
-  const [openModal3, setOpenModal3] = useState(false);
   const [openModal4, setOpenModal4] = useState(false);
   const [openModal5, setOpenModal5] = useState(false);
+  const [numberOfUsers, setNumberOfUsers] = useState(0);
+  const [numberOfVendors, setNumberOfVendors] = useState(0);
+  const [numberOfShippers, setNumberOfShippers] = useState(0);
+  const [numberOfProducts, setNumberOfProducts] = useState(0);
+
+
+  const fetchData = useCallback(async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/admin/dashboard", { withCredentials: true });
+      setNumberOfUsers(res.data.numberOfUsers)
+      setNumberOfVendors(res.data.numberOfVendors)
+      setNumberOfShippers(res.data.numberOfShippers)
+      setNumberOfProducts(res.data.numberOfProducts)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData])
+
   return (
     <>
-
-
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
@@ -124,7 +139,7 @@ export default function DashboardPage() {
             <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
               Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
             </h1>
-            <AdminInsight />
+            <AdminInsight numbersOfUser={numberOfUsers} numbersOfVendors={numberOfVendors} numbersOfShippers={numberOfShippers} numbersOfProducts={numberOfProducts} />
             <div className="mt-4">
               <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black lg:md:text-2xl text-lg">
                 Last Month Users

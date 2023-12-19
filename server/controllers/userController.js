@@ -4,10 +4,12 @@ const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 const Order = require('../models/order')
+const HomepageBanner = require('../models/homepage-banner')
 const Thread = require('../models/thread')
 const Message = require('../models/message')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
@@ -26,6 +28,7 @@ const imagekit = new ImageKit({
 });
 
 const fs = require("fs");
+const { error } = require('console')
 require('dotenv').config()
 
 function convertUser(user) {
@@ -94,7 +97,19 @@ exports.loginSuccess = async (req, res) => {
 exports.homePage = async (req, res) => {
   try {
     let product = await Product.find({}).limit(32);
-    return res.json({ product: product })
+    return res.json({ product: product });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.slider = async (req, res) => {
+  try {
+    const banner = await HomepageBanner.findOne({ title: 'Banner' })
+    const carouselImage = banner.img;
+    console.log(carouselImage);
+    return res.json({ images: carouselImage });
   } catch (error) {
     console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -467,13 +482,33 @@ exports.manageOrder = async (req, res) => {
 exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    let vendorImage;
+    let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
+    if (vendor.coverPhoto.data) {
+      coverPhoto = Buffer.from(
+        vendor.coverPhoto.data
+      ).toString("base64");
+    }
+    if (vendor.bigBanner.data) {
+      bigBanner = Buffer.from(
+        vendor.bigBanner.data
+      ).toString("base64");
+    }
+    if (vendor.smallBanner1.data) {
+      smallBanner1 = Buffer.from(
+        vendor.smallBanner1.data
+      ).toString("base64");
+    }
+    if (vendor.smallBanner2.data) {
+      smallBanner2 = Buffer.from(
+        vendor.smallBanner2.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2 });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -592,8 +627,7 @@ exports.updateUser = async (req, res) => {
 
 exports.updateVendor = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ email: req.body.email });
-
+    const vendor = await Vendor.findById(req.user._id);
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),
@@ -694,17 +728,32 @@ exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
 }
 
-exports.updateVendorWallpaper = async (req, res) => {
+exports.editStore = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ email: req.body.email });
-    if (req.file) {
-      const image = {
-        data: fs.readFileSync("uploads/" + req.file.filename),
-      };
-      vendor.wallpaper = image;
+    const vendor = await Vendor.findById(req.user._id);
+    if (req.files) {
+      if (req.files.coverPhoto) {
+        vendor.coverPhoto.data = fs.readFileSync(req.files.coverPhoto[0].path);
+      }
+
+      if (req.files.bigBanner) {
+        vendor.bigBanner.data = fs.readFileSync(req.files.bigBanner[0].path);
+      }
+
+      if (req.files.smallBanner1 && req.files.smallBanner2) {
+        const smallBanner1Buffer = fs.readFileSync(req.files.smallBanner1[0].path);
+        vendor.smallBanner1.data = smallBanner1Buffer;
+        const smallBanner2Buffer = fs.readFileSync(req.files.smallBanner2[0].path);
+        vendor.smallBanner2.data = smallBanner2Buffer;
+      }
+
+      if ((req.files.smallBanner1 && !req.files.smallBanner2) || (!req.files.smallBanner1 && req.files.smallBanner2)) {
+        return res.json("Must include 2 images file for 2 small banner.")
+      }
+
     }
     await vendor.save();
-    return res.json('Profile has been updated!')
+    return res.json('Storefront has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -916,6 +965,38 @@ exports.reportPage = async (req, res) => {
   }
 }
 
+exports.uploadHomepageCarousel = async (req, res) => {
+  try {
+    let banner = await HomepageBanner.findOne({ title: 'Banner' })
+    if (!banner) {
+      banner = new HomepageBanner({
+        title: 'Banner',
+      })
+    }
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file.filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    if (req.files) {
+      const images = await Promise.all(req.files.map(async (file) => await uploadImage(file)));
+      banner.img = images.filter(url => url !== null);
+    }
+    await banner.save();
+    return res.status(200).json("Image uploaded.")
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
 exports.getThreads = async (req, res) => {
   try {
     const threads = await Thread.find({ $or: [{ userId: req.user._id }, { vendorId: req.user._id }] }).populate('content');
@@ -967,4 +1048,15 @@ exports.createThread = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: "You must login first!" });
   }
+}
+
+exports.getAdminDashboard = async (req, res) => {
+  try {
+    const numberOfUsers = await User.countDocuments();
+    const numberOfVendors = await Vendor.countDocuments();
+    const numberOfShippers = await Shipper.countDocuments();
+    const numberOfProducts = await Product.countDocuments();
+    return res.status(200).json({ numberOfUsers: numberOfUsers, numberOfVendors: numberOfVendors, numberOfShippers: numberOfShippers, numberOfProducts: numberOfProducts });
+  } catch (error) { }
+  return res.status(500).json({ error: error })
 }
