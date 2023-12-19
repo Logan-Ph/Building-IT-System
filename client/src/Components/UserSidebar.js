@@ -1,11 +1,11 @@
 import { useContext, useState } from "react"
-import { UserImageContext } from '../Context/UserImageContext'
+import { UserContext } from '../Context/UserContext'
 
-export default function VendorSidebar() {
+export default function UserSidebar() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
-    const { userImage } = useContext(UserImageContext)
+    const { user } = useContext(UserContext)
     const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
 
     const handleSidebarToggle = () => {
@@ -20,6 +20,10 @@ export default function VendorSidebar() {
     const handleDropdownToggle = (index) => {
         setActiveDropdown(activeDropdown === index ? null : index);
     };
+
+    if (user === undefined) {
+        return <div>Loading....</div>
+    }
 
     return (
         <>
@@ -36,7 +40,7 @@ export default function VendorSidebar() {
 
             <a href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50">
                 <span href="#" className="flex items-center gap-4 hover:bg-blue-50" onClick={handleSidebarToggle}>
-                <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+                <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
                 <div className="whitespace-nowrap sidebar-user-profile">
                     <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
                 </div>

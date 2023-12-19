@@ -1,9 +1,13 @@
-import UserSidebar from '../../Components/UserSidebar';
+import UserSidebar from "../../Components/UserSidebar";
+import { UserContext } from "../../Context/UserContext";
+import { useContext } from "react";
 
 export default function UserOrder() {
+    const { user } = useContext(UserContext)
+
     return (
         <>
-        <UserSidebar></UserSidebar> 
+        <UserSidebar /> 
         <div className="pl-0 md:pl-64 transition-all" id="main">
 
             <div className='pl-8 mt-6 p-5'>

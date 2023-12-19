@@ -28,7 +28,7 @@ export default function VendorSidebar() {
         <SidebarItem icon={<Store size={20} />} text="Shop Management"
             subitems={[
                 { text: "Information", href: "/edit-vendor-profile" },
-                { text: "Decoration", href: "/edit-vendor-store" },
+                { text: "Decoration", href: "/edit-store" },
             ]} />
 
         {/* <SidebarItem icon={<Settings size={20} />} text="Dashboard"
