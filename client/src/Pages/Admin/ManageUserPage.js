@@ -78,10 +78,10 @@ export default function ManageUserPage() {
           </Tabs.Item> */}
           
           {/* Admin manage product */}
-          <Tabs.Item title="Product" icon={AiFillDelete}>
+          {/* {/* <Tabs.Item title="Product" icon={AiFillDelete}>
             <AdminManageVendorProduct />
-          </Tabs.Item>
-        </Tabs>
+          </Tabs.Item> *\} */}
+        </Tabs> 
       </div>
     </div>
   );

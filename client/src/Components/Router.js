@@ -36,6 +36,7 @@ import CartPage from "../Pages/User/CartPage";
 import ChatPage from "../Pages/User/ChatPage";
 
 import { useMediaQuery } from 'react-responsive';
+import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -212,6 +213,10 @@ export default function Router() {
         {
           path: "/admin/manage-product",
           element: <AdminManageVendorProduct />,
+        },
+        {
+          path: "/admin/reported-product-page",
+          element: <ReportedProductPage />,
         },
         {
           path: "/admin/dashboard",
