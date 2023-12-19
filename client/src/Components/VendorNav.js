@@ -1,20 +1,33 @@
+import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
 
-export default function VandorNav({ vendor, activeTab, vendorImage }) {
+export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }) {
   const { refine } = useSearchBox();
 
   const getTabClass = (tabName) => {
     return `border-b-2 px-2 py-3 duration-700 transition ${activeTab === tabName ? 'border-black' : 'border-transparent hover:border-black'
       }`;
   };
+
+  const createThread = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:4000/chat", { vendorId: vendor._id }, { withCredentials: true });
+      localStorage.setItem("threadId", res.data.thread._id);
+      window.location.href = "/chat";
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       {/* Profile Section */}
       <div class="md:container mx-auto">
-        <img class="h-auto max-w-full" src="/images/cover.jpg" alt="" />
+        <img class="h-auto max-w-full" src={`data:image/jpeg;base64,${coverPhoto}`} alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full" alt="" />
+            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
 
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
@@ -29,12 +42,12 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
                 >
                   <i class="fa-regular fa-plus"></i> Follow
                 </button>
-                <button
-                  type="button"
+                <span
+                  onClick={(e)=>createThread(e)}
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                 >
                   <i class="fa-regular fa-comment-dots"></i> Chat
-                </button>
+                </span>
               </div>
             </div>
           </div>
@@ -47,7 +60,7 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
           <div class="md:order-last drop-shadow-md mt-2">
             <form>
               <div class="relative">
-                {activeTab === "PRODUCTS" &&
+                {activeTab === "PRODUCTS" && (
                   <>
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                       <svg
@@ -73,25 +86,26 @@ export default function VandorNav({ vendor, activeTab, vendorImage }) {
                       placeholder={`Search in ${vendor && vendor.businessName}`}
                       onChange={(e) => refine(e.target.value)}
                     />
-                  </>}
+                  </>
+                )}
               </div>
             </form>
           </div>
 
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
-              <li className={getTabClass('HOME')}>
-                <a href={(vendor) ? `/vendor/${vendor._id}/home` : ""}
-
+              <li className={getTabClass("HOME")}>
+                <a
+                  href={vendor ? `/vendor/${vendor._id}/home` : ""}
                   class="text-gray-900hover:underline text-sm font-light md:text-lg"
                   aria-current="page"
                 >
                   HOME
                 </a>
               </li>
-              <li className={getTabClass('PRODUCTS')}>
+              <li className={getTabClass("PRODUCTS")}>
                 <a
-                  href={(vendor) ? `/vendor/${vendor._id}/product` : ""}
+                  href={vendor ? `/vendor/${vendor._id}/product` : ""}
                   class="text-gray-900hover:underline text-sm md:text-lg font-light"
                 >
                   PRODUCTS

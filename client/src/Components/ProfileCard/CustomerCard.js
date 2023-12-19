@@ -1,14 +1,14 @@
+import { useState } from "react";
 import "../../css/mangeorder.css";
-import { Tabs } from "flowbite-react";
-import UnpaidTableComponent from "../../Components/VMOUnpaidTableComponent";
-import AllTableComponent from "../../Components/VMOAllTableComponent";
+import OrdersInfo from "../OrdersInfo";
 
-export default function CustomerCard({ user, userImage, categorizedOrder, orders }) {
+export default function CustomerCard({ user, orders }) {
+  const [searchTerm, setSearchTerm] = useState("")
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
-        <div class="flex items-center gap-4 mt-4">
-          <img src={(userImage) ? `data:image/jpeg;base64,${userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+        <div class="flex items-center gap-4 mt-4 flex-wrap">
+          <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
           <div>
             <h2 class="text-2xl font-semibold mb-2">{user.name}</h2>
             <div class="text-lg text-gray-500">{user.email}</div>
@@ -40,96 +40,16 @@ export default function CustomerCard({ user, userImage, categorizedOrder, orders
           <div class="text-lg mt-3 text-black font-medium">
             Purchases History
           </div>
-        </div>
-        <Tabs aria-label="Tabs with icons" style="underline">
-          <Tabs.Item active title="All">
-            {/* <AllTableComponent /> */}
-            {orders.length === 0 && <div className="overflow-x-auto">
-              <div className='border border-gray my-1 py-32'>
-                <div className='flex flex-col justify-center items-center'>
-                  <div className='w-[100px] h-[80px]'>
-                    <img src={require("../../Components/images/noorder.png")}
-                      alt="No Order" className='w-full h-full' />
-                  </div>
-                  <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
-                </div>
-              </div>
-            </div>}
-            {orders.length !== 0 && <AllTableComponent orders={orders} />}
-          </Tabs.Item>
-          <Tabs.Item title="Unpaid">
-            {!categorizedOrder["Unpaid"] && <div className="overflow-x-auto">
-              <div className='border border-gray my-1 py-32'>
-                <div className='flex flex-col justify-center items-center'>
-                  <div className='w-[100px] h-[80px]'>
-                    <img src={require("../../Components/images/noorder.png")}
-                      alt="No Order" className='w-full h-full' />
-                  </div>
-                  <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
-                </div>
-              </div>
-            </div>}
-            {categorizedOrder["Unpaid"] && <UnpaidTableComponent orders={categorizedOrder["Unpaid"]} />}
-          </Tabs.Item>
-          <Tabs.Item title="To Ship">
-            {!categorizedOrder["To Ship"] && <div className="overflow-x-auto">
-              <div className='border border-gray my-1 py-32'>
-                <div className='flex flex-col justify-center items-center'>
-                  <div className='w-[100px] h-[80px]'>
-                    <img src={require("../../Components/images/noorder.png")}
-                      alt="No Order" className='w-full h-full' />
-                  </div>
-                  <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
-                </div>
-              </div>
-            </div>}
-            {categorizedOrder["To Ship"] && <UnpaidTableComponent orders={categorizedOrder["To Ship"]} />}
-          </Tabs.Item>
-          <Tabs.Item title="Shipping">
-            {!categorizedOrder["Shipping"] && <div className="overflow-x-auto">
-              <div className='border border-gray my-1 py-32'>
-                <div className='flex flex-col justify-center items-center'>
-                  <div className='w-[100px] h-[80px]'>
-                    <img src={require("../../Components/images/noorder.png")}
-                      alt="No Order" className='w-full h-full' />
-                  </div>
-                  <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
-                </div>
-              </div>
-            </div>}
-            {categorizedOrder["Shipping"] && <UnpaidTableComponent orders={categorizedOrder["Shipping"]} />}
-          </Tabs.Item>
-          <Tabs.Item title="Completed">
-            {!categorizedOrder["Completed"] && <div className="overflow-x-auto">
-              <div className='border border-gray my-1 py-32'>
-                <div className='flex flex-col justify-center items-center'>
-                  <div className='w-[100px] h-[80px]'>
-                    <img src={require("../../Components/images/noorder.png")}
-                      alt="No Order" className='w-full h-full' />
-                  </div>
-                  <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
-                </div>
-              </div>
-            </div>}
-            {categorizedOrder["Completed"] && <UnpaidTableComponent orders={categorizedOrder["Completed"]} />}
-          </Tabs.Item>
-          <Tabs.Item title="Failed Delivery">
-            <div className="border border-gray my-1 py-32">
-              <div className="flex flex-col justify-center items-center">
-                <div className="w-[100px] h-[80px]">
-                  <img
-                    src={require("../../Components/images/noorder.png")}
-                    alt="No Order image"
-                    className="w-full h-full"
-                  />
-                </div>
-                <p className="capitalize text-md text-gray-900 font-light my-2">
-                  no orders found
-                </p>
-              </div>
+          <div className="flex items-center py-10">
+            <div className="flex flex-row items-center">
+              <input type="text" name="search" placeholder="Please enter order info here "
+                className="rounded-md w-full border border-slate-400 pl-4 pr-20 py-2 text-md hover:border-black" onChange={(e) => setSearchTerm(e.target.value)} />
             </div>
-          </Tabs.Item>
-        </Tabs>
+          </div>
+        </div>
+        <div>
+          <OrdersInfo orders={orders} searchTerm={searchTerm} />
+        </div>
       </div>
     </>
   );

@@ -10,19 +10,16 @@ import { UserContext } from "../../Context/UserContext";
 
 export default function ReportInfoPage() {
   const params = useParams()
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState()
-  const [userInfoImage, setUserInfoImage] = useState()
   const [orders, setOrders] = useState([])
   const [error, setError] = useState()
-  const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/admin/${params.id}/report`, { withCredentials: true });
       setUserInfo(res.data.user);
-      setUserInfoImage(res.data.userImage);
       setOrders(res.data.orders)
       setIsLoading(false)
     } catch (error) {
@@ -31,32 +28,10 @@ export default function ReportInfoPage() {
     }
   }, [params])
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-      setIsLoading(false)
-    } catch (er) {
-      setError(er)
-      setIsLoading(false)
-    }
-  }, [setUser])
-
   useEffect(() => {
     fetchData()
-    fetchUser()
-  }, [fetchData, fetchUser])
+  }, [fetchData])
 
-  useEffect(() => {
-    const orderStatus = orders.reduce((acc, order) => {
-      if (!acc[order.status]) {
-        acc[order.status] = [];
-      }
-      acc[order.status].push(order);
-      return acc;
-    }, {});
-    setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
-  }, [orders]);
 
   if (isLoading) {
     return <div>....is loading</div>
@@ -64,20 +39,20 @@ export default function ReportInfoPage() {
 
   return (
     <>
-      <section class="bg-gray-200">
+      <section class="bg-gray-200 w-5/6 md:w-full">
         {user && user.role === "User" && <Navigate to={"/"} replace />}
         {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
         {error && <Navigate to={"/admin/manage-user"} replace />}
-        <div class="container mx-auto p-5">
+        <div class="md:container mx-auto p-5">
           <h1 class="m-5 text-3xl font-light text-center">
             Account Information
           </h1>
           {/* <!-- Customer --> */}
-          {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} orders={orders} />}
+          {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} orders={orders} />}
           {/* <!-- Vendor --> */}
-          {userInfo && userInfo.role === "Vendor" && <VendorCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} orders={orders} />}
+          {userInfo && userInfo.role === "Vendor" && <VendorCard user={userInfo} orders={orders} />}
           {/* <!-- Shipper --> */}
-          {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} userImage={userInfoImage} categorizedOrder={categorizedOrder} />}
+          {/* {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo}  />} */}
           {/* Report Section */}
           <ReportInfo />
         </div>

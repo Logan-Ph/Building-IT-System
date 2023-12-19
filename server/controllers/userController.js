@@ -4,8 +4,12 @@ const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 const Order = require('../models/order')
+const HomepageBanner = require('../models/homepage-banner')
+const Thread = require('../models/thread')
+const Message = require('../models/message')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const path = require('path')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
@@ -24,46 +28,55 @@ const imagekit = new ImageKit({
 });
 
 const fs = require("fs");
+const { error } = require('console')
 require('dotenv').config()
 
+function convertUser(user) {
+  if (!user) return null;
+  const userJson = user.toJSON();
+  if (user.img && user.img.data) {
+    userJson.img = Buffer.from(user.img.data).toString("base64");
+  }
+  return userJson;
+}
+
 function sendEmailVerification(userEmail) {
-  let config = {
-    service: 'gmail',
-    auth: {
-      user: process.env.GOOGLE_USER,
-      pass: process.env.GOOGLE_PASS
-    }
-  }
-
-  let transporter = nodemailer.createTransport(config);
-
-  let mailgenerator = new Mailgen({
-    theme: "default",
-    product: {
-      name: "Mailgen",
-      link: "https://mailgen.js"
-    }
-  })
-
-  const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
-  const url = `http://localhost:3000/user/${userToken}/verify-email`;
-
-  let response = {
-    body: {
-      intro: "Email verification",
-      outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
-    }
-  }
-
-  let mail = mailgenerator.generate(response);
-
-  let message = {
-    from: "rBuy@gmail.com",
-    to: userEmail,
-    subject: "Forgot password verification",
-    html: mail
-  }
   try {
+    let config = {
+      service: 'gmail',
+      auth: {
+        user: process.env.GOOGLE_USER,
+        pass: process.env.GOOGLE_PASS
+      }
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let mailgenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "Mailgen",
+        link: "https://mailgen.js"
+      }
+    })
+    const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
+    const url = `http://localhost:3000/user/${userToken}/verify-email`;
+
+    let response = {
+      body: {
+        intro: "Email verification",
+        outro: `Please lick on this link to verify your email ${url}, This link will be expired in 10 minutes`,
+      }
+    }
+
+    let mail = mailgenerator.generate(response);
+
+    let message = {
+      from: "rBuy@gmail.com",
+      to: userEmail,
+      subject: "Forgot password verification",
+      html: mail
+    }
     transporter.sendMail(message)
   }
   catch {
@@ -73,15 +86,9 @@ function sendEmailVerification(userEmail) {
 
 exports.loginSuccess = async (req, res) => {
   if (req.user) {
-    const user = (await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id));
-    let userImage;
-    if (user.img.data) {
-      userImage = Buffer.from(
-        user.img.data
-      ).toString("base64");
-    }
+    const user = convertUser((await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id)));
     const cart = await Cart.findOne({ userID: req.user._id })
-    res.status(200).json({ user: user, cart: (cart) ? cart : null, userImage: userImage });
+    res.status(200).json({ user: user, cart: (cart) ? cart : null });
   } else {
     res.status(500).json({ user: "", cart: null })
   }
@@ -89,23 +96,20 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    // const assistant = await openai.beta.assistants.retrieve("asst_nu4ES4sZ8unUKF3MxWmrX8ZQ")
-    // const thread = await openai.beta.threads.create();
-    // const message = await openai.beta.threads.messages.create(thread.id, {
-    //   role:"user",
-    //   content: "Who are you?"
-    // })
-    // const run = await openai.beta.threads.runs.create(thread.id, {assistant_id:assistant.id})
-    // console.log(run)
-
-    // const run = await openai.beta.threads.runs.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","run_CDh8qNB2FLdLZKqovgTO9rPO")
-    // console.log(run)
-
-    // const message = await openai.beta.threads.messages.retrieve("thread_oQ7KMPT4V5SEE98e54H325uw","msg_pSWfadQt9HZ4Ecg2wkzHt0Qo")
-    // messages.body.data.forEach(message => { console.log(message.content) })
-    // console.log(message.content[0].text.value)
     let product = await Product.find({}).limit(32);
-    return res.json({ product: product })
+    return res.json({ product: product });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.slider = async (req, res) => {
+  try {
+    const banner = await HomepageBanner.findOne({ title: 'Banner' })
+    const carouselImage = banner.img;
+    console.log(carouselImage);
+    return res.json({ images: carouselImage });
   } catch (error) {
     console.log(error)
     res.status(500).send({ message: error.message || "Error Occured" });
@@ -156,11 +160,10 @@ exports.registerpage = (req, res) => {
 exports.userRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
-
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
     const checkEmail =
       (await User.findOne({ email: email })) ||
       (await Vendor.findOne({ email: email })) ||
@@ -183,6 +186,9 @@ exports.userRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newUser.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -194,6 +200,7 @@ exports.userRegister = async (req, res) => {
 exports.vendorRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const businessName = req.body.businessName;
@@ -227,6 +234,9 @@ exports.vendorRegister = async (req, res) => {
         phoneNumber: phoneNumber,
       });
       await newVendor.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -238,6 +248,7 @@ exports.vendorRegister = async (req, res) => {
 exports.shipperRegister = async (req, res) => {
   const bcrypt = require('bcrypt');
   try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const email = req.body.email;
     const phoneNumber = req.body.phoneNumber;
     const distributionHub = req.body.distributionHub
@@ -269,6 +280,9 @@ exports.shipperRegister = async (req, res) => {
         distributionHub: distributionHub,
       });
       await newShipper.save();
+      if (!emailRegex.test(email)) {
+        throw new Error("Invalid email address");
+      }
       sendEmailVerification(email)
       return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
@@ -456,27 +470,6 @@ exports.removeProduct = async (req, res) => {
   }
 }
 
-exports.searchOrder = async (req, res) => {
-  try {
-    const orderId = req.body.orderId;
-    const orderStatus = req.body.orderStatus
-    let order;
-    if (orderStatus) {
-      order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
-    } else {
-      order = await Order.find({ vendorID: req.user._id, _id: orderId });
-    }
-
-    if (!order) {
-      return res.status(500).json({ error: "Cannot find order. " })
-    }
-
-    return res.status(200).json({ order: order });
-  } catch {
-    return res.status(500).json({ error: "Cannot find order. " })
-  }
-}
-
 exports.manageOrder = async (req, res) => {
   try {
     const orders = await Order.find({ vendorID: req.user._id })
@@ -489,13 +482,33 @@ exports.manageOrder = async (req, res) => {
 exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
-    let vendorImage;
+    let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
+    if (vendor.coverPhoto.data) {
+      coverPhoto = Buffer.from(
+        vendor.coverPhoto.data
+      ).toString("base64");
+    }
+    if (vendor.bigBanner.data) {
+      bigBanner = Buffer.from(
+        vendor.bigBanner.data
+      ).toString("base64");
+    }
+    if (vendor.smallBanner1.data) {
+      smallBanner1 = Buffer.from(
+        vendor.smallBanner1.data
+      ).toString("base64");
+    }
+    if (vendor.smallBanner2.data) {
+      smallBanner2 = Buffer.from(
+        vendor.smallBanner2.data
+      ).toString("base64");
+    }
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2 });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -614,8 +627,7 @@ exports.updateUser = async (req, res) => {
 
 exports.updateVendor = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ email: req.body.email });
-
+    const vendor = await Vendor.findById(req.user._id);
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),
@@ -684,17 +696,12 @@ exports.updateShipper = async (req, res) => {
 
 exports.banUser = async (req, res) => {
   const userId = req.body.userId;
-  const banDuration = req.body.banDate; // This should be in days or months
-
-  let endDate;
-
-  if (banDuration === '1 month') {
-    endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 1);
-  } else {
-    const banDays = parseInt(banDuration); // Convert the ban duration to integer
-    endDate = new Date(Date.now() + banDays * 24 * 60 * 60 * 1000); // Add the ban duration to the current date
+  if (req.body.remove) {
+    await User.findByIdAndDelete(userId);
+    return res.status(200).json({ msg: "Remove user successfully" });
   }
+  const startDate = (req.body.startDate).split('T')[0];
+  const endDate = (req.body.endDate).split('T')[0];
 
   try {
     const user = await User.findById(userId);
@@ -702,16 +709,16 @@ exports.banUser = async (req, res) => {
     const shipper = await Shipper.findById(userId);
 
     if (user) {
-      await User.updateOne({ _id: userId }, { banEndDate: endDate });
+      await User.updateOne({ _id: userId }, { banEndDate: endDate, banStartDate: startDate });
     } else if (vendor) {
-      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate });
+      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate, banStartDate: startDate });
     } else if (shipper) {
-      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate });
+      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate, banStartDate: startDate });
     } else {
       throw new Error('User does not exist!');
     }
 
-    return res.status(200).json("Banned user successfully");
+    return res.status(200).json({ msg: "Banned user successfully" });
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -721,17 +728,32 @@ exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
 }
 
-exports.updateVendorWallpaper = async (req, res) => {
+exports.editStore = async (req, res) => {
   try {
-    const vendor = await Vendor.findOne({ email: req.body.email });
-    if (req.file) {
-      const image = {
-        data: fs.readFileSync("uploads/" + req.file.filename),
-      };
-      vendor.wallpaper = image;
+    const vendor = await Vendor.findById(req.user._id);
+    if (req.files) {
+      if (req.files.coverPhoto) {
+        vendor.coverPhoto.data = fs.readFileSync(req.files.coverPhoto[0].path);
+      }
+
+      if (req.files.bigBanner) {
+        vendor.bigBanner.data = fs.readFileSync(req.files.bigBanner[0].path);
+      }
+
+      if (req.files.smallBanner1 && req.files.smallBanner2) {
+        const smallBanner1Buffer = fs.readFileSync(req.files.smallBanner1[0].path);
+        vendor.smallBanner1.data = smallBanner1Buffer;
+        const smallBanner2Buffer = fs.readFileSync(req.files.smallBanner2[0].path);
+        vendor.smallBanner2.data = smallBanner2Buffer;
+      }
+
+      if ((req.files.smallBanner1 && !req.files.smallBanner2) || (!req.files.smallBanner1 && req.files.smallBanner2)) {
+        return res.json("Must include 2 images file for 2 small banner.")
+      }
+
     }
     await vendor.save();
-    return res.json('Profile has been updated!')
+    return res.json('Storefront has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -899,92 +921,142 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
-    const users = await User.find({});
-    const vendors = await Vendor.find({});
-    const shippers = await Shipper.find({});
-
-    let usersImage = [];
-    let vendorsImage = [];
-    let shippersImage = [];
-
-    users.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      usersImage.push(userImage);
-    })
-
-    vendors.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      vendorsImage.push(userImage);
-    })
-
-    shippers.forEach(user => {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
-      shippersImage.push(userImage);
-    })
-
-
-
-    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers, usersImage: usersImage, vendorsImage: vendorsImage, shippersImage: shippersImage });
-  } catch {
+    const users = (await User.find({})).filter(user => user.role !== "Admin").map(user => convertUser(user));
+    const vendors = (await Vendor.find({})).map(vendor => convertUser(vendor));
+    const shippers = (await Shipper.find({})).map(shipper => convertUser(shipper));
+    return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
+  } catch (error) {
     return res.status(500).json({ error: "Cannot find user. " })
   }
 }
 
 exports.reportPage = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    const vendor = await Vendor.findById(req.params.id);
-    const shipper = await Shipper.findById(req.params.id);
+    const user = convertUser(await User.findById(req.params.id));
+    const vendor = convertUser(await Vendor.findById(req.params.id));
+    // const shipper = (await Shipper.findById(req.params.id)).map(shipper => convertUser(shipper));
 
     if (user) {
-      let userImage;
-      if (user.img.data) {
-        userImage = Buffer.from(
-          user.img.data
-        ).toString("base64");
-      }
       const orders = await Order.find({ userId: user._id })
-      return res.status(200).json({ user: user, userImage: userImage, orders: orders });
+      return res.status(200).json({ user: user, orders: orders });
     }
 
     if (vendor) {
-      let vendorImage;
-      if (vendor.img.data) {
-        vendorImage = Buffer.from(
-          vendor.img.data
-        ).toString("base64");
-      }
       const orders = await Order.find({ vendorID: vendor._id })
-      return res.status(200).json({ user: vendor, userImage: vendorImage, orders: orders });
+      return res.status(200).json({ user: vendor, orders: orders });
     };
 
-    if (shipper) {
-      let shipperImage;
-      if (shipper.img.data) {
-        shipperImage = Buffer.from(
-          shipper.img.data
-        ).toString("base64");
-      }
-      return res.status(200).json({ user: shipper, userImage: shipperImage });
-    }
+    // if (shipper) {
+    //   let shipperImage;
+    //   if (shipper.img.data) {
+    //     shipperImage = Buffer.from(
+    //       shipper.img.data
+    //     ).toString("base64");
+    //   }
+    //   return res.status(200).json({ user: shipper, userImage: shipperImage });
+    // }
 
-    if (!user && !vendor && !shipper) throw new Error("User not found");
+    if (!user && !vendor) throw new Error("User not found");
+
+    // if (!user && !vendor && !shipper) throw new Error("User not found");
   } catch (er) {
+    console.log(er)
     return res.status(500).json({ error: er })
   }
+}
+
+exports.uploadHomepageCarousel = async (req, res) => {
+  try {
+    let banner = await HomepageBanner.findOne({ title: 'Banner' })
+    if (!banner) {
+      banner = new HomepageBanner({
+        title: 'Banner',
+      })
+    }
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file.filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    if (req.files) {
+      const images = await Promise.all(req.files.map(async (file) => await uploadImage(file)));
+      banner.img = images.filter(url => url !== null);
+    }
+    await banner.save();
+    return res.status(200).json("Image uploaded.")
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
+exports.getThreads = async (req, res) => {
+  try {
+    const threads = await Thread.find({ $or: [{ userId: req.user._id }, { vendorId: req.user._id }] }).populate('content');
+    let users = [];
+    for (const thread of threads) {
+      const user = convertUser((req.user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
+      users.push(user);
+    }
+    return res.status(200).json({ threads: threads, users: users });
+  } catch (error) {
+    return res.status(500).json({ error: error })
+  }
+}
+
+exports.addMessage = async (req, res) => {
+  try {
+    const threadId = new mongoose.Types.ObjectId(req.params.id);
+
+    const thread = await Thread.findById(threadId);
+    if (!thread) return res.status(500).json({ error: "Thread not found" });
+
+    const message = new Message({
+      content: req.body.content,
+      sender: (req.user.role === "User") ? "User" : "Vendor",
+    })
+
+    await message.save();
+    thread.addMessage(message);
+    return res.status(200).json({ message: message });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error })
+  }
+}
+
+exports.createThread = async (req, res) => {
+  try {
+    const { _id: userId, role } = req.user;
+    const otherUserId = role === "User" ? req.body.vendorId : req.body.userId;
+
+    let thread = await Thread.findOne({ $or: [{ userId, vendorId: otherUserId }, { vendorId: userId, userId: otherUserId }] }).populate('content');
+
+    if (!thread) {
+      const newThreadData = role === "User" ? { userId, vendorId: otherUserId } : { userId: otherUserId, vendorId: userId };
+      thread = await Thread.create(newThreadData);
+    }
+
+    return res.status(200).json({ thread: thread });
+  } catch (error) {
+    return res.status(500).json({ error: "You must login first!" });
+  }
+}
+
+exports.getAdminDashboard = async (req, res) => {
+  try {
+    const numberOfUsers = await User.countDocuments();
+    const numberOfVendors = await Vendor.countDocuments();
+    const numberOfShippers = await Shipper.countDocuments();
+    const numberOfProducts = await Product.countDocuments();
+    return res.status(200).json({ numberOfUsers: numberOfUsers, numberOfVendors: numberOfVendors, numberOfShippers: numberOfShippers, numberOfProducts: numberOfProducts });
+  } catch (error) { }
+  return res.status(500).json({ error: error })
 }

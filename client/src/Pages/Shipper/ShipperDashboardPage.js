@@ -10,6 +10,7 @@ import UnpaidTableComponentShipper from '../../Components/VMOUnpaidTableComponen
 
 
 export default function ManageOrderPage() {
+export default function ManageOrderPage() {
     return <>
     <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
         <div

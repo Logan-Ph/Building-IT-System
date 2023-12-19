@@ -1,4 +1,3 @@
-import BarChart from "../../Components/BarChart";
 import AdminBarChart from "../../Components/AdminBarChart";
 
 import Insight from "../../Components/Insight";
