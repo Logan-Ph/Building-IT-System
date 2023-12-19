@@ -47,6 +47,9 @@ const shipperSchema = new mongoose.Schema({
     banEndDate: {
         type: Date,
     },
+    banStartDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model('Shipper', shipperSchema)

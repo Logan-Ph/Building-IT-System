@@ -36,6 +36,7 @@ export default function ManageUserPage() {
     try {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
+      console.log(res.data.users)
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
     }
@@ -207,7 +208,7 @@ function UserTable({ data, dataImage, type }) {
           </Table>
         </div>
       </div>
-      {!searchTerm && Math.floor(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}
+      {!searchTerm && Math.ceil(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}
     </>
   )
 }
