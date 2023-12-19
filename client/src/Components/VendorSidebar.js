@@ -1,13 +1,13 @@
-import { Settings, PackageSearch } from "lucide-react";
+import { Settings, PackageSearch, Home, Store, Shirt } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 
 export default function VendorSidebar() {
     return (<Sidebar>
         <a href="/dashboard">
-            <SidebarItem icon={<Settings size={20} />} text="Dashboard" />
+            <SidebarItem icon={<Home size={20} />} text="Dashboard" />
         </a>
 
-        <SidebarItem icon={<Settings size={20} />} text="Product"
+        <SidebarItem icon={<Shirt size={20} />} text="Product"
             subitems={[
                 { text: "Add Product", href: "/add-product" },
                 { text: "Manage Product", href: "/manage-product" },
@@ -18,11 +18,10 @@ export default function VendorSidebar() {
             <SidebarItem icon={<PackageSearch size={20} />} text="Orders" />
         </a>
 
-        {/* <SidebarItem icon={<Settings size={20} />} text="Dashboard"
+        <SidebarItem icon={<Store size={20} />} text="Shop Management"
             subitems={[
-                { text: "Subitem 1", href: "https://www.google.com/" },
-                { text: "Subitem 2" },
-                // Add more subitems as needed
-            ]} /> */}
+                { text: "Information", href: "/edit-vendor-profile" },
+                { text: "Decoration", href: "/edit-store" },
+            ]} />
     </Sidebar>)
 }

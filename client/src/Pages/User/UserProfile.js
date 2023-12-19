@@ -4,6 +4,8 @@ import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
 import { Navigate } from 'react-router';
+import UserSidebar from "../../Components/UserSidebar";
+
 
 
 export default function UserProfile() {
@@ -121,65 +123,7 @@ export default function UserProfile() {
             />
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
-
-                <div className={`absolute left-0 top-20 md:top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
-                    {/* <i className='bx bx-menu text-2xl cursor-pointer toggle-sidebar' onClick={handleSidebarToggle}></i> */}
-                    <div class="relative p-4 pb-2 flex justify-between items-center">
-                        <img src="" class="overflow-hidden transition-all w-32" alt=""></img>
-                        <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-first cursor-pointer toggle-sidebar " onClick={handleSidebarToggle}><path d="m17 18-6-6 6-6"></path>
-                                <path d="M7 6v12"></path></svg>
-                        </button>
-                    </div>
-                    <span href="#" className="p-4 flex items-center gap-4 hover:bg-blue-50" onClick={handleSidebarToggle}>
-                        <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
-                        <div className="whitespace-nowrap sidebar-user-profile">
-                            <span className="py-1 px-2 rounded-full bg-yellow-500 text-white text-sm font-medium">Golden Membership</span>
-                        </div>
-                    </span>
-                    <div className="py-4">
-                        <span className="text-sm text-gray-500 uppercase ml-4 inline-block mb-2 sidebar-menu-title">Menu</span>
-                        <ul className="sidebar-menu">
-                            <li>
-                                <span href="#" className="active">
-                                    <i className='bx bx-user-circle sidebar-menu-icon' ></i>
-                                    Account
-                                </span>
-                            </li>
-                            <li>
-                                <span href="#" onClick={() => handleDropdownToggle(0)}>
-                                    <i className='bx bx-receipt sidebar-menu-icon'></i>
-                                    Order
-                                </span>
-                                <ul className={`sidebar-dropdown ${activeDropdown === 0 ? '' : 'hidden'} ml-4 border-l border-blue-600`}>
-                                    {dropdownItems.map((item, index) => (
-                                        <li key={index} className={index === 0 ? 'active' : ''}>
-                                            <span href="#">{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                            <li>
-                                <span href="#">
-                                    <i className='bx bx-bell sidebar-menu-icon'></i>
-                                    Notifications
-                                </span>
-                            </li>
-                            <li>
-                                <span href="#">
-                                    <i className='bx bx-heart sidebar-menu-icon' ></i>
-                                    Wishlist
-                                </span>
-                            </li>
-                            <li>
-                                <span href="#">
-                                    <i className='bx bx-question-mark sidebar-menu-icon' ></i>
-                                    Help
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <UserSidebar /> 
                 {/* <!-- SIDEBAR --> */}
 
                 {/* <!-- MAIN --> */}
