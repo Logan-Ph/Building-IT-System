@@ -33,6 +33,7 @@ import VendorHeader from '../Components/VendorHeader';
 import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import CartPage from "../Pages/User/CartPage";
+import ShipperDashboardPage from '../Pages/Shipper/ShipperDashboardPage';
 import ChatPage from "../Pages/User/ChatPage";
 
 const searchClient = algoliasearch(
@@ -84,7 +85,10 @@ export default function Router() {
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <AdminHeader />
-          <Outlet />
+          <div className="flex  ">
+            <VendorSidebar />
+            <Outlet />
+          </div>
         </InstantSearch>
       </>
     );
@@ -171,6 +175,10 @@ export default function Router() {
           path: "/edit-product/:id",
           element: <VendorEditingProduct />,
         },
+        {
+          path: '/shipper-dashboard',
+          element: <ShipperDashboardPage />,
+        }
       ],
     },
     {
