@@ -241,7 +241,10 @@ export default function Router() {
           path: "/chat",
           element: (
             <InstantSearch searchClient={searchClient} indexName="rBuy">
-              <ChatPage />
+              <div className="h-screen overflow-hidden">
+                <Header />
+                <ChatPage />
+              </div>
             </InstantSearch>
           ),
         },

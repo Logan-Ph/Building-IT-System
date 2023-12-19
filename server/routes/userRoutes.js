@@ -6,7 +6,6 @@ const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
 const { OpenAI } = require('openai')
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 require('dotenv').config
 
 const storage = multer.diskStorage({
@@ -115,6 +114,11 @@ router.get('/remove-product/:id', userController.removeProduct);
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
 
+// user add message route
+router.post('/chat/:id', userController.addMessage);
+router.get('/chat', userController.getThreads);
+router.post('/chat', userController.createThread);
+
 // vendor update profile route
 router.post('/update-vendor', upload.single('file'), userController.updateVendor);
 
@@ -140,7 +144,6 @@ router.post('/edit-store', upload.fields([
   ]), userController.editStore);
 
 //vendor manage order (vendor side)
-router.post('/search-order', userController.searchOrder);
 router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 

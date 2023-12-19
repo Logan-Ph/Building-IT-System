@@ -4,6 +4,8 @@ const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 const Order = require('../models/order')
+const Thread = require('../models/thread')
+const Message = require('../models/message')
 const HomepageBanner = require('../models/homepage-banner')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -32,7 +34,8 @@ function convertUser(user) {
   if (!user) return null;
   const userJson = user.toJSON();
   if (user.img && user.img.data) {
-    userJson.userImage = Buffer.from(user.img.data).toString("base64");
+    // userJson.img = ""
+    userJson.img = Buffer.from(user.img.data).toString("base64");
   }
   return userJson;
 }
@@ -464,27 +467,6 @@ exports.removeProduct = async (req, res) => {
   }
   catch {
     return res.status(500).json({ error: "Cannot find the product." })
-  }
-}
-
-exports.searchOrder = async (req, res) => {
-  try {
-    const orderId = req.body.orderId;
-    const orderStatus = req.body.orderStatus
-    let order;
-    if (orderStatus) {
-      order = await Order.find({ vendorID: req.user._id, _id: orderId, status: (orderStatus === "All") ? "" : orderStatus });
-    } else {
-      order = await Order.find({ vendorID: req.user._id, _id: orderId });
-    }
-
-    if (!order) {
-      return res.status(500).json({ error: "Cannot find order. " })
-    }
-
-    return res.status(200).json({ order: order });
-  } catch {
-    return res.status(500).json({ error: "Cannot find order. " })
   }
 }
 
@@ -987,6 +969,60 @@ exports.reportPage = async (req, res) => {
   } catch (er) {
     console.log(er)
     return res.status(500).json({ error: er })
+  }
+}
+
+exports.getThreads = async (req, res) => {
+  try {
+    const threads = await Thread.find({ $or: [{ userId: req.user._id }, { vendorId: req.user._id }] }).populate('content');
+    let users = [];
+    for (const thread of threads) {
+      const user = convertUser((req.user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
+      users.push(user);
+    }
+    return res.status(200).json({ threads: threads, users: users });
+  } catch (error) {
+    return res.status(500).json({ error: error })
+  }
+}
+
+exports.addMessage = async (req, res) => {
+  try {
+    const threadId = new mongoose.Types.ObjectId(req.params.id);
+
+    const thread = await Thread.findById(threadId);
+    if (!thread) return res.status(500).json({ error: "Thread not found" });
+
+    const message = new Message({
+      content: req.body.content,
+      sender: (req.user.role === "User") ? "User" : "Vendor",
+    })
+
+    await message.save();
+    thread.addMessage(message);
+    return res.status(200).json({ message: message });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error })
+  }
+}
+
+exports.createThread = async (req, res) => {
+  try {
+    const { _id: userId, role } = req.user;
+    const otherUserId = role === "User" ? req.body.vendorId : req.body.userId;
+
+    let thread = await Thread.findOne({ $or: [{ userId, vendorId: otherUserId }, { vendorId: userId, userId: otherUserId }] }).populate('content');
+
+    if (!thread) {
+      const newThreadData = role === "User" ? { userId, vendorId: otherUserId } : { userId: otherUserId, vendorId: userId };
+      thread = await Thread.create(newThreadData);
+    }
+
+    return res.status(200).json({ thread: thread });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error });
   }
 }
 

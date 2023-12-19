@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
 
 export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }) {
@@ -7,6 +8,18 @@ export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }
     return `border-b-2 px-2 py-3 duration-700 transition ${activeTab === tabName ? 'border-black' : 'border-transparent hover:border-black'
       }`;
   };
+
+  const createThread = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:4000/chat", { vendorId: vendor._id }, { withCredentials: true });
+      localStorage.setItem("threadId", res.data.thread._id);
+      window.location.href = "/chat";
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       {/* Profile Section */}
@@ -29,12 +42,12 @@ export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }
                 >
                   <i class="fa-regular fa-plus"></i> Follow
                 </button>
-                <button
-                  type="button"
+                <span
+                  onClick={(e)=>createThread(e)}
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                 >
                   <i class="fa-regular fa-comment-dots"></i> Chat
-                </button>
+                </span>
               </div>
             </div>
           </div>

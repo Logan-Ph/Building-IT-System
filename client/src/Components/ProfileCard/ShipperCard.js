@@ -5,7 +5,7 @@ export default function ShipperCard({ user, categorizedOrder }) {
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
         <div class="flex items-center gap-4 mt-4">
-          <img src={(user.userImage) ? `data:image/jpeg;base64,${user.userImage}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
+          <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
           <div>
             <h2 class="text-2xl font-semibold mb-2">{user.name}</h2>
             <div class="text-lg text-gray-500">{user.email}</div>

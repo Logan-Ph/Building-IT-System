@@ -2,7 +2,7 @@ import { Table } from 'flowbite-react';
 import React from "react";
 import MoreDetailOrder from './MoreDetailOrder';
 
-export default function AllTableComponent({ foundOrder, orders }) {
+export default function TableComponent({ orders }) {
     return <>
         <div className="overflow-x-auto">
             <Table hoverable>
@@ -18,28 +18,7 @@ export default function AllTableComponent({ foundOrder, orders }) {
                     </Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
-                    {foundOrder && foundOrder.map(order => {
-                        const date = new Date(order.date);
-                        const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-                        return (
-                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell>{order._id}</Table.Cell>
-                                <Table.Cell>{order.userName}</Table.Cell>
-                                <Table.Cell>{formattedDate}</Table.Cell>
-                                <Table.Cell>{order.shippingAddress}</Table.Cell>
-                                <Table.Cell>{order.contactNumber}</Table.Cell>
-                                <Table.Cell>
-                                    <button className="bg-transparent text-[#E61E2A] text-sm px-2 font-bold border border-[#E61E2A] rounded-lg">{order.status}</button>
-                                </Table.Cell>
-                                <Table.Cell>
-
-                                    <MoreDetailOrder order={order} />
-
-                                </Table.Cell>
-                            </Table.Row>
-                        )
-                    })}
-                    {!foundOrder && orders.map((order) => {
+                    {orders.map((order) => {
                         const date = new Date(order.date);
                         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
                         return (
