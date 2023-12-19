@@ -1792,10 +1792,6 @@ input:checked + .toggle-bg {
   margin-top: auto;
 }
 
-.ml-12 {
-  margin-left: 3rem;
-}
-
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
