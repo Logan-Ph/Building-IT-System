@@ -4,7 +4,7 @@ import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
 
 export default function OrdersInfo({ orders, searchTerm }) {
-    const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
+    const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders.length > 0 ? orders : null })
     useEffect(() => {
         const initialStatuses = {
             "Unpaid": null,
@@ -25,6 +25,8 @@ export default function OrdersInfo({ orders, searchTerm }) {
 
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders]);
+
+    console.log(categorizedOrder)
 
     return (
         <Tabs aria-label="Tabs with icons">

@@ -46,6 +46,9 @@ const vendorSchema = new mongoose.Schema({
     banEndDate: {
         type: Date,
     },
+    banStartDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model('Vendor', vendorSchema)

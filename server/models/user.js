@@ -44,6 +44,9 @@ const userSchema = new mongoose.Schema({
     banEndDate: {
         type: Date,
     },
+    banStartDate: {
+        type: Date,
+    },
 });
 
 module.exports = mongoose.model('User', userSchema)
