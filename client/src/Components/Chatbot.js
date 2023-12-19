@@ -8,7 +8,7 @@ export default function Chatbot() {
   const [inputMessage, setInputMessage] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [showImage, setShowImage] = useState(false);
-  const [typing, setTyping] = useState(true)
+  const [typing, setTyping] = useState(false)
   const messageBoxRef = useRef();
 
   const send = async (e) => {

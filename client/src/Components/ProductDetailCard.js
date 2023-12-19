@@ -1,14 +1,13 @@
+'use client';
 import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
-import { Navigate } from 'react-router-dom';
-
+import { Rating } from 'flowbite-react';
 export default function ProductDetailCard({ product, vendorName }) {
     const [quantity, setQuantity] = useState(1)
     const { setCart } = useContext(CartContext)
     const [error, setError] = useState('')
-    const [navigateTo, setNavigateTo] = useState('')
     const [msg, setMsg] = useState('')
 
     const notify = useCallback(() => {
@@ -45,18 +44,13 @@ export default function ProductDetailCard({ product, vendorName }) {
         }
     }, [error, msg, notify]);
 
-    const handleBuyNow = async () => {
-        const formatedProduct = { ...product, product: product._id, quantity: quantity, owner: product.owner, checked: true }
-        localStorage.setItem('products', JSON.stringify([formatedProduct]));
-        setNavigateTo('/checkout');
-    }
 
     const addProduct = async (productId) => {
         error && notify();
         msg && notify();
         try {
             const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
-            setCart(res.data.cart)
+            setCart(res.data.length)
             setMsg(res.data.msg);
             setError('');
             setQuantity(1);
@@ -67,7 +61,6 @@ export default function ProductDetailCard({ product, vendorName }) {
     }
     return (
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
-            {navigateTo && <Navigate to={navigateTo} replace />}
             <img
                 alt="ecommerce"
                 className="lg:w-[550px] lg:h-[510px] md:h-auto sm:h-auto xs:h-auto  rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
@@ -125,81 +118,21 @@ export default function ProductDetailCard({ product, vendorName }) {
                     <h2 className="text-sm title-font text-gray-500 tracking-widest">
                         {vendorName}
                     </h2>
-                    <h1 className="text-gray-900 lg:text-3xl sm:text-md xs:text-md title-font font-medium mb-3 ">
+                    <h1 className="text-gray-900 lg:text-3xl sm:text-2xl xs:text-2xl  font-medium mb-3 ">
                         {product.product_name}
                     </h1>
 
                     <div className="flex mb-2 ">
-                        <span className="flex items-center">
-                            <svg
-                                fill="currentColor"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                className="w-5 h-5 xs:w-4 xs:h-4 text-[#222160]"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                            <svg
-                                fill="currentColor"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                className="w-5 h-5 xs:w-4 xs:h-4 text-[#222160]"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                            <svg
-                                fill="currentColor"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                className="w-5 h-5 xs:w-4 xs:h-4 text-[#222160]"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                            <svg
-                                fill="currentColor"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                className="w-5 h-5 xs:w-4 xs:h-4 text-[#222160]"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                            <svg
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                className="w-5 h-5 xs:w-4 xs:h-4 text-[#222160]"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                            <div></div>
-                            <div className="px-3 ps-4 lg:text-lg md:text-md sm:text-sm xs:text-sm font-medium hover:underline ml-3">
-                                4 Reviews (STATIC!)
-                            </div>
-                            <span
-                                href="#"
-                                class="px-3 lg:text-lg md:text-md sm:text-sm xs:text-sm font-medium  border-slate-500  border-s-[1px] md:mb-0 hover:underline "
-                            >
-                                14 Sold (STATIC!)
-                            </span>
-                        </span>
+                    <Rating size="md">
+        <Rating.Star />
+        <Rating.Star />
+        <Rating.Star />
+        <Rating.Star />
+        <Rating.Star filled={false} />
+      </Rating>
                     </div>
 
-                    <span className=" font-medium lg:text-3xl md:text-3xl sm:text-2xl xs:text-xl text-slate-700">
+                    <span className=" font-medium lg:text-3xl md:text-3xl sm:text-2xl xs:text-2xl text-slate-700">
                         ${product.price}.00
                     </span>
                     <hr class="my-4 w-full border-gray-300" />
@@ -215,7 +148,7 @@ export default function ProductDetailCard({ product, vendorName }) {
                             <form class="max-w-xs mx-auto">
                                 <label
                                     for="quantity-input"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    class="block mb-2 text-md font-medium text-gray-900 dark:text-white"
                                 >
                                     Choose quantity:
                                 </label>
@@ -295,10 +228,10 @@ export default function ProductDetailCard({ product, vendorName }) {
                         </button>
                     </div>
                     <div className="flex">
-                        <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[12.5px]  text-black font-medium bg-[#EAB308] border-0 py-2 px-6 focus:outline-none hover:bg-[#EAA000] rounded-lg">
+                        <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-black font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
                             Add to Cart
                         </button>
-                        <button className="w-48 h-12 xs:text-[12.5px]  ml-10 text-black font-medium bg-[#FF9209] border-0 py-2 px-6 focus:outline-none hover:bg-[#FF6C22] rounded-lg" onClick={(e) => handleBuyNow(e)}>
+                        <button className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-black font-medium bg-[#FF9209] border-0 focus:outline-none hover:bg-[#FF6C22] rounded-lg">
                             Buy Now
                         </button>
                     </div>

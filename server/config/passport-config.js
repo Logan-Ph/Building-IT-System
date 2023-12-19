@@ -14,8 +14,8 @@ passport.use(new GoogleStrategy({
   scope: ['profile', 'email'],
 },
   async function verify(accessToken, refreshToken, profile, cb) {
-    let user = (await User.find({ googleId: profile.id }, { _id: 1, banEndDate: 1, role: 1 }))[0]
-    if (user && user.banEndDate > new Date()) return cb(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
+    let user = (await User.find({ googleId: profile.id }, { _id: 1, banEndDate: 1, role: 1, banStartDate: 1 }))[0]
+    if (user && user.banEndDate && user.banStartDate && (user.banEndDate >= new Date() && new Date() >= user.banStartDate)) return cb(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
     if (user) {
       return cb(null, user)
     } else {
@@ -35,11 +35,11 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, async function verify(email, password, done) {
-  const user = (await User.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1 }))[0] || (await Vendor.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1 }))[0] || (await Shipper.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1 }))[0]
+  const user = (await User.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1, banStartDate: 1 }))[0] || (await Vendor.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1, banStartDate: 1 }))[0] || (await Shipper.find({ email: email }, { email: 1, password: 1, verify: 1, banEndDate: 1, role: 1, banStartDate: 1 }))[0]
   if (!user) return done(null, false, { message: "Please check the email and password again" }) // check if the user did not exist
   if (!user.password) return done(null, false, { message: "Please check the email and password again" }) // check if the account is gmail account 
   if (!user.verify) return done(null, false, { message: "You need to verify your account with gmail" }) // check if the user email is verify
-  if (user.banEndDate && user.banEndDate >= new Date()) return done(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
+  if (user.banEndDate && user.banStartDate && (user.banEndDate >= new Date() && new Date() >= user.banStartDate)) return done(null, false, { message: "Your account has been banned for serveral reasons. Please contact rBuy help center for more information" })
 
   try {
     if (await bcrypt.compare(password, user.password)) {

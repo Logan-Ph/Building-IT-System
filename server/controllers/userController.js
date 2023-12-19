@@ -34,7 +34,6 @@ function convertUser(user) {
   if (!user) return null;
   const userJson = user.toJSON();
   if (user.img && user.img.data) {
-    // userJson.img = ""
     userJson.img = Buffer.from(user.img.data).toString("base64");
   }
   return userJson;
@@ -696,17 +695,12 @@ exports.updateShipper = async (req, res) => {
 
 exports.banUser = async (req, res) => {
   const userId = req.body.userId;
-  const banDuration = req.body.banDate; // This should be in days or months
-
-  let endDate;
-
-  if (banDuration === '1 month') {
-    endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 1);
-  } else {
-    const banDays = parseInt(banDuration); // Convert the ban duration to integer
-    endDate = new Date(Date.now() + banDays * 24 * 60 * 60 * 1000); // Add the ban duration to the current date
+  if (req.body.remove) {
+    await User.findByIdAndDelete(userId);
+    return res.status(200).json({ msg: "Remove user successfully" });
   }
+  const startDate = (req.body.startDate).split('T')[0];
+  const endDate = (req.body.endDate).split('T')[0];
 
   try {
     const user = await User.findById(userId);
@@ -714,16 +708,16 @@ exports.banUser = async (req, res) => {
     const shipper = await Shipper.findById(userId);
 
     if (user) {
-      await User.updateOne({ _id: userId }, { banEndDate: endDate });
+      await User.updateOne({ _id: userId }, { banEndDate: endDate, banStartDate: startDate });
     } else if (vendor) {
-      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate });
+      await Vendor.updateOne({ _id: userId }, { banEndDate: endDate, banStartDate: startDate });
     } else if (shipper) {
-      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate });
+      await Shipper.updateOne({ _id: userId }, { banEndDate: endDate, banStartDate: startDate });
     } else {
       throw new Error('User does not exist!');
     }
 
-    return res.status(200).json("Banned user successfully");
+    return res.status(200).json({ msg: "Banned user successfully" });
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -926,13 +920,11 @@ exports.getSingleProduct = async (req, res) => {
 
 exports.manageUser = async (req, res) => {
   try {
-
     const users = (await User.find({})).filter(user => user.role !== "Admin").map(user => convertUser(user));
     const vendors = (await Vendor.find({})).map(vendor => convertUser(vendor));
     const shippers = (await Shipper.find({})).map(shipper => convertUser(shipper));
     return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ error: "Cannot find user. " })
   }
 }
@@ -1021,8 +1013,7 @@ exports.createThread = async (req, res) => {
 
     return res.status(200).json({ thread: thread });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: error });
+    return res.status(500).json({ error: "You must login first!" });
   }
 }
 

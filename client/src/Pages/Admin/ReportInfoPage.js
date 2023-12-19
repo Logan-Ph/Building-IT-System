@@ -51,11 +51,11 @@ export default function ReportInfoPage() {
 
   return (
     <>
-      <section class="bg-gray-200">
+      <section class="bg-gray-200 w-5/6 md:w-full">
         {user && user.role === "User" && <Navigate to={"/"} replace />}
         {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
         {error && <Navigate to={"/admin/manage-user"} replace />}
-        <div class="container mx-auto p-5">
+        <div class="md:container mx-auto p-5">
           <h1 class="m-5 text-3xl font-light text-center">
             Account Information
           </h1>
