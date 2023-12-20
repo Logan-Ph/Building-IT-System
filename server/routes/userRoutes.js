@@ -147,6 +147,12 @@ router.post('/edit-store', upload.fields([
 router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 
+
+//customer review routes
+router.get('/:productId/view-comment', userController.viewComments);
+router.post('/:productId/post-comment', userController.postComment);
+router.put('/:commentId/reply-comment', userController.replyComment);
+
 // vendor dashboard route (vendor side)
 router.post('/dashboard', authenticateToken, authorizeVendor, userController.postVendorDashboard);
 router.get('/dashboard', authenticateToken, authorizeVendor, userController.getVendorDashboard);

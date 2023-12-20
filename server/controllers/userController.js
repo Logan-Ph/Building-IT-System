@@ -4,6 +4,7 @@ const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 const Order = require('../models/order')
+const Comment = require('../models/comment')
 const HomepageBanner = require('../models/homepage-banner')
 const Thread = require('../models/thread')
 const Message = require('../models/message')
@@ -1060,3 +1061,58 @@ exports.getAdminDashboard = async (req, res) => {
   } catch (error) { }
   return res.status(500).json({ error: error })
 }
+
+
+exports.viewComments = async (req,res) => {
+  const id = req.params?.productId
+  try {
+      if (id) {
+        const comments = await Comment.find({productId: id}).sort({postedOn:'asc'})
+        res.json(comments);
+      } else {
+      res.status(500).json({message: 'Comments not found'})}
+
+  } catch (error) {
+    res.status(501).json({message: 'There was an error getting comments for this Product'});
+  }}
+
+exports.postComment = async (req,res) => {
+  if (!req.user) {
+    return res.status(500).json({ error: "Please log in or create an account to comment" })
+  }
+  const id = req.params.productId
+  const user = await User.findById(req.params.id);
+  const {commentText, userId  } = req.body;
+  try {
+    if (id) {
+      const postComment = await Comment.create({
+        productId: id,
+        commentText,
+        postedBy: new mongoose.Types.ObjectId(userId),
+      })
+      res.status(200).json(postComment);
+    } else {
+      res.status(500).json({message: 'Comments not found'})}
+
+  } catch (error) {
+    res.status(500).json({message: error.message});
+  }}
+
+exports.replyComment = async (req,res) => {
+    const comment_id = req.params?.commentId
+
+    try {
+        if (comment_id) {
+          const reply = {
+            commentId: comment_id,
+            vendorId: req.body.vendorId,
+            reply: req.body.reply
+          }
+         const newComment = await Comment.findByIdAndUpdate({ _id: comment_id}, {$push: {replyMessage : reply}}, {new: true})
+          res.json(newComment);
+        } else {
+        res.status(500).json({message: 'Comments not found'})}
+
+    } catch (error) {
+      res.status(501).json({message: 'There was an error getting comments for this Product'});
+    }}
