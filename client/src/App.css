@@ -2259,6 +2259,10 @@ input:checked + .toggle-bg {
   width: 133px;
 }
 
+.w-\[15\%\] {
+  width: 15%;
+}
+
 .w-\[18px\] {
   width: 18px;
 }
@@ -2582,6 +2586,10 @@ input:checked + .toggle-bg {
   flex-wrap: wrap;
 }
 
+.\!flex-nowrap {
+  flex-wrap: nowrap !important;
+}
+
 .place-content-between {
   place-content: space-between;
 }
@@ -2778,6 +2786,14 @@ input:checked + .toggle-bg {
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
 
+.space-y-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 1;
+}
+
+.space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
 .divide-x > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 0;
   border-right-width: calc(1px * var(--tw-divide-x-reverse));
@@ -2854,6 +2870,18 @@ input:checked + .toggle-bg {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.text-clip {
+  text-overflow: clip;
+}
+
+.\!whitespace-nowrap {
+  white-space: nowrap !important;
 }
 
 .whitespace-nowrap {
@@ -3116,9 +3144,29 @@ input:checked + .toggle-bg {
   border-style: dashed;
 }
 
+.border-\[\#000054\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 84 / var(--tw-border-opacity));
+}
+
+.border-\[\#092635\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(9 38 53 / var(--tw-border-opacity));
+}
+
 .border-\[\#222160\] {
   --tw-border-opacity: 1;
   border-color: rgb(34 33 96 / var(--tw-border-opacity));
+}
+
+.border-\[\#5C8374\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(92 131 116 / var(--tw-border-opacity));
+}
+
+.border-\[\#618264\] {
+  --tw-border-opacity: 1;
+  border-color: rgb(97 130 100 / var(--tw-border-opacity));
 }
 
 .border-\[\#E61E2A\] {
@@ -4151,11 +4199,6 @@ input:checked + .toggle-bg {
   padding-bottom: 2rem;
 }
 
-.\!py-5 {
-  padding-top: 1.25rem !important;
-  padding-bottom: 1.25rem !important;
-}
-
 .pb-12 {
   padding-bottom: 3rem;
 }
@@ -4530,6 +4573,16 @@ input:checked + .toggle-bg {
 .text-\[\#222160\] {
   --tw-text-opacity: 1;
   color: rgb(34 33 96 / var(--tw-text-opacity));
+}
+
+.text-\[\#5C8374\] {
+  --tw-text-opacity: 1;
+  color: rgb(92 131 116 / var(--tw-text-opacity));
+}
+
+.text-\[\#618264\] {
+  --tw-text-opacity: 1;
+  color: rgb(97 130 100 / var(--tw-text-opacity));
 }
 
 .text-\[\#E61E2A\] {
@@ -5442,9 +5495,18 @@ input:checked + .toggle-bg {
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
+.hover\:border-transparent:hover {
+  border-color: transparent;
+}
+
 .hover\:bg-\[\#000053\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 83 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-\[\#E61E2A\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(230 30 42 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-\[\#EAA000\]:hover {
@@ -5455,6 +5517,10 @@ input:checked + .toggle-bg {
 .hover\:bg-\[\#FF6C22\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 108 34 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-\[\#e61e2bc3\]:hover {
+  background-color: #e61e2bc3;
 }
 
 .hover\:bg-\[\#fac800e1\]:hover {
@@ -8793,14 +8859,14 @@ input:checked + .toggle-bg {
 }
 
 @media (max-width: 575px) {
-  .xs\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   .xs\:mx-0 {
     margin-left: 0px;
     margin-right: 0px;
+  }
+
+  .xs\:mx-auto {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .xs\:mb-3 {
@@ -8842,10 +8908,6 @@ input:checked + .toggle-bg {
     display: none;
   }
 
-  .xs\:h-4 {
-    height: 1rem;
-  }
-
   .xs\:h-5 {
     height: 1.25rem;
   }
@@ -8864,10 +8926,6 @@ input:checked + .toggle-bg {
 
   .xs\:h-auto {
     height: auto;
-  }
-
-  .xs\:w-10 {
-    width: 2.5rem;
   }
 
   .xs\:w-3\/4 {
@@ -8918,16 +8976,8 @@ input:checked + .toggle-bg {
     align-items: flex-start;
   }
 
-  .xs\:justify-start {
-    justify-content: flex-start;
-  }
-
   .xs\:justify-end {
     justify-content: flex-end;
-  }
-
-  .xs\:gap-2 {
-    gap: 0.5rem;
   }
 
   .xs\:gap-3 {
@@ -8948,18 +8998,6 @@ input:checked + .toggle-bg {
 
   .xs\:\!overflow-x-auto {
     overflow-x: auto !important;
-  }
-
-  .xs\:whitespace-nowrap {
-    white-space: nowrap;
-  }
-
-  .xs\:whitespace-pre-line {
-    white-space: pre-line;
-  }
-
-  .xs\:p-2 {
-    padding: 0.5rem;
   }
 
   .xs\:p-4 {
@@ -8999,11 +9037,6 @@ input:checked + .toggle-bg {
   .xs\:py-5 {
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
-  }
-
-  .xs\:px-5 {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
   }
 
   .xs\:pt-0 {
