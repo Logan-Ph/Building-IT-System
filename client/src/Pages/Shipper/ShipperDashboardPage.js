@@ -33,14 +33,7 @@ export default function ManageOrderPage() {
                         <input type="text" name="search" placeholder="Search orders here.... "
                             className="rounded-md w-full border border-slate-400 pl-4 pr-20 py-2 text-md hover:border-black" />
                     </div>
-                    <div className='flex items-center ml-2'>
-                        <button className="bg-[#E61E2A] hover:bg-[#e61e2bc3] text-white font-bold py-2 px-4 md:px-2 md:py-2 border border-[#E61E2A] rounded-lg">
-                            Search
-                        </button>
-                        <button className="bg-transparent hover:bg-[#E61E2A] text-[#E61E2A] font-semibold hover:text-white py-2 px-4 border border-[#E61E2A] hover:border-transparent rounded-lg ml-2">
-                            Reset
-                        </button>
-                    </div>
+             
                 </div>
 
                 <div>

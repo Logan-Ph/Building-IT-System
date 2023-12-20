@@ -11,8 +11,6 @@ import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
 import { Carousel } from 'flowbite-react';
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 
 export default function Homepage() {
     const { user } = useContext(UserContext)
@@ -236,43 +234,6 @@ function MiddleBanner({ setNavigateTo }) {
             </div>
 
         </div>
-
-
-        <Swiper
-            breakpoints={{
-              300: {
-                spaceBetween: 7,
-                slidesPerView: 3,
-              },
-
-              576: {
-                spaceBetween: 10,
-                slidesPerView: 3,
-              },
-
-              898: {
-                spaceBetween: 20,
-                slidesPerView: 4,
-              },
-              1200: {
-                spaceBetween: 15,
-                slidesPerView: 5,
-              },
-              1259: {
-                spaceBetween: 15,
-                slidesPerView: 5,
-              },
-            }}
-          >
-            <div className="mt-64">
-              {/* Realated Product */}
-                <SwiperSlide>
-                  <img src='https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA='/>
-                </SwiperSlide>
-              
-               </div>
-          </Swiper>
-        
     </>
 }
 
