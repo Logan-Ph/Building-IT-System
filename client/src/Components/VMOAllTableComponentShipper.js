@@ -19,6 +19,7 @@ export default function AllTableComponent() {
             <Table.HeadCell>
               <span className="sr-only">Edit</span>
             </Table.HeadCell>
+          
           </Table.Head>
           <Table.Body className="divide-y">
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
@@ -40,7 +41,7 @@ export default function AllTableComponent() {
               <Table.Cell>#1234-abcd</Table.Cell>
               <Table.Cell>5</Table.Cell>
               <Table.Cell>22/12/2022</Table.Cell>
-              <Table.Cell>104 Pho Quang p2 qTB</Table.Cell>
+              <Table.Cell>104 Pho Quang p2 qTB </Table.Cell>
               <Table.Cell>0977702769</Table.Cell>
               <Table.Cell>
                     <button className="bg-white text-[#FAC800] text-sm px-2 font-bold border border-[#FAC800] rounded-lg">Completed</button>
