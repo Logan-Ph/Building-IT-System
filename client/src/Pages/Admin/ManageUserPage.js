@@ -13,24 +13,11 @@ import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
 
 export default function ManageUserPage() {
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const [users, setUsers] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState();
-
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true })
-      setUser(res.data.user);
-      setIsLoading(false)
-    }
-    catch (er) {
-      setIsLoading(false)
-      setError(er)
-    }
-  }, [setUser])
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
     try {
@@ -39,16 +26,17 @@ export default function ManageUserPage() {
       console.log(res.data.users)
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
+      setIsLoading(false)
     }
     catch (er) {
       console.log(er);
+      setIsLoading(false)
     }
   }, [])
 
   useEffect(() => {
-    fetchUser();
     fetchData();
-  }, [fetchUser, fetchData])
+  }, [fetchData])
 
   if (isLoading) {
     return <div>....is loading</div>
@@ -58,7 +46,6 @@ export default function ManageUserPage() {
     <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       {user && user.role === "User" && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
-      {error && <Navigate to={"/login"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}

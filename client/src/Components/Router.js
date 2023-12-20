@@ -39,12 +39,18 @@ import ShipperDashboardPage from '../Pages/Shipper/ShipperDashboardPage';
 import ChatPage from "../Pages/User/ChatPage";
 import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
-
+import AdminSideBar from "./AdminSideBar";
+import aa from 'search-insights';
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
   "d8ac69cc1ecc43ac91c32ca6d0fb4305"
 );
+
+aa('init', {
+  appId: 'IZX7MYSNRD',
+  apiKey: "d8ac69cc1ecc43ac91c32ca6d0fb4305",
+});
 
 export default function Router() {
   const UserLayout = ({ header }) => {
@@ -91,7 +97,7 @@ export default function Router() {
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <AdminHeader />
           <div className="flex  ">
-            <VendorSidebar />
+            <AdminSideBar />
             <Outlet />
           </div>
         </InstantSearch>
@@ -185,17 +191,17 @@ export default function Router() {
           element: <VendorEditingProduct />,
         },
         {
+          path: '/shipper-dashboard',
+          element: <ShipperDashboardPage />,
+        },
+        {
           path: "/edit-store",
           element: <VendorEditStore />,
         },
         {
-          path: "/vendor-profile",
+          path: "/edit-vendor-profile",
           element: <VendorEditProfile />,
         },
-        {
-          path: '/shipper-dashboard',
-          element: <ShipperDashboardPage />,
-        }
       ],
     },
     {

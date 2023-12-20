@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
 
 const upload = multer({ storage });
-const uploadBanner = multer({storage}).array('files', 10);
+const uploadBanner = multer({ storage }).array('files', 10);
 
 /**
  *  App routes
@@ -141,7 +141,7 @@ router.post('/edit-store', upload.fields([
     { name: 'bigBanner', maxCount: 1 },
     { name: 'smallBanner1', maxCount: 1 },
     { name: 'smallBanner2', maxCount: 1 },
-  ]), userController.editStore);
+]), userController.editStore);
 
 //vendor manage order (vendor side)
 router.post('/confirm-order', userController.confirmOrder);
@@ -153,6 +153,9 @@ router.get('/dashboard', authenticateToken, authorizeVendor, userController.getV
 
 // logout route
 router.get('/logout', userController.logout);
+
+// admin dashboard
+router.get('/admin/dashboard', userController.getAdminDashboard);
 
 // admin manage user route
 router.get('/admin/manage-user', userController.manageUser)

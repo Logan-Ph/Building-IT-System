@@ -4,9 +4,9 @@ const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
 const Order = require('../models/order')
+const HomepageBanner = require('../models/homepage-banner')
 const Thread = require('../models/thread')
 const Message = require('../models/message')
-const HomepageBanner = require('../models/homepage-banner')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const path = require('path')
@@ -28,6 +28,7 @@ const imagekit = new ImageKit({
 });
 
 const fs = require("fs");
+const { error } = require('console')
 require('dotenv').config()
 
 function convertUser(user) {
@@ -964,6 +965,38 @@ exports.reportPage = async (req, res) => {
   }
 }
 
+exports.uploadHomepageCarousel = async (req, res) => {
+  try {
+    let banner = await HomepageBanner.findOne({ title: 'Banner' })
+    if (!banner) {
+      banner = new HomepageBanner({
+        title: 'Banner',
+      })
+    }
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file.filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    if (req.files) {
+      const images = await Promise.all(req.files.map(async (file) => await uploadImage(file)));
+      banner.img = images.filter(url => url !== null);
+    }
+    await banner.save();
+    return res.status(200).json("Image uploaded.")
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
 exports.getThreads = async (req, res) => {
   try {
     const threads = await Thread.find({ $or: [{ userId: req.user._id }, { vendorId: req.user._id }] }).populate('content');
@@ -1017,34 +1050,13 @@ exports.createThread = async (req, res) => {
   }
 }
 
-exports.uploadHomepageCarousel = async (req, res) => {
+exports.getAdminDashboard = async (req, res) => {
   try {
-    let banner = await HomepageBanner.findOne({ title: 'Banner' })
-    if (!banner) {
-      banner = new HomepageBanner({
-        title: 'Banner',
-      })
-    } 
-    const uploadImage = async (file) => {
-      try {
-        const response = await imagekit.upload({
-          file: fs.readFileSync("uploads/" + file.filename),
-          fileName: file.filename + ".jpg",
-        });
-        return response.url;
-      } catch (err) {
-        console.log("Error uploading image:", err);
-        return null;
-      }
-    };
-    if (req.files) {
-      const images = await Promise.all(req.files.map(async (file) => await uploadImage(file)));
-      banner.img = images.filter(url => url !== null); 
-    }
-    await banner.save();
-    return res.status(200).json("Image uploaded.")
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({ error: error })
-  }
+    const numberOfUsers = await User.countDocuments();
+    const numberOfVendors = await Vendor.countDocuments();
+    const numberOfShippers = await Shipper.countDocuments();
+    const numberOfProducts = await Product.countDocuments();
+    return res.status(200).json({ numberOfUsers: numberOfUsers, numberOfVendors: numberOfVendors, numberOfShippers: numberOfShippers, numberOfProducts: numberOfProducts });
+  } catch (error) { }
+  return res.status(500).json({ error: error })
 }

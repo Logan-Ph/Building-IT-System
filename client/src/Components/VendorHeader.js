@@ -23,6 +23,7 @@ export default function VendorHeader() {
   const handleLogout = async () => {
     const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
     if (res.data === "Logged out successfully") {
+      setUser(undefined)
       setNavigateTo('/login');
     }
   }
@@ -90,11 +91,9 @@ function DropdownAva({ user, handleLogout }) {
       <div>
         <Menu.Button className="flex -space-x-2 overflow-hidden">
           <div className='w-10 h-10 rounded-full'>
-            {user && user.img && <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+            {user && user.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
               src={`data:image/jpeg;base64,${user.img}`}
-              alt="avatar_img" />
-            }
-            {user && !user.img && <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+              alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
               <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
             </div>}
           </div>

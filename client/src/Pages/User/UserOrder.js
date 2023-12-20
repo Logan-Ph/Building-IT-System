@@ -1,10 +1,6 @@
 import UserSidebar from "../../Components/UserSidebar";
-import { UserContext } from "../../Context/UserContext";
-import { useContext } from "react";
 
 export default function UserOrder() {
-    const { user } = useContext(UserContext)
-
     return (
         <>
         <UserSidebar /> 

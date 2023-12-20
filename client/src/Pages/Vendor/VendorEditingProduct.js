@@ -2,9 +2,7 @@ import axios from 'axios'
 import { useContext, useState, useEffect } from 'react'
 import { UserContext } from "../../Context/UserContext";
 import { ToastContainer, toast } from 'react-toastify'
-import { UserImageContext } from '../../Context/UserImageContext';
 import { Navigate, useParams } from 'react-router-dom';
-import { useCallback } from 'react';
 
 export default function VendorEditPostingProduct() {
   const params = useParams();

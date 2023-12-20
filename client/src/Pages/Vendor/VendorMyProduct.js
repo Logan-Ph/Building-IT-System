@@ -1,12 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
-import ReactPaginate from 'react-paginate';
 import { ToastContainer, toast } from 'react-toastify'
-import { UserImageContext } from '../../Context/UserImageContext';
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-
 
 export default function VendorMyProduct() {
   const { user } = useContext(UserContext)

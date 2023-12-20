@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { CartContext } from "../Context/CartContext";
+import aa from "search-insights";
+import { UserContext } from "../Context/UserContext";
+const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
 
 export default function OrderSummary({ checkoutInfo, price, products }) {
   const [msg, setMsg] = useState("");
+  const { user } = useContext(UserContext)
   const [error, setError] = useState("");
-  const { cart, setCart } = useContext(CartContext);
   const [shippingFee, setShippingFee] = useState(5); // Default to standard delivery
   const date = new Date(new Date().setDate(new Date().getDate() + 7));
   const days = [
@@ -61,10 +63,6 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
         setError("There are no products to checkout");
       }
 
-      if (cart.products.length === 0) {
-        setError("Your cart is empty");
-        return;
-      }
       if (!(checkoutInfo["phoneNumber"] && checkoutInfo["city"] && checkoutInfo["district"] && checkoutInfo["ward"] && checkoutInfo["streetAddress"])) {
         setError("The field is empty");
         setMsg();
@@ -72,7 +70,19 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       }
       const res = await axios.post("http://localhost:4000/checkout", { checkoutInfo: checkoutInfo, products: products }, { withCredentials: true });
       setMsg(res.data.message);
-      setCart(res.data.cart);
+      aa('purchasedObjectIDs', {
+        userToken: user._id, // required for Node.js
+        authenticatedUserToken: accessToken,
+        eventName: 'purchasedObjectIDs',
+        index: 'rBuy',
+        objectIDs: products.map(product => product.product),
+        objectData: products.map(product => ({
+          price: product.price,
+          quantity: product.quantity,
+        })),
+        value: products.reduce((total, product) => total + product.price * product.quantity, 0),
+        currency: 'USD'
+      });
       localStorage.setItem('products', JSON.stringify([]));
       setError("");
     } catch (er) {

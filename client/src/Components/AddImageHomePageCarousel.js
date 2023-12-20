@@ -14,20 +14,7 @@ export default function AddImageHomePageBanner() {
         setFiles(event.target.files);
     };
 
-    const notify = (error) => {
-        toast.error(error, {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            pauseOnHover: false,
-            theme: "light",
-        });
-      }
-    
-      const success = (success) => {
+    const success = (success) => {
         toast.success(success, {
             position: "top-center",
             autoClose: 10000,
@@ -38,38 +25,56 @@ export default function AddImageHomePageBanner() {
             pauseOnHover: false,
             theme: "light",
         });
-      }    
+    }
 
     async function uploadHomepageCarousel() {
         const fd = new FormData();
-    
+
         for (let i = 0; i < files.length; i++) {
             fd.append('files', files[i]);
         }
         fd.append('title', title);
-        await axios.post("http://localhost:4000/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' }})
-        .then(res => {
-            setMsg(res.data)
-            setError('')
-        })
-        .catch(er => { setError(er.response.data); setMsg() });
+        await axios.post("http://localhost:4000/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+            .then(res => {
+                setMsg(res.data)
+                setError('')
+            })
+            .catch(er => { setError(er.response.data); setMsg() });
     }
-    
+
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         uploadHomepageCarousel()
         if (error) {
-            notify(error);
+            toast.error(error, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
         }
     }
 
     useEffect(() => {
         if (error || msg) {
-            notify();
+            toast.error(error, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
         }
-    }, [error, msg, notify]);
-    
+    }, [error, msg]);
+
     return (
         <>
             <ToastContainer
@@ -95,7 +100,7 @@ export default function AddImageHomePageBanner() {
                         <div class="max-w-sm  ">
                             <div class="px-4 py-6">
                                 <div id="image-preview" class="max-w-sm p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">
-                                    <input onChange={handleFileChange} id="upload" type="file" name="files" class="hidden" accept="image/*" multiple/>
+                                    <input onChange={handleFileChange} id="upload" type="file" name="files" class="hidden" accept="image/*" multiple />
                                     <label for="upload" class="cursor-pointer">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700 mx-auto mb-4">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
@@ -120,7 +125,7 @@ export default function AddImageHomePageBanner() {
                             <Textarea onChange={(e) => setTitle(e.target.value)} id="comment" placeholder="Write a comment..." required rows={4} />
                         </div>
 
-                        
+
 
                     </form>
                 </div>

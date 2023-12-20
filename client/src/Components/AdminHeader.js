@@ -8,13 +8,15 @@ export default function AdminHeader() {
   const { user, setUser } = useContext(UserContext)
   const [navigateTo, setNavigateTo] = useState("");
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const fetchUser = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
       setIsLoading(false)
-    } catch (er) {
+    } catch (error) {
+      setError(error)
       setUser(null)
       setIsLoading(false)
     }
@@ -31,12 +33,21 @@ export default function AdminHeader() {
     fetchUser()
   }, [fetchUser])
 
+
   if (user === undefined || isLoading) {
     return <div>Loading....</div>
   }
 
-  if (user && user.role !== "Admin") {
+  if (error) {
+    return <Navigate to='/login' replace={true} />
+  }
+
+  if (user && user.role === "User") {
     return <Navigate to='/' replace={true} />
+  }
+
+  if (user && user.role === "Vendor") {
+    return <Navigate to='/dashboard' replace={true} />
   }
 
   return (
