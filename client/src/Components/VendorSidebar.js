@@ -18,7 +18,7 @@ export default function VendorSidebar() {
             <SidebarItem icon={<PackageSearch size={20} />} text="Orders" />
         </a>
 
-        <SidebarItem icon={<Store size={20} />} text="Shop Management"
+        <SidebarItem icon={<Store size={20} />} text="Manage Shop" className="!whitespace-nowrap"
             subitems={[
                 { text: "Information", href: "/edit-vendor-profile" },
                 { text: "Decoration", href: "/edit-store" },

@@ -6,7 +6,7 @@ import '../css/mangeorder.css'
 
 
 export default function OrdersInfo({ orders, searchTerm }) {
-    const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders.length > 0 ? orders : null })
+    const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
     useEffect(() => {
         const initialStatuses = {
             "Unpaid": null,
@@ -27,8 +27,6 @@ export default function OrdersInfo({ orders, searchTerm }) {
 
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders]);
-
-    console.log(categorizedOrder)
 
     return (
         <Tabs aria-label="Tabs with icon" className="!flex-nowrap !relative xs:!overflow-x-auto md:!overflow-x-auto sm:!overflow-x-auto">
@@ -64,18 +62,39 @@ function OrderContent({ orders, searchTerm }) {
 
     return (
         <>
-            {orders ? <TableComponent orders={dataslice} /> : <div className="overflow-x-auto">
-                <div className='border border-gray my-1 py-32'>
+            <div>
+                {orders ? (
+                <TableComponent orders={dataslice}/>   
+                ) : (
+                <div className="overflow-x-auto">
+                    <div className='border border-gray my-1 py-32'>
                     <div className='flex flex-col justify-center items-center'>
                         <div className='w-[100px] h-[80px]'>
-                            <img src={require("./images/noorder.png")}
-                                alt="No Order" className='w-full h-full' />
+                        <img 
+                            src={require("./images/noorder.png")} 
+                            alt="No Order" 
+                            className='w-full h-full'  
+                        />
                         </div>
-                        <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
+                        
+                        <p className="capitalize text-md text-gray-900 font-light my-2">
+                        no orders found
+                        </p>
+                    </div>
                     </div>
                 </div>
-            </div>}
-            {!searchTerm && Math.floor(orders.length / 10) > 1 && <Pagination pages={Math.ceil(orders.length / 10)} setDataSlice={setDataSlice} data={orders} />}
+                )}
+            </div>
+
+            <div>
+            {!searchTerm && Math.floor(orders.length / 10) > 1 && (
+                <Pagination 
+                pages={Math.ceil(orders.length / 10)}
+                setDataSlice={setDataSlice}
+                data={orders} 
+                />
+            )}
+            </div>
         </>
     )
 }

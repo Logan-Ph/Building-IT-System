@@ -86,12 +86,8 @@ export default function Router() {
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <VendorHeader />
           <div className="flex">
-            <div className="w-[15%]">
               <VendorSidebar />
-            </div>
-            <div className="w-[85%]">
               <Outlet />
-            </div>
           </div>
         </InstantSearch>
       </>

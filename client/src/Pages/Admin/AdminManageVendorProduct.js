@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 export default function AdminManageVendorProduct() {
   return <>
-    <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
+    <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
       <div className='mx-auto'>
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
@@ -31,34 +31,34 @@ function NoReportedTableComponent() {
   return (
     <>
       <div class="flex items-center justify-end space-y-4 md:space-y-0 py-4">
-        <label for="table-search" class="sr-only">
-          Search
-        </label>
-        <div class="relative">
-          <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg
-              class="w-4 h-4 text-gray-500"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 20"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-              ></path>
-            </svg>
-          </div>
-          <input
-            type="text"
-            id="table-search-users"
-            class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 xs:w-52 sm:w-52  bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search products here...."
-          />
+      <label for="table-search" class="sr-only">
+        Search
+      </label>
+      <div class="relative">
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg
+            class="w-4 h-4 text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            ></path>
+          </svg>
         </div>
+        <input
+          type="text"
+          id="table-search-users"
+          class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Search products here...."
+        />
+      </div>
       </div>
       <div className="overflow-x-auto">
         <Table hoverable>
