@@ -37,6 +37,7 @@ export default function BarChart() {
         width={600}
         options={{
           maintainAspectRatio: false,
+          responsive:true,
           scales: {
             yAxes: [
               {

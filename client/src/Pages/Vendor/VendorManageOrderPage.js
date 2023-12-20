@@ -50,7 +50,7 @@ export default function ManageOrderPage() {
                 pauseOnHover={false}
                 theme="light"
             />
-            <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full mx-auto">
+            <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] ">
                 <div className="flex items-center py-10">
                     <div className="flex flex-row items-center">
                         <input type="text" name="search" placeholder="Please enter order info"

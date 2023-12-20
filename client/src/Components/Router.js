@@ -28,12 +28,19 @@ import Chatbot from "./Chatbot";
 import VendorMyProduct from '../Pages/Vendor/VendorMyProduct';
 import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorEditingProduct from '../Pages/Vendor/VendorEditingProduct';
+import VendorEditProfile from '../Pages/Vendor/VendorEditProfile';
+import VendorEditStore from '../Pages/Vendor/VendorEditStore';
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
 import AdminHeader from '../Components/AdminHeader'
 import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import CartPage from "../Pages/User/CartPage";
+import ShipperDashboardPage from '../Pages/Shipper/ShipperDashboardPage';
 import ChatPage from "../Pages/User/ChatPage";
+import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
+import UserOrder from '../Pages/User/UserOrder';
+import AdminSideBar from "./AdminSideBar";
+import aa from 'search-insights';
 
 import { useMediaQuery } from 'react-responsive';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
@@ -42,6 +49,11 @@ const searchClient = algoliasearch(
   "IZX7MYSNRD",
   "d8ac69cc1ecc43ac91c32ca6d0fb4305"
 );
+
+aa('init', {
+  appId: 'IZX7MYSNRD',
+  apiKey: "d8ac69cc1ecc43ac91c32ca6d0fb4305",
+});
 
 export default function Router() {
   const UserLayout = ({ header }) => {
@@ -91,7 +103,10 @@ export default function Router() {
       <>
         <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
           <AdminHeader />
-          <Outlet />
+          <div className="flex  ">
+            <AdminSideBar />
+            <Outlet />
+          </div>
         </InstantSearch>
       </>
     );
@@ -141,6 +156,10 @@ export default function Router() {
           element: <UserProfile />,
         },
         {
+          path: "/user-order",
+          element: <UserOrder />,
+        },
+        {
           path: "/vendor/:id/product",
           element: <VendorProductPage />,
         },
@@ -177,6 +196,18 @@ export default function Router() {
         {
           path: "/edit-product/:id",
           element: <VendorEditingProduct />,
+        },
+        {
+          path: '/shipper-dashboard',
+          element: <ShipperDashboardPage />,
+        },
+        {
+          path: "/edit-store",
+          element: <VendorEditStore />,
+        },
+        {
+          path: "/edit-vendor-profile",
+          element: <VendorEditProfile />,
         },
       ],
     },
@@ -221,6 +252,10 @@ export default function Router() {
         {
           path: "/admin/dashboard",
           element: <AdminDashboardPage />,
+        },
+        {
+          path: "/admin/add-homepage-carousel",
+          element: <AddImageHomePageCarousel />,
         },
       ],
     },

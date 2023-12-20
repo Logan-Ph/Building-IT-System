@@ -1,11 +1,42 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
+import { ToastContainer, toast } from 'react-toastify'
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 export default function VendorMyProduct() {
   const { user } = useContext(UserContext)
   const [products, setProducts] = useState([])
+  const [dataSlice, setDataSlice] = useState([])
+  const [error, setError] = useState('')
+  const [msg, setMsg] = useState('')
+
+  const notify = (error) => {
+    toast.error(error, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
+  }
+
+  const success = (success) => {
+    toast.success(success, {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+    });
+  }
 
   const fetchProducts = async () => {
     try {
@@ -17,22 +48,31 @@ export default function VendorMyProduct() {
   };
 
   const handleDelete = async (productID) => {
-    console.log('Product ID:', productID);
     const apiUrl = `http://localhost:4000/delete-product/${productID}`;
     try {
       await axios.delete(apiUrl, {
         headers: {
           'Content-Type': 'application/json',
         },
-      }).then().catch(console.log.error)
+      }).then(res => {
+        setMsg(res.data)
+        setError('')
+      })
+      .catch(er => { setError(er.response.data); setMsg() });    
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
   useEffect(() => {
+    setDataSlice(products.slice(0, 10));
+  }, [products]);
+
+  useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
     fetchProducts();
-  }, []);
+  }, [error, msg]);
 
   if (user === undefined) {
     return <div>Loading...</div>
@@ -43,6 +83,18 @@ export default function VendorMyProduct() {
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {!user && <Navigate to={'/login'} replace />}
+      <ToastContainer
+          position="top-center"
+          autoClose={10000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+          theme="light"
+      />
       <div class=" bg-gray-100 h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
@@ -86,27 +138,38 @@ export default function VendorMyProduct() {
               </div>
               <div className="mt-4">
                 <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">Search</button>
-                <button type="reset" className=" border-solid border-2 hover:bg-gray-100 px-3 py-1 rounded-md ">Reset</button>
+                <button type="reset" className=" border-solid border-2 hover:bg-gray-100 ml-2 px-3 py-1 rounded-md ">Reset</button>
               </div>
             </form>
           </div>
         </div>
 
 
-        <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
-          <div class="mb-4 flex justify-between items-center">
-            <div class="flex space-x-2">
-              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">All</button>
-              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Live</button>
-              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Sold Out</button>
-              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Reviewing</button>
-              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Violation</button>
-              <button class="bg-gray-200 hover:bg-blue-700 hover:text-white px-3 py-1 rounded">Delisted</button>
-            </div>
-            <div class="space-x-2">
-              <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
-            </div>
+      <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
+        <div class="mb-4 flex justify-between items-center">
+          <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                <ul class="flex flex-wrap -mb-px">
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</a>
+                    </li>
+                    <li class="me-2">
+                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</a>
+                    </li>
+                </ul>
           </div>
+          <div class="space-x-2">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
+          </div>
+        </div>
 
           <div class="relative overflow-x-auto sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -128,35 +191,105 @@ export default function VendorMyProduct() {
                     <span class="sr-only">Edit</span>
                   </th>
                 </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {product.product_name}
-                    </td>
-                    <td className="px-6 py-4">
-                      ${product.price}
-                    </td>
-                    <td className="px-6 py-4">
-                      {product.stock}
-                    </td>
-                    <td className="px-6 py-4">
-                      {product.description}
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                      <a href={`/edit-product/${product._id}`} class="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                      <button onClick={() => handleDelete(product._id)} class="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            </thead>
+            <tbody>
+              {dataSlice.map((product) => (
+                <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  {/* ... Table data goes here ... */}
+                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {product.product_name}
+                  </td>
+                  <td className="px-6 py-4">
+                    ${product.price}
+                  </td>
+                  <td className="px-6 py-4">
+                    {product.stock}
+                  </td>
+                  <td className="px-6 py-4">
+                    {product.description}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-
       </div>
+    {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
+    </div>
+  </>
+  )
+}
 
-    </>
+function Pagination({ pages, setDataSlice, data }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const maxPageNumbersToShow = 5;
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+  };
+
+  const getPaginationNumbers = () => {
+    const numbers = [];
+    let start = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 10));
+    let end = Math.min(pages, start + maxPageNumbersToShow - 1);
+    if (currentPage <= Math.floor(maxPageNumbersToShow / 10)) {
+      end = Math.min(pages, maxPageNumbersToShow);
+    }
+    if (currentPage > pages - Math.floor(maxPageNumbersToShow / 10)) {
+      start = Math.max(1, pages - maxPageNumbersToShow + 1);
+    }
+    for (let i = start; i <= end; i++) {
+      numbers.push(i);
+    }
+    return numbers;
+  };
+
+  return (
+    <div className="flex items-center justify-end py-3 mt-5">
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between lg:justify-end xl:justify-end">
+        <div>
+          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            {pages > 1 &&
+              <>
+                <span
+                  href="#"
+                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => { (currentPage - 1) > 0 && handlePageChange(currentPage - 1) }}
+                >
+                  <span className="sr-only">Previous</span>
+                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                </span>
+                {getPaginationNumbers().map((pageNumber) => (
+                  <span
+                    key={pageNumber}
+                    className={(pageNumber === currentPage) ? "relative z-2 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"}
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handlePageChange(pageNumber);
+                      setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+                    }}>
+                    {pageNumber}
+                  </span>
+                ))}
+                <span
+                  href="#"
+                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                  onClick={() => { (currentPage + 1) <= pages && handlePageChange(currentPage + 1) }}
+                >
+                  <span className="sr-only">Next</span>
+                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                </span>
+              </>
+            }
+          </nav>
+        </div>
+      </div>
+    </div>
   )
 }

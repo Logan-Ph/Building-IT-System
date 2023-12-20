@@ -4,6 +4,8 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContainer, toast } from "react-toastify";
+import aa from "search-insights";
+const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
 
 export default function CartPage() {
   const { user } = useContext(UserContext);
@@ -66,7 +68,7 @@ export default function CartPage() {
     setCheckedProducts(products.filter(product => product.checked));
   }, [products]);
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (user) => {
     if (checkedProducts.length === 0) {
       toast.error("Please select at least one product to checkout", {
         position: "top-center",
@@ -81,6 +83,19 @@ export default function CartPage() {
       return;
     }
     localStorage.setItem('products', JSON.stringify(checkedProducts));
+    aa('addedToCartObjectIDs', {
+      userToken: user._id, // required for Node.js
+      authenticatedUserToken: accessToken,
+      eventName: 'addedToCartObjectIDs',
+      index: 'rBuy',
+      objectIDs: checkedProducts.map(product => product.product),
+      objectData: checkedProducts.map(product => ({
+        price: product.price,
+        quantity: product.quantity,
+      })),
+      value: checkedProducts.reduce((total, product) => total + product.price * product.quantity, 0),
+      currency: 'USD'
+    });
     setNavigateTo('/checkout')
   }
 
@@ -238,7 +253,7 @@ export default function CartPage() {
                 <div class="my-5">
                   <span
                     class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-lg font-medium leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]"
-                    onClick={handleCheckout}
+                    onClick={() => handleCheckout(user)}
                   >
                     Proceed to checkout
                   </span>

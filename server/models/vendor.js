@@ -29,7 +29,19 @@ const vendorSchema = new mongoose.Schema({
         data: Buffer,
     },
 
-    wallpaper: {
+    coverPhoto: {
+        data: Buffer,
+    },
+
+    bigBanner: {
+        data: Buffer,
+    },
+
+    smallBanner1: {
+        data: Buffer,
+    },
+
+    smallBanner2: {
         data: Buffer,
     },
 
@@ -44,6 +56,9 @@ const vendorSchema = new mongoose.Schema({
         default: "Vendor",
     },
     banEndDate: {
+        type: Date,
+    },
+    banStartDate: {
         type: Date,
     },
 });

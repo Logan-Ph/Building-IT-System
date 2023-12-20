@@ -13,7 +13,7 @@ import SortOptions from '../../Components/SortOptions';
 import { UserContext } from '../../Context/UserContext';
 
 export default function Example() {
-  const { hits } = useHits();
+  const { hits, sendEvent } = useHits();
   const { user } = useContext(UserContext)
   const { refine, items } = useRefinementList({ attribute: 'category', operator: 'or' });
   const [valueFilter, setValueFilter] = useState([]);
@@ -89,7 +89,7 @@ export default function Example() {
               <div className='grid xs:grid-cols-1 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
                 {/* Product grid */}
                 {hits.map(hit => (
-                  <SRProductCard hit={hit} />
+                  <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
                 ))}
               </div>
             </div>

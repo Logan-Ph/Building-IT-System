@@ -7,7 +7,7 @@ export default function Insight() {
     <>
       <div id="24h">
         <div class="flex flex-wrap ">
-          <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5 mb-4">
+          <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 lg:px-5 lg:mb-4">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-3 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
@@ -38,7 +38,7 @@ export default function Insight() {
               </div>
             </div>
           </div>
-          <div class=" mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
+          <div class=" lg:mt-4 w-full lg:w-6/12 xl:w-3/12 lg:px-5">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-4 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
@@ -55,7 +55,7 @@ export default function Insight() {
                       <i class="fa-solid fa-money-bill-wave"></i>                            </div>
                   </div>
                 </div>
-                <hr class="mt-4 mb-2 w-full border-gray-300" />
+                <hr class="lg:mt-4 mb-2 w-full border-gray-300" />
                 <p class="text-sm text-gray-400">
                   <span class="text-red-500">
                   </span>
@@ -67,7 +67,7 @@ export default function Insight() {
               </div>
             </div>
           </div>
-          <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
+          <div class="lg:mt-4 w-full lg:w-6/12 xl:w-3/12 lg:px-5">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
@@ -94,7 +94,7 @@ export default function Insight() {
               </div>
             </div>
           </div>
-          <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 px-5">
+          <div class="lg:mt-4 w-full lg:w-6/12 xl:w-3/12  lg:px-5">
             <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
               <div class="flex-auto p-4">
                 <div class="flex flex-wrap">
@@ -125,6 +125,8 @@ export default function Insight() {
             </div>
           </div>
         </div>
-      </div></>
+      </div>
+      
+      </>
   )
 }
