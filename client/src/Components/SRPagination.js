@@ -11,8 +11,8 @@ export default function Example() {
   const previousPageIndex = (currentRefinement - 1) > 0 ? currentRefinement - 1 : 0;
   const nextPageIndex = (currentRefinement + 1) === nbPages ? currentRefinement : currentRefinement + 1;
   return (
-    <div className="flex items-center px-4 py-3 sm:px-6 mt-5">
-      <div className="xs:flex xs:flex-1 xs:justify-end sm:flex sm:flex-1 sm:items-center sm:justify-between lg:justify-end">
+    <div className="flex items-center mt-5">
+      <div className="xs:flex xs:flex-1 xs:justify-end sm:flex sm:flex-1 sm:items-center sm:justify-end lg:justify-end">
         <div>
           <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
             <span
