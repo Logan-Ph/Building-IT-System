@@ -30,6 +30,9 @@ export default function VendorSidebar() {
                 { text: "Information", href: "/edit-vendor-profile" },
                 { text: "Decoration", href: "/edit-vendor-store" },
             ]} />
+        <a href="/shipper-update-status">
+            <SidebarItem icon={<PackageSearch size={20} />} text="My Orders" />
+        </a>
 
         {/* <SidebarItem icon={<Settings size={20} />} text="Dashboard"
             subitems={[

@@ -39,6 +39,7 @@ import CartPage from "../Pages/User/CartPage";
 import VendorEditProfile from '../Pages/Vendor/VendorEditProfile';
 import VendorEditStore from '../Pages/Vendor/VendorEditStore';
 import UserOrder from '../Pages/User/UserOrder';
+import ShipperUpdateStatus from '../Pages/Shipper/ShipperUpdateStatus';
 
 
 const searchClient = algoliasearch('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
@@ -185,6 +186,10 @@ export default function Router() {
         {
           path: "/edit-vendor-store",
           element: <VendorEditStore />
+        },
+        {
+          path: "/shipper-update-status",
+          element: <ShipperUpdateStatus />
         },
       ],
     },
