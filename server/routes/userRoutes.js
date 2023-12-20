@@ -17,13 +17,17 @@ const storage = multer.diskStorage({
     }
 });
 
+
 const upload = multer({ storage });
+const uploadBanner = multer({ storage }).array('files', 10);
+
 /**
  *  App routes
 */
 
 
 // authorization
+
 function authorizeUser(req, res, next) {
     try {
         (req.user && req.user.role === "User") ? next() : res.status(500).json({ error: "You are not authorized to access this route" })
@@ -88,6 +92,9 @@ router.get('/login/success', authenticateToken, userController.loginSuccess);
 // user homepage route
 router.get('/', userController.homePage);
 
+// fetch slider images
+router.get('/slider', userController.slider);
+
 // user product details route
 router.get('/product/:id', userController.productPage);
 
@@ -112,6 +119,9 @@ router.post('/chat/:id', userController.addMessage);
 router.get('/chat', userController.getThreads);
 router.post('/chat', userController.createThread);
 
+// vendor update profile route
+router.post('/update-vendor', upload.single('file'), userController.updateVendor);
+
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
@@ -125,6 +135,14 @@ router.get('/vendor/:id', userController.vendorHomepage)
 // vendor product page (user side)
 router.get('/vendor/:id/product', userController.vendorProductPage);
 
+// vendor edit storefront 
+router.post('/edit-store', upload.fields([
+    { name: 'coverPhoto', maxCount: 1 },
+    { name: 'bigBanner', maxCount: 1 },
+    { name: 'smallBanner1', maxCount: 1 },
+    { name: 'smallBanner2', maxCount: 1 },
+]), userController.editStore);
+
 //vendor manage order (vendor side)
 router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
@@ -135,6 +153,9 @@ router.get('/dashboard', authenticateToken, authorizeVendor, userController.getV
 
 // logout route
 router.get('/logout', userController.logout);
+
+// admin dashboard
+router.get('/admin/dashboard', userController.getAdminDashboard);
 
 // admin manage user route
 router.get('/admin/manage-user', userController.manageUser)
@@ -150,6 +171,9 @@ router.get('/admin/:id/report', userController.reportPage);
 
 // admin ban user route
 router.post("/ban-user", userController.banUser);
+
+// admin upload homepage carousel image 
+router.post("/upload-homepage-carousel", uploadBanner, userController.uploadHomepageCarousel);
 
 // get reponse message from chatbot
 router.post("/api/chatbot/message", userController.chatbotMessage);

@@ -31,7 +31,6 @@ const shipperSchema = new mongoose.Schema({
 
     img: {
         data: Buffer,
-        contentType: String,
     },
 
     verify: {
@@ -45,6 +44,9 @@ const shipperSchema = new mongoose.Schema({
         default: "Shipper",
     },
     banEndDate: {
+        type: Date,
+    },
+    banStartDate: {
         type: Date,
     },
 });

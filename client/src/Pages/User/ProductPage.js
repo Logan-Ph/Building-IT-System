@@ -8,13 +8,11 @@ import RelatedProduct from "../../Components/RelatedProduct";
 import CustomerReview from '../../Components/CustomerReview';
 import ProductDetailCard from "../../Components/ProductDetailCard";
 import ProductDetailComment from "../../Components/ProductDetailComment";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
-
+import { MessagesSquare, Store } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-
-
 
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
@@ -33,6 +31,26 @@ export default function TestingPage() {
     objectIDs: [params.id],
     maxRecommendations: 10
   });
+
+  const createThread = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:4000/chat", { vendorId: product.owner }, { withCredentials: true });
+      localStorage.setItem("threadId", res.data.thread._id);
+      window.location.href = "/chat";
+    } catch (error) {
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -59,7 +77,6 @@ export default function TestingPage() {
       {error && <Navigate to={"/"} replace />}
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-
       <ToastContainer
         position="top-center"
         autoClose={10000}
@@ -75,10 +92,44 @@ export default function TestingPage() {
       <section className="text-gray-600 body-font overflow-hidden ">
         <div className="lg:container md:container py-12 px-12 mx-auto mt-10 bg-slate-50 ">
           {/* product card */}
-          <ProductDetailCard product={product} vendorName={vendorName} />
+          <ProductDetailCard product={product} vendorName={vendorName} user={user}/>
         </div>
       </section>
+      <section className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
 
+        <div class="flex xs:sm:flex-col lg:md:flex-row items-center text-gray-800 ">
+          <div className="flex flex-row my-8 w-full lg:w-3/5 items-center mx-auto lg:md:justify-normal sm:xs:justify-center">
+            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" />
+            <div className="ml-4">
+              <div className="font-semibold lg:md:text-3xl xs:sm:text-2xl mb-2">{vendorName}</div>
+              <div className="flex">
+                <button class=" mr-2.5 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200  inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
+                  <MessagesSquare size={21} />
+                  <div className="ml-1.5 "
+                    onClick={(e) => createThread(e)}
+                  >Chat Now</div>
+                </button>
+                <button class="ml-1 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200    inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
+                  <Store size={20} />
+                  <a href={`/vendor/${product.owner}/home`} className="ml-1.5">View Shop</a>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="text-center lg:mb-0 xs:sm:md:mb-10 ">
+            <div class="grid grid-cols-12 gap-4 place-content-between">
+              <div class="col-span-12 sm:col-span-6 md:col-span-3">
+                <div class="">
+                  <div class="flex lg:flex-col  ml-4">
+                    <div class="text-lg text-gray-500 ">Followers</div>
+                    <div class="font-semibold text-lg sm:ml-2">1259</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="lg:container md:container mx-auto ">
         <div className="lg:container md:container lg:px-9 md:px-9 sm:px-3 xs:px-4 mx-auto mt-10 bg-gray-50 lg:flex ">
           {/*Comment section */}
@@ -89,7 +140,6 @@ export default function TestingPage() {
           </div>
         </div>
       </section>
-
       <div className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
         <div className="lg:py-12 md:py-12 sm:py-8 xs:py-4">
           <h2 className="lg:text-2xl md:text-2xl  sm:xs:text-xl font-bold text-gray-600 mb-8 xs:mb-3 sm:mb-3 ">
