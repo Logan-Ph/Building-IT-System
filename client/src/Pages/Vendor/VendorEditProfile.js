@@ -1,31 +1,17 @@
 import '../../css/profile.css'
 import axios from 'axios'
-import { useState, useCallback, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
 import { Navigate } from 'react-router';
 export default function VendorEditProfile() {
-  const [businessName, setBusinessName] = useState()
   const [address, setAddress] = useState()
   const [phoneNumber, setPhoneNumber] = useState()
   const [file, setFile] = useState()
   const [error, setError] = useState('')
   const [msg, setMsg] = useState('')
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
   const [loading, setLoading] = useState(false);
-
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
-      setUser(res.data.user);
-    } catch (er) {
-      setUser(null)
-    }
-  }, [setUser])
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser])
 
   const notify = (error) => {
     toast.error(error, {
@@ -59,7 +45,6 @@ export default function VendorEditProfile() {
   };
 
   const data = {
-    businessName: businessName,
     phoneNumber: phoneNumber,
     address: address,
     file: file,
@@ -93,15 +78,9 @@ export default function VendorEditProfile() {
     msg && success(msg)
   }, [error, msg]);
 
-  if (user === undefined) {
-    return <div>Loading....</div>
-  }
-
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
-      {user && user.role === "User" && <Navigate to={'/'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-      {(error || !user) && <Navigate to='/login' replace={true} />}
+      {error && <Navigate to='/login' replace={true} />}
       <ToastContainer
         position="top-center"
         autoClose={10000}
@@ -130,13 +109,6 @@ export default function VendorEditProfile() {
           </div>
         </div>
         <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          {/* <div className="sm:col-span-3">
-                  <label for="first-name"  className="block text-sm font-medium leading-6 text-gray-900">Business Name</label>
-                  <div className="mt-2">
-                    <input onChange={(e) => setBusinessName(e.target.value)} type="text" placeholder={user && user.businessName} name="first-name" id="first-name" autocomplete="given-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                    </input>
-                  </div>
-                </div> */}
           <div className="sm:col-span-4">
             <label for="address" className="block text-sm font-medium leading-6 text-gray-900">Address</label>
             <div className="mt-2">
@@ -152,24 +124,11 @@ export default function VendorEditProfile() {
               </input>
             </div>
           </div>
-
-          {/* <div className="col-span-full">
-                  <label for="about" className="block text-sm font-medium leading-6 text-gray-900">Shop description</label>
-                  <p className="mt-3 text-sm leading-6 text-gray-600">Introduce your store, products related to the store,...</p>
-      
-                  <div className="mt-2 relative">
-                      <textarea id="about" name="about" rows="3" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" oninput="this.parentNode.querySelector('.counter').innerText = 500 - this.value.length"></textarea>
-                      <div className="counter text-xs text-gray-500 text-right pr-2 pt-1 absolute right-0 bottom-0">500</div>
-                  </div>
-                </div> */}
-
         </div>
-
         <div class="mt-6 flex items-center justify-end gap-x-6">
           <button type="reset" class="rounded-md px-3 py-2 text-sm font-semibold shadow-sm border-solid border-2  hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Cancel</button>
           <button onClick={handleSubmit} disabled={loading} type="submit" class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white'}`}>Save changes</button>
         </div>
-
       </div>
     </div>
   )

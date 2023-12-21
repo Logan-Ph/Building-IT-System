@@ -1,11 +1,8 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify'
-import { UserContext } from "../../Context/UserContext";
 import axios from "axios";
-import { Navigate } from 'react-router-dom';
 
 export default function VendorEditStore({ vendor, vendorImage }) {
-  const [openModal, setOpenModal] = useState(false);
   const [coverPhoto, setCoverPhoto] = useState();
   const [bigBanner, setBigBanner] = useState();
   const [smallBanner1, setSmallBanner1] = useState();
@@ -13,8 +10,6 @@ export default function VendorEditStore({ vendor, vendorImage }) {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(UserContext);
-
 
   const handleCoverPhotoChange = (event) => {
     event.preventDefault();
@@ -39,7 +34,6 @@ export default function VendorEditStore({ vendor, vendorImage }) {
     setSmallBanner1();
     setSmallBanner2();
   }
-
 
   const notify = (error) => {
     toast.error(error, {
@@ -105,10 +99,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
 
   return (
     <>
-
       <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
-        {user && user.role === "User" && <Navigate to={'/'} replace />}
-        {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
         <ToastContainer
           position="top-center"
           autoClose={10000}
@@ -194,12 +185,11 @@ export default function VendorEditStore({ vendor, vendorImage }) {
 
         {/* Upload Banner */}
         <div className="p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
-          {bigBanner && (
+          {bigBanner ? (
             <div>
               <img class="flex items-center justify-center text-center mb-4 rounded" src={URL.createObjectURL(bigBanner)} alt="Preview" />
             </div>
-          )}
-          {!bigBanner && (
+          ) : (
             <label for='bigBanner' className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer">
               <button>
                 <input id='bigBanner' onChange={handleBigBannerChange} type="file" className="hidden" accept="image/*" />
@@ -213,12 +203,11 @@ export default function VendorEditStore({ vendor, vendorImage }) {
               </button>
             </label>)}
           <div className="grid grid-cols-2 gap-4">
-            {smallBanner1 && (
+            {smallBanner1 ? (
               <div>
                 <img class="flex items-center justify-center text-center rounded" src={URL.createObjectURL(smallBanner1)} alt="Preview" />
               </div>
-            )}
-            {!smallBanner1 && (
+            ) : (
               <label for="smallBanner1" className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800">
                 <input id='smallBanner1' onChange={handleSmallBanner1Change} type="file" className="hidden" accept="image/*" />
                 <p className="text-2xl text-gray-400 dark:text-gray-500">
@@ -227,12 +216,11 @@ export default function VendorEditStore({ vendor, vendorImage }) {
                   </svg>
                 </p>
               </label>)}
-            {smallBanner2 && (
+            {smallBanner2 ? (
               <div>
                 <img class="flex items-center justify-center text-center rounded" src={URL.createObjectURL(smallBanner2)} alt="Preview" />
               </div>
-            )}
-            {!smallBanner2 && (
+            ) : (
               <label for="smallBanner2" className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800">
                 <input id="smallBanner2" onChange={handleSmallBanner2Change} type="file" className="hidden" accept="image/*" />
                 <p className="text-2xl text-gray-400 dark:text-gray-500">

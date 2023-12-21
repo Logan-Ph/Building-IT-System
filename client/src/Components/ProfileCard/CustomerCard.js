@@ -27,6 +27,7 @@ export default function CustomerCard({ user, orders }) {
             </span>
           </div>
         </div>
+        
         <div class="text-lg mt-3 text-black font-medium">Adresses</div>
         <div class="my-3">
           <div class="text-base text-gray-500 border-t border-gray-200 py-5 px-3">
