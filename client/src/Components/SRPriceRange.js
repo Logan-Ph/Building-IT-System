@@ -28,8 +28,8 @@ export default function SRPriceRange() {
     <div className='flex px-6 border border-gray-50 py-6 bg-white'>
       <div className='w-full'>
         <h3 className='font-medium mb-2'>Price <span className='font-medium'>Range</span></h3>
-        <div className='flex justify-center items-center'>
 
+        <div className='flex justify-center items-center'>
           <div className='flex items-center'>
             <i className="fa-solid fa-dollar-sign mr-2"></i>
             <input type="number" id="number-input"

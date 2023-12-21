@@ -2,9 +2,11 @@ import { Tabs } from "flowbite-react";
 import { useEffect, useState } from "react";
 import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
+import '../css/mangeorder.css'
+
 
 export default function OrdersInfo({ orders, searchTerm }) {
-    const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders.length > 0 ? orders : null })
+    const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
     useEffect(() => {
         const initialStatuses = {
             "Unpaid": null,
@@ -27,22 +29,17 @@ export default function OrdersInfo({ orders, searchTerm }) {
     }, [orders]);
 
     return (
-        <Tabs aria-label="Tabs with icons">
-            {Object.entries(categorizedOrder).map(([title, orders]) => (
-                <Tabs.Item title={title} >
-                    {orders ? <OrderContent orders={orders} searchTerm={searchTerm} /> : <div className="overflow-x-auto">
-                        <div className='border border-gray my-1 py-32'>
-                            <div className='flex flex-col justify-center items-center'>
-                                <div className='w-[100px] h-[80px]'>
-                                    <img src={require("./images/noorder.png")}
-                                        alt="No Order" className='w-full h-full' />
-                                </div>
-                                <p className="capitalize text-md text-gray-900 font-light my-2">no orders found</p>
-                            </div>
-                        </div>
-                    </div>}
-                </Tabs.Item>
-            ))}
+        <Tabs aria-label="Tabs with icon" className="!flex-nowrap !relative xs:!overflow-x-auto md:!overflow-x-auto sm:!overflow-x-auto">
+        {Object.entries(categorizedOrder).map(([title, orders]) => (
+            <Tabs.Item 
+                title={ title } 
+                className="text-gray-900 !whitespace-nowrap">
+                {orders 
+                && (<div> 
+                    <OrderContent orders={orders} searchTerm={searchTerm} />
+                    </div>
+                )}</Tabs.Item>
+        ))}
         </Tabs>
     )
 }
@@ -65,8 +62,39 @@ function OrderContent({ orders, searchTerm }) {
 
     return (
         <>
-            {dataslice && <TableComponent orders={dataslice} />}
-            {!searchTerm && Math.floor(orders.length / 10) > 1 && <Pagination pages={Math.ceil(orders.length / 10)} setDataSlice={setDataSlice} data={orders} />}
+            <div>
+                {orders ? (
+                <TableComponent orders={dataslice}/>   
+                ) : (
+                <div className="overflow-x-auto">
+                    <div className='border border-gray my-1 py-32'>
+                    <div className='flex flex-col justify-center items-center'>
+                        <div className='w-[100px] h-[80px]'>
+                        <img 
+                            src={require("./images/noorder.png")} 
+                            alt="No Order" 
+                            className='w-full h-full'  
+                        />
+                        </div>
+                        
+                        <p className="capitalize text-md text-gray-900 font-light my-2">
+                        no orders found
+                        </p>
+                    </div>
+                    </div>
+                </div>
+                )}
+            </div>
+
+            <div>
+            {!searchTerm && Math.floor(orders.length / 10) > 1 && (
+                <Pagination 
+                pages={Math.ceil(orders.length / 10)}
+                setDataSlice={setDataSlice}
+                data={orders} 
+                />
+            )}
+            </div>
         </>
     )
 }

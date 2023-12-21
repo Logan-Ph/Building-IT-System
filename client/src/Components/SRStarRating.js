@@ -32,8 +32,8 @@ export default function SRStarRating() {
             return (
               <label className="flex flex-col justify-center items-center">
                 <div className="starRating gap-2">
-                  {ratingValue <= (hover || rating) ? (
-                    index + 0.5 <= (hover || rating) ? (
+                  {ratingValue <= (rating || hover) ? (
+                    index + 0.5 <= (rating || hover) ? (
                       //Full Star
                       <FaStar
                         className="star w-8 h-8 md:w-6 md:h-6"
@@ -41,7 +41,7 @@ export default function SRStarRating() {
                         value={ratingValue}
                         onClick={() => handleRating(ratingValue)}
                         onMouseEnter={() => setHover(ratingValue)}
-
+                        onMouseLeave={() => setHover(null)}
                       />
                     ) : (
                       //Half Star
@@ -51,6 +51,7 @@ export default function SRStarRating() {
                         value={ratingValue}
                         onClick={() => handleRating(ratingValue)}
                         onMouseEnter={() => setHover(ratingValue)}
+                        onMouseLeave={() => setHover(null)}
                       />
                     )
                   ) : (
@@ -61,10 +62,10 @@ export default function SRStarRating() {
                       value={ratingValue}
                       onClick={() => handleRating(ratingValue)}
                       onMouseEnter={() => setHover(ratingValue)}
+                      onMouseLeave={() => setHover(null)}
                     />
                   )}
                 </div>
-
               </label>
             );
           })}
