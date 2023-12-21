@@ -62,7 +62,7 @@ export default function UserOrder() {
                 </div>
 
 
-                <div class="text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                <div class="pl-5 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="me-2">
                             <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("Unpaid")}>Waitting for Payment</span>
@@ -147,9 +147,19 @@ function OrderContent({ orders, searchTerm }) {
                     <>
                         <div class="my-4 md:mt-6 flex flex-col">
                             <div class="p-6 bg-white divide-y">
-                                <div className='flex items-center mb-4'>
+                                <div className='inline-flex items-center justify-between w-full mb-4'>
+
+                                    <div className="inline-flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-store"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>
+                                    <button class="pl-2 text-lg font-bold">Shop name</button>
+                                    </div>
+
+                                    <div className="inline-flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-check"><path d="m16 16 2 2 4-4" /><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /></svg>
-                                    <h1 class="pl-2 text-lg font-bold">{data.status}</h1>
+                                    <h1 class="pl-2 text-lg font-medium">{data.status}</h1>
+                                    <div className="ml-2 inline-block w-0.5 self-stretch bg-gray-300 opacity-50 dark:opacity-50"></div>
+                                    <h1 class="pl-2 text-md font-medium" >ID: 56789123455</h1>
+                                    </div>
                                 </div>
                                 {data.products.map((product) => {
                                     orderPrice += product.price * product.quantity;
@@ -157,7 +167,7 @@ function OrderContent({ orders, searchTerm }) {
                                         <div class="flex items-center space-x-4 mb-4">
                                             <img src={product.image_link} alt="Product" class="w-32 h-32"></img>
                                             <div>
-                                                <h2 class="font-bold">{product.product_name}</h2>
+                                                <h2 class="font-medium">{product.product_name}</h2>
                                                 <p>x{product.quantity}</p>
                                                 <p>${product.price}</p>
                                             </div>
