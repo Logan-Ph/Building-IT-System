@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import AddImageHomePageBanner from "../../Components/AddImageHomePageBanner";
 import AddImageHomePageCarousel from "../../Components/AddImageHomePageCarousel";
 import axios from "axios";
+
 import { Carousel } from 'flowbite-react';
 export default function DashboardPage() {
   const [openModal1, setOpenModal1] = useState(false);
@@ -30,9 +31,13 @@ export default function DashboardPage() {
     }
   }, [])
 
+  
+
   useEffect(() => {
     fetchData();
   }, [fetchData])
+
+
 
   return (
     <>
