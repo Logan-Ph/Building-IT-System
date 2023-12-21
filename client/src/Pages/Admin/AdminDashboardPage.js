@@ -6,8 +6,10 @@ import { useCallback, useEffect, useState } from 'react';
 import AddImageHomePageBanner from "../../Components/AddImageHomePageBanner";
 import AddImageHomePageCarousel from "../../Components/AddImageHomePageCarousel";
 import axios from "axios";
+import { CustomFlowbiteTheme } from 'flowbite-react';
 
 import { Carousel } from 'flowbite-react';
+import { ArrowLeft, ArrowRight } from "lucide-react";
 export default function DashboardPage() {
   const [openModal1, setOpenModal1] = useState(false);
   const [openModal2, setOpenModal2] = useState(false);
@@ -63,7 +65,15 @@ export default function DashboardPage() {
           <div className='grid grid-cols-1'>
 
             <div className="h-80 ">
-              <Carousel>
+              <Carousel leftControl={
+                <ArrowLeft /> 
+                 
+                
+              }
+            rightControl={
+              <ArrowRight />
+            }
+        >
                 <div>
                   <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xl  mb-3">
                     Carousel #1
