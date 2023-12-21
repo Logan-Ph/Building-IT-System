@@ -149,9 +149,11 @@ router.get('/manage-order', userController.manageOrder);
 
 
 //customer review routes
-router.get('/:productId/view-comment', userController.viewComments);
-router.post('/:productId/post-comment', userController.postComment);
-router.put('/:commentId/reply-comment', userController.replyComment);
+router.get('/product/:productId/view-comment', userController.viewComments);
+
+router.post('/product/:productId/post-comment', userController.postComment);
+
+router.put('/product/:commentId/reply-comment', userController.replyComment);
 
 // vendor dashboard route (vendor side)
 router.post('/dashboard', authenticateToken, authorizeVendor, userController.postVendorDashboard);

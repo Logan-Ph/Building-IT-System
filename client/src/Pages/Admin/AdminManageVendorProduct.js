@@ -164,7 +164,7 @@ function DeleteButtonPopup() {
       Delete
     </a>
     <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
-      <Modal.Header />
+      <Modal.Header/>
       <Modal.Body>
         <div className="text-center">
           <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />

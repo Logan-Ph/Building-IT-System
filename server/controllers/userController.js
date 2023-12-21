@@ -1077,30 +1077,27 @@ exports.viewComments = async (req,res) => {
   }}
 
 exports.postComment = async (req,res) => {
+ const product = await Product.findById(req.params.productId) ;
   if (!req.user) {
     return res.status(500).json({ error: "Please log in or create an account to comment" })
   }
+  if (!product ){
+    return res.status(500).json({ error: "This product does not exist" })
+  }
   const id = req.params.productId
-  const user = await User.findById(req.params.id);
-  const {commentText, userId  } = req.body;
+  const { commentText  } = req.body;
   try {
-    if (id) {
       const postComment = await Comment.create({
-        productId: id,
+        productId:new mongoose.Types.ObjectId(id),
         commentText,
-        postedBy: new mongoose.Types.ObjectId(userId),
-      })
-      res.status(200).json(postComment);
-    } else {
-      res.status(500).json({message: 'Comments not found'})}
-
+        postedBy: new mongoose.Types.ObjectId(req.user._id)})
+       return res.status(200).json(postComment);  
   } catch (error) {
     res.status(500).json({message: error.message});
   }}
 
 exports.replyComment = async (req,res) => {
-    const comment_id = req.params?.commentId
-
+    const comment_id = await Comment.findById(req.params.commentId) ;
     try {
         if (comment_id) {
           const reply = {

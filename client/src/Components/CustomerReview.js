@@ -1,4 +1,46 @@
+import {useState , useEffect  } from 'react';
+// import axios from 'axios'
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css'
+// import { Navigate } from 'react-router-dom'
+
 export default function CustomerReview() {
+  const [comment, setComment] = useState('')
+//   const [error,setError]= useState[''];
+//   const notify = (error) => {
+//     toast.error(error, {
+//         position: "top-center",
+//         autoClose: 3000,
+//         hideProgressBar: false,
+//         closeOnClick: true,
+//         draggable: true,
+//         progress: undefined,
+//         pauseOnHover: false,
+//         theme: "light",
+//     });
+// }
+
+// useEffect(() => {
+//     if (error) {
+//         notify(error);
+//     }
+// }, [error]);
+//   const replyToComment = async (commentId, replyData) => {
+//     try {
+//       const response = await axios.put(`http://localhost:4000/${commentId}/reply-comment`, replyData);
+//       return response.data;
+//     } catch (error) {
+//       console.error("Error replying to comment", error);
+//     }
+// };
+// const handleReply = (e) => {
+//   e.preventDefault();
+//   replyToComment();
+//   if (error) {
+//       notify(error);
+//   }
+// };
+  
   return (
     <>
       <article className="pt-8 ">
