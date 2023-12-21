@@ -9,7 +9,6 @@ const Thread = require('../models/thread')
 const Message = require('../models/message')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const path = require('path')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
@@ -1059,4 +1058,13 @@ exports.getAdminDashboard = async (req, res) => {
     return res.status(200).json({ numberOfUsers: numberOfUsers, numberOfVendors: numberOfVendors, numberOfShippers: numberOfShippers, numberOfProducts: numberOfProducts });
   } catch (error) { }
   return res.status(500).json({ error: error })
+}
+
+exports.userOrder = async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.user._id })
+    return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  } catch {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
 }
