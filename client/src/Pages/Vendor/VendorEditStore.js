@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify'
 import axios from "axios";
+import bannerImage from "../../Components/images/banner1.jpg";
+
 
 export default function VendorEditStore({ vendor, vendorImage }) {
   const [coverPhoto, setCoverPhoto] = useState();
@@ -123,31 +125,67 @@ export default function VendorEditStore({ vendor, vendorImage }) {
 
         {/* Upload Cover Image */}
         <div class="md:container mx-auto">
-
           {/* Upload Cover Image */}
           <section class="container w-full mx-auto items-center pt-8">
             <div class="max-w-full mx-auto items-center">
               <div class="px-4 py-4">
                 {coverPhoto && (
                   <div>
-                    <img class="h-48 w-full object-cover object-center" src={URL.createObjectURL(coverPhoto)} alt="Preview" />
+                    <img
+                      class="h-48 w-full object-cover object-center"
+                      src={URL.createObjectURL(coverPhoto)}
+                      alt="Preview"
+                    />
                   </div>
                 )}
                 {!coverPhoto && (
-                  <div id="image-preview" class="max-w-full h-48 p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer">
-                    <input id="upload" onChange={handleCoverPhotoChange} type="file" class="hidden" accept="image/*" required />
+                  <div
+                    id="image-preview"
+                    class="max-w-full h-48 p-6 mb-4 bg-gray-700 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
+                    style={{ backgroundImage: `url(${bannerImage})` }}
+                  >
+                    <input
+                      id="upload"
+                      onChange={handleCoverPhotoChange}
+                      type="file"
+                      class="hidden"
+                      accept="image/*"
+                      required
+                    />
                     <label for="upload" class="cursor-pointer">
-                      <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700 mx-auto mb-4">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                      <div class="font-extrabold tracking-tight leading-none text-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-8 h-8 mx-auto mb-4"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                          />
                         </svg>
-                        <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-700">Upload Cover Image</h5>
-                        <p class="font-normal text-sm text-gray-400 md:px-6">You should choose photo size with <b class="text-gray-600">height {">"} 950px</b> and <b class="text-gray-600">width {"<"} 300px</b></p>
-                        <p class="font-normal text-sm text-gray-400 md:px-6">and must be in <b class="text-gray-600">JPG, PNG, or GIF</b> format.</p>
-                        <span id="filename" class="text-gray-500 bg-gray-200 z-50"></span>
+                        <h5 class="mb-2 text-xl">Upload Cover Image</h5>
+                        <p class="font-normal text-sm md:px-6">
+                          You should choose photo size with{" "}
+                          <b class="italic ...">height {">"} 950px</b> and{" "}
+                          <b class="italic ...">width {"<"} 300px</b>
+                        </p>
+                        <p class="font-normal text-sm md:px-6">
+                          and must be in{" "}
+                          <b class="italic ...">JPG, PNG, or GIF</b> format.
+                        </p>
+                        <span
+                          id="filename"
+                          class="text-gray-500 bg-gray-200 z-50"
+                        ></span>
                       </div>
                     </label>
-                  </div>)}
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -155,7 +193,15 @@ export default function VendorEditStore({ vendor, vendorImage }) {
           {/* Avatar, follow button */}
           <div class="md:flex my-3 md:justify-between px-4 md:px-0">
             <div class="flex items-center gap-4">
-              <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full" alt="" />
+              <img
+                src={
+                  vendorImage
+                    ? `data:image/jpeg;base64,${vendorImage}`
+                    : require("../../Components/images/defaultUserImage.png")
+                }
+                className="vendor-avatar md:w- rounded-full"
+                alt=""
+              />
 
               <div class="font-medium">
                 <div class="text-2xl">{vendor && vendor.businessName}</div>
@@ -182,62 +228,163 @@ export default function VendorEditStore({ vendor, vendorImage }) {
           </div>
         </div>
 
-
         {/* Upload Banner */}
         <div className="p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
           {bigBanner ? (
             <div>
-              <img class="flex items-center justify-center text-center mb-4 rounded" src={URL.createObjectURL(bigBanner)} alt="Preview" />
+              <img
+                class="flex items-center justify-center text-center mb-4 rounded"
+                src={URL.createObjectURL(bigBanner)}
+                alt="Preview"
+              />
             </div>
           ) : (
-            <label for='bigBanner' className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer">
+            <label
+              for="bigBanner"
+              className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer"
+            >
               <button>
-                <input id='bigBanner' onChange={handleBigBannerChange} type="file" className="hidden" accept="image/*" />
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700 mx-auto mb-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                <input
+                  id="bigBanner"
+                  onChange={handleBigBannerChange}
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-8 h-8 text-gray-700 mx-auto mb-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                  />
                 </svg>
-                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-700">Upload Banner Images</h5>
-                <p class="font-normal text-sm text-gray-400 md:px-6">You should choose photo size with <b class="text-gray-600">height {">"} 950px</b> and <b class="text-gray-600">width {"<"} 300px</b></p>
-                <p class="font-normal text-sm text-gray-400 md:px-6">and must be in <b class="text-gray-600">JPG, PNG, or GIF</b> format.</p>
-                <span id="filename" class="text-gray-500 bg-gray-200 z-50"></span>
+                <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-700">
+                  Upload Banner Images
+                </h5>
+                <p class="font-normal text-sm text-gray-400 md:px-6">
+                  You should choose photo size with{" "}
+                  <b class="text-gray-600">height {">"} 950px</b> and{" "}
+                  <b class="text-gray-600">width {"<"} 300px</b>
+                </p>
+                <p class="font-normal text-sm text-gray-400 md:px-6">
+                  and must be in <b class="text-gray-600">JPG, PNG, or GIF</b>{" "}
+                  format.
+                </p>
+                <span
+                  id="filename"
+                  class="text-gray-500 bg-gray-200 z-50"
+                ></span>
               </button>
-            </label>)}
+            </label>
+          )}
           <div className="grid grid-cols-2 gap-4">
             {smallBanner1 ? (
               <div>
-                <img class="flex items-center justify-center text-center rounded" src={URL.createObjectURL(smallBanner1)} alt="Preview" />
+                <img
+                  class="flex items-center justify-center text-center rounded"
+                  src={URL.createObjectURL(smallBanner1)}
+                  alt="Preview"
+                />
               </div>
             ) : (
-              <label for="smallBanner1" className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800">
-                <input id='smallBanner1' onChange={handleSmallBanner1Change} type="file" className="hidden" accept="image/*" />
+              <label
+                for="smallBanner1"
+                className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              >
+                <input
+                  id="smallBanner1"
+                  onChange={handleSmallBanner1Change}
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                />
                 <p className="text-2xl text-gray-400 dark:text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700 mx-auto mb-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-8 h-8 text-gray-700 mx-auto mb-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                    />
                   </svg>
                 </p>
-              </label>)}
+              </label>
+            )}
             {smallBanner2 ? (
               <div>
-                <img class="flex items-center justify-center text-center rounded" src={URL.createObjectURL(smallBanner2)} alt="Preview" />
+                <img
+                  class="flex items-center justify-center text-center rounded"
+                  src={URL.createObjectURL(smallBanner2)}
+                  alt="Preview"
+                />
               </div>
             ) : (
-              <label for="smallBanner2" className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800">
-                <input id="smallBanner2" onChange={handleSmallBanner2Change} type="file" className="hidden" accept="image/*" />
+              <label
+                for="smallBanner2"
+                className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              >
+                <input
+                  id="smallBanner2"
+                  onChange={handleSmallBanner2Change}
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                />
                 <p className="text-2xl text-gray-400 dark:text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700 mx-auto mb-4">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-8 h-8 text-gray-700 mx-auto mb-4"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                    />
                   </svg>
                 </p>
-              </label>)}
+              </label>
+            )}
           </div>
-
         </div>
         <div class="mt-6 flex items-center justify-end gap-x-6">
-          <button onClick={handleCancel} type="button" class="rounded-md px-3 py-2 text-sm font-semibold shadow-sm border-solid border-2  hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Cancel</button>
-          <button onClick={handleSubmit} disabled={loading} type="submit" class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white'}`}>Save and Publish</button>
+          <button
+            onClick={handleCancel}
+            type="button"
+            class="rounded-md px-3 py-2 text-sm font-semibold shadow-sm border-solid border-2  hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            type="submit"
+            class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white"
+            }`}
+          >
+            Save and Publish
+          </button>
         </div>
       </div>
-
     </>
   );
 }
