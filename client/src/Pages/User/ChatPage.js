@@ -16,6 +16,7 @@ export default function ChatPage() {
     try {
       const res = await axios.get("http://localhost:4000/chat", { withCredentials: true });
       setUsers(res.data.users);
+      console.log(res.data.users)
       setThreads(res.data.threads);
       setIsLoading(false)
     } catch (err) {
@@ -150,7 +151,7 @@ export default function ChatPage() {
             </div>
             <div>
               <header className="text-gray-700">
-                <h1>{users[threadIndex] && users[threadIndex].businessName}</h1>
+                <h1>{users[threadIndex] && (users[threadIndex].businessName || users[threadIndex].name)}</h1>
               </header>
             </div>
           </div>
@@ -209,7 +210,7 @@ export default function ChatPage() {
 
 function filterUsers(users, searchTerm) {
   const regex = new RegExp(searchTerm, 'i');
-  return users.filter(user => regex.test(user.businessName));
+  return users.filter(user => regex.test(user.businessName || user.name));
 }
 
 function ContactList({ users, searchTerm, toggleChatArea, threadIndex }) {
@@ -231,7 +232,7 @@ function ContactList({ users, searchTerm, toggleChatArea, threadIndex }) {
           <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
         </div>}
         <div className="flex-1 truncate ...">
-          <h2 className="text-lg font-semibold">{user.businessName}</h2>
+          <h2 className="text-lg font-semibold">{user.businessName || user.name}</h2>
           <p className="text-gray-600">STATIC</p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Settings, PackageSearch, Home, Store, Shirt } from "lucide-react";
+import { PackageSearch, Home, Store, Shirt, MessageCircle } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 
 export default function VendorSidebar() {
@@ -16,6 +16,10 @@ export default function VendorSidebar() {
 
         <a href="/manage-order">
             <SidebarItem icon={<PackageSearch size={20} />} text="Orders" />
+        </a>
+
+        <a href="/vendor-chat">
+            <SidebarItem icon={<MessageCircle size={20} />} text="Chat" />
         </a>
 
         <SidebarItem icon={<Store size={20} />} text="Shop Management"

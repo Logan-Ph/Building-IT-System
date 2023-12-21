@@ -635,14 +635,6 @@ exports.updateVendor = async (req, res) => {
     }
 
     if (req.body.address) { vendor.address = req.body.address; }
-    if (req.body.businessName) {
-      const checkBusinessName = (await Vendor.findOne({ businessName: req.body.businessName }));
-      if (checkBusinessName(req.body.businessName)) {
-        return res.status(500).json("Business name has already existed.")
-      } else {
-        vendor.businessName = req.body.businessName;
-      }
-    }
     if (req.body.phoneNumber) {
       const phoneNumber = req.body.phoneNumber;
       const checkPhone =
