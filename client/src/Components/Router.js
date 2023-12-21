@@ -41,6 +41,7 @@ import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
+import ShipperUpdateStatus from '../Pages/Shipper/ShipperUpdateStatus';
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -201,6 +202,10 @@ export default function Router() {
         {
           path: "/edit-vendor-profile",
           element: <VendorEditProfile />,
+        },
+        {
+          path: "/shipper-update-status",
+          element: <ShipperUpdateStatus />
         },
       ],
     },
