@@ -8,9 +8,7 @@ import UserSidebar from "../../Components/UserSidebar";
 
 export default function UserProfile() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
-    const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
-    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const { user } = useContext(UserContext)
@@ -22,17 +20,11 @@ export default function UserProfile() {
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
-        setActiveDropdown(null); // Hide dropdown when sidebar is toggled
     };
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
-
-    const handleDropdownToggle = (index) => {
-        setActiveDropdown(activeDropdown === index ? null : index);
-    };
-
 
     const notify = (error) => {
         toast.error(error, {
