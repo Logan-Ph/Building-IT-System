@@ -59,20 +59,20 @@ export default function VendorHomePage() {
             <div class="grid md:grid-cols-5">
               <div>
                 <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                  <a href="#">
+                  <span href="#">
                     <img
                       class="p-8 rounded-t-lg"
                       src="/docs/images/products/apple-watch.png"
                       alt="product"
                     />
-                  </a>
+                  </span>
                   <div class="px-5 pb-5">
-                    <a href="#">
+                    <span href="#">
                       <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                         Apple Watch Series 7 GPS, Aluminium Case, Starlight
                         Sport
                       </h5>
-                    </a>
+                    </span>
                     <div class="flex items-center mt-2.5 mb-5">
                       <div class="flex items-center space-x-1 rtl:space-x-reverse">
                         <svg
@@ -129,12 +129,12 @@ export default function VendorHomePage() {
                       <span class="text-3xl font-bold text-gray-900 dark:text-white">
                         $599
                       </span>
-                      <a
+                      <span
                         href="#"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       >
                         Add to cart
-                      </a>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -144,33 +144,33 @@ export default function VendorHomePage() {
         </div>
 
         {/* <!-- Banner --> */}
-        
-        <div class="md:container mx-auto grid grid-cols-4 gap-4">
-          {smallBanner1 && 
-          <div class="md:col-span-2 col-span-4">
-            <img
-              class="object-fill h-full w-full"
-              src={`data:image/jpeg;base64,${smallBanner1}`}
-              alt=""
-            />
-          </div>}
-          {smallBanner2 && 
-          <div class="md:col-span-2 col-span-4">
-            <img
-              class="object-fill h-full w-full"
-              src={`data:image/jpeg;base64,${smallBanner2}`}              
-              alt=""
-            />
-          </div>}
 
-          {bigBanner && 
-          <div class="col-span-4">
-            <img
-              class="object-fill h-full w-full"
-              src={`data:image/jpeg;base64,${bigBanner}`}             
-              alt=""
-            />
-          </div>}
+        <div class="md:container mx-auto grid grid-cols-4 gap-4">
+          {smallBanner1 &&
+            <div class="md:col-span-2 col-span-4">
+              <img
+                class="object-fill h-full w-full"
+                src={`data:image/jpeg;base64,${smallBanner1}`}
+                alt=""
+              />
+            </div>}
+          {smallBanner2 &&
+            <div class="md:col-span-2 col-span-4">
+              <img
+                class="object-fill h-full w-full"
+                src={`data:image/jpeg;base64,${smallBanner2}`}
+                alt=""
+              />
+            </div>}
+
+          {bigBanner &&
+            <div class="col-span-4">
+              <img
+                class="object-fill h-full w-full"
+                src={`data:image/jpeg;base64,${bigBanner}`}
+                alt=""
+              />
+            </div>}
         </div>
       </section>
     </>
