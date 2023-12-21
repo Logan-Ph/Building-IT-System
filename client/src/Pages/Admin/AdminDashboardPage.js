@@ -1,17 +1,10 @@
 'use client';
 import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
-import { Button, Modal } from 'flowbite-react';
 import { useCallback, useEffect, useState } from 'react';
-import AddImageHomePageBanner from "../../Components/AddImageHomePageBanner";
-import AddImageHomePageCarousel from "../../Components/AddImageHomePageCarousel";
 import axios from "axios";
 import { Carousel } from 'flowbite-react';
 export default function DashboardPage() {
-  const [openModal1, setOpenModal1] = useState(false);
-  const [openModal2, setOpenModal2] = useState(false);
-  const [openModal4, setOpenModal4] = useState(false);
-  const [openModal5, setOpenModal5] = useState(false);
   const [numberOfUsers, setNumberOfUsers] = useState(0);
   const [numberOfVendors, setNumberOfVendors] = useState(0);
   const [numberOfShippers, setNumberOfShippers] = useState(0);

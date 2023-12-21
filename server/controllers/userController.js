@@ -1043,7 +1043,7 @@ exports.createThread = async (req, res) => {
 
 exports.getAdminDashboard = async (req, res) => {
   try {
-    const numberOfUsers = await User.countDocuments();
+    const numberOfUsers = await User.countDocuments({ role: { $ne: 'Admin' } });
     const numberOfVendors = await Vendor.countDocuments();
     const numberOfShippers = await Shipper.countDocuments();
     const numberOfProducts = await Product.countDocuments();
