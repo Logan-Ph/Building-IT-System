@@ -26,8 +26,6 @@ export default function OrdersInfo({ orders, searchTerm }) {
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders]);
 
-    console.log(categorizedOrder)
-
     return (
         <Tabs aria-label="Tabs with icons">
             {Object.entries(categorizedOrder).map(([title, orders]) => (

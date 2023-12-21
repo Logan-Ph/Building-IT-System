@@ -2,7 +2,7 @@ import { useContext, useState } from "react"
 import { UserContext } from '../Context/UserContext'
 
 export default function UserSidebar() {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true)
     const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
     const { user } = useContext(UserContext)

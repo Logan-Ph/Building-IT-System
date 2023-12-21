@@ -113,7 +113,7 @@ router.get('/remove-product/:id', userController.removeProduct);
 
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
-
+// router.get('/')
 // user add message route
 router.post('/chat/:id', userController.addMessage);
 router.get('/chat', userController.getThreads);
@@ -162,6 +162,7 @@ router.get('/admin/manage-user', userController.manageUser)
 
 // user register route
 router.post('/user-register', userController.userRegister);
+router.get('/user-order', userController.userOrder)
 
 // vendor register route
 router.post('/vendor-register', userController.vendorRegister);
