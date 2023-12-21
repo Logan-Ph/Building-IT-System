@@ -7,16 +7,15 @@ import { Navigate } from 'react-router-dom'
 export default function VendorHeader() {
   const { user, setUser } = useContext(UserContext)
   const [navigateTo, setNavigateTo] = useState("");
-  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const fetchUser = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
       setUser(res.data.user);
-      setIsLoading(false)
     } catch (er) {
       setUser(null)
-      setIsLoading(false)
+      setError(er)
     }
   }, [setUser])
 
@@ -32,23 +31,15 @@ export default function VendorHeader() {
     fetchUser()
   }, [fetchUser])
 
-  if (user === undefined || isLoading) {
+  if (user === undefined) {
     return <div>Loading....</div>
   }
 
-  if (user && user.role === "User") {
-    return <Navigate to={'/'} replace />
-  }
-
-  if (user && user.role === "Admin") {
-    return <Navigate to={'/admin/manage-user'} replace />
-  }
-
-  if ((!user && user !== undefined)) {
-    return <Navigate to={'/login'} replace />
-  }
   return (
     <>
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {error && <Navigate to={'/login'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <section>
         <div className="w-full">
@@ -114,7 +105,7 @@ function DropdownAva({ user, handleLogout }) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="/vendor-profile"
+                  href="/edit-vendor-profile"
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm'

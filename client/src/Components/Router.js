@@ -79,14 +79,11 @@ export default function Router() {
   const VendorLayout = () => {
     return (
       <>
-        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
-          <VendorHeader />
-          <div className="flex  ">
-            <VendorSidebar />
-            <Outlet />
-          </div>
-        </InstantSearch>
-
+        <VendorHeader />
+        <div className="flex">
+          <VendorSidebar />
+          <Outlet />
+        </div>
       </>
     );
   };
@@ -191,7 +188,7 @@ export default function Router() {
           element: <VendorEditingProduct />,
         },
         {
-          path: '/shipper-dashboard',
+          path: "/shipper-dashboard",
           element: <ShipperDashboardPage />,
         },
         {
@@ -254,12 +251,19 @@ export default function Router() {
         {
           path: "/chat",
           element: (
-            <InstantSearch searchClient={searchClient} indexName="rBuy">
-              <div className="h-screen overflow-hidden">
-                <Header />
-                <ChatPage />
-              </div>
-            </InstantSearch>
+            <div className="h-screen overflow-hidden">
+              <Header />
+              <ChatPage />
+            </div>
+          ),
+        },
+        {
+          path: "/vendor-chat",
+          element: (
+            <div className="h-screen overflow-hidden">
+              <VendorHeader />
+              <ChatPage />
+            </div>
           ),
         },
       ],
