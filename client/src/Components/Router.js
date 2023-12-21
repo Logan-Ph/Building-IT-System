@@ -41,6 +41,7 @@ import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
+import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -234,6 +235,10 @@ export default function Router() {
         {
           path: "/admin/manage-product",
           element: <AdminManageVendorProduct />,
+        },
+        {
+          path: "/admin/reported-product-page",
+          element: <ReportedProductPage />,
         },
         {
           path: "/admin/dashboard",

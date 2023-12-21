@@ -68,15 +68,18 @@ export default function Example() {
         {/* Mobile filter dialog */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
-            <h1 className="text-3xl font-semibold tracking-tight text-gray-900">Search result for <span className='text-[#E61E2A] font-light'>"{searchQuery}"</span></h1>
+            <h1 className="text-3xl font-semibold tracking-tight text-gray-900 xs:text-lg">Search result for <span className='text-[#E61E2A] font-light xs:text-md'>"{searchQuery}"</span></h1>
 
             <div className="flex items-center">
               <SortOptions sortOptions={sortOptions} setSortOptions={setSortOptions} />
               <FilterSideBar />
             </div>
+
           </div>
+
+          {/* Normal Screen */}
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <div className="xl:justify-start xl:divide-x-2 xl:gap-6 xl:flex lg:flex lg:justify-start lg:divide-x-2 lg:gap-6 md:flex sm:block ">
+            <div className="xl:justify-start xl:divide-x-2 xl:gap-6 xl:flex lg:flex lg:justify-start lg:divide-x-2 lg:gap-6 md:flex sm:block">
               <div className='w-full'>
                 {/* Filters */}
                 <div className="xs:hidden sm:hidden md:block lg:block wi">
@@ -86,7 +89,7 @@ export default function Example() {
                 </div>
               </div>
 
-              <div className='grid xs:grid-cols-1 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
+              <div className='grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
                 {/* Product grid */}
                 {hits.map(hit => (
                   <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
@@ -98,7 +101,6 @@ export default function Example() {
 
         </main>
       </div>
-
     </div>
   )
 }
@@ -126,7 +128,11 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
   );
 }
 
-function FilterSideBar({ setMobileFiltersOpen }) {
+function FilterSideBar() {
+  const { refine } = useRefinementList({ attribute: 'category', operator: 'or' });
+  const [valueFilter, setValueFilter] = useState([]);
+  const oldCategoryRef = useRef();
+
   const [open, setOpen] = useState(false);
 
   const handleFilterSidebar = () => {
@@ -154,9 +160,9 @@ function FilterSideBar({ setMobileFiltersOpen }) {
       {/* mobile menu */}
       <div className={open ? "relative inset-0 z-50 overflow-hidden" : "relative inset-0 z-50 overflow-hidden hidden"}>
         <div className="absolute inset-0 overflow-hidden">
-          <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
-            <div className="w-screen max-w-md">
-              <div className="h-full bg-white border-l border-gray-200">
+          <div className="fixed inset-y-0 right-0 pl-5 max-w-full flex">
+            <div className="w-screen max-w-2xs">
+              <div className="h-full bg-white border-l border-gray-200 py-16">
                 {/* Sidebar content */}
                 <button
                   type="button"
@@ -169,6 +175,7 @@ function FilterSideBar({ setMobileFiltersOpen }) {
                 <div>
                   <SRPriceRange />
                   <SRStarRating />
+                  <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
                 </div>
               </div>
             </div>

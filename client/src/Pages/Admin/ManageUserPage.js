@@ -64,11 +64,12 @@ export default function ManageUserPage() {
           {/* <Tabs.Item title="Reported Account" icon={HiClipboardList}>
             <UserTable data={shippers} type="reported user" />
           </Tabs.Item> */}
+          
           {/* Admin manage product */}
-          <Tabs.Item title="Product" icon={AiFillDelete}>
+          {/* {/* <Tabs.Item title="Product" icon={AiFillDelete}>
             <AdminManageVendorProduct />
-          </Tabs.Item>
-        </Tabs>
+          </Tabs.Item> *\} */}
+        </Tabs> 
       </div>
     </div>
   );
