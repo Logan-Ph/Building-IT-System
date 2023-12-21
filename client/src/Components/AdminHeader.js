@@ -59,7 +59,7 @@ export default function AdminHeader() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {/* <!-- logo --> */}
-                <a className="flex items-center lg:ml-10 " href='\admin\manage-user'>
+                <a className="flex items-center lg:ml-10 " href='\admin\dashboard'>
                   <img
                     src={require("./images/logo1.png")}
                     className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
@@ -75,7 +75,6 @@ export default function AdminHeader() {
                 <DropdownAva user={user} handleLogout={handleLogout} />
                 <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
               </div>
-
             </div>
           </div>
         </div>
