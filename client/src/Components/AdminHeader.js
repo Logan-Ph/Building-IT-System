@@ -75,7 +75,6 @@ export default function AdminHeader() {
                 <DropdownAva user={user} handleLogout={handleLogout} />
                 <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
               </div>
-
             </div>
           </div>
         </div>

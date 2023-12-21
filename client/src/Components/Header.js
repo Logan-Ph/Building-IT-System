@@ -142,26 +142,29 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400">
-                  <PackageCheck color='#eb6767' size={26} />
-                  <a className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden " href='/user-order'>
-                    Orders
-                  </a>
-                </div>
-                <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
-                  <div className="relative">
-                    <ShoppingBag color='#eb6767' />
-                    {/* <!-- number on the cart --> */}
-                    <span className="absolute -top-2 -right-2 flex h-[17.5px] w-[17.5px] items-center justify-center rounded-full bg-[#eb6767] p-2 text-[8px] text-white hover:animate-bounce ">
-                      {(!cart || !cart.products) && "0"}
-                      {cart !== null && cart.products && ((cart.products?.length > 99) ? "99+" : cart.products?.length)}
-                    </span>
-                  </div>
-                  <span className="text-xl font-medium  lg:flex md:hidden sm:hidden xs:hidden">
-                    Cart
-                  </span>
-                </a>
-
+                {user && (
+                  <>
+                    <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400">
+                      <PackageCheck color='#eb6767' size={26} />
+                      <a className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden " href='/user-order'>
+                        Orders
+                      </a>
+                    </div>
+                    <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
+                      <div className="relative">
+                        <ShoppingBag color='#eb6767' />
+                        {/* <!-- number on the cart --> */}
+                        <span className="absolute -top-2 -right-2 flex h-[17.5px] w-[17.5px] items-center justify-center rounded-full bg-[#eb6767] p-2 text-[8px] text-white hover:animate-bounce ">
+                          {(!cart || !cart.products) && "0"}
+                          {cart !== null && cart.products && ((cart.products?.length > 99) ? "99+" : cart.products?.length)}
+                        </span>
+                      </div>
+                      <span className="text-xl font-medium  lg:flex md:hidden sm:hidden xs:hidden">
+                        Cart
+                      </span>
+                    </a>
+                  </>
+                )}
                 {/* if user login this will appear: avatar icon*/}
                 <div className='flex items-center'>
                   {/* avatar icon */}
@@ -171,9 +174,9 @@ export default function Header() {
               </div>
             </div>
             {/* if the user login this will disappear */}
-            {!user && <div className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white">
-              <a href='\login' className="text-md font-medium text-black">Sign in</a>
-            </div>}
+            {!user && <a className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white" href='\login'>
+              <span className="text-md font-medium text-black">Sign in</span>
+            </a>}
           </div>
         </div>
         <div className="flex items-center justify-between py-2">
