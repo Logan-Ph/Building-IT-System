@@ -65,22 +65,22 @@ export default function UserOrder() {
                 <div class="text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="me-2">
-                            <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("Unpaid")}>Waitting for Payment</span>
+                            <span className={`${activeTab === "Unpaid" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Unpaid")}>Waiting for proccessing</span>
                         </li>
                         <li class="me-2">
-                            <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("To Ship")}>Being Delivered</span>
+                            <span className={`${activeTab === "To Ship" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("To Ship")}>To ship</span>
                         </li>
                         <li class="me-2">
-                            <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("Shipping")}>Delivering</span>
+                            <span className={`${activeTab === "Shipping" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Shipping")}>Delivering</span>
                         </li>
                         <li class="me-2">
-                            <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("Completed")}>Completed</span>
+                            <span className={`${activeTab === "Completed" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Completed")}>Completed</span>
                         </li>
                         <li class="me-2">
-                            <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("Cancelled")}>Cancelled</span>
+                            <span className={`${activeTab === "Cancelled" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Cancelled")}>Cancelled</span>
                         </li>
                         <li class="me-2">
-                            <span class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" onClick={() => setActiveTab("Failed Delivery")}>Failed Delivery</span>
+                            <span className={`${activeTab === "Failed Delivery" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Failed Delivery")}>Failed Delivery</span>
                         </li>
                     </ul>
                 </div>
