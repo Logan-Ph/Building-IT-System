@@ -3,10 +3,8 @@ import { Table } from 'flowbite-react';
 import { Modal } from 'flowbite-react';
 import { useState } from 'react';
 import React from "react";
-
-import { Select, Option } from "@material-tailwind/react";
-
-export default function UnpaidTableComponentShipper() {
+import { Label, Select } from 'flowbite-react';
+export default function ConfirmTableComponent() {
 
   return <>
     <div className="overflow-x-auto">
@@ -92,12 +90,12 @@ export default function UnpaidTableComponentShipper() {
 }
 
 function MoreDetailOrdID() {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal1, setOpenModal1] = useState(false);
   return <>
-    <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
+    <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal1(true)}>
       More
     </a>
-    <Modal show={openModal} onClose={() => setOpenModal(false)}>
+    <Modal show={openModal1} onClose={() => setOpenModal1(false)}>
       <Modal.Header>
         <div>
           <p className='text-sm font-medium text-[#E61E2A]'>Order ID: <span className='font-light text-gray-500 text-sm ml-1'>#1234-klmn</span></p>
@@ -178,22 +176,15 @@ function MoreDetailOrdID() {
           </div>
         </div>
 
-
+      
       </Modal.Footer>
 
       <Modal.Footer>
-        <div className="flex w-72 flex-col gap-6">
-        <Select variant="outlined" label="Select Status" className=''>
-            <Option>Completed</Option>
-            <Option>Shipping</Option>
-            <Option>To ship</Option>
-            <Option>Cancel</Option>
-            <Option>Failed Delivery</Option>
-          </Select>
+      <div className=''>
+          <button type="button" class="text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Confirm</button>
+          <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" onClick={() => setOpenModal1(false)}>Cancel</button>
         </div>
-
-        <button type="button" class=" text-white bg-green-500 hover:bg-green-700 focus:outline-none font-medium rounded text-sm px-6 py-2.5 text-center">Confirm</button>
-      </Modal.Footer>
+        </Modal.Footer>
     </Modal>
   </>
 }

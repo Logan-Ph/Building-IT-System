@@ -7,6 +7,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
+import { PackageCheck, ShoppingBag } from 'lucide-react';
 
 export default function Header() {
   const { cart, setCart } = useContext(CartContext)
@@ -97,7 +98,6 @@ export default function Header() {
                 rBuy
               </span>
             </a>
-
             <form onSubmit={submitSearch} className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
               <input
                 type="text"
@@ -123,7 +123,6 @@ export default function Header() {
                 </svg>
               </div>
             </form>
-
             <div className="flex items-center">
               <div className="ml-2 flex">
                 <div className="mr-2 flex">
@@ -143,61 +142,22 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-lg hover:shadow-3xl bg-blue-400 transition duration-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-[18px] w-[18px] text-red-500"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
-                    <path
-                      fill-rule="evenodd"
-                      d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-[17px] font-medium lg:flex md:hidden sm:hidden xs:hidden ">
+                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400">
+                  <PackageCheck color='#eb6767' size={26} />
+                  <a className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden " href='/user-order'>
                     Orders
-                  </span>
+                  </a>
                 </div>
-
-                <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white shadow-md hover:shadow-2xl transition duration-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-[18px] w-[18px] text-red-500"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                  <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
-                    Wishlists
-                  </span>
-                </div>
-
-                <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:bg-gray-200 hover:text-black">
+                <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
                   <div className="relative">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-red-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                    </svg>
-
+                    <ShoppingBag color='#eb6767' />
                     {/* <!-- number on the cart --> */}
-                    <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 p-2 text-[8px] text-white hover:animate-bounce ">
+                    <span className="absolute -top-2 -right-2 flex h-[17.5px] w-[17.5px] items-center justify-center rounded-full bg-[#eb6767] p-2 text-[8px] text-white hover:animate-bounce ">
                       {(!cart || !cart.products) && "0"}
                       {cart !== null && cart.products && ((cart.products?.length > 99) ? "99+" : cart.products?.length)}
                     </span>
                   </div>
-                  <span className="text-[17px] font-medium  lg:flex md:hidden sm:hidden xs:hidden">
+                  <span className="text-xl font-medium  lg:flex md:hidden sm:hidden xs:hidden">
                     Cart
                   </span>
                 </a>
@@ -216,10 +176,8 @@ export default function Header() {
             </div>}
           </div>
         </div>
-
         <div className="flex items-center justify-between py-2">
           <div className="flex gap-x-2 py-1 px-2"></div>
-
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
               Best Seller
@@ -253,7 +211,6 @@ export default function Header() {
 
       <div className="navbar-menu relative z-50 sm:w-1 hidden">
         <div className="navbar-backdrop fixed inset-0 bg-gray-800 opacity-25"></div>
-
         <div className=" ">
           <div className="container flex flex-col mx-auto bg-white ">
             <aside
@@ -374,6 +331,7 @@ export default function Header() {
                   <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                    onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}
                   >
                     <svg
                       class="w-6 h-6 fill-current inline-block"
@@ -388,11 +346,12 @@ export default function Header() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>Electronics</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" >Electronics</span>
                   </span>
                   <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                    onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}
                   >
                     <svg
                       class="w-6 h-6 fill-current inline-block"
@@ -407,11 +366,12 @@ export default function Header() {
                         d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Beauty & Personal Care"}/price=`)}>Beauty & Personal Care</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Beauty & Personal Care</span>
                   </span>
                   <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                    onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}
                   >
                     <svg
                       class="w-6 h-6 fill-current inline-block"
@@ -425,11 +385,12 @@ export default function Header() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Household Appliances"}/price=`)}>Household Appliances</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">Household Appliances</span>
                   </span>
                   <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                    onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}
                   >
                     <svg
                       class="w-6 h-6 fill-current inline-block"
@@ -443,11 +404,12 @@ export default function Header() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Fashion"}/price=`)}>Fashion</span>
+                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]" >Fashion</span>
                   </span>
                   <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+                    onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}
                   >
                     <svg
                       class="w-6 h-6 fill-current inline-block"
@@ -459,7 +421,7 @@ export default function Header() {
                         d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
                       ></path>
                     </svg>
-                    <span class="ml-2 xs:text-[12px] md:text-[16px]" onClick={() => setNavigateTo(`/search/query=/category=${"Baby toys"}/price=`)}>Toys & Games</span>
+                    <span class="ml-2 xs:text-[12px] md:text-[16px]" >Toys & Games</span>
                   </span>
                 </div>
 

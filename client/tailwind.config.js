@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  
   mode: 'jit',
   content: ["./src/**/*.{js,jsx,ts,tsx}"
     , "./src/**/*.{js,jsx,ts,tsx}",
@@ -10,6 +11,7 @@ module.exports = {
   
 
   theme: {
+    
     extend: {
       screens: {
         '2xs': { min: '300px' },
