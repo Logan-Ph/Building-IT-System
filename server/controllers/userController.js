@@ -28,6 +28,7 @@ const imagekit = new ImageKit({
 
 const fs = require("fs");
 const { error } = require('console')
+const order = require('../models/order')
 require('dotenv').config()
 
 function convertUser(user) {
@@ -107,7 +108,6 @@ exports.slider = async (req, res) => {
   try {
     const banner = await HomepageBanner.findOne({ title: 'Banner' })
     const carouselImage = banner.img;
-    console.log(carouselImage);
     return res.json({ images: carouselImage });
   } catch (error) {
     console.log(error)
@@ -1054,9 +1054,16 @@ exports.getAdminDashboard = async (req, res) => {
 
 exports.userOrder = async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.user._id })
+    let orders = (await Order.find({ userId: req.user._id }))
+    orders = await Promise.all(orders.map(async (order) => {
+      let jsonOrder = order.toJSON();
+      jsonOrder.vendorName = (await Vendor.findOne(order.vendorID, { businessName: 1 })).businessName;
+      return jsonOrder;
+    }));
+    console.log(orders)
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
-  } catch {
+  } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Cannot find order. " })
   }
 }
