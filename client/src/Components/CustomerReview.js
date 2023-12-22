@@ -15,7 +15,7 @@ import axios from 'axios'
       return response.data;
     } catch (error) {
       console.error("Error fetching comments", error);
-      return []; // Return an empty array in case of error
+      return []; 
     }
   };
   export default function CustomerReview({ productId }) {
@@ -60,9 +60,9 @@ import axios from 'axios'
               </p>
             </div>
           </div>
-          {[comment].content.map(comment => (
+          {/* {[comment].content.map(comment => (
         <comment key={comment._id} comment={comment} />
-              ))}
+              ))} */}
           <h3 class=" text-lg xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2">
             Thinking to buy another one!
           </h3>

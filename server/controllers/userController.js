@@ -1113,3 +1113,26 @@ exports.replyComment = async (req,res) => {
     } catch (error) {
       res.status(501).json({message: 'There was an error getting comments for this Product'});
     }}
+
+exports.likeComment = async (req, res) => {
+      const commentId = req.params.commentId;
+      const userId = req.user._id; 
+  
+      try {
+          const comment = await Comment.findById(commentId);
+          if (!comment) {
+              return res.status(404).json({ message: 'Comment not found' });
+          }
+  
+          const index = comment.likes.indexOf(userId);
+          if (index === -1) {
+              comment.likes.push(userId);
+          } else {
+              comment.likes.splice(index, 1);
+          }
+          await comment.save();
+          res.json(comment);
+      } catch (error) {
+          res.status(500).json({ message: 'There was an error updating the comment' });
+      }
+  };

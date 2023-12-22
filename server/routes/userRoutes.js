@@ -155,6 +155,7 @@ router.post('/product/:productId/post-comment', userController.postComment);
 
 router.put('/product/:commentId/reply-comment', userController.replyComment);
 
+router.put('/product/:commentId/like', userController.likeComment);
 // vendor dashboard route (vendor side)
 router.post('/dashboard', authenticateToken, authorizeVendor, userController.postVendorDashboard);
 router.get('/dashboard', authenticateToken, authorizeVendor, userController.getVendorDashboard);
