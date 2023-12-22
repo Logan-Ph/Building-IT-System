@@ -8,8 +8,16 @@ export default function CustomerCard({ user, orders }) {
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
         <div class="flex items-center gap-4 mt-4 flex-wrap">
-          <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
-          <div>
+          <img
+            src={
+              user.img
+                ? `data:image/jpeg;base64,${user.img}`
+                : require("../../Components/images/defaultUserImage.png")
+            }
+            className="w-16 aspect-square object-cover rounded"
+            alt=""
+          />
+          <div class="truncate ...">
             <h2 class="text-2xl font-semibold mb-2">{user.name}</h2>
             <div class="text-lg text-gray-500">{user.email}</div>
             <div class="text-lg text-gray-500 mb-1">{user.phoneNumber}</div>
@@ -43,8 +51,13 @@ export default function CustomerCard({ user, orders }) {
           </div>
           <div className="flex items-center py-10">
             <div className="flex flex-row items-center">
-              <input type="text" name="search" placeholder="Please enter order info here "
-                className="rounded-md w-full border border-slate-400 pl-4 pr-20 py-2 text-md hover:border-black" onChange={(e) => setSearchTerm(e.target.value)} />
+              <input
+                type="text"
+                name="search"
+                placeholder="Please enter order info"
+                className="rounded-md w-full border border-slate-400 pl-4 pr-20 py-2 text-md hover:border-black"
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </div>
         </div>

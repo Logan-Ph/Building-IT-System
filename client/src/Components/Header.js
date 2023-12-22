@@ -83,6 +83,7 @@ export default function Header() {
     <section>
       {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {user === null && <Navigate to={'/'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
@@ -144,12 +145,12 @@ export default function Header() {
                 </div>
                 {user && (
                   <>
-                    <div className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400">
+                    <a className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/user-order'>
                       <PackageCheck color='#eb6767' size={26} />
-                      <a className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden " href='/user-order'>
+                      <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">
                         Orders
-                      </a>
-                    </div>
+                      </span>
+                    </a>
                     <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
                       <div className="relative">
                         <ShoppingBag color='#eb6767' />
