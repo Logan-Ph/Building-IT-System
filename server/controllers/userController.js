@@ -7,9 +7,9 @@ const Order = require('../models/order')
 const HomepageBanner = require('../models/homepage-banner')
 const Thread = require('../models/thread')
 const Message = require('../models/message')
+const Report = require('../models/report')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const path = require('path')
 const mongoose = require('mongoose')
 const Mailgen = require('mailgen')
 const nodemailer = require('nodemailer')
@@ -81,6 +81,105 @@ function sendEmailVerification(userEmail) {
   }
   catch {
     console.log("error when send Email")
+  }
+}
+function sendVendorReportNotificationEmail(userEmail, title, description) {
+  try {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userEmail)) {
+      throw "Invalid email";
+    }
+
+    
+    let config = {
+      service: 'gmail',
+      auth: {
+        user: process.env.GOOGLE_USER,
+        pass: process.env.GOOGLE_PASS
+      }
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let mailgenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "Mailgen",
+        link: "https://mailgen.js"
+      }
+    })
+
+    let response = {
+      body: {
+        intro: "Regarding your online shop,",
+        outro: ["We have recently received a report about your store. See the detail below. We will take a look into the situation. Please be reminded that your account might be banned if your activity violated the rBUY's policies.",
+        "Report details:",
+        `Title: ${title}`,
+        `Description: ${description}`]
+      }
+    }
+
+    let mail = mailgenerator.generate(response);
+
+    let message = {
+      from: "rBuy@gmail.com",
+      to: userEmail,
+      subject: "Report Update from rBUY",
+      html: mail
+    }
+    transporter.sendMail(message)
+  }
+  catch (error) {
+    console.error(error)
+  }
+}
+function sendProductReportNotificationEmail(userEmail, productName, title, description) {
+  try {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userEmail)) {
+      throw "Invalid email";
+    }
+    
+    let config = {
+      service: 'gmail',
+      auth: {
+        user: process.env.GOOGLE_USER,
+        pass: process.env.GOOGLE_PASS
+      }
+    }
+
+    let transporter = nodemailer.createTransport(config);
+
+    let mailgenerator = new Mailgen({
+      theme: "default",
+      product: {
+        name: "Mailgen",
+        link: "https://mailgen.js"
+      }
+    })
+
+    let response = {
+      body: {
+        intro: `Regarding your product: ${productName},`,
+        outro: ["We have recently received a report about your product. See the detail below. We will take a look into the situation. Please be reminded that your account might be banned if your activity violated the rBUY's policies.",
+        "Report details:",
+        `Title: ${title}`,
+        `Description: ${description}`]
+      }
+    }
+
+    let mail = mailgenerator.generate(response);
+
+    let message = {
+      from: "rBuy@gmail.com",
+      to: userEmail,
+      subject: "Report Update from rBUY",
+      html: mail
+    }
+    transporter.sendMail(message)
+  }
+  catch (error) {
+    console.error(error)
   }
 }
 
@@ -943,7 +1042,14 @@ exports.reportPage = async (req, res) => {
 
     if (vendor) {
       const orders = await Order.find({ vendorID: vendor._id })
-      return res.status(200).json({ user: vendor, orders: orders });
+      const reports = await Report.find({ vendor: vendor._id });
+      const reportsInfo = await Promise.all(reports.map(async (report) => {
+        const reportJson = report.toJSON();
+        reportJson.user = convertUser(await User.findById(report.user));
+        return reportJson;
+      }));
+      console.log(reportsInfo)
+      return res.status(200).json({ user: vendor, orders: orders, report: reportsInfo });
     };
 
     // if (shipper) {
@@ -1059,4 +1165,58 @@ exports.getAdminDashboard = async (req, res) => {
     return res.status(200).json({ numberOfUsers: numberOfUsers, numberOfVendors: numberOfVendors, numberOfShippers: numberOfShippers, numberOfProducts: numberOfProducts });
   } catch (error) { }
   return res.status(500).json({ error: error })
+}
+
+exports.reportVendor = async (req, res) => {
+  try {
+    const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
+    const newReport = new Report ({
+      user: req.body.userID,
+      vendor: req.body.vendorID,
+      title: req.body.title,
+      description: req.body.description,
+      date: Date.now(),
+    })
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file.filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+    if (req.files) {
+      const images = await Promise.all(req.files.map(async (file) => await uploadImage(file)));
+      newReport.evidence = images.filter(url => url !== null)
+    }
+    await newReport.save();
+    sendVendorReportNotificationEmail(vendorEmail, req.body.title, req.body.description)
+    return res.status(200).send('Successfully Reported');
+  } catch (error) {
+    return res.status(500).json({ error: error })
+  }
+}
+
+exports.reportProduct = async (req, res) => {
+  try {
+    const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
+    const productName = (await Product.findById(req.body.productID)).product_name;
+    const newReport = new Report ({
+      user: req.body.userID,
+      vendor: req.body.vendorID,
+      product: req.body.productID,
+      title: req.body.title,
+      description: req.body.description,
+      date: Date.now(),
+    })
+    await newReport.save();
+    sendProductReportNotificationEmail(vendorEmail, productName, req.body.title, req.body.description)
+    return res.status(200).send('Successfully Reported');
+  } catch (error) {
+    return res.status(500).json({ error: error })
+  }
 }

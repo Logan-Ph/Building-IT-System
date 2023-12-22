@@ -7,7 +7,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 
-export default function ReportInfo() {
+export default function ReportInfo({reports}) {
   const [openModalBlock, setOpenModalBlock] = useState(false);
   const [openModalRemove, setOpenModalRemove] = useState(false);
   const [startDate, setStartDate] = useState("");
@@ -50,11 +50,12 @@ export default function ReportInfo() {
     } catch (error) {
       console.log(error)
     }
-  }, [params.id])
+  }, [params.id])  
 
   return (
     <>
       {navigateTo && <Navigate to={navigateTo} />}
+      {console.log(reports)}
       <ToastContainer
         position="top-center"
         autoClose={10000}
@@ -70,96 +71,42 @@ export default function ReportInfo() {
       <div class="container mx-auto">
         <div class="p-4">
           <div>
-            <div class="flex py-5">
+            {reports && reports.map((report, index) => (
+            <div key={index} class="flex py-5">
               <div class="relative inline-block shrink-0">
                 <img
                   class="w-12 h-12 rounded-full"
-                  src="/docs/images/people/profile-picture-3.jpg"
+                  src={(report.user.img) ? `data:image/jpeg;base64,${report.user.img}` : require("../Components/images/defaultUserImage.png")}
                   alt="Jese Leos"
                 />
               </div>
               <div class="ms-3 text-sm font-normal">
                 <div class="text-sm font-semibold text-gray-900">
-                  Bonnie Green
+                  {report.user.name}
                 </div>
                 <div class="text-sm font-normal">
                   has reported this account:
                 </div>
                 <div class="text-sm font-semibold text-red-600 mt-2">
-                  Scam
+                  {report.title}
                 </div>
                 <div class="text-sm font-normal text-gray-900 my-3">
-                  I reported this account for posting scamming products. I
-                  have evidence below
+                  {report.description}
                 </div>
                 <div class="grid grid-cols-3 gap-3">
-                  <div>
-                    <img
-                      class="object-fill h-full w-full"
-                      src="/images/banner1.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div>
-                    <img
-                      class="object-fill h-full w-full"
-                      src="/images/banner1.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div>
-                    <img
-                      class="object-fill h-full w-full"
-                      src="/images/banner1.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div>
-                    <img
-                      class="object-fill h-full w-full"
-                      src="/images/banner1.jpg"
-                      alt=""
-                    />
-                  </div>
+                  {report.evidence && report.evidence.map((img, imgindex) => (
+                    <div key={imgindex}>
+                      <img
+                        class="object-fill h-full w-full"
+                        src={img} 
+                        alt="report evidence"
+                      />
+                    </div> 
+                  ))}
                 </div>
                 <div class="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
               </div>
-            </div>
-            {/* <!-- second --> */}
-            <div class="flex py-5 border-t border-gray-300">
-              <div class="relative inline-block shrink-0">
-                <img
-                  class="w-12 h-12 rounded-full"
-                  src="/docs/images/people/profile-picture-3.jpg"
-                  alt="Jese Leos"
-                />
-              </div>
-              <div class="ms-3 text-sm font-normal">
-                <div class="text-sm font-semibold text-gray-900">
-                  Bonnie Green
-                </div>
-                <div class="text-sm font-normal">
-                  has reported this account:
-                </div>
-                <div class="text-sm font-semibold text-red-600 mt-2">
-                  Prohited Item
-                </div>
-                <div class="text-sm font-normal text-gray-900 my-3">
-                  I reported this account for posting scamming products. I
-                  have evidence below
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                  <div>
-                    <img
-                      class="object-fill h-full w-full"
-                      src="/images/banner1.jpg"
-                      alt=""
-                    />
-                  </div>
-                </div>
-                <div class="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
-              </div>
-            </div>
+            </div>))}
           </div>
         </div>
         {/* Buttons */}

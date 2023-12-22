@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 
 
 const upload = multer({ storage });
-const uploadBanner = multer({ storage }).array('files', 10);
+const uploadMultiple = multer({ storage }).array('files', 10);
 
 /**
  *  App routes
@@ -119,8 +119,13 @@ router.post('/chat/:id', userController.addMessage);
 router.get('/chat', userController.getThreads);
 router.post('/chat', userController.createThread);
 
+// user report vendor route
+router.post('/report-vendor', uploadMultiple, userController.reportVendor);
+router.post('/report-product', userController.reportProduct);
+
 // vendor update profile route
 router.post('/update-vendor', upload.single('file'), userController.updateVendor);
+
 
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
@@ -173,7 +178,7 @@ router.get('/admin/:id/report', userController.reportPage);
 router.post("/ban-user", userController.banUser);
 
 // admin upload homepage carousel image 
-router.post("/upload-homepage-carousel", uploadBanner, userController.uploadHomepageCarousel);
+router.post("/upload-homepage-carousel", uploadMultiple, userController.uploadHomepageCarousel);
 
 // get reponse message from chatbot
 router.post("/api/chatbot/message", userController.chatbotMessage);
