@@ -3,6 +3,7 @@ const Vendor = require('../models/vendor')
 const Shipper = require('../models/shipper')
 const Product = require('../models/product')
 const Cart = require('../models/cart')
+const FollowerList = require('../models/follower')
 const Order = require('../models/order')
 const HomepageBanner = require('../models/homepage-banner')
 const Thread = require('../models/thread')
@@ -1220,3 +1221,54 @@ exports.reportProduct = async (req, res) => {
     return res.status(500).json({ error: error })
   }
 }
+exports.followVendor = async (req,res) => {
+  try {
+    const vendor = await Vendor.findById(req.body.vendorID)
+    const followerList = await FollowerList.findOne({ vendorID: req.body.vendorID})
+    if (!vendor) {
+      return res.status(500).json({ error: "Cannot find the vendor." })
+    }
+    if (!followerList) {
+      const newFollowerList = new FollowerList({ 
+        vendorID: req.body.vendorID,
+        followers: [{
+          userID: req.user._id
+        }]
+      })
+      await newFollowerList.save()
+    } else {
+      const isFollowing = await FollowerList.exists({
+        vendorID: req.body.vendorID,
+        "followers.userID": req.user._id
+      });
+      if (isFollowing) {
+        return res.status(400).json({ error: "User is already following the vendor." });
+      }
+      followerList.followers.push({ userID: req.user._id });
+      await followerList.save();
+    }
+    return res.status(200).json({ message: "Following." });
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.unfollowVendor = async (req, res) => {
+  try {
+    const vendor = await Vendor.findById(req.body.vendorID);
+    if (!vendor) {
+      return res.status(500).json({ error: "Cannot find the vendor." });
+    }
+    const result = await FollowerList.updateOne(
+      { vendorID: req.body.vendorID },
+      { $pull: { followers: { userID: req.body.userID } } }
+    );
+    if (result.nModified === 0) {
+      return res.status(500).json({ error: "User is not following the vendor." });
+    }
+    return res.status(200).json({ message: "Unfollowed successfully." });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: error.message || "Error Occurred" });
+  }
+};

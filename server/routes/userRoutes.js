@@ -127,6 +127,10 @@ router.post('/report-product', userController.reportProduct);
 router.post('/update-vendor', upload.single('file'), userController.updateVendor);
 
 
+// user follow/unfolow vendor route
+router.post('/follow-vendor', userController.followVendor);
+router.post('/unfollow-vendor', userController.unfollowVendor);
+
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
 router.post('/update-product/:id', upload.single('file'), userController.updateProduct);
