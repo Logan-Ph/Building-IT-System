@@ -1,48 +1,38 @@
 import {useState , useEffect  } from 'react';
-// import axios from 'axios'
+import axios from 'axios'
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css'
 // import { Navigate } from 'react-router-dom'
 
-export default function CustomerReview() {
-  const [comment, setComment] = useState('')
-//   const [error,setError]= useState[''];
-//   const notify = (error) => {
-//     toast.error(error, {
-//         position: "top-center",
-//         autoClose: 3000,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         draggable: true,
-//         progress: undefined,
-//         pauseOnHover: false,
-//         theme: "light",
-//     });
-// }
+// export default function CustomerReview() {
 
-// useEffect(() => {
-//     if (error) {
-//         notify(error);
-//     }
-// }, [error]);
-//   const replyToComment = async (commentId, replyData) => {
-//     try {
-//       const response = await axios.put(`http://localhost:4000/${commentId}/reply-comment`, replyData);
-//       return response.data;
-//     } catch (error) {
-//       console.error("Error replying to comment", error);
-//     }
-// };
-// const handleReply = (e) => {
-//   e.preventDefault();
-//   replyToComment();
-//   if (error) {
-//       notify(error);
-//   }
-// };
+//   const CommentsList = ({ productId }) => {
+//   const [comments, setComments] = useState([]);
   
+  const getCommentsByProduct = async (productId) => {
+    try {
+      const response = await axios.get(`http://localhost:4000/product/${productId}/view-comment`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching comments", error);
+      return []; // Return an empty array in case of error
+    }
+  };
+  export default function CustomerReview({ productId }) {
+    const [comments, setComments] = useState([]);
+    const [comment, setComment] = useState('')
+    useEffect(() => {
+      const fetchComments = async () => {
+        const commentsData = await getCommentsByProduct(productId);
+        setComments(commentsData);
+      };
+  
+      fetchComments();
+    }, [productId]);
+    
   return (
     <>
+    
       <article className="pt-8 ">
         <div className="flex-col lg:w-[800px] md:w-auto  bg-white border-b-2 border-r-2 border-gray-200 xs:px-0 sm:px-0 sm:py-4 md:px-4 rounded-lg sm:shadow-sm  mb-6">
           <div class="flex items-center mb-2 xs:px-2 xs:pt-4">
@@ -52,6 +42,13 @@ export default function CustomerReview() {
               src="https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&faces=1&faceindex=1&facepad=2.5&w=500&h=500&q=80"
             />
             <div class="flex items-center flex-1 px-4 font-bold leading-tight">
+            <article className="pt-8 ">
+            {comments.map(comment => (
+            <div key={comment._id} className="comment">
+            <p>{comment.commentText}</p>
+          </div>
+        ))}
+      </article>
               <p>
                 Customer 1{" "}
                 <time
@@ -63,6 +60,9 @@ export default function CustomerReview() {
               </p>
             </div>
           </div>
+          {[comment].content.map(comment => (
+        <comment key={comment._id} comment={comment} />
+              ))}
           <h3 class=" text-lg xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2">
             Thinking to buy another one!
           </h3>
