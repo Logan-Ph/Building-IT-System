@@ -18,6 +18,7 @@ export default function ManageUserPage() {
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const fetchData = useCallback(async () => {
     try {
@@ -28,8 +29,8 @@ export default function ManageUserPage() {
       setShippers(res.data.shippers);
       setIsLoading(false)
     }
-    catch (er) {
-      console.log(er);
+    catch (error) {
+      setError(error);
       setIsLoading(false)
     }
   }, [])
@@ -44,8 +45,8 @@ export default function ManageUserPage() {
 
   return (
     <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
-      {user && user.role === "User" && <Navigate to={"/"} replace />}
-      {user && user.role === "Vendor" && <Navigate to={"/dashboard"} replace />}
+      {user === null && <Navigate to={"/"} replace />}
+      {error && <Navigate to={"/"} replace />}
       <div className="overflow-x-auto">
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
@@ -64,12 +65,12 @@ export default function ManageUserPage() {
           {/* <Tabs.Item title="Reported Account" icon={HiClipboardList}>
             <UserTable data={shippers} type="reported user" />
           </Tabs.Item> */}
-          
+
           {/* Admin manage product */}
           {/* {/* <Tabs.Item title="Product" icon={AiFillDelete}>
             <AdminManageVendorProduct />
           </Tabs.Item> *\} */}
-        </Tabs> 
+        </Tabs>
       </div>
     </div>
   );

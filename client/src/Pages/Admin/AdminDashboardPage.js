@@ -1,16 +1,20 @@
 "use client";
 import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Carousel } from "flowbite-react";
 import bannerImage from "../../Components/images/banner1.jpg";
-
+import { Carousel } from 'flowbite-react';
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../../Context/UserContext";
 export default function DashboardPage() {
+  const {user} = useContext(UserContext)
   const [numberOfUsers, setNumberOfUsers] = useState(0);
   const [numberOfVendors, setNumberOfVendors] = useState(0);
   const [numberOfShippers, setNumberOfShippers] = useState(0);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
+  const [error, setError] = useState("");
 
   const fetchData = useCallback(async () => {
     try {
@@ -22,16 +26,22 @@ export default function DashboardPage() {
       setNumberOfShippers(res.data.numberOfShippers);
       setNumberOfProducts(res.data.numberOfProducts);
     } catch (error) {
-      console.log(error);
+      setError(error);
     }
   }, []);
+
+
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
+
+
   return (
     <>
+      {user === null && <Navigate to={"/"} replace />}
+      {error && <Navigate to={"/"} replace />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
@@ -50,7 +60,13 @@ export default function DashboardPage() {
           </h1>
           <div className="grid grid-cols-1">
             <div className="h-80 ">
-              <Carousel>
+              <Carousel leftControl={
+                <ArrowLeft />
+              }
+                rightControl={
+                  <ArrowRight />
+                }
+              >
                 <div>
                   <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xl  mb-3">
                     Carousel #1
@@ -62,7 +78,6 @@ export default function DashboardPage() {
                       class="bg-center bg-no-repeat bg-gray-700 bg-blend-multiply"
                     />
                   </div> */}
-
                   <div
                     id="image-preview"
                     class="max-w-full h-64 p-6 mb-4 bg-gray-700 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer object-fit bg-cover bg-center bg-no-repeat bg-blend-multiply"

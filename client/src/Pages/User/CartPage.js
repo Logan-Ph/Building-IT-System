@@ -5,14 +5,12 @@ import { Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContainer, toast } from "react-toastify";
 import aa from "search-insights";
-const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
 
 export default function CartPage() {
   const { user } = useContext(UserContext);
   const { cart, setCart } = useContext(CartContext);
   const [error, setError] = useState("");
   const [navigateTo, setNavigateTo] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [checkedProducts, setCheckedProducts] = useState([]); // Array of products that are checked [
   const [products, setProducts] = useState([]); // Array of products in the cart
 
@@ -24,10 +22,8 @@ export default function CartPage() {
       setProducts(() =>
         res.data.products.map((product) => ({ ...product, checked: false }))
       );
-      setIsLoading(false);
     } catch (error) {
       setError(error);
-      setIsLoading(false);
     }
   }, []);
 
@@ -109,7 +105,6 @@ export default function CartPage() {
     localStorage.setItem('products', JSON.stringify(checkedProducts));
     aa('addedToCartObjectIDs', {
       userToken: user._id, // required for Node.js
-      authenticatedUserToken: accessToken,
       eventName: 'addedToCartObjectIDs',
       index: 'rBuy',
       objectIDs: checkedProducts.map(product => product.product),
@@ -122,14 +117,9 @@ export default function CartPage() {
     });
     setNavigateTo('/checkout')
   }
-
-  if (user === undefined || isLoading) {
-    return <div>isLoading...</div>;
-  }
-
   return (
     <>
-      {!user && <Navigate to="/" />}
+      {user === null && <Navigate to={"/"} />}
       {error && <Navigate to="/" />}
       {navigateTo && <Navigate to={navigateTo} />}
       <ToastContainer

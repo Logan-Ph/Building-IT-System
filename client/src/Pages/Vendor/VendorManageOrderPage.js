@@ -12,6 +12,15 @@ export default function ManageOrderPage() {
     const [orders, setOrders] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('');
+    const initialStatuses = {
+        "Unpaid": null,
+        "To Ship": null,
+        "Shipping": null,
+        "Completed": null,
+        "Cancelled": null,
+        "Failed Delivery": null
+    };
+    const headerContent = ["Order ID", "Customer Name", "Order Date", "Shipping Address", "Contact Number", "Status"]
 
     const getOrders = useCallback(async () => {
         try {
@@ -58,11 +67,19 @@ export default function ManageOrderPage() {
                     </div>
                 </div>
                 <div className='relative'>
-                    <OrdersInfo orders={orders} searchTerm={searchTerm} className="w-full"/>
+                    <OrdersInfo orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} initialStatuses={initialStatuses} headerContent={headerContent} className="w-full" />
                 </div>
-
             </div>
         </>
     )
+}
+
+function filterOrders(orders, searchTerm) {
+    const regex = new RegExp(searchTerm, 'i');
+    return orders.map(order => {
+        const date = new Date(order.date);
+        const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+        return { ...order, date: formattedDate };
+    }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
 }
 

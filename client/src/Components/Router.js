@@ -42,6 +42,7 @@ import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
+import ShipperHeader from "./ShipperHeader";
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -102,6 +103,16 @@ export default function Router() {
       </>
     );
   };
+
+  const ShipperLayout = () => {
+    return (
+      <>
+        <ShipperHeader />
+        <Outlet />
+      </>
+    )
+  }
+
 
   const BrowserRoutes = createBrowserRouter([
     {
@@ -169,7 +180,7 @@ export default function Router() {
       element: <VendorLayout />,
       children: [
         {
-          path: "/dashboard",
+          path: "/vendor/dashboard",
           element: <DashboardPage />,
         },
         {
@@ -187,10 +198,6 @@ export default function Router() {
         {
           path: "/edit-product/:id",
           element: <VendorEditingProduct />,
-        },
-        {
-          path: "/shipper-dashboard",
-          element: <ShipperDashboardPage />,
         },
         {
           path: "/edit-store",
@@ -273,6 +280,16 @@ export default function Router() {
         },
       ],
     },
+    {
+      path: "/",
+      element: <ShipperLayout />,
+      children: [
+        {
+          path: "/shipper/dashboard",
+          element: <ShipperDashboardPage />,
+        },
+      ],
+    }
   ]);
 
   return (

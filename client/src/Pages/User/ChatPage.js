@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../../Context/UserContext";
+import { Navigate } from "react-router-dom";
 
 export default function ChatPage() {
   const [isChatAreaVisible, setChatAreaVisible] = useState(false);
@@ -10,7 +11,6 @@ export default function ChatPage() {
   const [message, setMessage] = useState('');
   const [threadIndex, setThreadIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   const getThreads = useCallback(async () => {
     try {
@@ -18,7 +18,6 @@ export default function ChatPage() {
       setUsers(res.data.users);
       console.log(res.data.users)
       setThreads(res.data.threads);
-      setIsLoading(false)
     } catch (err) {
       console.log(err);
     }
@@ -72,12 +71,9 @@ export default function ChatPage() {
     };
   }, []);
 
-  if (isLoading || user === undefined) {
-    return <div>Loading...</div>
-  }
-
   return (
     <section>
+      {user === null && <Navigate to={'/'} replace />}
       {/* Component */}
       <div className="flex">
         {/* <!-- Sidebar --> */}

@@ -2,14 +2,11 @@
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { useEffect } from "react";
-import { UserContext } from "../Context/UserContext";
-import { Navigate } from "react-router-dom";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [expanded, setExpanded] = useState(true);
-  const { user } = useContext(UserContext)
 
   function getSize() {
     setWidth(window.innerWidth);

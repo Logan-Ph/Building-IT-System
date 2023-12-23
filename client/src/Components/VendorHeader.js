@@ -37,8 +37,10 @@ export default function VendorHeader() {
 
   return (
     <>
+      {user === null && <Navigate to={'/'} replace />}
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
+      {user && user.role === "Shipper" && <Navigate to={'/shipper/dashboard'} replace />}
       {error && <Navigate to={'/login'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <section>
@@ -47,7 +49,7 @@ export default function VendorHeader() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {/* <!-- logo --> */}
-                <a className="flex items-center lg:ml-10 " href='\dashboard'>
+                <a className="flex items-center lg:ml-10 " href='\vendor\dashboard'>
                   <img
                     src={require("./images/logo1.png")}
                     className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"

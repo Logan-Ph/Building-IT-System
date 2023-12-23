@@ -38,20 +38,13 @@ export default function AdminHeader() {
     return <div>Loading....</div>
   }
 
-  if (error) {
-    return <Navigate to='/login' replace={true} />
-  }
-
-  if (user && user.role === "User") {
-    return <Navigate to='/' replace={true} />
-  }
-
-  if (user && user.role === "Vendor") {
-    return <Navigate to='/dashboard' replace={true} />
-  }
-
   return (
     <>
+      {user === null && <Navigate to={'/'} replace />}
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Shipper" && <Navigate to={'/shipper/dashboard'} replace />}
+      {user && user.role === "Vendor" && <Navigate to={'/vendor/dashboard'} replace />}
+      {error && <Navigate to={'/login'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <section>
         <div className="w-full">

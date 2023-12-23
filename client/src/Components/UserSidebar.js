@@ -1,18 +1,12 @@
 import { useContext, useState } from "react"
 import { UserContext } from '../Context/UserContext'
 
-export default function UserSidebar() {
+export default function UserSidebar({ activeMenu }) {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true)
-    const [activeDropdown, setActiveDropdown] = useState(null)
     const { user } = useContext(UserContext)
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
-        setActiveDropdown(null); // Hide dropdown when sidebar is toggled
-    };
-
-    const handleDropdownToggle = (index) => {
-        setActiveDropdown(activeDropdown === index ? null : index);
     };
 
     if (user === undefined) {
@@ -22,8 +16,7 @@ export default function UserSidebar() {
     return (
         <>
             {/* <!-- SIDEBAR --> */}
-            <div className={`absolute left-0 top-20 md:top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-40`} id="sidebar">
-
+            <div className={`absolute left-0 top-20 md:top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-4`} id="sidebar">
                 <div class="relative p-4 pb-2 flex justify-between items-center">
                     <img src="" class="overflow-hidden transition-all w-32" alt=""></img>
                     <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">
@@ -31,7 +24,6 @@ export default function UserSidebar() {
                             <path d="M7 6v12"></path></svg>
                     </button>
                 </div>
-
                 <span className="p-4 flex items-center gap-4 hover:bg-blue-50">
                     <span href="#" className="flex items-center gap-4 hover:bg-blue-50" onClick={handleSidebarToggle}>
                         <img src={(user && user.img) ? `data:image/jpeg;base64,${user.img}` : require("../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
@@ -40,45 +32,19 @@ export default function UserSidebar() {
                         </div>
                     </span>
                 </span>
-
                 <div className="py-4">
                     <span className="text-sm text-gray-500 uppercase ml-4 inline-block mb-2 sidebar-menu-title">Menu</span>
                     <ul className="sidebar-menu">
                         <li>
-                            <a href="/profile" className="active">
+                            <a href="/profile" className={(activeMenu === "profile") ? "active" : ""} >
                                 <i className='bx bx-user-circle sidebar-menu-icon' ></i>
                                 Account
                             </a>
                         </li>
                         <li>
-                            <a href="/user-order" onClick={() => handleDropdownToggle(0)}>
+                            <a href="/user-order" className={(activeMenu === "order") ? "active" : ""} >
                                 <i className='bx bx-receipt sidebar-menu-icon'></i>
                                 Order
-                            </a>
-                            {/* <ul className={`sidebar-dropdown ${activeDropdown === 0 ? '' : 'hidden'} ml-4 border-l border-blue-600`}>
-                            {dropdownItems.map((item, index) => (
-                                <li key={index} className={index === 0 ? 'active' : ''}>
-                                    <a href="#">{item}</a>
-                                </li>
-                            ))}
-                        </ul> */}
-                        </li>
-                        <li>
-                            <span href="#">
-                                <i className='bx bx-bell sidebar-menu-icon'></i>
-                                Notifications
-                            </span>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className='bx bx-heart sidebar-menu-icon' ></i>
-                                Wishlist
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className='bx bx-question-mark sidebar-menu-icon' ></i>
-                                Help
                             </a>
                         </li>
                     </ul>

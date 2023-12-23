@@ -15,7 +15,6 @@ export default function Slider() {
         try {
             const response = await axios.get("http://localhost:4000/slider", { withCredentials: true });
             setImages(response.data.images);
-            console.log(images);
         } catch (error) {
             console.error('Error fetching products:', error);
         }
@@ -28,7 +27,7 @@ export default function Slider() {
             {images && images.map((image, index) => (
                 <SwiperSlide key={index} className='w-[!600px]'>
                     <img src={image}
-                    alt="..." className='object-cover'/>
+                        alt="..." className='object-cover' />
                 </SwiperSlide>
             ))}
         </Swiper>

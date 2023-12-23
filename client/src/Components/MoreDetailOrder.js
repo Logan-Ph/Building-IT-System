@@ -1,13 +1,14 @@
 import axios from "axios";
 import { Modal } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { UserContext } from "../Context/UserContext";
 
 export default function MoreDetailOrder({ order }) {
+    const { user } = useContext(UserContext);
     const [openModal, setOpenModal] = useState(false);
     const [orderQuantity, setOrderQuantity] = useState(0);
     const [orderPrice, setOrderPrice] = useState(0);
-    const [msg, setMsg] = useState("")
     const date = new Date(order.date);
     const formattedDate = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -26,7 +27,11 @@ export default function MoreDetailOrder({ order }) {
 
     const postData = async () => {
         await axios.post("http://localhost:4000/confirm-order", { orderId: order._id }, { withCredentials: true })
-            .then(res => { setMsg(res.data.msg); notify(res.data.msg) })
+            .then(res => {
+                notify(res.data.msg)
+                window.location.reload();
+            })
+            .catch(err => { notify(err.response.data.error) })
     }
 
     const notify = (msg) => {
@@ -60,9 +65,9 @@ export default function MoreDetailOrder({ order }) {
             pauseOnHover={false}
             theme="light"
         />
-        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
+        <span className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
             More
-        </a>
+        </span>
         <Modal show={openModal} onClose={() => setOpenModal(false)}>
             <Modal.Header>
                 <div>
@@ -121,7 +126,7 @@ export default function MoreDetailOrder({ order }) {
                     </div>
                 </div>
             </Modal.Footer>
-            {order.status === "Unpaid" &&
+            {(user && ((order.status === "Unpaid" && user.role === "Vendor") || ((order.status !== "Unpaid" && order.status !== "Completed" && order.status !== "Cancelled" && order.status !== "Failed Delivery") && user.role === "Shipper"))) &&
                 <Modal.Footer>
                     <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2" onClick={handleSubmit}>Confirm</button>
                     <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" onClick={() => setOpenModal(false)}>Cancel</button>

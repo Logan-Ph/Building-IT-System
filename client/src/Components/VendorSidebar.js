@@ -3,7 +3,7 @@ import Sidebar, { SidebarItem } from "./Sidebar";
 
 export default function VendorSidebar() {
     return (<Sidebar>
-        <a href="/dashboard">
+        <a href="/vendor/dashboard">
             <SidebarItem icon={<Home size={20} />} text="Dashboard" />
         </a>
 

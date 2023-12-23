@@ -189,10 +189,10 @@ exports.userRegister = async (req, res) => {
         throw new Error("Invalid email address");
       }
       sendEmailVerification(email)
-      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
+      return res.status(200).json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).send(error.message || "Error Occured");
   }
 }
 
@@ -237,10 +237,10 @@ exports.vendorRegister = async (req, res) => {
         throw new Error("Invalid email address");
       }
       sendEmailVerification(email)
-      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
+      return res.status(200).json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).send(error.message || "Error Occured");
   }
 }
 
@@ -283,10 +283,10 @@ exports.shipperRegister = async (req, res) => {
         throw new Error("Invalid email address");
       }
       sendEmailVerification(email)
-      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
+      return res.status(200).json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).send(error.message || "Error Occured");
   }
 }
 
@@ -529,10 +529,25 @@ exports.vendorProductPage = async (req, res) => {
 }
 
 exports.confirmOrder = async (req, res) => {
-  const orderId = req.body.orderId;
-  await Order.findByIdAndUpdate(orderId, { status: "To Ship" });
-  return res.status(200).json({ msg: "Order confirmed" });
+  try {
 
+    const orderId = req.body.orderId;
+    const order = await Order.findById(orderId);
+
+    const statuses = ["Unpaid", "To Ship", "Shipping", "Completed"];
+    const currentIndex = statuses.indexOf(order.status);
+
+    if (currentIndex === statuses.length - 1) {
+      return res.status(500).json({ msg: "Cannot update status" });
+    }
+
+    const nextStatus = statuses[currentIndex + 1];
+    await Order.findByIdAndUpdate(orderId, { status: nextStatus });
+
+    return res.status(200).json({ msg: "Order confirmed" });
+  } catch (error) {
+    return res.status(500).json({ error: "Can not found order" });
+  }
 }
 
 exports.getVendorDashboard = async (req, res) => {
@@ -557,10 +572,6 @@ exports.getVendorDashboard = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
-
-exports.postVendorDashboard = async (req, res) => {
-
 }
 
 exports.cartPage = async (req, res) => {
@@ -1054,16 +1065,47 @@ exports.getAdminDashboard = async (req, res) => {
 
 exports.userOrder = async (req, res) => {
   try {
-    let orders = (await Order.find({ userId: req.user._id }))
-    orders = await Promise.all(orders.map(async (order) => {
+    let orders = await Order.find({ userId: req.user._id });
+    let vendorIds = [...new Set(orders.map(order => order.vendorID))];
+    let vendors = await Vendor.find({ _id: { $in: vendorIds } }, { businessName: 1 });
+    let vendorNameMap = {};
+    vendors.forEach(vendor => {
+      vendorNameMap[vendor._id.toString()] = vendor.businessName;
+    });
+    orders = orders.map(order => {
       let jsonOrder = order.toJSON();
-      jsonOrder.vendorName = (await Vendor.findOne(order.vendorID, { businessName: 1 })).businessName;
+      jsonOrder.vendorName = vendorNameMap[order.vendorID.toString()];
       return jsonOrder;
-    }));
-    console.log(orders)
+    });
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
   } catch (error) {
-    console.log(error)
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
+}
+
+exports.getShipperDashboard = async (req, res) => {
+  try {
+    const orders = await Order.find({ status: { $ne: "Unpaid" } });
+
+    const ordersCount = await Order.aggregate([
+      {
+        $match: { status: { $ne: "Unpaid" } }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const ordersCountByStatus = {};
+    ordersCount.forEach(orderGroup => {
+      ordersCountByStatus[orderGroup._id] = orderGroup.count;
+    });
+    return res.status(200).json({ orders: orders, ordersCountByStatus: ordersCountByStatus });
+  }
+  catch (error) {
     return res.status(500).json({ error: "Cannot find order. " })
   }
 }

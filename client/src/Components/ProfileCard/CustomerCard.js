@@ -4,6 +4,15 @@ import OrdersInfo from "../OrdersInfo";
 
 export default function CustomerCard({ user, orders }) {
   const [searchTerm, setSearchTerm] = useState("")
+  const initialStatuses = {
+    "Unpaid": null,
+    "To Ship": null,
+    "Shipping": null,
+    "Completed": null,
+    "Cancelled": null,
+    "Failed Delivery": null
+  };
+  const headerContent = ["Order ID", "Customer Name", "Order Date", "Shipping Address", "Contact Number", "Status"]
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
@@ -27,7 +36,7 @@ export default function CustomerCard({ user, orders }) {
             </span>
           </div>
         </div>
-        
+
         <div class="text-lg mt-3 text-black font-medium">Adresses</div>
         <div class="my-3">
           <div class="text-base text-gray-500 border-t border-gray-200 py-5 px-3">
@@ -62,9 +71,18 @@ export default function CustomerCard({ user, orders }) {
           </div>
         </div>
         <div>
-          <OrdersInfo orders={orders} searchTerm={searchTerm} />
+          <OrdersInfo orders={orders} searchTerm={searchTerm} initialStatuses={initialStatuses} filterOrders={filterOrders} headerContent={headerContent} />
         </div>
       </div>
     </>
   );
+}
+
+function filterOrders(orders, searchTerm) {
+  const regex = new RegExp(searchTerm, 'i');
+  return orders.map(order => {
+    const date = new Date(order.date);
+    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+    return { ...order, date: formattedDate };
+  }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
 }
