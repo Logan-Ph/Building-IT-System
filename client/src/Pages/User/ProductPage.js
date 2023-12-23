@@ -75,8 +75,6 @@ export default function TestingPage() {
   return (
     <>
       {error && <Navigate to={"/"} replace />}
-      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <ToastContainer
         position="top-center"
         autoClose={10000}
