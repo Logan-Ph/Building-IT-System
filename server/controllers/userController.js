@@ -1297,7 +1297,7 @@ exports.followVendor = async (req,res) => {
       followerList.followers.push({ userID: req.user._id });
       await followerList.save();
     }
-    return res.status(200).json({ message: "Following" });
+    return res.status(200).json({ following: true });
   } catch (error) {
     res.status(500).json({ message: error.message || "Error Occured" });
   }
@@ -1316,7 +1316,7 @@ exports.unfollowVendor = async (req, res) => {
     if (result.nModified === 0) {
       return res.status(500).json({ error: "User is not following the vendor." });
     }
-    return res.status(200).json({ message: "Unfollowed successfully." });
+    return res.status(200).json({ following: false });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: error.message || "Error Occurred" });
