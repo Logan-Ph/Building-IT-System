@@ -163,36 +163,18 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
                                 </Modal.Header>
                                 <Modal.Body className="overflow-y-auto">
-                                    <h4 className="mb-2 font-bold">Select a reason</h4>
-                                    <div className='mb-2 flex items-center'>
-                                        <input type="checkbox" className='rounded-md'/>
-                                        <span className='ml-2 text-md'>Product is fake/replica</span>
-                                    </div>
-
-                                    <div className='mb-2 flex items-center'>
-                                        <input type="checkbox" className='rounded-md'/>
-                                        <span className='ml-2 text-md'>The product's origin is unidentified</span>
-                                    </div>
-
-                                    <div className='mb-2 flex items-center'>
-                                        <input type="checkbox" className='rounded-md'/>
-                                        <span className='ml-2 text-md'>The product's illustrator is indistinct </span>
-                                    </div>
-                                    
-                                    <div className='mb-2 flex items-center'>
-                                        <input type="checkbox" className='rounded-md'/>
-                                        <span className='ml-2 text-md'>The product's name does not match with product illustrators </span>
-                                    </div>
-
-                                    <div className='mb-2 flex items-center'>
-                                        <input type="checkbox" className='rounded-md'/>
-                                        <span className='ml-2 text-md'>Other</span>
-                                    </div>
-
-                                    <hr className="my-4 border border-gray-200"></hr>
+                                    <label for="reason" className="font-bold">Select a reason:</label>
+                                    <select name="reportedReason" id="reportedReason" className="w-full my-2">
+                                        <option disabled value="" >Select a reason below</option>
+                                        <option value="fake">Product is fake/replica</option>
+                                        <option value="unidentifiedProductOrigin">The product's origin is unidentified</option>
+                                        <option value="indistinctProductIllustratior">The product's illustrators is indistinct</option>
+                                        <option value="unmatchedProductName">The product's name does not match with product illustrators</option>
+                                        <option value="Other">Other</option>
+                                    </select>
 
                                     <div className="my-2">
-                                        <textarea id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)"></textarea>
+                                        <textarea id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
                                     </div>
                                 </Modal.Body>
                                     
