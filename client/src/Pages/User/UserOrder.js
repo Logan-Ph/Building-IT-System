@@ -10,6 +10,7 @@ export default function UserOrder() {
     const [isLoading, setIsLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState("Unpaid");
+    const activeMenu = "order"
     const initialStatuses = {
         "Unpaid": null,
         "To Ship": null,
@@ -42,7 +43,7 @@ export default function UserOrder() {
     return (
         <>
             {error && <Navigate to="/" />}
-            <UserSidebar />
+            <UserSidebar activeMenu={activeMenu} />
             <div className="pl-0 md:pl-64 transition-all" id="main">
 
                 <div className='pl-8 mt-6 p-5'>
@@ -51,7 +52,7 @@ export default function UserOrder() {
                     </h1>
                 </div>
 
-                <div className="max-w-8xl px-4 sm:px-6 lg:px-8 m-2 pb-2 w-full mx-auto">
+                <div className="max-w-full px-4 sm:px-6 lg:px-8 m-2 pb-2 w-full mx-auto">
                     <div className="flex items-center py-10">
                         <div className="flex flex-row items-center">
                             <input type="text" name="search" placeholder="Search by name, id, ...  "
@@ -69,9 +70,6 @@ export default function UserOrder() {
                         </li>
                         <li class="me-2">
                             <span className={`${activeTab === "To Ship" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("To Ship")}>To ship</span>
-                        </li>
-                        <li class="me-2">
-                            <span className={`${activeTab === "Shipping" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Shipping")}>Delivering</span>
                         </li>
                         <li class="me-2">
                             <span className={`${activeTab === "Completed" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Completed")}>Completed</span>
@@ -129,7 +127,7 @@ function filterOrders(orders, searchTerm) {
         const date = new Date(order.date);
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
         return { ...order, date: formattedDate };
-    }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.shippingAddress));
+    }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.vendorName));
 }
 
 function OrderContent({ orders, searchTerm }) {

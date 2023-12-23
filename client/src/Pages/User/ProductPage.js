@@ -99,7 +99,7 @@ export default function TestingPage() {
 
         <div class="flex xs:sm:flex-col lg:md:flex-row items-center text-gray-800 ">
           <div className="flex flex-row my-8 w-full lg:w-3/5 items-center mx-auto lg:md:justify-normal sm:xs:justify-center">
-            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" />
+            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" alt=""/>
             <div className="ml-4">
               <div className="font-semibold lg:md:text-3xl xs:sm:text-2xl mb-2">{vendorName}</div>
               <div className="flex">

@@ -56,6 +56,6 @@ passport.serializeUser((user, done) => {
   done(null, user._id)
 })
 passport.deserializeUser(async (id, done) => {
-  const user = (await User.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1, streetAddress: 1, city: 1, ward: 1, district: 1 }))[0] || (await Vendor.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, businessName: 1, address: 1 }))[0] || (await Shipper.find(id))[0];
+  const user = (await User.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1, streetAddress: 1, city: 1, ward: 1, district: 1 }))[0] || (await Vendor.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, businessName: 1, address: 1 }))[0] || (await Shipper.find({ _id: id }, { email: 1, phoneNumber: 1, password: 1, verify: 1, role: 1, name: 1, address: 1 }))[0];
   done(null, user)
 })

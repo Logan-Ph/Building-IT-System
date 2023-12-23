@@ -17,6 +17,7 @@ export default function UserProfile() {
     const [name, setName] = useState('')
     const email = user && user.email;
     const [file, setFile] = useState();
+    const activeMenu = "profile";
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -113,7 +114,8 @@ export default function UserProfile() {
             />
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
-                <UserSidebar />
+                <UserSidebar activeMenu={activeMenu} />
+
                 {/* <!-- SIDEBAR --> */}
 
                 {/* <!-- MAIN --> */}
