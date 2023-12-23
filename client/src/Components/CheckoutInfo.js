@@ -144,7 +144,7 @@ export default function CheckoutInfo({ setCheckoutInfo, products, price, checkou
                                         value=""
                                         class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
                                         required
-                                        onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, isRemember: e.target.value }))}
+                                        onChange={(e) => setCheckoutInfo((prev) => ({ ...prev, isRemember: e.target.checked }))}
                                     />
                                 </div>
                                 <label

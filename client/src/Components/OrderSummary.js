@@ -58,8 +58,9 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
 
   const postData = async () => {
     try {
-      if (!products) {
+      if (products.length === 0) {
         setError("There are no products to checkout");
+        return;
       }
 
       if (!(checkoutInfo["phoneNumber"] && checkoutInfo["city"] && checkoutInfo["district"] && checkoutInfo["ward"] && checkoutInfo["streetAddress"])) {
@@ -83,6 +84,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       });
       localStorage.setItem('products', JSON.stringify([]));
       setError("");
+      window.location.reload();
     } catch (er) {
       setError(er);
       setMsg("");
@@ -96,6 +98,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
     }
     postData();
   };
+
 
   return (
     <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">

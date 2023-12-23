@@ -84,7 +84,6 @@ export default function Header() {
       {user && user.role === "Vendor" && <Navigate to={'/vendor/dashboard'} replace />}
       {user && user.role === "Shipper" && <Navigate to={'/shipper/dashboard'} replace />}
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-      {user === null && <Navigate to={'/'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <div className="w-full">
         <div className="border py-3 px-6 gradient-background">
