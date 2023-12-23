@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import UserSidebar from "../../Components/UserSidebar";
 import Pagination from "../../Components/Pagination";
 import { Navigate } from 'react-router';
 import axios from "axios";
+import { UserContext } from "../../Context/UserContext";
 
 export default function UserOrder() {
+    const {user} = useContext(UserContext)
     const [error, setError] = useState("");
     const [orders, setOrders] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -42,6 +44,7 @@ export default function UserOrder() {
 
     return (
         <>
+            {user === null && <Navigate to={'/'} replace />}
             {error && <Navigate to="/" />}
             <UserSidebar activeMenu={activeMenu} />
             <div className="pl-0 md:pl-64 transition-all" id="main">
