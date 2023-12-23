@@ -30,6 +30,7 @@ const imagekit = new ImageKit({
 
 const fs = require("fs");
 const { error } = require('console')
+const order = require('../models/order')
 require('dotenv').config()
 
 function convertUser(user) {
@@ -208,7 +209,6 @@ exports.slider = async (req, res) => {
   try {
     const banner = await HomepageBanner.findOne({ title: 'Banner' })
     const carouselImage = banner.img;
-    console.log(carouselImage);
     return res.json({ images: carouselImage });
   } catch (error) {
     console.log(error)
@@ -290,10 +290,10 @@ exports.userRegister = async (req, res) => {
         throw new Error("Invalid email address");
       }
       sendEmailVerification(email)
-      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
+      return res.status(200).json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).send(error.message || "Error Occured");
   }
 }
 
@@ -338,10 +338,10 @@ exports.vendorRegister = async (req, res) => {
         throw new Error("Invalid email address");
       }
       sendEmailVerification(email)
-      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
+      return res.status(200).json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).send(error.message || "Error Occured");
   }
 }
 
@@ -384,10 +384,10 @@ exports.shipperRegister = async (req, res) => {
         throw new Error("Invalid email address");
       }
       sendEmailVerification(email)
-      return res.json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
+      return res.status(200).json("Thank you for registering! A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder.");
     }
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    res.status(500).send(error.message || "Error Occured");
   }
 }
 
@@ -630,10 +630,25 @@ exports.vendorProductPage = async (req, res) => {
 }
 
 exports.confirmOrder = async (req, res) => {
-  const orderId = req.body.orderId;
-  await Order.findByIdAndUpdate(orderId, { status: "To Ship" });
-  return res.status(200).json({ msg: "Order confirmed" });
+  try {
 
+    const orderId = req.body.orderId;
+    const order = await Order.findById(orderId);
+
+    const statuses = ["Unpaid", "To Ship", "Shipping", "Completed"];
+    const currentIndex = statuses.indexOf(order.status);
+
+    if (currentIndex === statuses.length - 1) {
+      return res.status(500).json({ msg: "Cannot update status" });
+    }
+
+    const nextStatus = statuses[currentIndex + 1];
+    await Order.findByIdAndUpdate(orderId, { status: nextStatus });
+
+    return res.status(200).json({ msg: "Order confirmed" });
+  } catch (error) {
+    return res.status(500).json({ error: "Can not found order" });
+  }
 }
 
 exports.getVendorDashboard = async (req, res) => {
@@ -658,10 +673,6 @@ exports.getVendorDashboard = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
-
-exports.postVendorDashboard = async (req, res) => {
-
 }
 
 exports.cartPage = async (req, res) => {
@@ -736,14 +747,6 @@ exports.updateVendor = async (req, res) => {
     }
 
     if (req.body.address) { vendor.address = req.body.address; }
-    if (req.body.businessName) {
-      const checkBusinessName = (await Vendor.findOne({ businessName: req.body.businessName }));
-      if (checkBusinessName(req.body.businessName)) {
-        return res.status(500).json("Business name has already existed.")
-      } else {
-        vendor.businessName = req.body.businessName;
-      }
-    }
     if (req.body.phoneNumber) {
       const phoneNumber = req.body.phoneNumber;
       const checkPhone =
@@ -1159,13 +1162,60 @@ exports.createThread = async (req, res) => {
 
 exports.getAdminDashboard = async (req, res) => {
   try {
-    const numberOfUsers = await User.countDocuments();
+    const numberOfUsers = await User.countDocuments({ role: { $ne: 'Admin' } });
     const numberOfVendors = await Vendor.countDocuments();
     const numberOfShippers = await Shipper.countDocuments();
     const numberOfProducts = await Product.countDocuments();
     return res.status(200).json({ numberOfUsers: numberOfUsers, numberOfVendors: numberOfVendors, numberOfShippers: numberOfShippers, numberOfProducts: numberOfProducts });
   } catch (error) { }
   return res.status(500).json({ error: error })
+}
+
+exports.userOrder = async (req, res) => {
+  try {
+    let orders = await Order.find({ userId: req.user._id });
+    let vendorIds = [...new Set(orders.map(order => order.vendorID))];
+    let vendors = await Vendor.find({ _id: { $in: vendorIds } }, { businessName: 1 });
+    let vendorNameMap = {};
+    vendors.forEach(vendor => {
+      vendorNameMap[vendor._id.toString()] = vendor.businessName;
+    });
+    orders = orders.map(order => {
+      let jsonOrder = order.toJSON();
+      jsonOrder.vendorName = vendorNameMap[order.vendorID.toString()];
+      return jsonOrder;
+    });
+    return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
+  } catch (error) {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
+}
+
+exports.getShipperDashboard = async (req, res) => {
+  try {
+    const orders = await Order.find({ status: { $ne: "Unpaid" } });
+
+    const ordersCount = await Order.aggregate([
+      {
+        $match: { status: { $ne: "Unpaid" } }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const ordersCountByStatus = {};
+    ordersCount.forEach(orderGroup => {
+      ordersCountByStatus[orderGroup._id] = orderGroup.count;
+    });
+    return res.status(200).json({ orders: orders, ordersCountByStatus: ordersCountByStatus });
+  }
+  catch (error) {
+    return res.status(500).json({ error: "Cannot find order. " })
+  }
 }
 
 exports.reportVendor = async (req, res) => {

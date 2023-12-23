@@ -38,20 +38,13 @@ export default function AdminHeader() {
     return <div>Loading....</div>
   }
 
-  if (error) {
-    return <Navigate to='/login' replace={true} />
-  }
-
-  if (user && user.role === "User") {
-    return <Navigate to='/' replace={true} />
-  }
-
-  if (user && user.role === "Vendor") {
-    return <Navigate to='/dashboard' replace={true} />
-  }
-
   return (
     <>
+      {user === null && <Navigate to={'/'} replace />}
+      {user && user.role === "User" && <Navigate to={'/'} replace />}
+      {user && user.role === "Shipper" && <Navigate to={'/shipper/dashboard'} replace />}
+      {user && user.role === "Vendor" && <Navigate to={'/vendor/dashboard'} replace />}
+      {error && <Navigate to={'/login'} replace />}
       {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <section>
         <div className="w-full">
@@ -59,7 +52,7 @@ export default function AdminHeader() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {/* <!-- logo --> */}
-                <a className="flex items-center lg:ml-10 " href='\admin\manage-user'>
+                <a className="flex items-center lg:ml-10 " href='\admin\dashboard'>
                   <img
                     src={require("./images/logo1.png")}
                     className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
@@ -75,7 +68,6 @@ export default function AdminHeader() {
                 <DropdownAva user={user} handleLogout={handleLogout} />
                 <p className='font-light text-gray-500 ml-2 xl:text-lg lg:text-lg md:text-md sm:text-sm xs:text-xs'>{user && user.businessName}</p>
               </div>
-
             </div>
           </div>
         </div>

@@ -10,14 +10,13 @@ import { UserContext } from '../../Context/UserContext';
 import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
 import { Carousel } from 'flowbite-react';
-
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function Homepage() {
     const { user } = useContext(UserContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [navigateTo, setNavigateTo] = useState("");
-
 
     const fetchProduct = useCallback(async () => {
         try {
@@ -40,8 +39,6 @@ export default function Homepage() {
 
     return (
         <>
-            {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
-            {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
             {navigateTo && <Navigate to={navigateTo} replace={true} />}
             <ToastContainer
                 position="top-center"
@@ -54,6 +51,8 @@ export default function Homepage() {
                 draggable
                 pauseOnHover={false}
                 theme="light"
+                
+                
             />
 
             <section className='bg-gray-50 py-6'>
@@ -99,7 +98,14 @@ function MiddleBanner({ setNavigateTo }) {
         <div className='grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid sm:hidden xs:hidden'>
 
             <div className="h-80">
-                <Carousel>
+                <Carousel leftControl={
+                <ArrowLeft /> 
+                 
+                
+              }
+            rightControl={
+              <ArrowRight />
+            }>
                     <img src={require("../../Components/images/bannerN5.jpg")} alt="banner1" className=' border border-gray-200 shadow-lg' />
                     <img src={require("../../Components/images/bannerN6.jpg")} alt="banner2" className=' border border-gray-200 shadow-lg' />
                     <img src={require("../../Components/images/bannerN9.jpg")} alt="banner3" className='border border-gray-200 shadow-lg' />

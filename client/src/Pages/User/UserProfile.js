@@ -6,13 +6,9 @@ import { ToastContainer, toast } from 'react-toastify'
 import { Navigate } from 'react-router';
 import UserSidebar from "../../Components/UserSidebar";
 
-
-
 export default function UserProfile() {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
-    const [activeDropdown, setActiveDropdown] = useState(null)
     const [activeTab, setActiveTab] = useState("profile")
-    const dropdownItems = ['All', 'Waiting For Payment', 'Processing', 'Being Delivered', 'Completed', 'Cancelled']
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const { user } = useContext(UserContext)
@@ -21,20 +17,15 @@ export default function UserProfile() {
     const [name, setName] = useState('')
     const email = user && user.email;
     const [file, setFile] = useState();
+    const activeMenu = "profile";
 
     const handleSidebarToggle = () => {
         setIsSidebarCollapsed(!isSidebarCollapsed);
-        setActiveDropdown(null); // Hide dropdown when sidebar is toggled
     };
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
-
-    const handleDropdownToggle = (index) => {
-        setActiveDropdown(activeDropdown === index ? null : index);
-    };
-
 
     const notify = (error) => {
         toast.error(error, {
@@ -123,12 +114,12 @@ export default function UserProfile() {
             />
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
-                <UserSidebar /> 
+                <UserSidebar activeMenu={activeMenu} />
+
                 {/* <!-- SIDEBAR --> */}
 
                 {/* <!-- MAIN --> */}
                 <div className="pl-0 md:pl-64 transition-all" id="main">
-
                     <div class="p-4 pb-2 flex justify-between items-center visible md:hidden">
                         <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-last cursor-pointer toggle-sidebar " onClick={handleSidebarToggle}>

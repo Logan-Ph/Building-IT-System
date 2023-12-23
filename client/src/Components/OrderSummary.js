@@ -3,7 +3,6 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import aa from "search-insights";
 import { UserContext } from "../Context/UserContext";
-const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
 
 export default function OrderSummary({ checkoutInfo, price, products }) {
   const [msg, setMsg] = useState("");
@@ -72,7 +71,6 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       setMsg(res.data.message);
       aa('purchasedObjectIDs', {
         userToken: user._id, // required for Node.js
-        authenticatedUserToken: accessToken,
         eventName: 'purchasedObjectIDs',
         index: 'rBuy',
         objectIDs: products.map(product => product.product),

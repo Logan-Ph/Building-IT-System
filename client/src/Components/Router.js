@@ -41,6 +41,8 @@ import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
+import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
+import ShipperHeader from "./ShipperHeader";
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -79,14 +81,11 @@ export default function Router() {
   const VendorLayout = () => {
     return (
       <>
-        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
-          <VendorHeader />
-          <div className="flex  ">
-            <VendorSidebar />
-            <Outlet />
-          </div>
-        </InstantSearch>
-
+        <VendorHeader />
+        <div className="flex">
+          <VendorSidebar />
+          <Outlet />
+        </div>
       </>
     );
   };
@@ -104,6 +103,16 @@ export default function Router() {
       </>
     );
   };
+
+  const ShipperLayout = () => {
+    return (
+      <>
+        <ShipperHeader />
+        <Outlet />
+      </>
+    )
+  }
+
 
   const BrowserRoutes = createBrowserRouter([
     {
@@ -171,7 +180,7 @@ export default function Router() {
       element: <VendorLayout />,
       children: [
         {
-          path: "/dashboard",
+          path: "/vendor/dashboard",
           element: <DashboardPage />,
         },
         {
@@ -189,10 +198,6 @@ export default function Router() {
         {
           path: "/edit-product/:id",
           element: <VendorEditingProduct />,
-        },
-        {
-          path: '/shipper-dashboard',
-          element: <ShipperDashboardPage />,
         },
         {
           path: "/edit-store",
@@ -239,6 +244,10 @@ export default function Router() {
           element: <AdminManageVendorProduct />,
         },
         {
+          path: "/admin/reported-product-page",
+          element: <ReportedProductPage />,
+        },
+        {
           path: "/admin/dashboard",
           element: <AdminDashboardPage />,
         },
@@ -250,16 +259,33 @@ export default function Router() {
         {
           path: "/chat",
           element: (
-            <InstantSearch searchClient={searchClient} indexName="rBuy">
-              <div className="h-screen overflow-hidden">
-                <Header />
-                <ChatPage />
-              </div>
-            </InstantSearch>
+            <div className="h-screen overflow-hidden">
+              <Header />
+              <ChatPage />
+            </div>
+          ),
+        },
+        {
+          path: "/vendor-chat",
+          element: (
+            <div className="h-screen overflow-hidden">
+              <VendorHeader />
+              <ChatPage />
+            </div>
           ),
         },
       ],
     },
+    {
+      path: "/",
+      element: <ShipperLayout />,
+      children: [
+        {
+          path: "/shipper/dashboard",
+          element: <ShipperDashboardPage />,
+        },
+      ],
+    }
   ]);
 
   return (

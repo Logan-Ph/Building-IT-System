@@ -9,17 +9,14 @@ export default function CheckoutPage() {
   const { user } = useContext(UserContext)
   const [products, setProducts] = useState()
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
   const [checkoutInfo, setCheckoutInfo] = useState({})
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/checkout", { withCredentials: true });
       setCheckoutInfo(res.data.checkoutInfo)
-      setIsLoading(false)
     } catch (er) {
       setError(er)
-      setIsLoading(false)
     }
   }, [])
 
@@ -31,15 +28,10 @@ export default function CheckoutPage() {
     }
   }, [fetchData]);
 
-  if (user === undefined || isLoading) {
-    return <div>Loading....</div>
-  }
-
   return (
     <>
+      {user === null && <Navigate to={'/'} replace />}
       {error && <Navigate to={"/"} replace />}
-      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <section>
         <div class="mx-auto px-10 my-10">
           <h1 class="text-center text-5xl">Checkout</h1>

@@ -4,6 +4,14 @@ import OrdersInfo from "../OrdersInfo";
 
 export default function VendorCard({ user, orders }) {
   const [searchTerm, setSearchTerm] = useState("")
+  const initialStatuses = {
+    "Unpaid": null,
+    "To Ship": null,
+    "Shipping": null,
+    "Completed": null,
+    "Cancelled": null,
+    "Failed Delivery": null
+  };
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
@@ -35,9 +43,19 @@ export default function VendorCard({ user, orders }) {
           </div>
         </div>
         <div>
-          <OrdersInfo orders={orders} searchTerm={searchTerm} />
+          <OrdersInfo orders={orders} searchTerm={searchTerm} initialStatuses={initialStatuses} filterOrders={filterOrders} />
         </div>
       </div>
     </>
   );
 }
+
+function filterOrders(orders, searchTerm) {
+  const regex = new RegExp(searchTerm, 'i');
+  return orders.map(order => {
+    const date = new Date(order.date);
+    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+    return { ...order, date: formattedDate };
+  }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
+}
+

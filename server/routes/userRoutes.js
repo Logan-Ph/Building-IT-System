@@ -25,45 +25,6 @@ const uploadMultiple = multer({ storage }).array('files', 10);
  *  App routes
 */
 
-
-// authorization
-
-function authorizeUser(req, res, next) {
-    try {
-        (req.user && req.user.role === "User") ? next() : res.status(500).json({ error: "You are not authorized to access this route" })
-    } catch {
-        res.status(500).json({ error: "You are not authorized to access this route" })
-    }
-}
-
-// authorization
-function authorizeShipper(req, res, next) {
-    try {
-        (req.user && req.user.role === "Shipper") ? next() : res.status(500).json({ error: "You are not authorized to access this route" })
-    } catch {
-        res.status(500).json({ error: "You are not authorized to access this route" })
-    }
-}
-
-// authorization
-function authorizeVendor(req, res, next) {
-    try {
-        (req.user && req.user.role === "Vendor") ? next() : res.status(500).json({ error: "You are not authorized to access this route" })
-    } catch {
-        res.status(500).json({ error: "You are not authorized to access this route" })
-    }
-}
-
-// authorization
-function authorizeNotVendor(req, res, next) {
-    try {
-        (!req.user || req.user.role !== "Vendor") ? next() : res.status(500).json({ error: "You are not authorized to access this route" })
-    }
-    catch {
-        res.status(500).json({ error: "You are not authorized to access this route" })
-    }
-}
-
 // authenticate token 
 function authenticateToken(req, res, next) {
     jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => { // verify the cookies on the header 
@@ -99,8 +60,8 @@ router.get('/slider', userController.slider);
 router.get('/product/:id', userController.productPage);
 
 // user checkout route
-router.get('/checkout', authenticateToken, authorizeUser, userController.checkout);
-router.post('/checkout', authenticateToken, authorizeUser, userController.placeOrder);
+router.get('/checkout', userController.checkout);
+router.post('/checkout', userController.placeOrder);
 
 // user cart route
 router.get('/cart', userController.cartPage);
@@ -113,6 +74,11 @@ router.get('/remove-product/:id', userController.removeProduct);
 
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
+
+// user register route
+router.post('/user-register', userController.userRegister);
+router.get('/user-order', userController.userOrder)
+
 
 // user add message route
 router.post('/chat/:id', userController.addMessage);
@@ -158,8 +124,7 @@ router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 
 // vendor dashboard route (vendor side)
-router.post('/dashboard', authenticateToken, authorizeVendor, userController.postVendorDashboard);
-router.get('/dashboard', authenticateToken, authorizeVendor, userController.getVendorDashboard);
+router.get('/dashboard', userController.getVendorDashboard);
 
 // logout route
 router.get('/logout', userController.logout);
@@ -169,9 +134,6 @@ router.get('/admin/dashboard', userController.getAdminDashboard);
 
 // admin manage user route
 router.get('/admin/manage-user', userController.manageUser)
-
-// user register route
-router.post('/user-register', userController.userRegister);
 
 // vendor register route
 router.post('/vendor-register', userController.vendorRegister);
@@ -185,8 +147,14 @@ router.post("/ban-user", userController.banUser);
 // admin upload homepage carousel image 
 router.post("/upload-homepage-carousel", uploadMultiple, userController.uploadHomepageCarousel);
 
+// shipper dashboard route
+router.get('/shipper/dashboard', userController.getShipperDashboard);
+
 // get reponse message from chatbot
 router.post("/api/chatbot/message", userController.chatbotMessage);
+
+router.post('/shipper-register', userController.shipperRegister)
+
 
 // authentication route via login function
 router.get('/login', userController.loginPage);

@@ -67,10 +67,7 @@ export default function ForgotPassword() {
             notify(error);
             return;
         }
-
     }
-
-
 
     return <>
         <ToastContainer

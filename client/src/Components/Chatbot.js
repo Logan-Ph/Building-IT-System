@@ -81,7 +81,7 @@ export default function Chatbot() {
             </div>
           ))}
         </div>
-        {typing && <div class="indicator">
+        {typing && <div class="indicator ml-4">
           <svg
             version="1.1"
             id="L4"

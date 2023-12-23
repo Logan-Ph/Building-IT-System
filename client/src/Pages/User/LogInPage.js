@@ -1,14 +1,15 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Navigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { UserContext } from '../../Context/UserContext'
 
 export default function LogInPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [user, setUser] = useState();
+    const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
         if (error) {
@@ -51,7 +52,6 @@ export default function LogInPage() {
             const { data } = event;
             if (data.user) {
                 setUser(data.user);
-                console.log(user);
             } else if (data.error) {
                 setError(data.error);
             }
@@ -83,7 +83,8 @@ export default function LogInPage() {
             />
             {user && user.role === "User" && <Navigate to="/" replace={true} />}
             {user && user.role === "Admin" && <Navigate to="/admin/dashboard" replace={true} />}
-            {user && user.role === "Vendor" && <Navigate to="/dashboard" replace={true} />}
+            {user && user.role === "Vendor" && <Navigate to="/vendor/dashboard" replace={true} />}
+            {user && user.role === "Shipper" && <Navigate to="/shipper/dashboard" replace={true} />}
             <section className="bg-white ">
                 <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign In</h2>
@@ -91,7 +92,6 @@ export default function LogInPage() {
 
                     <div className="p-4 rounded-lg bg-gray-50">
                         <form name="SignIn" className="space-y-6">
-
                             <div>
                                 <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                 <div className="mt-2">
