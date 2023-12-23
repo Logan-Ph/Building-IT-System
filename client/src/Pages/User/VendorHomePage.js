@@ -42,8 +42,6 @@ export default function VendorHomePage() {
   return (
     <>
       {error && <Navigate to={"/"} replace />}
-      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
         <VendorNav user={user} vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} />
@@ -142,9 +140,7 @@ export default function VendorHomePage() {
             </div>
           </div>
         </div>
-
         {/* <!-- Banner --> */}
-
         <div class="md:container mx-auto grid grid-cols-4 gap-4">
           {smallBanner1 &&
             <div class="md:col-span-2 col-span-4">
