@@ -1,8 +1,22 @@
 import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
+import { useCallback, useEffect, useState } from "react";
 
-export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }) {
+export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto }) {
   const { refine } = useSearchBox();
+  const [ follow, setFollow ] = useState();
+
+  const fetchData = useCallback(async() => {
+    try {
+      await axios.get(`http://localhost:4000/checkFollow/${vendor.id}/${user.id}`, { withCredentials: true })
+      .then(res=> {
+        setFollow(res.data.following);
+      })
+      } catch (error) {
+      console.error(error);
+    }
+  }, [vendor.id, user.id])
+
 
   const getTabClass = (tabName) => {
     return `border-b-2 px-2 py-3 duration-700 transition ${activeTab === tabName ? 'border-black' : 'border-transparent hover:border-black'

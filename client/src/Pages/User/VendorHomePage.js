@@ -46,7 +46,7 @@ export default function VendorHomePage() {
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} />
+        <VendorNav user={user} vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} />
 
         {/*  */}
         {/* Top Product */}

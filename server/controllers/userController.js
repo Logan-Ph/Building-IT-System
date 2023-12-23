@@ -5,7 +5,7 @@ const Product = require('../models/product')
 const Cart = require('../models/cart')
 const FollowerList = require('../models/follower')
 const Order = require('../models/order')
-const HomepageBanner = require('../models/homepage-banner')
+const HomepageBanner = require('../models/homepagebanner')
 const Thread = require('../models/thread')
 const Message = require('../models/message')
 const Report = require('../models/report')
@@ -1247,7 +1247,7 @@ exports.followVendor = async (req,res) => {
       followerList.followers.push({ userID: req.user._id });
       await followerList.save();
     }
-    return res.status(200).json({ message: "Following." });
+    return res.status(200).json({ message: "Following" });
   } catch (error) {
     res.status(500).json({ message: error.message || "Error Occured" });
   }
@@ -1272,3 +1272,17 @@ exports.unfollowVendor = async (req, res) => {
     res.status(500).json({ message: error.message || "Error Occurred" });
   }
 };
+
+exports.checkFollow = async (req, res) => {
+  try {
+    const followerList = await FollowerList.findOne({ vendorID: req.params.vendorID });
+    let following = false;
+    if (followerList) {
+      const isUserIDExists = followerList.followers.some(follower => follower.userID.equals(req.params.userID));
+      following = isUserIDExists;
+    }
+    return res.status(200).json({ following: following });
+  } catch (error) {
+    res.status(500).json({ message: error.message || "Error Occurred" });
+  }
+}

@@ -130,6 +130,7 @@ router.post('/update-vendor', upload.single('file'), userController.updateVendor
 // user follow/unfolow vendor route
 router.post('/follow-vendor', userController.followVendor);
 router.post('/unfollow-vendor', userController.unfollowVendor);
+router.get('/check-follow/:vendorID/:userID', userController.checkFollow);
 
 // vendor crud product route
 router.post('/add-new-product', upload.single('file'), userController.addNewProduct);
