@@ -372,7 +372,7 @@ exports.verifyEmail = async (req, res) => {
 exports.placeOrder = async (req, res) => {
   try {
     const userID = req.user._id;
-    if (req.body.isRemember) {
+    if (req.body.checkoutInfo.isRemember) {
       await User.findByIdAndUpdate(userID, { city: req.body.checkoutInfo.city, phoneNumber: req.body.checkoutInfo.phoneNumber, district: req.body.checkoutInfo.district, ward: req.body.checkoutInfo.ward, streetAddress: req.body.checkoutInfo.streetAddress })
     }
     const products = req.body.products
