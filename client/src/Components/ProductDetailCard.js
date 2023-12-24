@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Rating } from 'flowbite-react';
 import { Navigate } from "react-router";
+import { Modal } from "flowbite-react";
+
 import aa from "search-insights";
 const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
 
@@ -12,6 +14,8 @@ export default function ProductDetailCard({ product, vendorName, user }) {
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const [navigateTo, setNavigateTo] = useState('')
+
+    const [openModal, setOpenModal] = useState(false)
 
     const notify = useCallback(() => {
         if (error) {
@@ -78,7 +82,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
             <img
                 alt="ecommerce"
-                className="lg:w-[550px] lg:h-[510px] md:h-auto sm:h-auto xs:h-auto  rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto"
+                className="lg:w-[500px] lg:h-[500px] md:h-auto sm:h-auto xs:h-auto rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto scale-95"
                 src={product.image_link}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -133,19 +137,56 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     <h2 className="text-sm title-font text-gray-500 tracking-widest">
                         {vendorName}
                     </h2>
-                    <h1 className="text-gray-900 lg:text-3xl sm:text-2xl xs:text-2xl  font-medium mb-3 ">
+                    <h1 className="text-gray-900 lg:text-2xl sm:text-xl xs:text-lg font-medium mb-3 ">
                         {product.product_name}
                     </h1>
+                    
+                    <div className="flex items-center justify-between">
+                        <div className="flex mb-2 items-center">
+                            <Rating size="md">
+                                <Rating.Star className="!w-5 !h-5"/>
+                                <Rating.Star className="!w-5 !h-5"/>
+                                <Rating.Star className="!w-5 !h-5"/>
+                                <Rating.Star className="!w-5 !h-5"/>
+                                <Rating.Star filled={false} className="!w-5 !h-5" />
+                            </Rating>
+                            <div className="ml-2 font-light whitespace-nowrap">Rating 4.0</div>
+                        </div>
+                        <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
+                            <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
+                                <Modal.Header>
+                                    <div>
+                                        <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
+                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
+                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p>
+                                    </div>
 
-                    <div className="flex mb-2 ">
-                        <Rating size="md">
-                            <Rating.Star />
-                            <Rating.Star />
-                            <Rating.Star />
-                            <Rating.Star />
-                            <Rating.Star filled={false} />
-                        </Rating>
+                                </Modal.Header>
+                                <Modal.Body className="overflow-y-auto">
+                                    <label for="reason" className="font-bold">Select a reason:</label>
+                                    <select name="reportedReason" id="reportedReason" className="w-full my-2">
+                                        <option disabled value="" >Select a reason below</option>
+                                        <option value="fake">Product is fake/replica</option>
+                                        <option value="unidentifiedProductOrigin">The product's origin is unidentified</option>
+                                        <option value="indistinctProductIllustratior">The product's illustrators is indistinct</option>
+                                        <option value="unmatchedProductName">The product's name does not match with product illustrators</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+
+                                    <div className="my-2">
+                                        <textarea id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
+                                    </div>
+                                </Modal.Body>
+                                    
+
+                                <Modal.Footer>
+                                    <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Send Report</button>
+                                    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
+                                </Modal.Footer>
+                                
+                            </Modal>
                     </div>
+
 
                     <span className=" font-medium lg:text-3xl md:text-3xl sm:text-2xl xs:text-2xl text-slate-700">
                         ${product.price}.00

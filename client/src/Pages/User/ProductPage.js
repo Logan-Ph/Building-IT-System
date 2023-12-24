@@ -14,6 +14,8 @@ import { MessagesSquare, Store } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
+import { Modal } from "flowbite-react";
+
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
 
@@ -24,6 +26,7 @@ export default function TestingPage() {
   const [error, setError] = useState()
   const { user } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(true)
+
 
   const { recommendations } = useRelatedProducts({
     recommendClient,
