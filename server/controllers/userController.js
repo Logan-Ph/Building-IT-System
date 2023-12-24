@@ -207,7 +207,18 @@ exports.homePage = async (req, res) => {
 
 exports.slider = async (req, res) => {
   try {
-    const banner = await HomepageBanner.findOne({ title: 'Banner' })
+    const banner = await HomepageBanner.findOne({ title: 'Big Carousel' })
+    const carouselImage = banner.img;
+    return res.json({ images: carouselImage });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.middleBanner = async (req, res) => {
+  try {
+    const banner = await HomepageBanner.findOne({ title: 'Small Carousel' })
     const carouselImage = banner.img;
     return res.json({ images: carouselImage });
   } catch (error) {
@@ -1077,10 +1088,10 @@ exports.reportPage = async (req, res) => {
 
 exports.uploadHomepageCarousel = async (req, res) => {
   try {
-    let banner = await HomepageBanner.findOne({ title: 'Banner' })
+    let banner = await HomepageBanner.findOne({ title: req.body.title })
     if (!banner) {
       banner = new HomepageBanner({
-        title: 'Banner',
+        title: req.body.title,
       })
     }
     const uploadImage = async (file) => {

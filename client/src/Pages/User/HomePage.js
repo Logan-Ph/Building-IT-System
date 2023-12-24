@@ -94,6 +94,18 @@ export default function Homepage() {
 }
 
 function MiddleBanner({ setNavigateTo }) {
+    const [images, setImages] = useState();
+    const fetchImages = async () => {
+        try {
+            const response = await axios.get("http://localhost:4000/middle-banner", { withCredentials: true });
+            setImages(response.data.images);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    }
+    useEffect(() => {
+        fetchImages();
+    }, []);
     return <>
         <div className='grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid sm:hidden xs:hidden'>
 
@@ -106,9 +118,9 @@ function MiddleBanner({ setNavigateTo }) {
             rightControl={
               <ArrowRight />
             }>
-                    <img src={require("../../Components/images/bannerN5.jpg")} alt="banner1" className=' border border-gray-200 shadow-lg' />
-                    <img src={require("../../Components/images/bannerN6.jpg")} alt="banner2" className=' border border-gray-200 shadow-lg' />
-                    <img src={require("../../Components/images/bannerN9.jpg")} alt="banner3" className='border border-gray-200 shadow-lg' />
+                {images && images.map((image, index) => (
+                    <img key={index} src={image} alt="banner" className=' border border-gray-200 shadow-lg' />
+                ))}
                 </Carousel>
             </div>
 

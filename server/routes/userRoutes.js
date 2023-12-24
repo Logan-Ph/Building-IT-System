@@ -55,6 +55,7 @@ router.get('/', userController.homePage);
 
 // fetch slider images
 router.get('/slider', userController.slider);
+router.get('/middle-banner', userController.middleBanner);
 
 // user product details route
 router.get('/product/:id', userController.productPage);
