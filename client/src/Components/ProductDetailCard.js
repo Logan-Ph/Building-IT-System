@@ -152,13 +152,11 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             </Rating>
                             <div className="ml-2 font-light whitespace-nowrap">Rating 4.0</div>
                         </div>
-                        <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
+                        <div className="font-medium text-[#E61E2A] hover:underline cursor-pointer" onClick={() => setOpenModal(true)}> Report </div>
                             <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
                                 <Modal.Header>
                                     <div>
                                         <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p>
                                     </div>
 
                                 </Modal.Header>
@@ -181,7 +179,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
                                 <Modal.Footer>
                                     <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Send Report</button>
-                                    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
+                                    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2">Cancel</button>
                                 </Modal.Footer>
                                 
                             </Modal>

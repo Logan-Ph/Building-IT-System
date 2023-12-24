@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
+import { Button, Modal } from "flowbite-react";
+import { useState } from "react";
 
 export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }) {
+  const [openModal, setOpenModal] = useState(false);
   const { refine } = useSearchBox();
 
   const getTabClass = (tabName) => {
@@ -24,10 +27,22 @@ export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }
     <>
       {/* Profile Section */}
       <div class="md:container mx-auto">
-        <img class="h-auto max-w-full" src={`data:image/jpeg;base64,${coverPhoto}`} alt="" />
+        <img
+          class="h-auto max-w-full"
+          src={`data:image/jpeg;base64,${coverPhoto}`}
+          alt=""
+        />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
+            <img
+              src={
+                vendorImage
+                  ? `data:image/jpeg;base64,${vendorImage}`
+                  : require("../Components/images/defaultUserImage.png")
+              }
+              className="md:w-rounded-full w-[100px] h-[100px]"
+              alt=""
+            />
 
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
@@ -38,16 +53,88 @@ export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }
               <div>
                 <button
                   type="button"
-                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2"
                 >
                   <i class="fa-regular fa-plus"></i> Follow
                 </button>
-                <span
-                  onClick={(e)=>createThread(e)}
-                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                <button
+                  onClick={(e) => createThread(e)}
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2"
                 >
                   <i class="fa-regular fa-comment-dots"></i> Chat
-                </span>
+                </button>
+              </div>
+              <div class="flex">
+                <button
+                  className="font-medium text-sm text-[#E61E2A] hover:underline cursor-pointer"
+                  onClick={() => setOpenModal(true)}
+                >
+                  {" "} Report{" "}
+                </button>
+                <Modal
+                  show={openModal}
+                  onClose={() => setOpenModal(false)}
+                  className="!my-auto"
+                >
+                  <Modal.Header className="flex justify-center">
+                    <div className="text-center">Report this user</div>
+                  </Modal.Header>
+                  <Modal.Body className="overflow-y-auto">
+                    <label for="reason" className="font-bold">
+                      Select a reason:
+                    </label>
+                    <select
+                      name="reportedReason"
+                      id="reportedReason"
+                      className="w-full my-2"
+                    >
+                      <option disabled value="">
+                        Select a reason below
+                      </option>
+                      <option value="fake">Prohibited item</option>
+                      <option value="unidentifiedProductOrigin">Scam</option>
+                      <option value="indistinctProductIllustratior">
+                        Counterfeit
+                      </option>
+                      <option value="unmatchedProductName">
+                        Offensive chat messages / images / videos
+                      </option>
+                      <option value="unmatchedProductName">
+                        Data privacy violation
+                      </option>
+                      <option value="unmatchedProductName">
+                        Posting pornographic, obscene and vulgar content
+                      </option>
+                      <option value="Other">Other</option>
+                    </select>
+
+                    <div className="my-2">
+                      <textarea
+                        id="w3review"
+                        name="w3review"
+                        rows="4"
+                        cols="50"
+                        placeholder="Report Description (10-50 character allowed)"
+                        className="w-full"
+                      ></textarea>
+                    </div>
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                    <button
+                      type="button"
+                      class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
+                    >
+                      Send Report
+                    </button>
+                    <button
+                      type="button"
+                      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2"
+                    >
+                      Cancel
+                    </button>
+                  </Modal.Footer>
+                </Modal>
               </div>
             </div>
           </div>
