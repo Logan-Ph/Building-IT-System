@@ -86,7 +86,7 @@ export default function LogInPage() {
             {user && user.role === "Vendor" && <Navigate to="/vendor/dashboard" replace={true} />}
             {user && user.role === "Shipper" && <Navigate to="/shipper/dashboard" replace={true} />}
             <section className="bg-white ">
-                <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+                <div className="py-8 lg:py-16 px-8 mx-auto max-w-screen-md">
                     <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign In</h2>
                     <p className="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Welcome back, We hope you have a great day!</p>
 
