@@ -118,11 +118,8 @@ export default function ProductDetailComment({ product }) {
                             rows={4}
                             value={newComment}
                             onChange={e => setNewComment(e.target.value)} />
-                        <button
-                            className="text-sm font-medium text-black text-center mx-auto"
-                            onClick={handleComment} type="submit">
-                            Post
-                        </button>
+                      
+                        <button class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none font-medium rounded text-sm px-3 py-2 w-full text-center me-2 mt-2 mb-2" onClick={handleComment} type="submit">Post</button>
                     </div>
                 </div>
             </div>
