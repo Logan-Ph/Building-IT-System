@@ -24,6 +24,7 @@ export default function OrdersInfo({ orders, searchTerm, initialStatuses, filter
                 <Tabs.Item title={title} >
                     {orders ? <OrderContent orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} headerContent={headerContent} /> : <div className="overflow-x-auto">
                         <div className='border border-gray my-1 py-32'>
+                            
                             <div className='flex flex-col justify-center items-center'>
                                 <div className='w-[100px] h-[80px]'>
                                     <img src={require("./images/noorder.png")}

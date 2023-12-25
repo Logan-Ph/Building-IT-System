@@ -7,8 +7,6 @@ import { FaCircle } from "react-icons/fa";
 import { MdReportProblem } from "react-icons/md";
 import { Link } from 'react-router-dom';
 
-
-
 export default function AdminManageVendorProduct() {
   return <>
     <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
@@ -328,7 +326,7 @@ function DeleteButtonPopup() {
       Delete
     </a>
     <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
-      <Modal.Header />
+      <Modal.Header/>
       <Modal.Body>
         <div className="text-center">
           <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
