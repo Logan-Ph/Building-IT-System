@@ -4,8 +4,11 @@ import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
 export default function VendorHomePage() {
+  const [follow, setFollow] = useState();
   const params = useParams()
   const [vendor, setVendor] = useState()
+  const [numberOfProducts, setNumberOfProducts] = useState(0)
+  const [numberOfFollowers, setNumberOfFollwers] = useState(0)
   const [vendorImage, setVendorImage] = useState()
   const { user } = useContext(UserContext)
   const [error, setError] = useState("")
@@ -24,6 +27,8 @@ export default function VendorHomePage() {
       setBigBanner(res.data.bigBanner)
       setSmallBanner1(res.data.smallBanner1)
       setSmallBanner2(res.data.smallBanner2)
+      setNumberOfFollwers(res.data.numberOfFollowers)
+      setNumberOfProducts(res.data.numberOfProducts)
       setIsLoading(false)
     } catch (error) {
       setError(error)
@@ -33,9 +38,9 @@ export default function VendorHomePage() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData])
+  }, [fetchData, follow])
 
-  if (user === undefined || isLoading) {
+  if (isLoading) {
     return <div>....is loading</div>
   }
 
@@ -44,8 +49,7 @@ export default function VendorHomePage() {
       {error && <Navigate to={"/"} replace />}
       <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav user={user} vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} />
-
+        <VendorNav user={user} vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} numberOfFollowers={numberOfFollowers} numberOfProducts={numberOfProducts} setNumberOfFollwers={setNumberOfFollwers} follow={follow} setFollow={setFollow}/>
         {/*  */}
         {/* Top Product */}
         <div className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 bg-gray-50">

@@ -156,7 +156,7 @@ export default function ChatPage() {
           <div className="h-screen overflow-y-auto p-4 pb-72 bg-[#E3E5E0]">
             {/* <!-- Incoming Message --> */}
             {threads[threadIndex] && threads[threadIndex].content.map((message) => {
-              if (message.sender === user.role) {
+              if (user && message.sender === user.role) {
                 return (
                   <div className="flex justify-end mb-4 cursor-pointer">
                     <div className="flex max-w-96 bg-[#000054] text-white rounded-lg p-3 gap-3">

@@ -13,9 +13,6 @@ import { UserContext } from "../../Context/UserContext";
 import { MessagesSquare, Store } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-
-import { Modal } from "flowbite-react";
-
 const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
 const indexName = 'rBuy';
 
@@ -23,10 +20,10 @@ export default function TestingPage() {
   const params = useParams()
   const [product, setProduct] = useState([])
   const [vendorName, setVendorName] = useState("")
+  const [numberOfFollowers, setNumberOfFollowers] = useState(0)
   const [error, setError] = useState()
   const { user } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(true)
-
 
   const { recommendations } = useRelatedProducts({
     recommendClient,
@@ -60,6 +57,7 @@ export default function TestingPage() {
       const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
       setVendorName(res.data.vendorName);
+      setNumberOfFollowers(res.data.numberOfFollowers);
       setIsLoading(false)
     } catch (error) {
       setError(error);
@@ -93,14 +91,13 @@ export default function TestingPage() {
       <section className="text-gray-600 body-font overflow-hidden ">
         <div className="lg:container md:container py-12 px-12 mx-auto mt-10 bg-slate-50 ">
           {/* product card */}
-          <ProductDetailCard product={product} vendorName={vendorName} user={user}/>
+          <ProductDetailCard product={product} vendorName={vendorName} user={user} />
         </div>
       </section>
       <section className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 mt-10 bg-gray-50">
-
         <div class="flex xs:sm:flex-col lg:md:flex-row items-center text-gray-800 ">
           <div className="flex flex-row my-8 w-full lg:w-3/5 items-center mx-auto lg:md:justify-normal sm:xs:justify-center">
-            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" alt=""/>
+            <img className="w-20 h-20" src="https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg" alt="" />
             <div className="ml-4">
               <div className="font-semibold lg:md:text-3xl xs:sm:text-2xl mb-2">{vendorName}</div>
               <div className="flex">
@@ -122,8 +119,8 @@ export default function TestingPage() {
               <div class="col-span-12 sm:col-span-6 md:col-span-3">
                 <div class="">
                   <div class="flex lg:flex-col  ml-4">
-                    <div class="text-lg text-gray-500 ">Followers</div>
-                    <div class="font-semibold text-lg sm:ml-2">1259</div>
+                    <div class="text-lg text-gray-500 ">Follower(s)</div>
+                    <div class="font-semibold text-lg sm:ml-2">{numberOfFollowers}</div>
                   </div>
                 </div>
               </div>

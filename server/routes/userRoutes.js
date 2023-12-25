@@ -5,7 +5,6 @@ const userController = require('../controllers/userController');
 const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
-const { OpenAI } = require('openai')
 require('dotenv').config
 
 const storage = multer.diskStorage({
@@ -120,10 +119,22 @@ router.post('/edit-store', upload.fields([
     { name: 'smallBanner2', maxCount: 1 },
 ]), userController.editStore);
 
+// vendor edit store info
+router.get('/edit-store', userController.getStoreInfo);
+
 //vendor manage order (vendor side)
 router.post('/confirm-order', userController.confirmOrder);
 router.get('/manage-order', userController.manageOrder);
 
+
+//customer review routes
+router.get('/product/:productId/view-comment', userController.viewComments);
+
+router.post('/product/:productId/post-comment', userController.postComment);
+
+router.put('/product/:commentId/reply-comment', userController.replyComment);
+
+router.put('/product/:commentId/like', userController.likeComment);
 // vendor dashboard route (vendor side)
 router.get('/dashboard', userController.getVendorDashboard);
 

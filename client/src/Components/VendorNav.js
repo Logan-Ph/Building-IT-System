@@ -1,49 +1,50 @@
 import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 
-export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto }) {
+export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
   const { refine } = useSearchBox();
-  const [ follow, setFollow ] = useState();
 
-  const fetchData = useCallback(async() => {
+  const fetchData = useCallback(async () => {
     try {
       await axios.get(`http://localhost:4000/check-follow/${vendor._id}/${user._id}`, { withCredentials: true })
-      .then(res=> {
-        setFollow(res.data.following);
-      })
+        .then(res => {
+          setFollow(res.data.following);
+        })
     } catch (error) {
       console.error(error);
     }
-  }, [vendor._id, user._id])
+  }, [vendor._id, user])
 
-  const data = {
-    vendorID: vendor._id,
-    userID: user._id
+  const handleUnfollow = async () => {
+    const data = {
+      vendorID: vendor._id,
+      userID: user._id
+    }
+    try {
+      await axios.post("http://localhost:4000/unfollow-vendor", data, { withCredentials: true })
+        .then(res => {
+          setFollow(res.data.following);
+        })
+    } catch (error) {
+      console.error(error);
+    }
   }
-  
-  const handleUnfollow = useCallback(async() => {
+
+  const handleFollow = async () => {
+    const data = {
+      vendorID: vendor._id,
+      userID: user._id
+    }
     try {
-      await axios.post("http://localhost:4000/unfollow-vendor", data, {withCredentials: true})
-      .then(res => {
-        setFollow(res.data.following);
-      })
+      await axios.post("http://localhost:4000/follow-vendor", data, { withCredentials: true })
+        .then(res => {
+          setFollow(res.data.following);
+        })
     } catch (error) {
       console.error(error);
     }
-  })
-
-  const handleFollow = useCallback(async() => {
-    try {
-      await axios.post("http://localhost:4000/follow-vendor", data, {withCredentials: true})
-      .then(res => {
-        setFollow(res.data.following);
-      })
-    } catch (error) {
-      console.error(error);
-    }
-  })
-
+  }
 
   const getTabClass = (tabName) => {
     return `border-b-2 px-2 py-3 duration-700 transition ${activeTab === tabName ? 'border-black' : 'border-transparent hover:border-black'
@@ -61,8 +62,8 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
     }
   }
   useEffect(() => {
-    fetchData();
-  }, [fetchData])
+    user && fetchData();
+  }, [fetchData, user])
 
   return (
     <>
@@ -72,41 +73,41 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
             <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
-
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">
-                <span class="border-r border-black pr-3">1,8 followers</span>
-                <span class="pl-2">69 products</span>
+                <span class="border-r border-black pr-3">{numberOfFollowers} follower(s)</span>
+                <span class="pl-2">{numberOfProducts} product(s)</span>
               </div>
               <div>
-                {follow ? 
-                <button onClick={handleUnfollow}
-                  type="button"
-                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                >Unfollow
-                </button> : 
-                <button onClick={handleFollow}
-                  type="button"
-                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                >
-                  <i class="fa-regular fa-plus"></i> Follow
-                </button>}
-                
-                <span
-                  onClick={(e)=>createThread(e)}
+                {user && <span
+                  onClick={(e) => createThread(e)}
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                 >
                   <i class="fa-regular fa-comment-dots"></i> Chat
-                </span>
+                </span>}
+                {user &&
+                  ((follow) ?
+                    <button onClick={handleUnfollow}
+                      type="button"
+                      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                    >Unfollow
+                    </button> :
+                    <button onClick={handleFollow}
+                      type="button"
+                      class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                    >
+                      <i class="fa-regular fa-plus"></i> Follow
+                    </button>)
+                }
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Vendor Nav */}
-      <div class="md:container mx-auto my-2 sticky top-0 border-b bg-white">
+      <div div class="md:container mx-auto my-2 sticky top-0 border-b bg-white" >
         <div class="px-4 py-2 mx-auto md:flex md:justify-between">
           <div class="md:order-last drop-shadow-md mt-2">
             <form>
@@ -165,7 +166,7 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
             </ul>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }

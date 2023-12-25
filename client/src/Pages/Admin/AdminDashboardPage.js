@@ -263,8 +263,8 @@ export default function DashboardPage() {
             disabled={loading}
             type="submit"
             class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white"
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white"
               }`}
           >Save
           </button>
@@ -395,8 +395,8 @@ export default function DashboardPage() {
                     disabled={loading}
                     type="submit"
                     class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${loading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white"
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white"
                       }`}
                   > Save
                   </button>

@@ -5,6 +5,7 @@ const Product = require('../models/product')
 const Cart = require('../models/cart')
 const FollowerList = require('../models/follower')
 const Order = require('../models/order')
+const Comment = require('../models/comment')
 const HomepageBanner = require('../models/homepagebanner')
 const Thread = require('../models/thread')
 const Message = require('../models/message')
@@ -92,7 +93,7 @@ function sendVendorReportNotificationEmail(userEmail, title, description) {
       throw "Invalid email";
     }
 
-    
+
     let config = {
       service: 'gmail',
       auth: {
@@ -115,9 +116,9 @@ function sendVendorReportNotificationEmail(userEmail, title, description) {
       body: {
         intro: "Regarding your online shop,",
         outro: ["We have recently received a report about your store. See the detail below. We will take a look into the situation. Please be reminded that your account might be banned if your activity violated the rBUY's policies.",
-        "Report details:",
-        `Title: ${title}`,
-        `Description: ${description}`]
+          "Report details:",
+          `Title: ${title}`,
+          `Description: ${description}`]
       }
     }
 
@@ -141,7 +142,7 @@ function sendProductReportNotificationEmail(userEmail, productName, title, descr
     if (!emailRegex.test(userEmail)) {
       throw "Invalid email";
     }
-    
+
     let config = {
       service: 'gmail',
       auth: {
@@ -164,9 +165,9 @@ function sendProductReportNotificationEmail(userEmail, productName, title, descr
       body: {
         intro: `Regarding your product: ${productName},`,
         outro: ["We have recently received a report about your product. See the detail below. We will take a look into the situation. Please be reminded that your account might be banned if your activity violated the rBUY's policies.",
-        "Report details:",
-        `Title: ${title}`,
-        `Description: ${description}`]
+          "Report details:",
+          `Title: ${title}`,
+          `Description: ${description}`]
       }
     }
 
@@ -254,7 +255,8 @@ exports.productPage = async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
     let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
-    res.json({ product: product, vendorName: vendorName.businessName });
+    const numberOfFollowers = await FollowerList.find({ vendorID: product.owner }, { followers: 1 })
+    res.json({ product: product, vendorName: vendorName.businessName, numberOfFollowers: numberOfFollowers[0].followers.length });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -592,7 +594,9 @@ exports.manageOrder = async (req, res) => {
 
 exports.vendorHomepage = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.params.id);
+    const vendor = await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
+    const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
+    const numberOfFollowers = await FollowerList.find({ vendorID: req.params.id }, { followers: 1 })
     let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
@@ -619,8 +623,9 @@ exports.vendorHomepage = async (req, res) => {
         vendor.smallBanner2.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2 });
-  } catch {
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+  } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
   }
 }
@@ -628,13 +633,15 @@ exports.vendorHomepage = async (req, res) => {
 exports.vendorProductPage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id);
+    const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
+    const numberOfFollowers = await FollowerList.find({ vendorID: req.params.id }, { followers: 1 })
     let vendorImage;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -870,6 +877,16 @@ exports.editStore = async (req, res) => {
     return res.json('Storefront has been updated!')
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
+  }
+}
+
+exports.getStoreInfo = async (req, res) => {
+  try {
+    const numberOfProducts = await Product.find({ owner: req.user._id }).countDocuments();
+    const numberOfFollowers = await FollowerList.find({ vendorID: req.user._id }, { followers: 1 });
+    return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+  } catch {
+    return res.status(500).json({ error: "Cannot find store info" })
   }
 }
 
@@ -1232,7 +1249,7 @@ exports.getShipperDashboard = async (req, res) => {
 exports.reportVendor = async (req, res) => {
   try {
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
-    const newReport = new Report ({
+    const newReport = new Report({
       user: req.body.userID,
       vendor: req.body.vendorID,
       title: req.body.title,
@@ -1267,7 +1284,7 @@ exports.reportProduct = async (req, res) => {
   try {
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const productName = (await Product.findById(req.body.productID)).product_name;
-    const newReport = new Report ({
+    const newReport = new Report({
       user: req.body.userID,
       vendor: req.body.vendorID,
       product: req.body.productID,
@@ -1282,15 +1299,15 @@ exports.reportProduct = async (req, res) => {
     return res.status(500).json({ error: error })
   }
 }
-exports.followVendor = async (req,res) => {
+exports.followVendor = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.body.vendorID)
-    const followerList = await FollowerList.findOne({ vendorID: req.body.vendorID})
+    const followerList = await FollowerList.findOne({ vendorID: req.body.vendorID })
     if (!vendor) {
       return res.status(500).json({ error: "Cannot find the vendor." })
     }
     if (!followerList) {
-      const newFollowerList = new FollowerList({ 
+      const newFollowerList = new FollowerList({
         vendorID: req.body.vendorID,
         followers: [{
           userID: req.user._id
@@ -1347,3 +1364,83 @@ exports.checkFollow = async (req, res) => {
     res.status(500).json({ message: error.message || "Error Occurred" });
   }
 }
+
+exports.viewComments = async (req, res) => {
+  const id = req.params?.productId
+  try {
+    if (id) {
+      const comments = await Comment.find({ productId: id }).sort({ postedOn: 'asc' })
+      res.json(comments);
+    } else {
+      res.status(500).json({ message: 'Comments not found' })
+    }
+
+  } catch (error) {
+    res.status(501).json({ message: 'There was an error getting comments for this Product' });
+  }
+}
+
+exports.postComment = async (req, res) => {
+  const product = await Product.findById(req.params.productId);
+  if (!req.user) {
+    return res.status(500).json({ error: "Please log in or create an account to comment" })
+  }
+  if (!product) {
+    return res.status(500).json({ error: "This product does not exist" })
+  }
+  const id = req.params.productId
+  const { commentText } = req.body;
+  try {
+    const postComment = await Comment.create({
+      productId: new mongoose.Types.ObjectId(id),
+      commentText,
+      postedBy: new mongoose.Types.ObjectId(req.user._id)
+    })
+    return res.status(200).json(postComment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+exports.replyComment = async (req, res) => {
+  const comment_id = await Comment.findById(req.params.commentId);
+  try {
+    if (comment_id) {
+      const reply = {
+        commentId: comment_id,
+        vendorId: req.body.vendorId,
+        reply: req.body.reply
+      }
+      const newComment = await Comment.findByIdAndUpdate({ _id: comment_id }, { $push: { replyMessage: reply } }, { new: true })
+      res.json(newComment);
+    } else {
+      res.status(500).json({ message: 'Comments not found' })
+    }
+
+  } catch (error) {
+    res.status(501).json({ message: 'There was an error getting comments for this Product' });
+  }
+}
+
+exports.likeComment = async (req, res) => {
+  const commentId = req.params.commentId;
+  const userId = req.user._id;
+
+  try {
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    const index = comment.likes.indexOf(userId);
+    if (index === -1) {
+      comment.likes.push(userId);
+    } else {
+      comment.likes.splice(index, 1);
+    }
+    await comment.save();
+    res.json(comment);
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error updating the comment' });
+  }
+};

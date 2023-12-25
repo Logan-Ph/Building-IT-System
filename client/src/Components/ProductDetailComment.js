@@ -1,13 +1,46 @@
 import { Textarea } from "flowbite-react";
 import { Rating } from "flowbite-react";
-
+import { useState } from 'react';
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function ProductDetailComment({ product }) {
     const textMessage = () => {
         document.getElementById("customer_review").className = "block";
     }
+    const [comment, setComment] = useState([])
+    const [commentText, setCommentText] = useState('')
 
+    const postComment = async (productId, commentText) => {
+        const commentData = { commentText: commentText }
+        try {
+            const response = await axios.post(`http://localhost:4000/product/${productId}/post-comment`, commentData, { withCredentials: true });
+            setComment([...comment, response.data]);
+            console.log(response.data)
+        }
+        catch (error) {
+            console.error("Error posting comment", error);
+        }
+    };
+
+    const handleComment = (e) => {
+        e.preventDefault();
+        postComment();
+    };
     return (<div className="w-full lg:md:py-12 md:pr-2 xs:py-3">
+        <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="light"
+        />
         <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-2">
             Customer Reviews
         </p>
@@ -59,11 +92,17 @@ export default function ProductDetailComment({ product }) {
                 <div className="">
                     <div className="hidden mt-2" id="customer_review">
                         <Textarea
-                            id="comment"
+                            id="commentText"
                             placeholder="Leave a review..."
                             required
                             rows={4}
-                        />
+                            value={commentText}
+                            onChange={e => setCommentText(e.target.value)} />
+                        <button
+                            className="text-sm font-medium text-black text-center mx-auto"
+                            onClick={handleComment} type="submit">
+                            Post
+                        </button>
                     </div>
                 </div>
             </div>
