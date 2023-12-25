@@ -13,6 +13,7 @@ export default function ReportInfoPage() {
   const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState()
   const [orders, setOrders] = useState([])
+  const [reports, setReports] = useState()
   const [error, setError] = useState()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -20,7 +21,8 @@ export default function ReportInfoPage() {
     try {
       const res = await axios.get(`http://localhost:4000/admin/${params.id}/report`, { withCredentials: true });
       setUserInfo(res.data.user);
-      setOrders(res.data.orders)
+      setOrders(res.data.orders);
+      setReports(res.data.report);
       setIsLoading(false)
     } catch (error) {
       setError(error);
@@ -53,7 +55,7 @@ export default function ReportInfoPage() {
           {/* <!-- Shipper --> */}
           {/* {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo}  />} */}
           {/* Report Section */}
-          <ReportInfo />
+          {reports && <ReportInfo reports={reports}/> }
         </div>
       </section>
     </>

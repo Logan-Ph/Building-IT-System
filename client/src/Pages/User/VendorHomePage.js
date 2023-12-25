@@ -44,7 +44,7 @@ export default function VendorHomePage() {
       {error && <Navigate to={"/"} replace />}
       <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} />
+        <VendorNav user={user} vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} />
 
         {/*  */}
         {/* Top Product */}

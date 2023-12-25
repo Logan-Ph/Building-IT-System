@@ -251,10 +251,6 @@ export default function Router() {
           path: "/admin/dashboard",
           element: <AdminDashboardPage />,
         },
-        {
-          path: "/admin/add-homepage-carousel",
-          element: <AddImageHomePageCarousel />,
-        },
       ],
     },
     {

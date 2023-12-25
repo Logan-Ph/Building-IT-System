@@ -1,8 +1,49 @@
 import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
+import { useCallback, useEffect, useState } from "react";
 
-export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }) {
+export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto }) {
   const { refine } = useSearchBox();
+  const [ follow, setFollow ] = useState();
+
+  const fetchData = useCallback(async() => {
+    try {
+      await axios.get(`http://localhost:4000/check-follow/${vendor._id}/${user._id}`, { withCredentials: true })
+      .then(res=> {
+        setFollow(res.data.following);
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }, [vendor._id, user._id])
+
+  const data = {
+    vendorID: vendor._id,
+    userID: user._id
+  }
+  
+  const handleUnfollow = useCallback(async() => {
+    try {
+      await axios.post("http://localhost:4000/unfollow-vendor", data, {withCredentials: true})
+      .then(res => {
+        setFollow(res.data.following);
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  })
+
+  const handleFollow = useCallback(async() => {
+    try {
+      await axios.post("http://localhost:4000/follow-vendor", data, {withCredentials: true})
+      .then(res => {
+        setFollow(res.data.following);
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  })
+
 
   const getTabClass = (tabName) => {
     return `border-b-2 px-2 py-3 duration-700 transition ${activeTab === tabName ? 'border-black' : 'border-transparent hover:border-black'
@@ -19,6 +60,9 @@ export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }
       console.log(err);
     }
   }
+  useEffect(() => {
+    fetchData();
+  }, [fetchData])
 
   return (
     <>
@@ -36,12 +80,19 @@ export default function VandorNav({ vendor, activeTab, vendorImage, coverPhoto }
                 <span class="pl-2">69 products</span>
               </div>
               <div>
-                <button
+                {follow ? 
+                <button onClick={handleUnfollow}
+                  type="button"
+                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                >Unfollow
+                </button> : 
+                <button onClick={handleFollow}
                   type="button"
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                 >
                   <i class="fa-regular fa-plus"></i> Follow
-                </button>
+                </button>}
+                
                 <span
                   onClick={(e)=>createThread(e)}
                   class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
