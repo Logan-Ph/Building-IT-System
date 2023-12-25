@@ -37,7 +37,6 @@ import AdminManageVendorProduct from '../Pages/Admin/AdminManageVendorProduct';
 import CartPage from "../Pages/User/CartPage";
 import ShipperDashboardPage from '../Pages/Shipper/ShipperDashboardPage';
 import ChatPage from "../Pages/User/ChatPage";
-import AddImageHomePageCarousel from "./AddImageHomePageCarousel";
 import UserOrder from '../Pages/User/UserOrder';
 import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
@@ -81,11 +80,13 @@ export default function Router() {
   const VendorLayout = () => {
     return (
       <>
-        <VendorHeader />
-        <div className="flex">
-          <VendorSidebar />
-          <Outlet />
-        </div>
+        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+          <VendorHeader />
+          <div className="flex">
+            <VendorSidebar />
+            <Outlet />
+          </div>
+        </InstantSearch>
       </>
     );
   };
@@ -107,8 +108,10 @@ export default function Router() {
   const ShipperLayout = () => {
     return (
       <>
-        <ShipperHeader />
-        <Outlet />
+        <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+          <ShipperHeader />
+          <Outlet />
+        </InstantSearch>
       </>
     )
   }
@@ -251,10 +254,6 @@ export default function Router() {
           path: "/admin/dashboard",
           element: <AdminDashboardPage />,
         },
-        {
-          path: "/admin/add-homepage-carousel",
-          element: <AddImageHomePageCarousel />,
-        },
       ],
     },
     {
@@ -263,19 +262,23 @@ export default function Router() {
         {
           path: "/chat",
           element: (
-            <div className="h-screen overflow-hidden">
-              <Header />
-              <ChatPage />
-            </div>
+            <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+              <div className="h-screen overflow-hidden">
+                <Header />
+                <ChatPage />
+              </div>
+            </InstantSearch>
           ),
         },
         {
           path: "/vendor-chat",
           element: (
-            <div className="h-screen overflow-hidden">
-              <VendorHeader />
-              <ChatPage />
-            </div>
+            <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+              <div className="h-screen overflow-hidden">
+                <VendorHeader />
+                <ChatPage />
+              </div>
+            </InstantSearch>
           ),
         },
       ],

@@ -8,7 +8,7 @@ import SRPriceRange from '../../Components/SRPriceRange'
 import SRStarRating from '../../Components/SRStarRating'
 
 import { useHits, useRefinementList } from 'react-instantsearch';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
 import { UserContext } from '../../Context/UserContext';
 
@@ -55,15 +55,8 @@ export default function Example() {
     }
   }, [category, refine]);
 
-  if (user === undefined) {
-    return <div>Loading....</div>
-  }
-
   return (
     <div className="bg-gray-100">
-      {user && user.role === "Vendor" && <Navigate to={'/dashboard'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-
       <div>
         {/* Mobile filter dialog */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

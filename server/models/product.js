@@ -53,7 +53,7 @@ const productSchema = new mongoose.Schema({
     no_of_ratings: {
         type: Number,
         require: true,
-    }
+    },
 });
 
 module.exports = mongoose.model('Product', productSchema)
