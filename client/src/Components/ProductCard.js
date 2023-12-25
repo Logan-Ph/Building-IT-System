@@ -14,7 +14,7 @@ export default function ProductCard({ product }) {
             toast.error(error, {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,
@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
             toast.success(msg, {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,

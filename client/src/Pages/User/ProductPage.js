@@ -17,6 +17,7 @@ const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb430
 const indexName = 'rBuy';
 
 export default function TestingPage() {
+  const [comments, setComments] = useState([]);
   const params = useParams()
   const [product, setProduct] = useState([])
   const [vendorName, setVendorName] = useState("")
@@ -42,7 +43,7 @@ export default function TestingPage() {
       toast.error(error.response.data.error, {
         position: "top-center",
         autoClose: 3000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -67,7 +68,7 @@ export default function TestingPage() {
 
   useEffect(() => {
     fetchData()
-  }, [fetchData])
+  }, [fetchData, comments])
 
   if (user === undefined || isLoading) {
     return <div>....is loading</div>
@@ -79,7 +80,7 @@ export default function TestingPage() {
       <ToastContainer
         position="top-center"
         autoClose={10000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -134,7 +135,7 @@ export default function TestingPage() {
           <ProductDetailComment product={product} />
           <div className="flex flex-col">
             {/* comment  */}
-            <CustomerReview />
+            <CustomerReview product={product} comments={comments} setComments={setComments} />
           </div>
         </div>
       </section>

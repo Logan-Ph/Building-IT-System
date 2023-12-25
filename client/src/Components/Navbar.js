@@ -105,7 +105,7 @@ export default function Navbar() {
           <div className="w-full md:w-4/12 px-4 mx-auto text-center">
             <div className="text-md text-white font-semibold py-1">
               Copyright ©
-              <a href="" className="text-white hover:text-white">2023 rBuy</a>.
+              <span className="text-white hover:text-white">2023 rBuy</span>.
             </div>
           </div>
         </div>

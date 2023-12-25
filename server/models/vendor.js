@@ -55,9 +55,11 @@ const vendorSchema = new mongoose.Schema({
         require: true,
         default: "Vendor",
     },
+    
     banEndDate: {
         type: Date,
     },
+
     banStartDate: {
         type: Date,
     },

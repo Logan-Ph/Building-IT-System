@@ -6,10 +6,12 @@ const commentSchema = new mongoose.Schema({
         ref: 'Product',
         required: true
     },
-    postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    userName: {
+        type: String,
         required: true,
+    },
+    userImg: {
+        data: Buffer
     },
     commentText: {
         type: String,
@@ -19,36 +21,50 @@ const commentSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    title: {
+        type: String,
+    },
+    rating: {
+        type: Number,
+    },
     replyMessage: [{
         commentId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
         },
-        reply: {
-        type: String,
-        required: true
+        replyText: {
+            type: String,
+            required: true
         },
-        vendorId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Vendor',
+        vendorBusinessName: {
+            type: String,
+        },
+        vendorImg: {
+            data: Buffer
+        },
+        userName: {
+            type: String,
             required: true,
+        },
+        userImg: {
+            data: Buffer
         },
         postedOn: {
             type: Date,
             default: Date.now
         },
     }],
-    like:[{
-        likes:{
+    like: [{
+        likes: {
             type: Number,
             default: 0,
         },
-        likeBy:{
-            type:mongoose.Schema.Types.ObjectId,
+        likeBy: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
             default: null
         }
     }]
-    });
-    module.exports = mongoose.model('Comment', commentSchema);
+});
+module.exports = mongoose.model('Comment', commentSchema);

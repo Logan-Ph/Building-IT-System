@@ -20,7 +20,7 @@ export default function ResetPassword() {
         toast.error(error, {
             position: "top-center",
             autoClose: 5000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
             progress: undefined,
@@ -33,7 +33,7 @@ export default function ResetPassword() {
         toast.success(msg, {
             position: "top-center",
             autoClose: 5000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
             progress: undefined,
@@ -100,7 +100,7 @@ export default function ResetPassword() {
         <ToastContainer
             position="top-center"
             autoClose={5000}
-            hideProgressBar={false}
+            hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
             rtl={false}

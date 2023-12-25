@@ -93,7 +93,7 @@ export default function CartPage() {
       toast.error("Please select at least one product to checkout", {
         position: "top-center",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -125,7 +125,7 @@ export default function CartPage() {
       <ToastContainer
         position="top-center"
         autoClose={10000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}

@@ -22,7 +22,7 @@ export default function ForgotPassword() {
         toast.success(msg, {
             position: "top-center",
             autoClose: 5000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: false,
             draggable: true,
@@ -35,7 +35,7 @@ export default function ForgotPassword() {
         toast.error(error, {
             position: "top-center",
             autoClose: 5000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
             progress: undefined,
@@ -73,7 +73,7 @@ export default function ForgotPassword() {
         <ToastContainer
             position="top-center"
             autoClose={5000}
-            hideProgressBar={false}
+            hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
             rtl={false}
