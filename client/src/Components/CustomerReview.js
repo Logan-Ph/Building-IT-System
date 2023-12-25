@@ -1,7 +1,12 @@
 import { useEffect, useCallback } from 'react';
+import { Textarea } from "flowbite-react";
+import { useState } from 'react';
+
 import axios from 'axios'
 export default function CustomerReview({ product, setComments, comments }) {
-
+  const textMessage = () => {
+    document.getElementById("customer_comment").className = "block";
+}
   const fetchComments = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/product/${product._id}/view-comment`);
@@ -69,7 +74,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                       >
                         {(comment.like && comment.like.likes) || 0} people found this helpful
                       </span>
-                      <button class="inline-flex items-center px-1  ml-1 flex-column">
+                      <button class="inline-flex items-center px-1  ml-1 flex-column" onClick={textMessage}>
                         <svg
                           class="w-5 h-5 ml-2 text-gray-600 cursor-pointer fill-current hover:text-gray-900"
                           viewBox="0 0 95 78"
@@ -80,8 +85,10 @@ export default function CustomerReview({ product, setComments, comments }) {
                             fill-rule="nonzero"
                           />
                         </svg>
+
                       </button>
-                      <button class="inline-flex items-center px-1 -ml-1 flex-column">
+
+                      <button class="inline-flex items-center px-1 -ml-1 flex-column " >
                         <svg
                           class="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-700"
                           fill="none"
@@ -97,6 +104,21 @@ export default function CustomerReview({ product, setComments, comments }) {
                           ></path>
                         </svg>
                       </button>
+                    </div>
+
+                    <div className="hidden" id="customer_comment">
+                      <div className='text-md xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2 mt-5'>Add Comment</div>
+                      <div className=" mt-2" >
+                        <Textarea
+                          id="commentText"
+                          placeholder="Write a Comment..."
+                          required
+                          rows={3}
+                          className="mb-2 w-2/3" />
+
+
+                        <button class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none font-medium rounded text-sm px-3 py-2 w-2/3 text-center me-2 mt-2 mb-2">Post</button>
+                      </div>
                     </div>
                     <hr class="my-4 w-full border-gray-300" />
                     {comment.replyMessage && comment.replyMessage.map((reply) => {
@@ -133,6 +155,8 @@ export default function CustomerReview({ product, setComments, comments }) {
                                 />
                               </svg>
                             </button>
+
+
                             <button class="inline-flex items-center px-1 -ml-1 flex-column">
                               <svg
                                 class="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-700"
