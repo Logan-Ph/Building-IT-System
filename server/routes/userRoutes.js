@@ -128,9 +128,9 @@ router.get('/manage-order', userController.manageOrder);
 
 
 //customer review routes
-router.get('/product/:productId/view-comment', userController.viewComments);
+router.get('/product/:id/view-comment', userController.viewComments);
 
-router.post('/product/:productId/post-comment', userController.postComment);
+router.post('/product/:id/post-comment', userController.postComment);
 
 router.put('/product/:commentId/reply-comment', userController.replyComment);
 

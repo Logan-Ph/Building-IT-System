@@ -31,7 +31,6 @@ const imagekit = new ImageKit({
 
 const fs = require("fs");
 const { error } = require('console')
-const order = require('../models/order')
 require('dotenv').config()
 
 function convertUser(user) {
@@ -1366,38 +1365,62 @@ exports.checkFollow = async (req, res) => {
 }
 
 exports.viewComments = async (req, res) => {
-  const id = req.params?.productId
+  const productId = req.params.id
+  const product = await Product.findById(productId);
   try {
-    if (id) {
-      const comments = await Comment.find({ productId: id }).sort({ postedOn: 'asc' })
-      res.json(comments);
+    if (product) {
+      const comments = await Comment.find({ productId: productId })
+      const commentsJson = comments.map(comment => {
+        const commentJson = comment.toJSON();
+        if (commentJson.userImg.data) {
+          commentJson.userImg = Buffer.from(commentJson.userImg.data).toString("base64");
+        }
+        commentJson.replyMessage.map(reply => {
+          if (reply.userImg.data) {
+            reply.userImg = Buffer.from(reply.userImg.data).toString("base64");
+          }
+
+          if (reply.vendorImg.data) {
+            reply.vendorImg = Buffer.from(reply.vendorImg.data).toString("base64");
+          }
+
+          return reply;
+        })
+        return commentJson;
+      });
+
+      res.json({ comments: commentsJson });
     } else {
       res.status(500).json({ message: 'Comments not found' })
     }
 
   } catch (error) {
+    console.log(error.message)
     res.status(501).json({ message: 'There was an error getting comments for this Product' });
   }
 }
 
 exports.postComment = async (req, res) => {
-  const product = await Product.findById(req.params.productId);
+  const productId = req.params.id;
+  const product = await Product.findById(productId);
   if (!req.user) {
     return res.status(500).json({ error: "Please log in or create an account to comment" })
   }
   if (!product) {
     return res.status(500).json({ error: "This product does not exist" })
   }
-  const id = req.params.productId
-  const { commentText } = req.body;
+  const { newComment } = req.body;
   try {
+    const user = await User.findById(req.user._id);
     const postComment = await Comment.create({
-      productId: new mongoose.Types.ObjectId(id),
-      commentText,
-      postedBy: new mongoose.Types.ObjectId(req.user._id)
+      productId: new mongoose.Types.ObjectId(productId),
+      commentText: newComment,
+      userName: user.name,
+      userImg: user.img,
     })
-    return res.status(200).json(postComment);
+    return res.status(200).json({ comment: postComment });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 }

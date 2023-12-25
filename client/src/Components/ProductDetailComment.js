@@ -9,18 +9,25 @@ export default function ProductDetailComment({ product }) {
     const textMessage = () => {
         document.getElementById("customer_review").className = "block";
     }
-    const [comment, setComment] = useState([])
-    const [commentText, setCommentText] = useState('')
+    const [newComment, setNewComment] = useState('')
 
-    const postComment = async (productId, commentText) => {
-        const commentData = { commentText: commentText }
+    const postComment = async () => {
         try {
-            const response = await axios.post(`http://localhost:4000/product/${productId}/post-comment`, commentData, { withCredentials: true });
-            setComment([...comment, response.data]);
-            console.log(response.data)
+            await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment }, { withCredentials: true });
+            setNewComment('')
+            window.location.reload();
         }
         catch (error) {
-            console.error("Error posting comment", error);
+            toast.error(error.response.data.error, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
         }
     };
 
@@ -28,6 +35,7 @@ export default function ProductDetailComment({ product }) {
         e.preventDefault();
         postComment();
     };
+
     return (<div className="w-full lg:md:py-12 md:pr-2 xs:py-3">
         <ToastContainer
             position="top-center"
@@ -96,8 +104,8 @@ export default function ProductDetailComment({ product }) {
                             placeholder="Leave a review..."
                             required
                             rows={4}
-                            value={commentText}
-                            onChange={e => setCommentText(e.target.value)} />
+                            value={newComment}
+                            onChange={e => setNewComment(e.target.value)} />
                         <button
                             className="text-sm font-medium text-black text-center mx-auto"
                             onClick={handleComment} type="submit">
