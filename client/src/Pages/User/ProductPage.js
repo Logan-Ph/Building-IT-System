@@ -43,7 +43,7 @@ export default function TestingPage() {
       toast.error(error.response.data.error, {
         position: "top-center",
         autoClose: 3000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -80,7 +80,7 @@ export default function TestingPage() {
       <ToastContainer
         position="top-center"
         autoClose={10000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}

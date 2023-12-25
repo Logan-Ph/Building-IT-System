@@ -38,7 +38,7 @@ export default function MoreDetailOrder({ order }) {
         toast.success(msg, {
             position: "top-center",
             autoClose: 3000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
             progress: undefined,
@@ -56,7 +56,7 @@ export default function MoreDetailOrder({ order }) {
         <ToastContainer
             position="top-center"
             autoClose={10000}
-            hideProgressBar={false}
+            hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
             rtl={false}

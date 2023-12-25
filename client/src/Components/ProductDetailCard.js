@@ -6,9 +6,6 @@ import { Rating } from 'flowbite-react';
 import { Navigate } from "react-router";
 import { Modal } from "flowbite-react";
 
-import aa from "search-insights";
-const accessToken = "70699cb6d8187950476a63e8e3ff8e02cac09bf497a40d4f91939e0c32be74cb970355fddd194acf319923528ea1dfb4c0f6a1bbb46d8c78af50c94b473f24e3"
-
 export default function ProductDetailCard({ product, vendorName, user }) {
     const [quantity, setQuantity] = useState(1)
     const [error, setError] = useState('')
@@ -22,7 +19,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
             toast.error(error, {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,
@@ -35,7 +32,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
             toast.success(msg, {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,

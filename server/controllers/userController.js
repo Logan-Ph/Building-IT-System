@@ -1418,7 +1418,7 @@ exports.postComment = async (req, res) => {
       userName: user.name,
       userImg: user.img,
     })
-    return res.status(200).json({ comment: postComment });
+    return res.status(200).json({ msg: "Add comment successfully" });
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: error.message });

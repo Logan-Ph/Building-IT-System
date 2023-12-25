@@ -21,7 +21,7 @@ export default function ReportInfo({reports}) {
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -39,7 +39,7 @@ export default function ReportInfo({reports}) {
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -59,7 +59,7 @@ export default function ReportInfo({reports}) {
       <ToastContainer
         position="top-center"
         autoClose={10000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}

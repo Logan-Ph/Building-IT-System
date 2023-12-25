@@ -14,19 +14,6 @@ export default function AddImageHomePageBanner() {
         setFiles(event.target.files);
     };
 
-    const success = (success) => {
-        toast.success(success, {
-            position: "top-center",
-            autoClose: 10000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            draggable: true,
-            progress: undefined,
-            pauseOnHover: false,
-            theme: "light",
-        });
-    }
-
     async function uploadHomepageCarousel() {
         const fd = new FormData();
 
@@ -50,7 +37,7 @@ export default function AddImageHomePageBanner() {
             toast.error(error, {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,
@@ -65,7 +52,7 @@ export default function AddImageHomePageBanner() {
             toast.error(error, {
                 position: "top-center",
                 autoClose: 5000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,
@@ -80,7 +67,7 @@ export default function AddImageHomePageBanner() {
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
-                hideProgressBar={false}
+                hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
                 rtl={false}

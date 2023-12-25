@@ -43,7 +43,7 @@ export default function Homepage() {
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
-                hideProgressBar={false}
+                hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
                 rtl={false}
@@ -51,8 +51,6 @@ export default function Homepage() {
                 draggable
                 pauseOnHover={false}
                 theme="light"
-                
-                
             />
 
             <section className='bg-gray-50 py-6'>

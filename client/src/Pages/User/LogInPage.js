@@ -21,7 +21,7 @@ export default function LogInPage() {
         toast.error(error, {
             position: "top-center",
             autoClose: 3000,
-            hideProgressBar: false,
+            hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
             progress: undefined,
@@ -72,7 +72,7 @@ export default function LogInPage() {
             <ToastContainer
                 position="top-center"
                 autoClose={3000}
-                hideProgressBar={false}
+                hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
                 rtl={false}

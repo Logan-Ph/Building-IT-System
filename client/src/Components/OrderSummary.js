@@ -27,7 +27,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       toast.error(error, {
         position: "top-center",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -40,7 +40,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       toast.success(msg, {
         position: "top-center",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
         progress: undefined,
@@ -84,7 +84,9 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       });
       localStorage.setItem('products', JSON.stringify([]));
       setError("");
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 4000);
     } catch (er) {
       setError(er);
       setMsg("");
@@ -105,7 +107,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       <ToastContainer
         position="top-center"
         autoClose={10000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}

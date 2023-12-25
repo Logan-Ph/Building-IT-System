@@ -13,15 +13,27 @@ export default function ProductDetailComment({ product }) {
 
     const postComment = async () => {
         try {
-            await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment }, { withCredentials: true });
+            const res = await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment }, { withCredentials: true });
+            toast.success(res.data.msg, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
             setNewComment('')
-            window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+            }, 4000);
         }
         catch (error) {
             toast.error(error.response.data.error, {
                 position: "top-center",
                 autoClose: 3000,
-                hideProgressBar: false,
+                hideProgressBar: true,
                 closeOnClick: true,
                 draggable: true,
                 progress: undefined,
@@ -40,7 +52,7 @@ export default function ProductDetailComment({ product }) {
         <ToastContainer
             position="top-center"
             autoClose={3000}
-            hideProgressBar={false}
+            hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
             rtl={false}
