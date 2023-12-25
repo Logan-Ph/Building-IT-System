@@ -108,6 +108,9 @@ export default function CustomerReview({ product, setComments, comments }) {
                       </button>
                     </div>
 
+
+
+{/* NEW ADDED */}
                     <div className="" id="customer_comment">
                       <div className='text-md xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2 mt-5'>Add Comment</div>
                       <div className=" mt-2" >
@@ -116,12 +119,15 @@ export default function CustomerReview({ product, setComments, comments }) {
                           placeholder="Write a Comment..."
                           required
                           rows={3}
-                          className="mb-2 w-2/3" />
-
-
-                        <button class="text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none font-medium rounded text-sm px-3 py-2 w-2/3 text-center me-2 mt-2 mb-2">Post</button>
+                          className="mb-2 w-full" />
+                        <button class="text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none font-medium rounded text-sm px-3 py-2 w-full text-center me-2 mt-2 mb-2">Post</button>
                       </div>
                     </div>
+
+
+
+
+
                     <hr class="my-4 w-full border-gray-300" />
                     {comment.replyMessage && comment.replyMessage.map((reply) => {
                       const postedOnDate = new Date(reply.postedOn);
