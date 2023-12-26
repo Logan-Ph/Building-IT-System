@@ -17,19 +17,20 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
 
   const handleFileChange = (event) => {
     setFiles(event.target.files);
-};
+  };
 
-  const reportData = {
-    vendorID: vendor._id,
-    title: title,
-    description: description,
-    files: files,
-  }
 
   async function reportProduct() {
     try {
       setLoading(true);
-      await axios.post('http://localhost:4000/report-vendor', reportData, { withCredentials: true })
+      const fd = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        fd.append('files', files[i]);
+      }
+      fd.append('vendorID', vendor._id);
+      fd.append('title', title);
+      fd.append('description', description);
+      await axios.post('http://localhost:4000/report-vendor', fd, { withCredentials: true })
         .then(res => {
           setError('')
           setMsg(res.data)
