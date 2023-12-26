@@ -54,11 +54,11 @@ const commentSchema = new mongoose.Schema({
             default: Date.now
         },
     }],
+    likes: {
+        type: Number,
+        default: 0,
+    },
     like: [{
-        likes: {
-            type: Number,
-            default: 0,
-        },
         likeBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
@@ -67,4 +67,21 @@ const commentSchema = new mongoose.Schema({
         }
     }]
 });
+
+commentSchema.methods.likeComment = function (userId) {
+    const index = this.like.findIndex(like => like.likeBy.toString() === userId.toString());
+
+    // If the user hasn't liked the comment yet, add their like and increment the likes count
+    if (index === -1) {
+        this.like.push({ likeBy: userId });
+        this.likes += 1;
+    } else {
+        // If the user has already liked the comment, remove their like and decrement the likes count
+        this.like.splice(index, 1);
+        this.likes -= 1;
+    }
+
+    return this.save();
+};
+
 module.exports = mongoose.model('Comment', commentSchema);

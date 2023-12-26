@@ -80,9 +80,6 @@ export default function VendorMyProduct() {
 
   return (
     <>
-      {user && user.role === "User" && <Navigate to={'/'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-      {!user && <Navigate to={'/login'} replace />}
       <ToastContainer
           position="top-center"
           autoClose={10000}
