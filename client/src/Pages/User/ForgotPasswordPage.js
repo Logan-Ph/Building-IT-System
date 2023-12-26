@@ -84,20 +84,20 @@ export default function ForgotPassword() {
         />
 
         <section className="bg-white">
-            <div className="px-4 mx-auto max-w-screen-md">
-                <div className="flex flex-col items-center justify-center px-6 mx-auto md:h-screen lg:py-0">
-                    <div className="w-full p-6 rounded-lg shadow dark:border md:mt-0 sm:max-w-md bg-gray-50 border-gray-50 sm:p-8">
+            <div className="mx-auto">
+                <div className="flex flex-col items-center mx-auto py-10 xs:px-10">
+                    <div className="w-full px-6 rounded-lg shadow dark:border md:mt-0 sm:max-w-md bg-gray-50 border-gray-50 sm:p-8">
                         <div className="flex flex-row items-center">
                             <button className="border-black">
                                 <a href="\login" className="text-2xl text-[#E61E2A]">
                                     <i className="fa-solid fa-arrow-left"></i>
                                 </a>
                             </button>
-                            <h1 className="ml-10 text-2xl font-bold leading-tight tracking-tight text-[#000053] md:text-2xl">Forgot your password?</h1>
+                            <h1 className="ml-10 text-2xl font-bold leading-tight tracking-tight text-[#000053] md:text-2xl xs:text-xl xs:ml-4">Forgot your password?</h1>
                         </div>
 
                         <hr className="h-px my-5 bg-gray-300 border-0"></hr>
-                        <p className="font-light text-gray-500">Don't freak out! Just type in your email and we will send you a code to reset your password!</p>
+                        <p className="font-light text-gray-500 xs:text-xs">Don't freak out! Just type in your email and we will send you a code to reset your password!</p>
                         <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
                             <div>
                                 <label for="email" className="block mb-2 text-md font-medium text-gray-900">Your email</label>

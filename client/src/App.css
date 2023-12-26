@@ -2034,10 +2034,6 @@ input:checked + .toggle-bg {
   height: 16rem;
 }
 
-.h-64 {
-  height: 16rem;
-}
-
 .h-7 {
   height: 1.75rem;
 }
@@ -2126,6 +2122,10 @@ input:checked + .toggle-bg {
 
 .max-h-full {
   max-height: 100%;
+}
+
+.max-h-40 {
+  max-height: 10rem;
 }
 
 .\!w-5 {
@@ -7870,6 +7870,10 @@ input:checked + .toggle-bg {
     height: auto;
   }
 
+  .sm\:h-screen {
+    height: 100vh;
+  }
+
   .sm\:w-1 {
     width: 0.25rem;
   }
@@ -8955,6 +8959,10 @@ input:checked + .toggle-bg {
     height: auto;
   }
 
+  .xs\:h-screen {
+    height: 100vh;
+  }
+
   .xs\:w-3\/4 {
     width: 75%;
   }
@@ -9070,6 +9078,11 @@ input:checked + .toggle-bg {
   .xs\:py-5 {
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
+  }
+
+  .xs\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 
   .xs\:pt-0 {
