@@ -98,7 +98,6 @@ export default function UserProfile() {
 
     return (
         <>
-            {user===null && <Navigate to={'/'} replace/>}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
