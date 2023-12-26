@@ -597,33 +597,13 @@ exports.vendorHomepage = async (req, res) => {
     const vendor = await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
     const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
     const numberOfFollowers = await FollowerList.find({ vendorID: req.params.id }, { followers: 1 })
-    let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
+    let vendorImage;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    if (vendor.coverPhoto.data) {
-      coverPhoto = Buffer.from(
-        vendor.coverPhoto.data
-      ).toString("base64");
-    }
-    if (vendor.bigBanner.data) {
-      bigBanner = Buffer.from(
-        vendor.bigBanner.data
-      ).toString("base64");
-    }
-    if (vendor.smallBanner1.data) {
-      smallBanner1 = Buffer.from(
-        vendor.smallBanner1.data
-      ).toString("base64");
-    }
-    if (vendor.smallBanner2.data) {
-      smallBanner2 = Buffer.from(
-        vendor.smallBanner2.data
-      ).toString("base64");
-    }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
@@ -852,20 +832,31 @@ exports.userProfile = async (req, res) => {
 exports.editStore = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.user._id);
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file[0].filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+
     if (req.files) {
       if (req.files.coverPhoto) {
-        vendor.coverPhoto.data = fs.readFileSync(req.files.coverPhoto[0].path);
+        vendor.coverPhoto = await uploadImage(req.files.coverPhoto);
       }
 
       if (req.files.bigBanner) {
-        vendor.bigBanner.data = fs.readFileSync(req.files.bigBanner[0].path);
+        vendor.bigBanner = await uploadImage(req.files.bigBanner);
       }
 
       if (req.files.smallBanner1 && req.files.smallBanner2) {
-        const smallBanner1Buffer = fs.readFileSync(req.files.smallBanner1[0].path);
-        vendor.smallBanner1.data = smallBanner1Buffer;
-        const smallBanner2Buffer = fs.readFileSync(req.files.smallBanner2[0].path);
-        vendor.smallBanner2.data = smallBanner2Buffer;
+        vendor.smallBanner1 = await uploadImage(req.files.smallBanner1);
+        vendor.smallBanner2 = await uploadImage(req.files.smallBanner2);
       }
 
       if ((req.files.smallBanner1 && !req.files.smallBanner2) || (!req.files.smallBanner1 && req.files.smallBanner2)) {
@@ -1283,7 +1274,9 @@ exports.reportVendor = async (req, res) => {
 exports.reportProduct = async (req, res) => {
   try {
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
+    console.log(vendorEmail);
     const productName = (await Product.findById(req.body.productID)).product_name;
+    c
     const newReport = new Report({
       user: req.body.userID,
       vendor: req.body.vendorID,

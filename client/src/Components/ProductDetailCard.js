@@ -1,7 +1,7 @@
 'use client';
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { Rating } from 'flowbite-react';
 import { Navigate } from "react-router";
 import { Modal } from "flowbite-react";
@@ -16,6 +16,45 @@ export default function ProductDetailCard({ product, vendorName, user }) {
     const [navigateTo, setNavigateTo] = useState('')
 
     const [openModal, setOpenModal] = useState(false)
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState()
+    const [loading, setLoading] = useState(false);
+
+    const handleDropdownChange = (event) => {
+        setTitle(event.target.value);
+      };
+
+    const reportData = {
+        userID: user._id,
+        vendorID: product.owner,
+        product: product._id,
+        title: title,
+        description: description
+    }
+
+    async function reportProduct() {
+        try {
+            console.log(reportData);
+            setLoading(true);
+            await axios.post('http://localhost:4000/report-product', reportData, { withCredentials: true })
+            .then(res => {
+                setError('')
+                setMsg(res.data)
+                setLoading(false)
+            })
+            .catch(er => { setError(er.response.data) });
+        } catch (error) {
+            console.error('Failed to update.', error);
+        }
+    }
+
+    const handleReport = (e) => {
+        e.preventDefault();
+        reportProduct();
+        if (error) {
+          notify(error);
+        }
+    }
 
     const notify = useCallback(() => {
         if (error) {
@@ -79,6 +118,18 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
     return (<>
         {navigateTo && <Navigate to={navigateTo} replace />}
+        <ToastContainer
+            position="top-center"
+            autoClose={10000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="light"
+        />
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
             <img
                 alt="ecommerce"
@@ -157,31 +208,31 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                 <Modal.Header>
                                     <div>
                                         <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p>
+                                        {/* <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
+                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p> */}
                                     </div>
 
                                 </Modal.Header>
                                 <Modal.Body className="overflow-y-auto">
                                     <label for="reason" className="font-bold">Select a reason:</label>
-                                    <select name="reportedReason" id="reportedReason" className="w-full my-2">
+                                    <select value={title} onChange={handleDropdownChange} name="reportedReason" id="reportedReason" className="w-full my-2">
                                         <option disabled value="" >Select a reason below</option>
-                                        <option value="fake">Product is fake/replica</option>
-                                        <option value="unidentifiedProductOrigin">The product's origin is unidentified</option>
-                                        <option value="indistinctProductIllustratior">The product's illustrators is indistinct</option>
-                                        <option value="unmatchedProductName">The product's name does not match with product illustrators</option>
+                                        <option value="Fake/Replica">Product is fake/replica</option>
+                                        <option value="Unidentified Product Origin">The product's origin is unidentified</option>
+                                        <option value="Indistinct Product Illustratior">The product's illustrators is indistinct</option>
+                                        <option value="Unmatched Product Name">The product's name does not match with product illustrators</option>
                                         <option value="Other">Other</option>
                                     </select>
 
                                     <div className="my-2">
-                                        <textarea id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
+                                        <textarea onChange={(e) => setDescription(e.target.value)} id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
                                     </div>
                                 </Modal.Body>
                                     
 
                                 <Modal.Footer>
-                                    <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Send Report</button>
-                                    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
+                                    <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>
+                                    {/* <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button> */}
                                 </Modal.Footer>
                                 
                             </Modal>
