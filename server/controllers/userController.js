@@ -253,12 +253,13 @@ exports.chatbotMessage = async (req, res) => {
 
 exports.productPage = async (req, res) => {
   try {
-    let product = await Product.findById(req.params.id);
+    let product = await Product.findById(new mongoose.Types.ObjectId(req.params.id));
     let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
-    const numberOfFollowers = await FollowerList.find({ vendorID: product.owner }, { followers: 1 })
-    res.json({ product: product, vendorName: vendorName.businessName, numberOfFollowers: numberOfFollowers[0].followers.length });
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: product.owner }, { followers: 1 })
+    return res.json({ product: product, vendorName: vendorName.businessName, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    console.log(error)
+    res.status(500).send({ message: "Error Occured" });
   }
 }
 
@@ -596,14 +597,14 @@ exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
     const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
-    const numberOfFollowers = await FollowerList.find({ vendorID: req.params.id }, { followers: 1 })
-    let vendorImage;
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: req.params.id }, { followers: 1 })
+    let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
@@ -1274,11 +1275,10 @@ exports.reportVendor = async (req, res) => {
 exports.reportProduct = async (req, res) => {
   try {
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
-    console.log(vendorEmail);
     const productName = (await Product.findById(req.body.productID)).product_name;
     c
     const newReport = new Report({
-      user: req.body.userID,
+      user: req.user._id,
       vendor: req.body.vendorID,
       product: req.body.productID,
       title: req.body.title,

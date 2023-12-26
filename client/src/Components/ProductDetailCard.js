@@ -25,7 +25,6 @@ export default function ProductDetailCard({ product, vendorName, user }) {
       };
 
     const reportData = {
-        userID: user._id,
         vendorID: product.owner,
         product: product._id,
         title: title,
@@ -42,7 +41,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                 setMsg(res.data)
                 setLoading(false)
             })
-            .catch(er => { setError(er.response.data) });
+            .catch(setError("Failed to report "));
         } catch (error) {
             console.error('Failed to update.', error);
         }
