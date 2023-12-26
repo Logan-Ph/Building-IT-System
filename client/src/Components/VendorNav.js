@@ -1,9 +1,56 @@
 import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
-import { useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { Modal } from "flowbite-react";
+import { ToastContainer, toast } from "react-toastify";
+
 
 export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
   const { refine } = useSearchBox();
+  const [openModal, setOpenModal] = useState(false)
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('')
+  const [msg, setMsg] = useState('')
+  const [files, setFiles] = useState();
+
+  const handleFileChange = (event) => {
+    setFiles(event.target.files);
+};
+
+  const reportData = {
+    vendorID: vendor._id,
+    title: title,
+    description: description,
+    files: files,
+  }
+
+  async function reportProduct() {
+    try {
+      setLoading(true);
+      await axios.post('http://localhost:4000/report-vendor', reportData, { withCredentials: true })
+        .then(res => {
+          setError('')
+          setMsg(res.data)
+          setLoading(false)
+        })
+        .catch(error => {
+          setError("Failed to report!" + error)
+          setLoading(false)
+        });
+    } catch (error) {
+      console.error('Failed to report.', error);
+    }
+  }
+
+  const handleReport = (e) => {
+    e.preventDefault();
+    reportProduct();
+    if (error) {
+      notify(error);
+    }
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -61,15 +108,62 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
       console.log(err);
     }
   }
+
+  const notify = useCallback(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+
+    if (msg) {
+      toast.success(msg, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+  }, [error, msg]);
+
+  useEffect(() => {
+    if (error || msg) {
+      notify();
+    }
+  }, [error, msg, notify]);
+
   useEffect(() => {
     user && fetchData();
   }, [fetchData, user])
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       {/* Profile Section */}
       <div class="md:container mx-auto">
-        <img class="h-auto max-w-full" src={`data:image/jpeg;base64,${coverPhoto}`} alt="" />
+        <img class="h-auto max-w-full" src={coverPhoto} alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
             <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
@@ -100,6 +194,46 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
                       <i class="fa-regular fa-plus"></i> Follow
                     </button>)
                 }
+                <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
+                <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
+                  <Modal.Header>
+                    <div>
+                      <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
+                      {/* <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
+                      <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p> */}
+                    </div>
+
+                  </Modal.Header>
+                  <Modal.Body className="overflow-y-auto">
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      name="reportedReason"
+                      id="reportedReason"
+                      className="w-full my-2"
+                      placeholder="Report Title"
+                    />
+                    <div className="my-2">
+                      <textarea onChange={(e) => setDescription(e.target.value)} id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
+                    </div>
+                    <p>Upload proof images</p>
+                    <input onChange={handleFileChange}
+                      type="file"
+                      name="files"
+                      id="files"
+                      className="w-full my-2"
+                      accept="image/*" // Specify the file types allowed, adjust as needed
+                      multiple // Allow multiple files to be selected
+                    />
+                  </Modal.Body>
+
+
+                  <Modal.Footer>
+                    <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>
+                  </Modal.Footer>
+
+                </Modal>
               </div>
             </div>
           </div>
@@ -143,7 +277,6 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
               </div>
             </form>
           </div>
-
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
               <li className={getTabClass("HOME")}>

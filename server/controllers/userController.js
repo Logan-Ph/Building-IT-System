@@ -1242,7 +1242,7 @@ exports.reportVendor = async (req, res) => {
   try {
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const newReport = new Report({
-      user: req.body.userID,
+      user: req.user._id,
       vendor: req.body.vendorID,
       title: req.body.title,
       description: req.body.description,
