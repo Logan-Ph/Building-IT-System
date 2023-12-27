@@ -252,12 +252,13 @@ exports.chatbotMessage = async (req, res) => {
 
 exports.productPage = async (req, res) => {
   try {
-    let product = await Product.findById(req.params.id);
+    let product = await Product.findById(new mongoose.Types.ObjectId(req.params.id));
     let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
-    const numberOfFollowers = await FollowerList.find({ vendorID: product.owner }, { followers: 1 })
-    res.json({ product: product, vendorName: vendorName.businessName, numberOfFollowers: numberOfFollowers[0].followers.length });
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: product.owner }, { followers: 1 })
+    return res.json({ product: product, vendorName: vendorName.businessName, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
-    res.status(500).send({ message: error.message || "Error Occured" });
+    console.log(error)
+    res.status(500).send({ message: "Error Occured" });
   }
 }
 
