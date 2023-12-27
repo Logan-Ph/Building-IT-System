@@ -596,7 +596,7 @@ exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
     const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
-    const numberOfFollowers = await FollowerList.find({ vendorID: req.params.id }, { followers: 1 })
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: product.owner }, { followers: 1 })
     let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
@@ -623,7 +623,7 @@ exports.vendorHomepage = async (req, res) => {
         vendor.smallBanner2.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
@@ -641,7 +641,7 @@ exports.vendorProductPage = async (req, res) => {
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -884,7 +884,7 @@ exports.getStoreInfo = async (req, res) => {
   try {
     const numberOfProducts = await Product.find({ owner: req.user._id }).countDocuments();
     const numberOfFollowers = await FollowerList.find({ vendorID: req.user._id }, { followers: 1 });
-    return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch {
     return res.status(500).json({ error: "Cannot find store info" })
   }
