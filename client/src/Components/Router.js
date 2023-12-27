@@ -247,7 +247,7 @@ export default function Router() {
           element: <AdminManageVendorProduct />,
         },
         {
-          path: "/admin/reported-product-page",
+          path: "/admin/reported-product-page/:id",
           element: <ReportedProductPage />,
         },
         {

@@ -10,10 +10,11 @@ export default function ProductDetailComment({ product }) {
         document.getElementById("customer_review").className = "block";
     }
     const [newComment, setNewComment] = useState('')
+    const [title, setTitle] = useState('')
 
     const postComment = async () => {
         try {
-            const res = await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment }, { withCredentials: true });
+            const res = await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment, title: title }, { withCredentials: true });
             toast.success(res.data.msg, {
                 position: "top-center",
                 autoClose: 3000,
@@ -25,6 +26,7 @@ export default function ProductDetailComment({ product }) {
                 theme: "light",
             });
             setNewComment('')
+            setTitle('')
             setTimeout(() => {
                 window.location.reload();
             }, 4000);
@@ -40,6 +42,8 @@ export default function ProductDetailComment({ product }) {
                 pauseOnHover: false,
                 theme: "light",
             });
+            setNewComment('')
+            setTitle('')
         }
     };
 
@@ -113,17 +117,24 @@ export default function ProductDetailComment({ product }) {
                     <div className="hidden mt-2" id="customer_review">
                         <Textarea
                             id="commentText"
+                            placeholder="Title..."
+                            required
+                            rows={1}
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            className="mb-2" />
+                        <Textarea
+                            id="commentText"
                             placeholder="Leave a review..."
                             required
                             rows={4}
                             value={newComment}
                             onChange={e => setNewComment(e.target.value)} />
-                        <button
-                            className="text-sm font-medium text-black text-center mx-auto"
-                            onClick={handleComment} type="submit">
-                            Post
-                        </button>
+
+                        <button class="text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none font-medium rounded text-sm px-3 py-2 w-full text-center me-2 mt-2 mb-2" onClick={handleComment} type="submit">Post</button>
                     </div>
+
+
                 </div>
             </div>
         </div>

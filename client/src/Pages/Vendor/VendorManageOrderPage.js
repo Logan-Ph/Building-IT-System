@@ -1,16 +1,11 @@
 import '../../css/mangeorder.css'
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { UserContext } from '../../Context/UserContext';
+import React, { useCallback, useEffect, useState } from "react";
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
-import { Navigate } from 'react-router-dom';
 import OrdersInfo from '../../Components/OrdersInfo';
 
 export default function ManageOrderPage() {
-    const { user } = useContext(UserContext)
-    const [error, setError] = useState();
     const [orders, setOrders] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('');
     const initialStatuses = {
         "Unpaid": null,
@@ -26,11 +21,9 @@ export default function ManageOrderPage() {
         try {
             const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
             setOrders(res.data.orders)
-            setIsLoading(false)
         }
         catch (error) {
-            setError(error)
-            setIsLoading(false)
+            console.log(error)
         }
     }, [setOrders])
 
@@ -38,15 +31,8 @@ export default function ManageOrderPage() {
         getOrders();
     }, [getOrders])
 
-    if (user === undefined || isLoading) {
-        return <div>Loading....</div>
-    }
-
     return (
         <>
-            {user && user.role === "User" && <Navigate to={'/'} replace />}
-            {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-            {(!user || error) && <Navigate to={'/login'} replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={10000}

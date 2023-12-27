@@ -252,7 +252,7 @@ exports.chatbotMessage = async (req, res) => {
 
 exports.productPage = async (req, res) => {
   try {
-    let product = await Product.findById(new mongoose.Types.ObjectId(req.params.id));
+    let product = await Product.findById(new mongoose.Types.ObjectId(new mongoose.Types.ObjectId(req.params.id)));
     let vendorName = await Vendor.findById(product.owner, { businessName: 1 })
     const numberOfFollowers = await FollowerList.findOne({ vendorID: product.owner }, { followers: 1 })
     return res.json({ product: product, vendorName: vendorName.businessName, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
@@ -1080,7 +1080,6 @@ exports.reportPage = async (req, res) => {
         reportJson.user = convertUser(await User.findById(report.user));
         return reportJson;
       }));
-      console.log(reportsInfo)
       return res.status(200).json({ user: vendor, orders: orders, report: reportsInfo });
     };
 
@@ -1098,7 +1097,6 @@ exports.reportPage = async (req, res) => {
 
     // if (!user && !vendor && !shipper) throw new Error("User not found");
   } catch (er) {
-    console.log(er)
     return res.status(500).json({ error: er })
   }
 }
@@ -1373,15 +1371,15 @@ exports.viewComments = async (req, res) => {
       const comments = await Comment.find({ productId: productId })
       const commentsJson = comments.map(comment => {
         const commentJson = comment.toJSON();
-        if (commentJson.userImg.data) {
+        if (commentJson.userImg) {
           commentJson.userImg = Buffer.from(commentJson.userImg.data).toString("base64");
         }
         commentJson.replyMessage.map(reply => {
-          if (reply.userImg.data) {
+          if (reply.userImg) {
             reply.userImg = Buffer.from(reply.userImg.data).toString("base64");
           }
 
-          if (reply.vendorImg.data) {
+          if (reply.vendorImg) {
             reply.vendorImg = Buffer.from(reply.vendorImg.data).toString("base64");
           }
 
@@ -1410,10 +1408,11 @@ exports.postComment = async (req, res) => {
   if (!product) {
     return res.status(500).json({ error: "This product does not exist" })
   }
-  const { newComment } = req.body;
+  const { newComment, title } = req.body;
   try {
     const user = await User.findById(req.user._id);
-    const postComment = await Comment.create({
+    await Comment.create({
+      title: title,
       productId: new mongoose.Types.ObjectId(productId),
       commentText: newComment,
       userName: user.name,
@@ -1421,50 +1420,83 @@ exports.postComment = async (req, res) => {
     })
     return res.status(200).json({ msg: "Add comment successfully" });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ msg: error.message });
   }
 }
 
 exports.replyComment = async (req, res) => {
-  const comment_id = await Comment.findById(req.params.commentId);
+  if (!req.user) return res.status(401).json({ error: "Please log in or create an account to reply" });
+  const { replyText } = req.body;
+  const comment_id = req.params.id;
   try {
-    if (comment_id) {
-      const reply = {
-        commentId: comment_id,
-        vendorId: req.body.vendorId,
-        reply: req.body.reply
-      }
-      const newComment = await Comment.findByIdAndUpdate({ _id: comment_id }, { $push: { replyMessage: reply } }, { new: true })
-      res.json(newComment);
-    } else {
-      res.status(500).json({ message: 'Comments not found' })
-    }
+    const comment = await Comment.findById(comment_id);
+    if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
+    const user = req.user.role === 'User' ? await User.findById(req.user._id) : await Vendor.findById(req.user._id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const reply = {
+      commentId: comment_id,
+      userName: user.name || user.businessName,
+      userImg: user.img,
+      replyText: replyText
+    };
+
+    await Comment.findByIdAndUpdate(comment_id, { $push: { replyMessage: reply } });
+    return res.status(200).json({ msg: "Reply comment successfully" });
   } catch (error) {
-    res.status(501).json({ message: 'There was an error getting comments for this Product' });
+    console.log(error)
+    res.status(500).json({ message: 'There was an error replying to the comment' });
   }
-}
+};
 
 exports.likeComment = async (req, res) => {
-  const commentId = req.params.commentId;
-  const userId = req.user._id;
-
+  if (!req.user) return res.status(500).json({ error: "Please log in or create an account to like" });
+  const commentId = req.params.id;
   try {
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
-
-    const index = comment.likes.indexOf(userId);
-    if (index === -1) {
-      comment.likes.push(userId);
-    } else {
-      comment.likes.splice(index, 1);
-    }
-    await comment.save();
-    res.json(comment);
+    await comment.likeComment(req.user._id);
+    return res.status(200).json({ msg: "Like comment successfully" });
   } catch (error) {
     res.status(500).json({ message: 'There was an error updating the comment' });
   }
 };
+
+exports.adminManageProduct = async (req, res) => {
+  try {
+    const query = req.params.query.split("=")[1];
+    let products;
+
+    if (query) {
+      const regex = new RegExp(query, 'i');
+      products = await Product.find({
+        $or: [
+          { product_name: regex },
+          { category: regex },
+        ]
+      });
+    } else {
+      products = await Product.find({});
+    }
+
+    return res.status(200).json({ products });
+  } catch (error) {
+    return res.status(500).json({ error: "Cannot find products." });
+  }
+}
+
+exports.adminManageReportedProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(500).json({ error: "Cannot find the product." })
+    }
+    const vendor = convertUser(await Vendor.findById(product.owner, { businessName: 1, email: 1, phoneNumber: 1, address: 1, img: 1 }));
+    return res.status(200).json({ product: product, vendor: vendor });
+  } catch (err) {
+    return res.status(500).json({ error: err })
+  }
+}

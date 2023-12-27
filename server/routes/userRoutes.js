@@ -132,9 +132,9 @@ router.get('/product/:id/view-comment', userController.viewComments);
 
 router.post('/product/:id/post-comment', userController.postComment);
 
-router.put('/product/:commentId/reply-comment', userController.replyComment);
+router.post('/product/:id/reply-comment', userController.replyComment);
 
-router.put('/product/:commentId/like', userController.likeComment);
+router.post('/product/:id/like', userController.likeComment);
 // vendor dashboard route (vendor side)
 router.get('/dashboard', userController.getVendorDashboard);
 
@@ -153,6 +153,12 @@ router.post('/vendor-register', userController.vendorRegister);
 // admin report user page
 router.get('/admin/:id/report', userController.reportPage);
 
+// admin manage product page
+router.get('/admin/manage-product/:query', userController.adminManageProduct);
+
+// admin manage reported product page
+router.get('/admin/manage-vendor-product/:id', userController.adminManageReportedProduct);
+
 // admin ban user route
 router.post("/ban-user", userController.banUser);
 
@@ -166,7 +172,6 @@ router.get('/shipper/dashboard', userController.getShipperDashboard);
 router.post("/api/chatbot/message", userController.chatbotMessage);
 
 router.post('/shipper-register', userController.shipperRegister)
-
 
 // authentication route via login function
 router.get('/login', userController.loginPage);
