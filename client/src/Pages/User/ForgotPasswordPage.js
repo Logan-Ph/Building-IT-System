@@ -68,7 +68,7 @@ export default function ForgotPassword() {
             return;
         }
     }
-
+    
     return <>
         <ToastContainer
             position="top-center"

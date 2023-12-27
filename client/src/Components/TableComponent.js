@@ -8,7 +8,7 @@ export default function TableComponent({ orders, headerContent }) {
             <div className='w-full overflow-x-auto'>
                 <Table hoverable>
                     <Table.Head>
-                        {headerContent.map((header) => (
+                        {headerContent && headerContent.map((header) => (
                             <Table.HeadCell className='!px-4 !py-2'>
                                 <span className='whitespace-nowrap'>{header}</span>
                             </Table.HeadCell>
@@ -18,7 +18,7 @@ export default function TableComponent({ orders, headerContent }) {
                         </Table.HeadCell>
                     </Table.Head>
                     <Table.Body className="divide-y">
-                        {orders.map((order) => {
+                        {orders && orders.map((order) => {
                             const date = new Date(order.date);
                             const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
                             let buttonColorClass = '';

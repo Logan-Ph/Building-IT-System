@@ -596,34 +596,14 @@ exports.vendorHomepage = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
     const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
-    const numberOfFollowers = await FollowerList.find({ vendorID: req.params.id }, { followers: 1 })
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: req.params.id }, { followers: 1 })
     let vendorImage, coverPhoto, bigBanner, smallBanner1, smallBanner2;
     if (vendor.img.data) {
       vendorImage = Buffer.from(
         vendor.img.data
       ).toString("base64");
     }
-    if (vendor.coverPhoto.data) {
-      coverPhoto = Buffer.from(
-        vendor.coverPhoto.data
-      ).toString("base64");
-    }
-    if (vendor.bigBanner.data) {
-      bigBanner = Buffer.from(
-        vendor.bigBanner.data
-      ).toString("base64");
-    }
-    if (vendor.smallBanner1.data) {
-      smallBanner1 = Buffer.from(
-        vendor.smallBanner1.data
-      ).toString("base64");
-    }
-    if (vendor.smallBanner2.data) {
-      smallBanner2 = Buffer.from(
-        vendor.smallBanner2.data
-      ).toString("base64");
-    }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, coverPhoto: coverPhoto, bigBanner: bigBanner, smallBanner1: smallBanner1, smallBanner2: smallBanner2, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
@@ -641,7 +621,7 @@ exports.vendorProductPage = async (req, res) => {
         vendor.img.data
       ).toString("base64");
     }
-    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ vendor: vendor, vendorImage: vendorImage, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch {
     return res.status(500).json({ error: "Vendor not found" })
   }
@@ -852,20 +832,31 @@ exports.userProfile = async (req, res) => {
 exports.editStore = async (req, res) => {
   try {
     const vendor = await Vendor.findById(req.user._id);
+    const uploadImage = async (file) => {
+      try {
+        const response = await imagekit.upload({
+          file: fs.readFileSync("uploads/" + file[0].filename),
+          fileName: file.filename + ".jpg",
+        });
+        return response.url;
+      } catch (err) {
+        console.log("Error uploading image:", err);
+        return null;
+      }
+    };
+
     if (req.files) {
       if (req.files.coverPhoto) {
-        vendor.coverPhoto.data = fs.readFileSync(req.files.coverPhoto[0].path);
+        vendor.coverPhoto = await uploadImage(req.files.coverPhoto);
       }
 
       if (req.files.bigBanner) {
-        vendor.bigBanner.data = fs.readFileSync(req.files.bigBanner[0].path);
+        vendor.bigBanner = await uploadImage(req.files.bigBanner);
       }
 
       if (req.files.smallBanner1 && req.files.smallBanner2) {
-        const smallBanner1Buffer = fs.readFileSync(req.files.smallBanner1[0].path);
-        vendor.smallBanner1.data = smallBanner1Buffer;
-        const smallBanner2Buffer = fs.readFileSync(req.files.smallBanner2[0].path);
-        vendor.smallBanner2.data = smallBanner2Buffer;
+        vendor.smallBanner1 = await uploadImage(req.files.smallBanner1);
+        vendor.smallBanner2 = await uploadImage(req.files.smallBanner2);
       }
 
       if ((req.files.smallBanner1 && !req.files.smallBanner2) || (!req.files.smallBanner1 && req.files.smallBanner2)) {
@@ -884,7 +875,7 @@ exports.getStoreInfo = async (req, res) => {
   try {
     const numberOfProducts = await Product.find({ owner: req.user._id }).countDocuments();
     const numberOfFollowers = await FollowerList.find({ vendorID: req.user._id }, { followers: 1 });
-    return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers[0].followers.length });
+    return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch {
     return res.status(500).json({ error: "Cannot find store info" })
   }
@@ -1065,7 +1056,7 @@ exports.reportPage = async (req, res) => {
   try {
     const user = convertUser(await User.findById(req.params.id));
     const vendor = convertUser(await Vendor.findById(req.params.id));
-    // const shipper = (await Shipper.findById(req.params.id)).map(shipper => convertUser(shipper));
+    const shipper = convertUser(await Shipper.findById(req.params.id));
 
     if (user) {
       const orders = await Order.find({ userId: user._id })
@@ -1083,19 +1074,11 @@ exports.reportPage = async (req, res) => {
       return res.status(200).json({ user: vendor, orders: orders, report: reportsInfo });
     };
 
-    // if (shipper) {
-    //   let shipperImage;
-    //   if (shipper.img.data) {
-    //     shipperImage = Buffer.from(
-    //       shipper.img.data
-    //     ).toString("base64");
-    //   }
-    //   return res.status(200).json({ user: shipper, userImage: shipperImage });
-    // }
-
-    if (!user && !vendor) throw new Error("User not found");
-
-    // if (!user && !vendor && !shipper) throw new Error("User not found");
+    if (shipper) {
+      const orders = await Order.find({})
+      return res.status(200).json({ user: shipper, orders: orders });
+    }
+    if (!user && !vendor && !shipper) throw new Error("User not found");
   } catch (er) {
     return res.status(500).json({ error: er })
   }
@@ -1248,7 +1231,7 @@ exports.reportVendor = async (req, res) => {
   try {
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const newReport = new Report({
-      user: req.body.userID,
+      user: req.user._id,
       vendor: req.body.vendorID,
       title: req.body.title,
       description: req.body.description,
@@ -1280,20 +1263,27 @@ exports.reportVendor = async (req, res) => {
 
 exports.reportProduct = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(500).send('Please log in or create an account to report');
+    }
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
-    const productName = (await Product.findById(req.body.productID)).product_name;
+    const productName = (await Product.findById(req.body.product, { product_name: 1 })).product_name;
     const newReport = new Report({
-      user: req.body.userID,
+      user: req.user._id,
       vendor: req.body.vendorID,
-      product: req.body.productID,
+      product: req.body.product,
       title: req.body.title,
       description: req.body.description,
       date: Date.now(),
     })
     await newReport.save();
-    sendProductReportNotificationEmail(vendorEmail, productName, req.body.title, req.body.description)
+    if (emailRegex.test(vendorEmail)) {
+      sendProductReportNotificationEmail(vendorEmail, productName, req.body.title, req.body.description)
+    }
     return res.status(200).send('Successfully Reported');
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: error })
   }
 }
@@ -1482,7 +1472,14 @@ exports.adminManageProduct = async (req, res) => {
       products = await Product.find({});
     }
 
-    return res.status(200).json({ products });
+    const reportedProductIds = await Report.distinct('product');
+    for (let i = 0; i < products.length; i++) {
+      const productObj = products[i].toObject();
+      const isReported = reportedProductIds.map(id => id.toString()).includes(products[i]._id.toString());
+      productObj.isReported = isReported;
+      products[i] = productObj;
+    }
+    return res.status(200).json({ products: products });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find products." });
   }
@@ -1491,11 +1488,19 @@ exports.adminManageProduct = async (req, res) => {
 exports.adminManageReportedProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
+    const reports = await Report.find({ product: req.params.id });
+
+    const reportsWithUser = await Promise.all(reports.map(async (report) => {
+      const reportJson = report.toJSON();
+      reportJson.user = convertUser(await User.findById(reportJson.user, { name: 1, img: 1, email: 1 }));
+      return reportJson;
+    }));
+
     if (!product) {
       return res.status(500).json({ error: "Cannot find the product." })
     }
     const vendor = convertUser(await Vendor.findById(product.owner, { businessName: 1, email: 1, phoneNumber: 1, address: 1, img: 1 }));
-    return res.status(200).json({ product: product, vendor: vendor });
+    return res.status(200).json({ product: product, vendor: vendor, reports: reportsWithUser });
   } catch (err) {
     return res.status(500).json({ error: err })
   }

@@ -21,7 +21,6 @@ export default function ManageUserPage() {
     try {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
-      console.log(res.data.users)
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
       setIsLoading(false)
@@ -58,15 +57,6 @@ export default function ManageUserPage() {
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
             <UserTable data={shippers} type="shipper" />
           </Tabs.Item>
-          {/* Admin manage reported account */}
-          {/* <Tabs.Item title="Reported Account" icon={HiClipboardList}>
-            <UserTable data={shippers} type="reported user" />
-          </Tabs.Item> */}
-
-          {/* Admin manage product */}
-          {/* {/* <Tabs.Item title="Product" icon={AiFillDelete}>
-            <AdminManageVendorProduct />
-          </Tabs.Item> *\} */}
         </Tabs>
       </div>
     </div>
