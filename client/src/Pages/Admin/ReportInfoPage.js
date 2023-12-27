@@ -42,7 +42,6 @@ export default function ReportInfoPage() {
   return (
     <>
       <section class="bg-gray-200 w-5/6 md:w-full">
-        {user === null && <Navigate to={"/"} replace />}
         {error && <Navigate to={"/"} replace />}
         <div class="md:container mx-auto p-5">
           <h1 class="m-5 text-3xl font-light text-center">
@@ -53,9 +52,9 @@ export default function ReportInfoPage() {
           {/* <!-- Vendor --> */}
           {userInfo && userInfo.role === "Vendor" && <VendorCard user={userInfo} orders={orders} />}
           {/* <!-- Shipper --> */}
-          {/* {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo}  />} */}
+          {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} orders={orders} />}
           {/* Report Section */}
-          {reports && <ReportInfo reports={reports}/> }
+          {reports && <ReportInfo reports={reports} />}
         </div>
       </section>
     </>
