@@ -77,12 +77,18 @@ export default function ProductDetailCard({ product, vendorName, user }) {
     return (<>
         {navigateTo && <Navigate to={navigateTo} replace />}
         <div className="lg:w-full lg:px-14 sm:px-0 md:px-2 mx-auto flex flex-wrap">
-            <img
-                alt="ecommerce"
-                className="lg:w-[500px] lg:h-[500px] md:h-auto sm:h-auto xs:h-auto rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto scale-95"
-                src={product.image_link}
-            />
-            <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+
+            <div className="flex items-center justify-center w-full lg:md:w-1/2">
+                <img
+                    alt="ecommerce"
+                    className="p-7 lg:md:w-[450px] lg:md:h-[450px] sm:h-auto xs:h-auto rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto "
+                    src={product.image_link}
+                />
+            </div>
+
+
+
+            <div className="lg:md:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                 <nav className="flex mb-5">
                     <ol className="flex items-center">
                         <li className="text-left">
@@ -141,11 +147,19 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     <div className="flex items-center justify-between">
                         <div className="flex mb-2 items-center">
                             <Rating size="md">
+<<<<<<< Updated upstream
                                 <Rating.Star className="!w-5 !h-5"/>
                                 <Rating.Star className="!w-5 !h-5"/>
                                 <Rating.Star className="!w-5 !h-5"/>
                                 <Rating.Star className="!w-5 !h-5"/>
                                 <Rating.Star filled={false} className="!w-5 !h-5" />
+=======
+                                <Rating.Star className="!w-6 !h-6" />
+                                <Rating.Star className="!w-6 !h-6" />
+                                <Rating.Star className="!w-6 !h-6" />
+                                <Rating.Star className="!w-6 !h-6" />
+                                <Rating.Star filled={false} className="!w-6 !h-6" />
+>>>>>>> Stashed changes
                             </Rating>
                             <div className="ml-2 font-light whitespace-nowrap">Rating 4.0</div>
                         </div>
@@ -185,7 +199,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     </div>
 
 
-                    <span className=" font-medium lg:text-3xl md:text-3xl sm:text-2xl xs:text-2xl text-slate-700">
+                    <span className="font-medium lg:text-4xl md:text-3xl sm:text-2xl xs:text-2xl text-slate-700">
                         ${product.price}.00
                     </span>
                     <hr class="my-4 w-full border-gray-300" />
@@ -267,18 +281,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                 </div>
                             </form>
                         </div>
-                        <button className="rounded-full w-12 h-12 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-10 mt-4">
-                            <svg
-                                fill="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                className="w-5 h-5"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                            </svg>
-                        </button>
+                        
                     </div>
                     <div className="flex">
                         <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-black font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
