@@ -147,19 +147,11 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     <div className="flex items-center justify-between">
                         <div className="flex mb-2 items-center">
                             <Rating size="md">
-<<<<<<< Updated upstream
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star filled={false} className="!w-5 !h-5" />
-=======
                                 <Rating.Star className="!w-6 !h-6" />
                                 <Rating.Star className="!w-6 !h-6" />
                                 <Rating.Star className="!w-6 !h-6" />
                                 <Rating.Star className="!w-6 !h-6" />
                                 <Rating.Star filled={false} className="!w-6 !h-6" />
->>>>>>> Stashed changes
                             </Rating>
                             <div className="ml-2 font-light whitespace-nowrap">Rating 4.0</div>
                         </div>
