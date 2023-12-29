@@ -2,7 +2,7 @@ import { Textarea } from "flowbite-react";
 import { Rating } from "flowbite-react";
 import { useState } from 'react';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function ProductDetailComment({ product }) {
@@ -53,18 +53,6 @@ export default function ProductDetailComment({ product }) {
     };
 
     return (<div className="w-full lg:md:py-12 md:pr-2 xs:py-3">
-        <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover={false}
-            theme="light"
-        />
         <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-2">
             Customer Reviews
         </p>

@@ -13,6 +13,71 @@ export default function ProductDetailCard({ product, vendorName, user }) {
     const [navigateTo, setNavigateTo] = useState('')
 
     const [openModal, setOpenModal] = useState(false)
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState()
+    const [loading, setLoading] = useState(false);
+
+    const handleDropdownChange = (event) => {
+        setTitle(event.target.value);
+    };
+
+    const reportData = {
+        vendorID: product.owner,
+        product: product._id,
+        title: title,
+        description: description
+    }
+
+    async function reportProduct() {
+        try {
+            setLoading(true);
+            if (!(title && description)) {
+                toast.error('Please select a reason and description', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    draggable: true,
+                    progress: undefined,
+                    pauseOnHover: false,
+                    theme: "light",
+                });
+                setLoading(false)
+                return
+            }
+            await axios.post('http://localhost:4000/report-product', reportData, { withCredentials: true })
+                .then(res => {
+                    setError('')
+                    setMsg(res.data)
+                    setTitle('')
+                    setDescription('')
+                    setOpenModal(false)
+                    setLoading(false)
+                })
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
+            setLoading(false)
+            setMsg("")
+        }
+    }
+
+    const handleReport = (e) => {
+        e.preventDefault();
+        reportProduct();
+        if (error) {
+            notify(error);
+        }
+    }
 
     const notify = useCallback(() => {
         if (error) {
@@ -50,8 +115,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
 
     const addProduct = async (productId) => {
-        error && notify();
-        msg && notify();
+        notify()
         try {
             const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
             setMsg(res.data.msg);
@@ -64,8 +128,17 @@ export default function ProductDetailCard({ product, vendorName, user }) {
     }
 
     const buyProduct = async (product) => {
-        if (user === undefined) {
-            setError("You need to login first!");
+        if (user === null) {
+            toast.error("You need to login first", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                draggable: true,
+                progress: undefined,
+                pauseOnHover: false,
+                theme: "light",
+            });
             return;
         }
         product.checked = true
@@ -137,51 +210,51 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     <h1 className="text-gray-900 lg:text-2xl sm:text-xl xs:text-lg font-medium mb-3 ">
                         {product.product_name}
                     </h1>
-                    
+
                     <div className="flex items-center justify-between">
                         <div className="flex mb-2 items-center">
                             <Rating size="md">
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star className="!w-5 !h-5"/>
-                                <Rating.Star className="!w-5 !h-5"/>
+                                <Rating.Star className="!w-5 !h-5" />
+                                <Rating.Star className="!w-5 !h-5" />
+                                <Rating.Star className="!w-5 !h-5" />
+                                <Rating.Star className="!w-5 !h-5" />
                                 <Rating.Star filled={false} className="!w-5 !h-5" />
                             </Rating>
                             <div className="ml-2 font-light whitespace-nowrap">Rating 4.0</div>
                         </div>
                         <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
-                            <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
-                                <Modal.Header>
-                                    <div>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p>
-                                    </div>
+                        <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
+                            <Modal.Header>
+                                <div>
+                                    <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
+                                    {/* <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
+                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p> */}
+                                </div>
 
-                                </Modal.Header>
-                                <Modal.Body className="overflow-y-auto">
-                                    <label for="reason" className="font-bold">Select a reason:</label>
-                                    <select name="reportedReason" id="reportedReason" className="w-full my-2">
-                                        <option disabled value="" >Select a reason below</option>
-                                        <option value="fake">Product is fake/replica</option>
-                                        <option value="unidentifiedProductOrigin">The product's origin is unidentified</option>
-                                        <option value="indistinctProductIllustratior">The product's illustrators is indistinct</option>
-                                        <option value="unmatchedProductName">The product's name does not match with product illustrators</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                            </Modal.Header>
+                            <Modal.Body className="overflow-y-auto">
+                                <label for="reason" className="font-bold">Select a reason:</label>
+                                <select value={title} onChange={handleDropdownChange} name="reportedReason" id="reportedReason" className="w-full my-2">
+                                    <option disabled value="" >Select a reason below</option>
+                                    <option value="Fake/Replica">Product is fake/replica</option>
+                                    <option value="Unidentified Product Origin">The product's origin is unidentified</option>
+                                    <option value="Indistinct Product Illustratior">The product's illustrators is indistinct</option>
+                                    <option value="Unmatched Product Name">The product's name does not match with product illustrators</option>
+                                    <option value="Other">Other</option>
+                                </select>
 
-                                    <div className="my-2">
-                                        <textarea id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
-                                    </div>
-                                </Modal.Body>
-                                    
+                                <div className="my-2">
+                                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
+                                </div>
+                            </Modal.Body>
 
-                                <Modal.Footer>
-                                    <button type="button" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Send Report</button>
-                                    <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
-                                </Modal.Footer>
-                                
-                            </Modal>
+
+                            <Modal.Footer>
+                                <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>
+                                {/* <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button> */}
+                            </Modal.Footer>
+
+                        </Modal>
                     </div>
 
 

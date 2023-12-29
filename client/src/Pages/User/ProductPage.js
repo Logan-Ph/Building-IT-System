@@ -70,7 +70,7 @@ export default function TestingPage() {
     fetchData()
   }, [fetchData, comments])
 
-  if (user === undefined || isLoading) {
+  if ( isLoading) {
     return <div>....is loading</div>
   }
 

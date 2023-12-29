@@ -78,18 +78,6 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   return (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover={false}
-        theme="light"
-      />
       {comments.length > 0 &&
         <article className="pt-8 ">
           <div className="flex-col lg:w-[800px] md:w-auto  bg-white border-b-2 border-r-2 border-gray-200 xs:px-0 sm:px-0 sm:py-4 md:px-4 rounded-lg sm:shadow-sm  mb-6">
