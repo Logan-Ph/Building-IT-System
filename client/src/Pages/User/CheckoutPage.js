@@ -1,12 +1,10 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { UserContext } from "../../Context/UserContext";
+import { useCallback, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import CheckoutInfo from "../../Components/CheckoutInfo"
 import OrderSummary from "../../Components/OrderSummary";
 
 export default function CheckoutPage() {
-  const { user } = useContext(UserContext)
   const [products, setProducts] = useState()
   const [error, setError] = useState('')
   const [checkoutInfo, setCheckoutInfo] = useState({})
@@ -30,7 +28,6 @@ export default function CheckoutPage() {
 
   return (
     <>
-      {user === null && <Navigate to={'/'} replace />}
       {error && <Navigate to={"/"} replace />}
       <section>
         <div class="mx-auto px-10 my-10">
