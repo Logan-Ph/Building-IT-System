@@ -30,6 +30,8 @@ import VendorPostingProduct from '../Pages/Vendor/VendorPostingProduct';
 import VendorEditingProduct from '../Pages/Vendor/VendorEditingProduct';
 import VendorEditProfile from '../Pages/Vendor/VendorEditProfile';
 import VendorEditStore from '../Pages/Vendor/VendorEditStore';
+import ProductPageVendor from '../Pages/Vendor/ProductPageVendor';
+
 import VendorSidebar from '../Components/VendorSidebar';
 import VendorHeader from '../Components/VendorHeader';
 import AdminHeader from '../Components/AdminHeader'
@@ -157,6 +159,10 @@ export default function Router() {
           element: <ProductPage />,
         },
         {
+          path: "/producta/:id",
+          element: <ProductPageVendor />,
+        },
+        {
           path: "/profile",
           element: <UserProfile />,
         },
@@ -210,6 +216,8 @@ export default function Router() {
           path: "/edit-vendor-profile",
           element: <VendorEditProfile />,
         },
+
+
       ],
     },
     {
