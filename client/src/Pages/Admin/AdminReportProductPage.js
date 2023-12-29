@@ -77,7 +77,8 @@ function ReportedVendorCard({ vendor, product, reports }) {
       </div>
       <hr className="my-2" />
       <ReportedTableComponent product={product} />
-      <h1>Reported information in details </h1>
+      <hr className="my-2" />
+      <h1 className="m-0 font-bold text-sm text-gray-900">Reported information in details </h1>
       <div>
         <ReportedProductInfo reports={reports} />
       </div>
@@ -88,7 +89,27 @@ function ReportedVendorCard({ vendor, product, reports }) {
 function ReportedTableComponent({ product }) {
   return (
     <>
-      <div className="overflow-x-auto">
+      <div>
+        <div className="flex items-center">
+          <div className="w-[100px] h-[100px]">
+            <img src={product.image_link} alt="product_img" className="object-cover scale-90"/>
+          </div>
+
+          <div className="ms-6">
+            <p className="font-light text-gray-900 text-sm">ProductID: <span className="ms-2 font-medium">{product._id}</span></p>
+            <p className="font-bold">{product.product_name}</p>
+            <p className="font-light text-gray-900 text-sm">Category: <span className="ms-2 font-medium">{product.category}</span></p>
+            <p className="font-light text-gray-900 text-sm">Price: <span className="ms-8 font-medium">${product.price}</span></p>
+            <p className="font-light text-gray-900 text-sm">Rating: <span className="ms-6 font-medium">4.0 stars</span></p>
+            <p className="font-light text-gray-900 text-sm">Sold: <span className="ms-9 font-medium">100</span></p>
+            <p className="font-light text-gray-900 text-sm">Status: <span className="ms-7 font-medium text-red-500">Reported</span></p>
+            {/* <p className="font-light text-gray-900 text-sm">Status: <span className="ms-2 font-medium text-green-500">No Report</span></p> */}
+          </div>          
+        </div>
+        <DeleteButtonPopup/>
+      </div>
+
+      {/* <div className="overflow-x-auto">
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product ID</Table.HeadCell>
@@ -150,7 +171,7 @@ function ReportedTableComponent({ product }) {
             </Table.Row>
           </Table.Body>
         </Table>
-      </div>
+      </div> */}
     </>
   );
 }
@@ -202,9 +223,10 @@ function DeleteButtonPopup(){
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
-      <span className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
-        Delete
-      </span>
+    <div className="flex justify-end">
+      <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onClick={() => setOpenModal(true)}>Delete</button>
+    </div>
+
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
         <Modal.Header />
         <Modal.Body>

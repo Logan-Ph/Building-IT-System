@@ -57,7 +57,19 @@ export default function AdminManageVendorProduct() {
           </Tabs.Item>
           <Tabs.Item active title="Reported Product" icon={MdReportProblem}>
             <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} />
-          </Tabs.Item>
+
+            {/* No Reported Product Found */}
+            {/* <div className='border border-gray my-1 py-32'>
+              <div className='flex flex-col justify-center items-center'>
+                  <div className='w-[100px] h-[80px]'>
+                    <img src={require("../../Components/images/noorder.png")}
+                          alt="No Order" className='w-full h-full' />
+                  </div>
+                  <p className="capitalize text-md text-gray-900 font-light my-2">No Reported Product Found</p>
+              </div>
+            </div> */}
+
+        </Tabs.Item>
         </Tabs>
       </div>
     </main>
@@ -144,7 +156,7 @@ function TableProductContent({ products }) {
               <span className='line-clamp-1 font-medium text-gray-900 '>{product.product_name}</span>
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
-              <span className='line-clamp-1'>{product.category}</span>
+              <span>{product.category}</span>
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>${product.price}</Table.Cell>
             <Table.Cell className='!px-4 !py-2'>

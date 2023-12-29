@@ -227,8 +227,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <Modal.Header>
                                 <div>
                                     <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                    {/* <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
-                                        <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p> */}
+                                    
                                 </div>
 
                             </Modal.Header>
@@ -238,8 +237,8 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                     <option disabled value="" >Select a reason below</option>
                                     <option value="Fake/Replica">Product is fake/replica</option>
                                     <option value="Unidentified Product Origin">The product's origin is unidentified</option>
-                                    <option value="Indistinct Product Illustratior">The product's illustrators is indistinct</option>
-                                    <option value="Unmatched Product Name">The product's name does not match with product illustrators</option>
+                                    <option value="Indistinct Product Illustratior">The product's illustrator is indistinct</option>
+                                    <option value="Unmatched Product Name">The product's name does not match with a product illustrator</option>
                                     <option value="Other">Other</option>
                                 </select>
 
@@ -251,7 +250,6 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
                             <Modal.Footer>
                                 <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>
-                                {/* <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button> */}
                             </Modal.Footer>
 
                         </Modal>
