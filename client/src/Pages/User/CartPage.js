@@ -159,6 +159,7 @@ export default function CartPage() {
         </div>
       </div> :
         <>
+
           <div class="text-center text-3xl my-5 sticky top-0">
             Shopping Cart <span class="text-xl">({cart.products?.length})</span>
           </div>
@@ -166,7 +167,31 @@ export default function CartPage() {
             <div class="grid md:grid-cols-3 md:gap-5 my-3">
               <div class="md:col-span-2 row-span-2">
                 <div class="">
-                  <div class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
+                  <div class="w-full items-center bg-white border border-gray-200 rounded-lg shadow  mb-4">
+                    <div class='flex justify-between lg:px-10 md:px-14 sm:xs:px-4 py-5'>
+                      <div class='flex items-center '>
+                        <input
+                          id="default-checkbox"
+                          type="checkbox"
+                          value=""
+                          class="w-5 h-5 text-black bg-gray-100 border-gray-300 rounded mr-3"
+                        />
+                        <div class='text-md font-medium'>Select All Product</div>
+
+                      </div>
+                      <div class="flex justify-end text-md ">
+                        <button
+                          type="button"
+                          class="font-medium text-indigo-600 hover:text-indigo-500 "
+                        >
+                          Remove all
+                        </button>
+                      </div>
+                    </div>
+
+
+                  </div>
+                  <div class="w-full lg:md:px-4 xs:px-4 py-2 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
                     {/* Test */}
                     <div class="flex-1 md:py-6 md:px-6">
                       <div class="">
@@ -183,15 +208,15 @@ export default function CartPage() {
                                     onClick={() => toggleChecked(product.product)}
                                   />
                                 </div>
-                                <div class="order-product-img">
-                                  <img src={product.image_link} alt="product" />
+                                <div class="flex justify-center order-product-img">
+                                  <img className="lg:md:h-40 sm:xs:h-24 w-auto " src={product.image_link} alt="product" />
                                 </div>
                                 <div class="ml-4 flex flex-1 flex-col">
                                   <div class="flex md:flex-row justify-between text-base font-medium text-gray-900 flex-col">
-                                    <h3>{product.product_name}</h3>
-                                    <p class="md:ml-4">${product.price}</p>
+                                    <h3 className="lg:md:text-md xs:text-sm lg:md:w-2/3">{product.product_name}</h3>
+                                    <p class="flex justify-start text-lg font-semibold text-indigo-600">${product.price}</p>
                                   </div>
-                                  <div class="flex flex-wrap flex-1 items-end justify-between text-sm">
+                                  <div class="flex flex-wrap flex-1 lg:md:items-end xs:items-center justify-between text-sm">
                                     <div class="py-2 relative flex items-center max-w-[7rem]">
                                       <button
                                         type="button"
