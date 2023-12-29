@@ -42,6 +42,8 @@ import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 import ShipperHeader from "./ShipperHeader";
+import ThankForOrderPage from "../Pages/User/ThankForOrderPage";
+
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -176,6 +178,10 @@ export default function Router() {
           path: "/search/:query/:category/:price",
           element: <SearchResultPage />,
         },
+        {
+          path: "/thankfororder",
+          element: <ThankForOrderPage />,
+        },
       ],
     },
     {
@@ -262,7 +268,11 @@ export default function Router() {
         {
           path: "/chat",
           element: (
-            <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+            <InstantSearch
+              searchClient={searchClient}
+              indexName="rBuy"
+              insights={true}
+            >
               <div className="h-screen overflow-hidden">
                 <Header />
                 <ChatPage />
@@ -273,7 +283,11 @@ export default function Router() {
         {
           path: "/vendor-chat",
           element: (
-            <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+            <InstantSearch
+              searchClient={searchClient}
+              indexName="rBuy"
+              insights={true}
+            >
               <div className="h-screen overflow-hidden">
                 <VendorHeader />
                 <ChatPage />
@@ -292,7 +306,7 @@ export default function Router() {
           element: <ShipperDashboardPage />,
         },
       ],
-    }
+    },
   ]);
 
   return (
