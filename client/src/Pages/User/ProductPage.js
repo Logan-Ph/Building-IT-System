@@ -148,12 +148,12 @@ export default function TestingPage() {
             breakpoints={{
               300: {
                 spaceBetween: 7,
-                slidesPerView: 3,
+                slidesPerView: 2,
               },
 
               576: {
                 spaceBetween: 10,
-                slidesPerView: 3,
+                slidesPerView: 2,
               },
 
               898: {

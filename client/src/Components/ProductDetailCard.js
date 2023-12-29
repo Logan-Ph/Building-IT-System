@@ -191,7 +191,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     </div>
 
 
-                    <span className="font-medium lg:text-4xl md:text-3xl sm:text-2xl xs:text-2xl text-slate-700">
+                    <span className="font-medium lg:text-4xl md:text-3xl sm:text-2xl xs:text-2xl text-red-500">
                         ${product.price}.00
                     </span>
                     <hr class="my-4 w-full border-gray-300" />
