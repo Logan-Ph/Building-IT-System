@@ -147,11 +147,13 @@ function TableProductContent({ products }) {
             <Table.Cell className='!px-4 !py-2'>
               <span>{product._id}</span>
             </Table.Cell>
+
             <Table.Cell className='!px-4 !py-2'>
               <div className='w-[60px] h-[60px]'>
-                <img src={product.image_link} alt="product_img" className='object-fit w-full h-full' />
+                <img src={product.image_link} alt="product_img" className='object-fit w-full h-full scale-90' />
               </div>
             </Table.Cell>
+            
             <Table.Cell className="!px-4 !py-2 overflow-x-auto">
               <span className='line-clamp-1 font-medium text-gray-900 '>{product.product_name}</span>
             </Table.Cell>
