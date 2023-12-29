@@ -11,6 +11,7 @@ export default function ReportedProductPage() {
   const params = useParams()
   const [product, setProduct] = useState()
   const [vendor, setVendor] = useState()
+  const [reports, setReports] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
@@ -19,6 +20,7 @@ export default function ReportedProductPage() {
       setIsLoading(false)
       setProduct(res.data.product)
       setVendor(res.data.vendor)
+      setReports(res.data.reports)
     } catch (error) {
       setIsLoading(false)
     }
@@ -42,7 +44,7 @@ export default function ReportedProductPage() {
             Reported Product Information
           </h1>
           {/* <!-- Vendor --> */}
-          <ReportedVendorCard vendor={vendor} product={product} />
+          <ReportedVendorCard vendor={vendor} product={product} reports={reports} />
         </div>
       </section>
     </>
@@ -50,7 +52,7 @@ export default function ReportedProductPage() {
 }
 
 
-function ReportedVendorCard({ vendor, product }) {
+function ReportedVendorCard({ vendor, product, reports }) {
   return <>
     <div className="p-6 space-y-6 bg-white rounded-lg shadow my-5 xs:p-4">
       <div className="flex items-center gap-4 mt-4 xs:gap-3 ">
@@ -77,7 +79,7 @@ function ReportedVendorCard({ vendor, product }) {
       <ReportedTableComponent product={product} />
       <h1>Reported information in details </h1>
       <div>
-        <ReportedProductInfo />
+        <ReportedProductInfo reports={reports} />
       </div>
     </div>
   </>
@@ -92,11 +94,6 @@ function ReportedTableComponent({ product }) {
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product ID</Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2'></Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product name</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Status</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Reported_Date</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Reported_Time</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>User_Info</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'></Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">View</span>
             </Table.HeadCell>
@@ -122,12 +119,9 @@ function ReportedTableComponent({ product }) {
                 </div>
               </Table.Cell>
 
-              <Table.Cell className='!px-4 !py-2 '>05-12-2023 (STATIC)</Table.Cell>
+              <Table.Cell className='!px-4 !py-2'>05-12-2023 (STATIC)</Table.Cell>
               <Table.Cell className='!px-4 !py-2'>17:10 (STATIC)</Table.Cell>
               <Table.Cell className='!px-4 !py-2'>phamphuocsang5850@gmail.com (STATIC)</Table.Cell>
-              <Table.Cell className="!px-4 !py-2">
-                  <DeleteButtonPopup/>
-              </Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 border-b border-gray-200">
@@ -161,108 +155,41 @@ function ReportedTableComponent({ product }) {
   );
 }
 
-function ReportedProductInfo() {
+function ReportedProductInfo({ reports }) {
   return (
     <>
       <div className="container mx-auto">
         <div>
-          <div className="flex py-5">
-            <div className="relative inline-block shrink-0">
-              <img
-                className="w-12 h-12 rounded-full"
-                src={require("../../Components/images/defaultUserImage.png")}
-                alt="Jese Leos image"
-              />
-            </div>
-            <div className="ms-3 text-sm font-normal">
-              <div className="text-md font-semibold text-gray-900">
-                Logan Pham
-              </div>
-              <div className="text-xs font-light mb-2">
-                phamphuocsang5850@gmail.com
-              </div>
-              <div className="text-sm font-normal">
-                has reported product: <span>656f070a83e57918414548b9</span>
-              </div>
-              <div className="text-sm font-semibold text-red-600 mt-2">
-                Scam
-              </div>
-              <div className="text-sm font-normal text-gray-900 my-3">
-                I reported this account for posting scamming products. I
-                have evidence below
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <img
-                    className="object-fill h-full w-full"
-                    src="/images/banner1.jpg"
-                    alt=""
-                  />
+          {reports.map(report => {
+            const date = new Date(report.date)
+            const formtatedDate = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+            return (
+              <div className="flex py-5">
+                <div className="relative inline-block shrink-0">
+                  {report.user.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+                    src={`data:image/jpeg;base64,${report.user.img}`}
+                    alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                    <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                  </div>}
                 </div>
-                <div>
-                  <img
-                    className="object-fill h-full w-full"
-                    src="/images/banner1.jpg"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img
-                    className="object-fill h-full w-full"
-                    src="/images/banner1.jpg"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <img
-                    className="object-fill h-full w-full"
-                    src="/images/banner1.jpg"
-                    alt=""
-                  />
+                <div className="ms-3 text-sm font-normal">
+                  <div className="text-md font-semibold text-gray-900">
+                    {report.user.name}
+                  </div>
+                  <div className="text-xs font-light mb-2">
+                    {report.user.email}
+                  </div>
+                  <div className="text-sm font-semibold text-red-600 mt-2">
+                    {report.title}
+                  </div>
+                  <div className="text-sm font-normal text-gray-900 my-3">
+                    {report.description}
+                  </div>
+                  <div className="text-sm text-gray-600 mt-3">{formtatedDate}</div>
                 </div>
               </div>
-              <div className="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
-            </div>
-          </div>
-
-          {/* <!-- second --> */}
-          <div className="flex py-5 border-t border-gray-300">
-            <div className="relative inline-block shrink-0">
-              <img
-                className="w-12 h-12 rounded-full"
-                src={require("../../Components/images/defaultUserImage.png")}
-                alt="Jese Leos image"
-              />
-            </div>
-            <div className="ms-3 text-sm font-normal">
-              <div className="text-sm font-semibold text-gray-900">
-                tpkdoan
-              </div>
-              <div className="text-xs font-light mb-2">
-                tranphamkhanhdoan0112@gmail.com
-              </div>
-              <div className="text-sm font-normal">
-                has reported product: <span>656f070a83e57918414548b9</span>
-              </div>
-              <div className="text-sm font-semibold text-red-600 mt-2">
-                Prohited Item
-              </div>
-              <div className="text-sm font-normal text-gray-900 my-3">
-                I reported this product for low-quality. I
-                have evidence below
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <img
-                    className="object-fill h-full w-full"
-                    src="/images/banner1.jpg"
-                    alt=""
-                  />
-                </div>
-              </div>
-              <div className="text-sm text-gray-600 mt-3">05-12-2023 17:10</div>
-            </div>
-          </div>
+            )
+          })}
         </div>
       </div>
     </>

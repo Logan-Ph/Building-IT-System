@@ -30,19 +30,19 @@ const vendorSchema = new mongoose.Schema({
     },
 
     coverPhoto: {
-        data: Buffer,
+        type: String,
     },
 
     bigBanner: {
-        data: Buffer,
+        type: String,
     },
 
     smallBanner1: {
-        data: Buffer,
+        type: String,
     },
 
     smallBanner2: {
-        data: Buffer,
+        type: String,
     },
 
     verify: {

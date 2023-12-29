@@ -8,13 +8,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Pagination from '../../Components/Pagination';
 import { ToastContainer, toast } from 'react-toastify';
+import { MdReportProblem } from "react-icons/md";
 
 export default function AdminManageVendorProduct() {
   const [products, setProducts] = useState([]);
+  const [reportedProducts, setReportedProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const getProducts = useCallback(async () => {
     const res = await axios.get("http://localhost:4000/admin/manage-product/query=", { withCredentials: true });
+    setReportedProducts(res.data.products.filter(product => product.isReported === true));
     setProducts(res.data.products);
   }, [])
 
@@ -47,8 +50,15 @@ export default function AdminManageVendorProduct() {
     />
     <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       <div className='mx-auto'>
-        {/* Admin manage customer account */}
-        <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} />
+        <Tabs aria-label="Full width tabs" style="fullWidth">
+          {/* Admin manage customer account */}
+          <Tabs.Item active title="All Products" icon={FaCircle}>
+            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} />
+          </Tabs.Item>
+          <Tabs.Item active title="Reported Product" icon={MdReportProblem}>
+            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} />
+          </Tabs.Item>
+        </Tabs>
       </div>
     </main>
   </>
@@ -95,7 +105,6 @@ function TableComponent({ setSearchTerm, products, handleSubmit }) {
             <Table.HeadCell className='!px-4 !py-2'></Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product name</Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Category</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Status</Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Price</Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">View</span>
@@ -135,13 +144,7 @@ function TableProductContent({ products }) {
               <span className='line-clamp-1 font-medium text-gray-900 '>{product.product_name}</span>
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
-              <span className='line-clamp-1'>Beauty & Care</span>
-            </Table.Cell>
-            <Table.Cell className='!px-4 !py-2'>
-              <div class="flex items-center">
-                <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2 whitespace-nowrap"></div>
-                <span className='whitespace-nowrap'>No Report</span>
-              </div>
+              <span className='line-clamp-1'>{product.category}</span>
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>${product.price}</Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
