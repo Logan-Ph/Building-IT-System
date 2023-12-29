@@ -42,6 +42,7 @@ import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 import ShipperHeader from "./ShipperHeader";
+import LoadingPage from "../Pages/User/LoadingPage";
 
 const searchClient = algoliasearch(
   "IZX7MYSNRD",
@@ -227,6 +228,10 @@ export default function Router() {
         {
           path: "/user/:token/forgot-password",
           element: <ResetPasswordPage />,
+        },
+        {
+          path: "/loading-page",
+          element: <LoadingPage />,
         },
       ],
     },
