@@ -8670,6 +8670,10 @@ input:checked + .toggle-bg {
     line-height: 2.5rem;
   }
 
+  .lg\:text-\[15px\] {
+    font-size: 15px;
+  }
+
   .lg\:text-\[33px\] {
     font-size: 33px;
   }
@@ -8769,6 +8773,10 @@ input:checked + .toggle-bg {
     .lg\:md\:text-3xl {
       font-size: 1.875rem;
       line-height: 2.25rem;
+    }
+
+    .lg\:md\:text-\[14px\] {
+      font-size: 14px;
     }
 
     .lg\:md\:text-base {
@@ -9172,8 +9180,8 @@ input:checked + .toggle-bg {
       padding-right: 1rem;
     }
 
-    .sm\:xs\:text-\[10px\] {
-      font-size: 10px;
+    .sm\:xs\:text-\[12px\] {
+      font-size: 12px;
     }
 
     .sm\:xs\:text-sm {
@@ -9199,23 +9207,7 @@ input:checked + .toggle-bg {
       font-size: 1.5rem;
       line-height: 2rem;
     }
-  }
-}
 
-@media (min-width: 300px) {
-  @media (max-width: 575px) {
-    .sm\:xs\:text-\[11px\] {
-      font-size: 11px;
-    }
-
-    .sm\:xs\:text-\[12px\] {
-      font-size: 12px;
-    }
-  }
-}
-
-@media (max-width: 575px) {
-  @media (min-width: 300px) {
     @media (min-width: 898px) {
       .xs\:sm\:md\:mb-10 {
         margin-bottom: 2.5rem;
