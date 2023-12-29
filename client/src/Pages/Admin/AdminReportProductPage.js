@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Table } from 'flowbite-react';
+import { Button, Modal } from 'flowbite-react';
+import { FiAlertTriangle } from "react-icons/fi";
+
 
 export default function ReportedProductPage() {
   const params = useParams()
@@ -33,9 +36,9 @@ export default function ReportedProductPage() {
 
   return (
     <>
-      <section className="bg-gray-200">
+      <section className="bg-gray-200 max-w-full px-4 sm:px-6 lg:px-8 pb-5 w-full">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
-          <h1 className="m-5 text-3xl font-light text-center xs:text-md">
+          <h1 className="m-2 text-xl font-bold text-center xs:text-md">
             Reported Product Information
           </h1>
           {/* <!-- Vendor --> */}
@@ -93,6 +96,7 @@ function ReportedTableComponent({ product }) {
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Reported_Date</Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Reported_Time</Table.HeadCell>
             <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>User_Info</Table.HeadCell>
+            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'></Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">View</span>
             </Table.HeadCell>
@@ -108,7 +112,7 @@ function ReportedTableComponent({ product }) {
                 </div>
               </Table.Cell>
               <Table.Cell className="!px-4 !py-2 overflow-x-auto">
-                <span className='line-clamp-1 font-medium text-gray-900 '>{product.product_name}</span>
+                <span className='font-medium text-gray-900 '>{product.product_name}</span>
               </Table.Cell>
 
               <Table.Cell className='!px-4 !py-2'>
@@ -118,9 +122,12 @@ function ReportedTableComponent({ product }) {
                 </div>
               </Table.Cell>
 
-              <Table.Cell className='!px-4 !py-2'>05-12-2023 (STATIC)</Table.Cell>
+              <Table.Cell className='!px-4 !py-2 '>05-12-2023 (STATIC)</Table.Cell>
               <Table.Cell className='!px-4 !py-2'>17:10 (STATIC)</Table.Cell>
               <Table.Cell className='!px-4 !py-2'>phamphuocsang5850@gmail.com (STATIC)</Table.Cell>
+              <Table.Cell className="!px-4 !py-2">
+                  <DeleteButtonPopup/>
+              </Table.Cell>
             </Table.Row>
 
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 border-b border-gray-200">
@@ -260,4 +267,36 @@ function ReportedProductInfo() {
       </div>
     </>
   );
+}
+
+function DeleteButtonPopup(){
+  const [error, setError] = useState('');
+  const [msg, setMsg] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  return (
+    <>
+      <span className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
+        Delete
+      </span>
+      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
+            <h3 className="mb-5 text-lg font-normal text-gray-900">
+              Are you sure you want to delete this product?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => setOpenModal(false)}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => { setOpenModal(false)}}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
+  )
 }

@@ -45,14 +45,10 @@ export default function AdminManageVendorProduct() {
       pauseOnHover={false}
       theme="light"
     />
-    <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
+    <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       <div className='mx-auto'>
-        <Tabs aria-label="Full width tabs" style="fullWidth">
-          {/* Admin manage customer account */}
-          <Tabs.Item active title="All Products" icon={FaCircle}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} />
-          </Tabs.Item>
-        </Tabs>
+        {/* Admin manage customer account */}
+        <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} />
       </div>
     </main>
   </>
@@ -157,7 +153,7 @@ function TableProductContent({ products }) {
           </Table.Row>
         ))}
       </Table.Body>
-      {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
+        {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
     </>
   )
 }

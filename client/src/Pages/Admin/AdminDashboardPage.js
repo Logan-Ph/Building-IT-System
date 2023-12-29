@@ -127,7 +127,7 @@ export default function DashboardPage() {
         pauseOnHover={false}
         theme="light"
       />
-      <div class=" max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden ">
+      <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
         <div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4">
           <h1 class="font-bold  lg:pl-5  uppercase text-black text-2xl  pt-10 ">
             Homepage Decoration

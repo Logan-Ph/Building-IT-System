@@ -27,7 +27,7 @@ export default function Pagination({ pages, setDataSlice, data }) {
     };
 
     return (
-        <div className="flex items-center mt-5">
+        <div className="flex items-center justify-end mt-5 w-full">
             <div className="xs:flex xs:flex-1 xs:justify-end sm:flex sm:flex-1 sm:justify-end md:justify-end xl:justify-end lg:justify-end w-full">
                 <div>
                     <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
