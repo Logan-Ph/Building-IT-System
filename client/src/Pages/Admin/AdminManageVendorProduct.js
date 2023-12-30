@@ -1,6 +1,6 @@
 import { Table } from 'flowbite-react';
 import { Button, Modal } from 'flowbite-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { FiAlertTriangle } from "react-icons/fi";
 import { Tabs } from "flowbite-react";
 import { FaCircle } from "react-icons/fa";
@@ -9,11 +9,13 @@ import axios from 'axios';
 import Pagination from '../../Components/Pagination';
 import { ToastContainer, toast } from 'react-toastify';
 import { MdReportProblem } from "react-icons/md";
+import { UserContext } from '../../Context/UserContext';
 
 export default function AdminManageVendorProduct() {
   const [products, setProducts] = useState([]);
   const [reportedProducts, setReportedProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { user } = useContext(UserContext);
 
   const getProducts = useCallback(async () => {
     const res = await axios.get("https://building-it-system-server.vercel.app/admin/manage-product/query=", { withCredentials: true });
@@ -34,6 +36,10 @@ export default function AdminManageVendorProduct() {
   useEffect(() => {
     getProducts();
   }, [getProducts])
+
+  if (user === undefined) {
+    return null;
+  }
 
   return <>
     <ToastContainer

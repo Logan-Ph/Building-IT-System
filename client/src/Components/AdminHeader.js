@@ -7,9 +7,7 @@ import LoadingPage from '../Pages/User/LoadingPage'
 
 export default function AdminHeader() {
   const { user, setUser } = useContext(UserContext)
-  const [navigateTo, setNavigateTo] = useState("");
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
 
   const fetchUser = useCallback(async () => {
     try {
@@ -17,17 +15,16 @@ export default function AdminHeader() {
       setUser(res.data.user);
       setIsLoading(false)
     } catch (error) {
-      setError(error)
       setUser(null)
       setIsLoading(false)
     }
   }, [setUser])
 
-  const handleLogout = async () => {
-    const res = await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
-    if (res.data === "Logged out successfully") {
-      setNavigateTo('/login');
-    }
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
+    setUser(undefined)
+    window.location.href = "/login"
   }
 
   useEffect(() => {
@@ -36,7 +33,7 @@ export default function AdminHeader() {
 
 
   if (user === undefined || isLoading) {
-    return null;
+    return <LoadingPage />;
   }
 
   return (
@@ -45,8 +42,6 @@ export default function AdminHeader() {
       {user && user.role === "User" && <Navigate to={'/'} replace />}
       {user && user.role === "Shipper" && <Navigate to={'/shipper/dashboard'} replace />}
       {user && user.role === "Vendor" && <Navigate to={'/vendor/dashboard'} replace />}
-      {error && <Navigate to={'/login'} replace />}
-      {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <section>
         <div className="w-full">
           <div className="border py-3 px-6 white border-[#E61E2A]">
@@ -114,7 +109,7 @@ function DropdownAva({ user, handleLogout }) {
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full px-4 py-2 text-left text-sm'
                     )}
-                    onClick={handleLogout}
+                    onClick={(e) => handleLogout(e)}
                   >
                     <i className="fas fa-sign-out-alt mr-1"></i>
                     Log Out

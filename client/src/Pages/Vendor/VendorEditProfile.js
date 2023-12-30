@@ -59,7 +59,7 @@ export default function VendorEditProfile() {
           setError('')
           setLoading(false)
         })
-        .catch(er => { setError(er.response.data); setMsg() });
+        .catch(er => { setError(er.response.data); setMsg(); setLoading(false) });
     } catch (error) {
       console.error('Failed to update.', error);
     }
@@ -77,6 +77,10 @@ export default function VendorEditProfile() {
     error && notify(error)
     msg && success(msg)
   }, [error, msg]);
+
+  if (user === undefined){
+    return null;
+  }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">

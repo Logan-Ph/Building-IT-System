@@ -8,6 +8,7 @@ export default function VendorMyProduct() {
   const [dataSlice, setDataSlice] = useState([])
   const [error, setError] = useState('')
   const [msg, setMsg] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const notify = (error) => {
     toast.error(error, {
@@ -39,8 +40,10 @@ export default function VendorMyProduct() {
     try {
       const response = await axios.get("https://building-it-system-server.vercel.app/manage-product", { withCredentials: true });
       setProducts(response.data.products);
+      setIsLoading(false)
     } catch (error) {
       console.error('Error fetching products:', error);
+      setIsLoading(false)
     }
   };
 
@@ -70,6 +73,10 @@ export default function VendorMyProduct() {
     msg && success(msg)
     fetchProducts();
   }, [error, msg]);
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <>

@@ -1,11 +1,11 @@
 import "../../css/mangeorder.css";
 import { useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Table } from 'flowbite-react';
 import { Button, Modal } from 'flowbite-react';
 import { FiAlertTriangle } from "react-icons/fi";
 import LoadingPage from "../User/LoadingPage";
+import { UserContext } from "../../Context/UserContext";
 
 
 export default function ReportedProductPage() {
@@ -14,6 +14,7 @@ export default function ReportedProductPage() {
   const [vendor, setVendor] = useState()
   const [reports, setReports] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
@@ -32,7 +33,7 @@ export default function ReportedProductPage() {
     fetchData()
   }, [fetchData])
 
-  if (isLoading) {
+  if (isLoading || user === undefined) {
     return <LoadingPage />
   }
 

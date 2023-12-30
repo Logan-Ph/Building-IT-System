@@ -9,6 +9,10 @@ export default function UserSidebar({ activeMenu }) {
         setIsSidebarCollapsed(!isSidebarCollapsed);
     };
 
+    if (user === undefined) {
+        return null;
+    }
+
     return (
         <>
             {/* <!-- SIDEBAR --> */}
