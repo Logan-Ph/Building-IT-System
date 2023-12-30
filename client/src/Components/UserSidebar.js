@@ -9,14 +9,10 @@ export default function UserSidebar({ activeMenu }) {
         setIsSidebarCollapsed(!isSidebarCollapsed);
     };
 
-    if (user === undefined) {
-        return <div>Loading....</div>
-    }
-
     return (
         <>
             {/* <!-- SIDEBAR --> */}
-            <div className={`absolute left-0 top-20 md:top-24 transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-4`} id="sidebar">
+            <div className={`absolute left-0 top-24 h-[90%] transition-all overflow-hidden w-64 bg-white border-r border-gray-200 bottom-0 ${isSidebarCollapsed ? 'sidebar-collapse' : ''} z-4`} id="sidebar">
                 <div class="relative p-4 pb-2 flex justify-between items-center">
                     <img src="" class="overflow-hidden transition-all w-32" alt=""></img>
                     <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">

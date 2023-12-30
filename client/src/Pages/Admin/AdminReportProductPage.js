@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Table } from 'flowbite-react';
+import { Button, Modal } from 'flowbite-react';
+import { FiAlertTriangle } from "react-icons/fi";
+import LoadingPage from "../User/LoadingPage";
+
 
 export default function ReportedProductPage() {
   const params = useParams()
@@ -28,16 +32,15 @@ export default function ReportedProductPage() {
     fetchData()
   }, [fetchData])
 
-
   if (isLoading) {
-    return <div>....is loading</div>
+    return <LoadingPage />
   }
 
   return (
     <>
-      <section className="bg-gray-200">
+      <section className="bg-gray-200 max-w-full px-4 sm:px-6 lg:px-8 pb-5 w-full">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
-          <h1 className="m-5 text-3xl font-light text-center xs:text-md">
+          <h1 className="m-2 text-xl font-bold text-center xs:text-md">
             Reported Product Information
           </h1>
           {/* <!-- Vendor --> */}
@@ -74,7 +77,8 @@ function ReportedVendorCard({ vendor, product, reports }) {
       </div>
       <hr className="my-2" />
       <ReportedTableComponent product={product} />
-      <h1>Reported information in details </h1>
+      <hr className="my-2" />
+      <h1 className="m-0 font-bold text-sm text-gray-900">Reported information in details </h1>
       <div>
         <ReportedProductInfo reports={reports} />
       </div>
@@ -85,32 +89,22 @@ function ReportedVendorCard({ vendor, product, reports }) {
 function ReportedTableComponent({ product }) {
   return (
     <>
-      <div className="overflow-x-auto">
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product ID</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2'></Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product name</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">View</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="border-b border-gray-200">
-            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 border-b border-gray-200">
-              <Table.Cell className='!px-4 !py-2'>
-                <span>{product._id}</span>
-              </Table.Cell>
-              <Table.Cell className='!px-4 !py-2'>
-                <div className='w-[60px] h-[60px]'>
-                  <img src={product.image_link} alt="product_img" className='object-fit w-full h-full' />
-                </div>
-              </Table.Cell>
-              <Table.Cell className="!px-4 !py-2 overflow-x-auto">
-                <span className='line-clamp-1 font-medium text-gray-900 '>{product.product_name}</span>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
+      <div>
+        <div className="flex items-center">
+          <div className="w-[100px] h-[100px]">
+            <img src={product.image_link} alt="product_img" className="object-cover scale-90" />
+          </div>
+          <div className="ms-6">
+            <p className="font-light text-gray-900 text-sm">ProductID: <span className="ms-2 font-medium">{product._id}</span></p>
+            <p className="font-bold">{product.product_name}</p>
+            <p className="font-light text-gray-900 text-sm">Category: <span className="ms-2 font-medium">{product.category}</span></p>
+            <p className="font-light text-gray-900 text-sm">Price: <span className="ms-8 font-medium">${product.price}</span></p>
+            <p className="font-light text-gray-900 text-sm">Rating: <span className="ms-6 font-medium">4.0 stars</span></p>
+            <p className="font-light text-gray-900 text-sm">Sold: <span className="ms-9 font-medium">100</span></p>
+            <p className="font-light text-gray-900 text-sm">Status: <span className="ms-7 font-medium text-red-500">Reported</span></p>
+          </div>
+        </div>
+        <DeleteButtonPopup />
       </div>
     </>
   );
@@ -155,4 +149,37 @@ function ReportedProductInfo({ reports }) {
       </div>
     </>
   );
+}
+
+function DeleteButtonPopup() {
+  const [error, setError] = useState('');
+  const [msg, setMsg] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  return (
+    <>
+      <div className="flex justify-end">
+        <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onClick={() => setOpenModal(true)}>Delete</button>
+      </div>
+
+      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
+            <h3 className="mb-5 text-lg font-normal text-gray-900">
+              Are you sure you want to delete this product?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => setOpenModal(false)}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => { setOpenModal(false) }}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
+  )
 }

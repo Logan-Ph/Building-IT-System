@@ -4,8 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Modal } from "flowbite-react";
 import { ToastContainer, toast } from "react-toastify";
 
-
-export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
+export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
   const { refine } = useSearchBox();
   const [openModal, setOpenModal] = useState(false)
   const [title, setTitle] = useState('');
@@ -18,7 +17,6 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
   const handleFileChange = (event) => {
     setFiles(event.target.files);
   };
-
 
   async function reportProduct() {
     try {
@@ -152,7 +150,7 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
     <>
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -167,7 +165,11 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
         <img class="h-auto max-w-full" src={coverPhoto} alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
+            {vendor && (vendor.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+              src={`data:image/jpeg;base64,${vendor.img}`}
+              alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+              <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            </div>)}
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">
@@ -200,8 +202,6 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
                   <Modal.Header>
                     <div>
                       <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                      {/* <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
-                      <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p> */}
                     </div>
 
                   </Modal.Header>

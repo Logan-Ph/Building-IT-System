@@ -16,7 +16,7 @@ export default function VendorEditProfile() {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -29,7 +29,7 @@ export default function VendorEditProfile() {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -83,7 +83,7 @@ export default function VendorEditProfile() {
       {error && <Navigate to='/login' replace={true} />}
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={2000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick

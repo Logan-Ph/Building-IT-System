@@ -32,7 +32,7 @@ export default function RegisterPage() {
     const notify = (error) => {
         toast.error(error, {
             position: "top-center",
-            autoClose: 5000,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -45,7 +45,7 @@ export default function RegisterPage() {
     const success = (error) => {
         toast.success(error, {
             position: "top-center",
-            autoClose: 10000,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -123,20 +123,7 @@ export default function RegisterPage() {
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={10000}
-                hideProgressBar={true}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover={false}
-                theme="light"
-            />
-
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
+                autoClose={1000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick

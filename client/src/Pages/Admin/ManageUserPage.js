@@ -1,16 +1,15 @@
 import axios from "axios";
 import { Tabs } from "flowbite-react";
 import { Table } from "flowbite-react";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HiAdjustments, HiUserCircle } from "react-icons/hi";
 import { FaShoppingBag } from "react-icons/fa";
-import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
+import LoadingPage from "../User/LoadingPage";
 
 export default function ManageUserPage() {
-  const { user } = useContext(UserContext)
   const [users, setUsers] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
@@ -36,14 +35,13 @@ export default function ManageUserPage() {
   }, [fetchData])
 
   if (isLoading) {
-    return <div>....is loading</div>
+    return <LoadingPage />
   }
 
   return (
     <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
-      {user === null && <Navigate to={"/"} replace />}
       {error && <Navigate to={"/"} replace />}
-      <div className="overflow-x-auto">
+      <div>
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
           <Tabs.Item active title="Customer" icon={HiUserCircle}>
@@ -141,8 +139,8 @@ function UserTable({ data, dataImage, type }) {
   return (
     <>
       <div className="p-4 bg-gray-100">
-        <div className="relative overflow-x-auto">
-          <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
+        <div className="relative">
+          <div class="flex items-center justify-end flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
             <SearchBox setSearchTerm={setSearchTerm} />
           </div>
           <Table hoverable>

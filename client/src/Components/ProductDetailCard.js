@@ -233,8 +233,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <Modal.Header>
                                 <div>
                                     <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                    <p className='text-sm font-medium text-[#E61E2A]'>Report Date:<span className='font-light text-gray-500 text-sm ml-1'>23/12/2023</span></p>
-                                    <p className='text-sm font-medium text-[#E61E2A]'>Report Time:<span className='font-light text-gray-500 text-sm ml-1'>20:09</span></p>
+                                    
                                 </div>
 
                             </Modal.Header>
@@ -242,10 +241,10 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                 <label for="reason" className="font-bold">Select a reason:</label>
                                 <select value={title} onChange={handleDropdownChange} name="reportedReason" id="reportedReason" className="w-full my-2">
                                     <option disabled value="" >Select a reason below</option>
-                                    <option value="fake">Product is fake/replica</option>
-                                    <option value="unidentifiedProductOrigin">The product's origin is unidentified</option>
-                                    <option value="indistinctProductIllustratior">The product's illustrators is indistinct</option>
-                                    <option value="unmatchedProductName">The product's name does not match with product illustrators</option>
+                                    <option value="Fake/Replica">Product is fake/replica</option>
+                                    <option value="Unidentified Product Origin">The product's origin is unidentified</option>
+                                    <option value="Indistinct Product Illustratior">The product's illustrator is indistinct</option>
+                                    <option value="Unmatched Product Name">The product's name does not match with a product illustrator</option>
                                     <option value="Other">Other</option>
                                 </select>
 

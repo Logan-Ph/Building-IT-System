@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from 'react';
 import { Textarea } from "flowbite-react";
 
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 export default function CustomerReview({ product, setComments, comments }) {
   const [activeCommentId, setActiveCommentId] = useState(null);
   const [replyText, setReplyText] = useState('');

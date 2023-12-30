@@ -2,7 +2,6 @@ import { useContext, useState, useEffect, useCallback } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { UserContext } from '../../Context/UserContext';
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 
 export default function VendorEditStore() {
   const { user } = useContext(UserContext) 
@@ -43,7 +42,7 @@ export default function VendorEditStore() {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -56,7 +55,7 @@ export default function VendorEditStore() {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -116,17 +115,12 @@ export default function VendorEditStore() {
     getStoreInfo()
   }, [getStoreInfo])
 
-  if (user === undefined) {
-    return <div>Loading....</div>
-  }
-
-
   return (
     <>
       <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
         <ToastContainer
           position="top-center"
-          autoClose={10000}
+          autoClose={2000}
           hideProgressBar={true}
           newestOnTop={false}
           closeOnClick

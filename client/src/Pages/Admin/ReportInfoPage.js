@@ -4,13 +4,12 @@ import CustomerCard from "../../Components/ProfileCard/CustomerCard";
 import VendorCard from "../../Components/ProfileCard/VendorCard";
 import ShipperCard from "../../Components/ProfileCard/ShipperCard";
 import { Navigate, useParams } from "react-router-dom";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "../User/LoadingPage";
 
 export default function ReportInfoPage() {
   const params = useParams()
-  const { user } = useContext(UserContext)
   const [userInfo, setUserInfo] = useState()
   const [orders, setOrders] = useState([])
   const [reports, setReports] = useState()
@@ -36,7 +35,7 @@ export default function ReportInfoPage() {
 
 
   if (isLoading) {
-    return <div>....is loading</div>
+    return <LoadingPage />
   }
 
   return (

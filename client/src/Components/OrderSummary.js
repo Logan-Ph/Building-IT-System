@@ -21,7 +21,6 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
   ];
   const dayOfWeek = days[date.getDay()];
 
-
   const notify = useCallback(() => {
     if (error) {
       toast.error(error, {
@@ -82,11 +81,12 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
         value: products.reduce((total, product) => total + product.price * product.quantity, 0),
         currency: 'USD'
       });
-      localStorage.setItem('products', JSON.stringify([]));
       setError("");
+      window.localStorage.setItem("shippingFee", shippingFee)
+      window.localStorage.setItem("checkoutInfo", JSON.stringify(checkoutInfo))
       setTimeout(() => {
-        window.location.reload();
-      }, 4000);
+        window.location.href = "/thankfororder"
+      }, 2000);
     } catch (er) {
       setError(er);
       setMsg("");

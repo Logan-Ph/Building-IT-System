@@ -48,7 +48,7 @@ export default function AdminManageVendorProduct() {
       pauseOnHover={false}
       theme="light"
     />
-    <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
+    <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       <div className='mx-auto'>
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
@@ -65,6 +65,12 @@ export default function AdminManageVendorProduct() {
 }
 
 function TableComponent({ setSearchTerm, products, handleSubmit }) {
+  const [dataslice, setDataSlice] = useState(products)
+
+  useEffect(() => {
+    setDataSlice(products.slice(0, 10))
+  }, [products])
+
   return (
     <>
       <form class="flex items-center justify-end space-y-4 md:space-y-0 py-4" onSubmit={handleSubmit}>
@@ -113,20 +119,15 @@ function TableComponent({ setSearchTerm, products, handleSubmit }) {
               <span className="sr-only">Delete</span>
             </Table.HeadCell>
           </Table.Head>
-          <TableProductContent products={products} />
+          <TableProductContent products={products} dataslice={dataslice} setDataSlice={setDataSlice} />
         </Table>
       </div>
+      {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
     </>
   );
 }
 
-function TableProductContent({ products }) {
-  const [dataslice, setDataSlice] = useState(products)
-
-  useEffect(() => {
-    setDataSlice(products.slice(0, 10))
-  }, [products])
-
+function TableProductContent({ products, dataslice, setDataSlice }) {
   return (
     <>
       <Table.Body className="border-b border-gray-200">
@@ -135,16 +136,18 @@ function TableProductContent({ products }) {
             <Table.Cell className='!px-4 !py-2'>
               <span>{product._id}</span>
             </Table.Cell>
+
             <Table.Cell className='!px-4 !py-2'>
               <div className='w-[60px] h-[60px]'>
-                <img src={product.image_link} alt="product_img" className='object-fit w-full h-full' />
+                <img src={product.image_link} alt="product_img" className='object-fit w-full h-full scale-90' />
               </div>
             </Table.Cell>
+
             <Table.Cell className="!px-4 !py-2 overflow-x-auto">
               <span className='line-clamp-1 font-medium text-gray-900 '>{product.product_name}</span>
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
-              <span className='line-clamp-1'>{product.category}</span>
+              <span>{product.category}</span>
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>${product.price}</Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
@@ -156,7 +159,6 @@ function TableProductContent({ products }) {
           </Table.Row>
         ))}
       </Table.Body>
-      {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
     </>
   )
 }

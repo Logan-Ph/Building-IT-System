@@ -35,7 +35,7 @@ export default function ManageOrderPage() {
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={10000}
+                autoClose={2000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick

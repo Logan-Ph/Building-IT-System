@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import LoadingPage from './LoadingPage'
 
 export default function ResetPassword() {
     const params = useParams();
@@ -91,7 +92,7 @@ export default function ResetPassword() {
     }
 
     if (isLoading) {
-        return <div>....Loading</div>
+        return <LoadingPage />
     }
 
     return (<>

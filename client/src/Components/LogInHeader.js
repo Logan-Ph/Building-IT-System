@@ -2,9 +2,6 @@ export default function LogInHeader() {
     return (
         <>
             <div className="border py-3 px-6 gradient-background">
-                
-
-                
                 <div className="flex justify-between items-center lg:ml-10 ">
                 <div className='flex items-center'>
                     <a href='/'>
