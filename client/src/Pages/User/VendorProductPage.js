@@ -34,7 +34,7 @@ export default function VendorProductPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`https://building-it-system-server.vercel.app/vendor/${params.id}/product`, { withCredentials: true })
+      const res = await axios.get(`https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/vendor/${params.id}/product`, { withCredentials: true })
       setVendor(res.data.vendor)
       setIsLoading(false)
       setNumberOfFollwers(res.data.numberOfFollowers)

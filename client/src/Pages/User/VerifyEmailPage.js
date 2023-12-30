@@ -8,7 +8,7 @@ export default function VerifyEmailPage() {
     const [error, setError] = useState('')
 
     const fetchData = useCallback(async () => {
-        await axios.get(`https://building-it-system-server.vercel.app/user/${params.token}/verify-email`, { withCredentials: true })
+        await axios.get(`https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/user/${params.token}/verify-email`, { withCredentials: true })
             .catch(er => setError(er))
     }, [params.token])
 

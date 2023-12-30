@@ -23,7 +23,7 @@ export default function ManageOrderPage() {
 
     const getData = useCallback(async () => {
         try {
-            const res = await axios.get("https://building-it-system-server.vercel.app/shipper/dashboard", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/shipper/dashboard", { withCredentials: true })
             setOrders(res.data.orders)
             setOrdersCountByStatus(res.data.ordersCountByStatus);
         } catch (error) {

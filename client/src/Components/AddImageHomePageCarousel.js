@@ -21,7 +21,7 @@ export default function AddImageHomePageBanner() {
             fd.append('files', files[i]);
         }
         fd.append('title', title);
-        await axios.post("https://building-it-system-server.vercel.app/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+        await axios.post("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
             .then(res => {
                 setMsg(res.data)
                 setError('')
