@@ -77,10 +77,6 @@ export default function Header() {
     window.location.href = "/login"
   }
 
-  if (user === undefined) {
-    return <LoadingPage />
-  }
-
   return (
     <section>
       {user && user.role === "Vendor" && <Navigate to={'/vendor/dashboard'} replace />}
