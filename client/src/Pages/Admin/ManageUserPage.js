@@ -18,7 +18,7 @@ export default function ManageUserPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-frontend.vercel.app/admin/manage-user", { withCredentials: true })
+      const res = await axios.get("https://building-it-system-server.vercel.app/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);

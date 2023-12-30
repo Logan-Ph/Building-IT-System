@@ -63,7 +63,7 @@ export default function DashboardPage() {
       fd.append('files', files[i]);
     }
     fd.append('title', title);
-    await axios.post("https://building-it-system-frontend.vercel.app/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+    await axios.post("https://building-it-system-server.vercel.app/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         setMsg(res.data)
         setError('')
@@ -80,7 +80,7 @@ export default function DashboardPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-frontend.vercel.app/admin/dashboard", {
+      const res = await axios.get("https://building-it-system-server.vercel.app/admin/dashboard", {
         withCredentials: true,
       });
       setNumberOfUsers(res.data.numberOfUsers);
@@ -96,9 +96,9 @@ export default function DashboardPage() {
   const [smallImages, setSmallImages] = useState();
   const fetchImages = async () => {
     try {
-      await axios.get("https://building-it-system-frontend.vercel.app/slider", { withCredentials: true })
+      await axios.get("https://building-it-system-server.vercel.app/slider", { withCredentials: true })
       .then (res => setBigImages(res.data.images))
-      await axios.get("https://building-it-system-frontend.vercel.app/middle-banner", { withCredentials: true }).then (res => setSmallImages(res.data.images))
+      await axios.get("https://building-it-system-server.vercel.app/middle-banner", { withCredentials: true }).then (res => setSmallImages(res.data.images))
     } catch (error) {
       console.error('Error fetching products:', error);
     }

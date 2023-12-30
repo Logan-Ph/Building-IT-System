@@ -29,7 +29,7 @@ export default function Chatbot() {
   };
 
   const handleResponse = async (message) => {
-    const res = await axios.post('https://building-it-system-frontend.vercel.app/api/chatbot/message', { message: message }, { withCredentials: true });
+    const res = await axios.post('https://building-it-system-server.vercel.app/api/chatbot/message', { message: message }, { withCredentials: true });
     messages.current = [...messages.current, { text: res.data.message, sender: "assistant" }];
     setTyping(false)
   }

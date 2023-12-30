@@ -13,7 +13,7 @@ export default function Slider() {
     const [images, setImages] = useState();
     const fetchImages = async () => {
         try {
-            const response = await axios.get("https://building-it-system-frontend.vercel.app/slider", { withCredentials: true });
+            const response = await axios.get("https://building-it-system-server.vercel.app/slider", { withCredentials: true });
             setImages(response.data.images);
         } catch (error) {
             console.error('Error fetching products:', error);
