@@ -27,7 +27,7 @@ const uploadMultiple = multer({ storage }).array('files', 10);
 // authenticate token 
 function authenticateToken(req, res, next) {
     jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => { // verify the cookies on the header 
-        if (err) return res.status(500).json({ error: "You must login first!" })
+        if (err) return res.status(500).json({ error: err })
         next()
     })
 }
