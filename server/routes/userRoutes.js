@@ -26,14 +26,14 @@ const uploadMultiple = multer({ storage }).array('files', 10);
 
 // authenticate token 
 function authenticateToken(req, res, next) {
-    jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => { // verify the cookies on the header 
+    jwt.verify(req.cookies.userToken, process.env.ACCESS_TOKEN, (err, user) => { // verify the cookies on the header 
         if (err) return res.status(500).json({ error: "You must login first!" })
         next()
     })
 }
 
 // generate access token function 
-function generateAccessToken(user) {
+function generateToken(user) {
     const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '1h' }); // sign the user with the access token
     return accessToken
 }
@@ -71,6 +71,9 @@ router.get('/add-product/:id', userController.addProduct);
 
 // user remove product from cart route
 router.get('/remove-product/:id', userController.removeProduct);
+
+// user remove all products from cart route
+router.post('/remove-all-products', userController.removeAllProducts);
 
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
@@ -132,9 +135,9 @@ router.get('/product/:id/view-comment', userController.viewComments);
 
 router.post('/product/:id/post-comment', userController.postComment);
 
-router.put('/product/:commentId/reply-comment', userController.replyComment);
+router.post('/product/:id/reply-comment', userController.replyComment);
 
-router.put('/product/:commentId/like', userController.likeComment);
+router.post('/product/:id/like', userController.likeComment);
 // vendor dashboard route (vendor side)
 router.get('/dashboard', userController.getVendorDashboard);
 
@@ -153,6 +156,12 @@ router.post('/vendor-register', userController.vendorRegister);
 // admin report user page
 router.get('/admin/:id/report', userController.reportPage);
 
+// admin manage product page
+router.get('/admin/manage-product/:query', userController.adminManageProduct);
+
+// admin manage reported product page
+router.get('/admin/manage-vendor-product/:id', userController.adminManageReportedProduct);
+
 // admin ban user route
 router.post("/ban-user", userController.banUser);
 
@@ -166,7 +175,6 @@ router.get('/shipper/dashboard', userController.getShipperDashboard);
 router.post("/api/chatbot/message", userController.chatbotMessage);
 
 router.post('/shipper-register', userController.shipperRegister)
-
 
 // authentication route via login function
 router.get('/login', userController.loginPage);
@@ -185,8 +193,8 @@ router.post('/login', (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            const accessToken = generateAccessToken(user); // create access token 
-            res.cookie('accessToken', accessToken, { httpOnly: true }); // pass access token into the cookies
+            const userToken = generateToken(user); // create access token 
+            res.cookie('userToken', userToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             return res.json({ user: user, message: info.message });
         });
     })(req, res, next);
@@ -208,8 +216,9 @@ router.get('/auth/google/callback', (req, res, next) => {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
                 return;
             }
-            const accessToken = generateAccessToken(user); // create access token
-            res.cookie('accessToken', accessToken, { httpOnly: true }); // pass access token into the cookies
+            console.log(user)
+            const userToken = generateToken(user); // create access token
+            res.cookie('userToken', userToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);
         });
     })(req, res);

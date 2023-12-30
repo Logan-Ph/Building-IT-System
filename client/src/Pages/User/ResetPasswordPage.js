@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import LoadingPage from './LoadingPage'
 
 export default function ResetPassword() {
     const params = useParams();
@@ -43,7 +44,7 @@ export default function ResetPassword() {
     }
 
     const fetchData = useCallback(async () => {
-        await axios.get(`http://localhost:4000/user/${params.token}/forgot-password`, { withCredentials: true })
+        await axios.get(`https://building-it-system-server.vercel.app/user/${params.token}/forgot-password`, { withCredentials: true })
             .then(res => {
                 setUserEmail(res.data.userEmail.user)
                 setIsLoading(false)
@@ -75,7 +76,7 @@ export default function ResetPassword() {
             password: password,
         }
 
-        await axios.post(`http://localhost:4000/user/${params.token}/forgot-password`, data, { withCredentials: true })
+        await axios.post(`https://building-it-system-server.vercel.app/user/${params.token}/forgot-password`, data, { withCredentials: true })
             .then(res => {
                 setMsg(res.data.msg)
                 setTimeout(() => setNavigate(true), 5000); // navigate after 5 seconds
@@ -91,7 +92,7 @@ export default function ResetPassword() {
     }
 
     if (isLoading) {
-        return <div>....Loading</div>
+        return <LoadingPage />
     }
 
     return (<>

@@ -3,11 +3,11 @@ import axios from 'axios'
 import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
-import { Navigate } from 'react-router';
 import UserSidebar from "../../Components/UserSidebar";
+import { Navigate } from 'react-router';
+import LoadingPage from './LoadingPage';
 
 export default function UserProfile() {
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [activeTab, setActiveTab] = useState("profile")
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
@@ -19,10 +19,6 @@ export default function UserProfile() {
     const [file, setFile] = useState();
     const activeMenu = "profile";
 
-    const handleSidebarToggle = () => {
-        setIsSidebarCollapsed(!isSidebarCollapsed);
-    };
-
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
@@ -30,7 +26,7 @@ export default function UserProfile() {
     const notify = (error) => {
         toast.error(error, {
             position: "top-center",
-            autoClose: 5000,
+            autoClose: 2000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -43,7 +39,7 @@ export default function UserProfile() {
     const success = (success) => {
         toast.success(success, {
             position: "top-center",
-            autoClose: 10000,
+            autoClose: 2000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -68,7 +64,7 @@ export default function UserProfile() {
 
     async function axiosPostData() {
         try {
-            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+            await axios.post('https://building-it-system-server.vercel.app/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
                 .then(res => {
                     setMsg(res.data)
                     setError('')
@@ -93,15 +89,15 @@ export default function UserProfile() {
     }, [error, msg]);
 
     if (user === undefined) {
-        return <div>Loading....</div>
+        return <LoadingPage />
     }
 
     return (
         <>
-            {user===null && <Navigate to={'/'} replace/>}
+            {user === null && <Navigate to="/" replace />}
             <ToastContainer
                 position="top-center"
-                autoClose={10000}
+                autoClose={2000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
@@ -119,18 +115,9 @@ export default function UserProfile() {
 
                 {/* <!-- MAIN --> */}
                 <div className="pl-0 md:pl-64 transition-all" id="main">
-                    <div class="p-4 pb-2 flex justify-between items-center visible md:hidden">
-                        <button class="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-last cursor-pointer toggle-sidebar " onClick={handleSidebarToggle}>
-                                <path d="m7 18 6-6-6-6"></path>
-                                <path d="M17 6v12"></path>
-                            </svg>
-                        </button>
-                    </div>
-
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
-                            <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
+                            <img src={(user && user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
                             <div>
                                 <h2 className="text-2xl font-semibold mb-2">{user && user.name}</h2>
                                 <span className="text-lg text-gray-500">{user && user.email}</span>

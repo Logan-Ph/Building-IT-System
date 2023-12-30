@@ -1,7 +1,14 @@
 import { PackageSearch, Home, Store, Shirt, MessageCircle } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
+import { useContext } from "react";
+import { UserContext } from "../Context/UserContext";
 
 export default function VendorSidebar() {
+    const { user } = useContext(UserContext)
+    if (user === undefined) {
+        return null;
+    }
+
     return (<Sidebar>
         <a href="/vendor/dashboard">
             <SidebarItem icon={<Home size={20} />} text="Dashboard" />

@@ -1,17 +1,16 @@
 import '../../css/mangeorder.css'
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ToDoListShipper from '../../Components/ToDoListShipper';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import OrdersInfo from '../../Components/OrdersInfo';
-import { UserContext } from '../../Context/UserContext';
 
 export default function ManageOrderPage() {
     const [orders, setOrders] = useState();
-    const { user } = useContext(UserContext);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('')
     const [ordersCountByStatus, setOrdersCountByStatus] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
     const initialStatuses = {
         "To Ship": null,
         "Shipping": null,
@@ -23,11 +22,13 @@ export default function ManageOrderPage() {
 
     const getData = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/shipper/dashboard", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server.vercel.app/shipper/dashboard", { withCredentials: true })
             setOrders(res.data.orders)
             setOrdersCountByStatus(res.data.ordersCountByStatus);
+            setIsLoading(false)
         } catch (error) {
             setError(error)
+            setIsLoading(false)
         }
     }, [])
 
@@ -35,9 +36,12 @@ export default function ManageOrderPage() {
         getData();
     }, [getData])
 
+    if (isLoading) {
+        return null
+    }
+
     return (
         <>
-            {user === null && <Navigate to={'/'} replace />}
             {error && <Navigate to={"/"} replace />}
             <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
                 <div

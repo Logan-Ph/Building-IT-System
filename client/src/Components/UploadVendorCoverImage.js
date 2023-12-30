@@ -1,18 +1,12 @@
-import { useSearchBox } from "react-instantsearch";
-import { useContext, useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 
 export default function UploadVendorCoverImage({ vendor, activeTab, vendorImage }) {
-  const { refine } = useSearchBox();
   const [file, setFile] = useState('');
   const handleFileChange = (event) => {
     event.preventDefault()
     setFile(event.target.files[0]);
   };
 
-  const getTabClass = (tabName) => {
-    return `border-b-2 px-2 py-3 duration-700 transition ${activeTab === tabName ? 'border-black' : 'border-transparent hover:border-black'
-      }`;
-  };
   return (
     <>
       <div class="md:container mx-auto">

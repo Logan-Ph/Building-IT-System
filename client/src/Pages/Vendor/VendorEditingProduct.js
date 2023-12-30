@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { useContext, useState, useEffect } from 'react'
-import { UserContext } from "../../Context/UserContext";
+import { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { Navigate, useParams } from 'react-router-dom';
 
@@ -12,46 +11,47 @@ export default function VendorEditPostingProduct() {
   const [description, setDescription] = useState('');
   const [stock, setStock] = useState('');
   const [file, setFile] = useState('');
-  const { user } = useContext(UserContext);
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('')
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const notify = (error) => {
     toast.error(error, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        pauseOnHover: false,
-        theme: "light",
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
     });
   }
 
   const success = (success) => {
     toast.success(success, {
-        position: "top-center",
-        autoClose: 10000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        pauseOnHover: false,
-        theme: "light",
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
     });
   }
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/edit-product/${params.id}`, { withCredentials: true });
+      const response = await axios.get(`https://building-it-system-server.vercel.app/edit-product/${params.id}`, { withCredentials: true });
       setProduct(response.data.product);
+      setIsLoading(false)
     } catch (error) {
       console.error('Error fetching products:', error);
     }
-  };
+  }, [params.id]);
 
   const data = {
     productName: productName,
@@ -73,13 +73,13 @@ export default function VendorEditPostingProduct() {
 
   async function axiosPostData() {
     setLoading(true)
-    await axios.post(`http://localhost:4000/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+    await axios.post(`https://building-it-system-server.vercel.app/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         setMsg(res.data)
         setError('')
         setLoading(false)
       })
-      .catch(er => { setError(er.response.data); setMsg() });
+      .catch(er => { setError(er.response.data); setMsg(); setIsLoading(false) });
   }
 
   const handleSubmit = (e) => {
@@ -94,37 +94,31 @@ export default function VendorEditPostingProduct() {
     error && notify(error)
     msg && success(msg)
     fetchProduct();
-  }, [error, msg]);
+  }, [error, msg, fetchProduct]);
 
-  if (user === undefined) {
-    console.log(user)
-    return <div>Loading...</div>
+  if (isLoading) {
+    return null;
   }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
-      {user && user.role === "User" && <Navigate to={'/'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-      {(error || !user) && <Navigate to='/login' replace={true} />}
+      {error && <Navigate to='/login' replace={true} />}
       <ToastContainer
-          position="top-center"
-          autoClose={10000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover={false}
-          theme="light"
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
       />
       <form>
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Edit Product</h2>
         <div class="space-y-12">
           <div class="border-b border-gray-900/10 pb-12">
-
-            {/* Cái element này để upload image */}
-
             <div class="col-span-full">
               <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Product Images</label>
               <p class="mt-1 text-sm leading-6 text-gray-600">Upload real, high resolution, clear product images. You should choose images with 1:1 resolution</p>
@@ -162,11 +156,7 @@ export default function VendorEditPostingProduct() {
               </section>
             </div>
 
-            {/* Javascript của element upload image */}
-
-
             <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
               <div class="col-span-full">
                 <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Product Name</label>
                 <p class="mt-3 text-sm leading-6 text-gray-600">Product name must use proper accented Vietnamese or English, with no shortened words, and contain at least 10 characters. For all Shop, maximum product name must not exceed 120 characters, including spaces.</p>
@@ -174,7 +164,6 @@ export default function VendorEditPostingProduct() {
                   <input onChange={(e) => setProductName(e.target.value)} placeholder={product && product.product_name} type="text" on name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" />
                 </div>
               </div>
-
               <div class="col-span-full">
                 <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Category</label>
                 <p class="mt-3 text-sm leading-6 text-gray-600">Uploading a product to the right category makes it easier for shoppers to find your product while searching in that category.</p>
@@ -214,7 +203,6 @@ export default function VendorEditPostingProduct() {
               </div>
             </div>
           </div>
-
 
           <div class="mt-6 flex items-center justify-end gap-x-6">
             <button type="button" class="rounded-md px-3 py-2 text-sm font-semibold shadow-sm border-solid border-2  hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Cancel</button>

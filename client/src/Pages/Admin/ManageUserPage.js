@@ -2,29 +2,26 @@ import axios from "axios";
 import { Tabs } from "flowbite-react";
 import { Table } from "flowbite-react";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
-import { AiFillDelete } from "react-icons/ai";
+import { HiAdjustments, HiUserCircle } from "react-icons/hi";
 import { FaShoppingBag } from "react-icons/fa";
-import { UserContext } from "../../Context/UserContext";
 import { Navigate } from "react-router-dom";
-import AdminManageVendorProduct from "./AdminManageVendorProduct";
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
+import LoadingPage from "../User/LoadingPage";
+import { UserContext } from "../../Context/UserContext";
 
 export default function ManageUserPage() {
-  const { user } = useContext(UserContext)
   const [users, setUsers] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [shippers, setShippers] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const {user} = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
+      const res = await axios.get("https://building-it-system-server.vercel.app/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
-      console.log(res.data.users)
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
       setIsLoading(false)
@@ -39,15 +36,14 @@ export default function ManageUserPage() {
     fetchData();
   }, [fetchData])
 
-  if (isLoading) {
-    return <div>....is loading</div>
+  if (isLoading || user === undefined) {
+    return <LoadingPage />
   }
 
   return (
     <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
-      {user === null && <Navigate to={"/"} replace />}
       {error && <Navigate to={"/"} replace />}
-      <div className="overflow-x-auto">
+      <div>
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
           <Tabs.Item active title="Customer" icon={HiUserCircle}>
@@ -61,15 +57,6 @@ export default function ManageUserPage() {
           <Tabs.Item title="Shipper" icon={HiAdjustments}>
             <UserTable data={shippers} type="shipper" />
           </Tabs.Item>
-          {/* Admin manage reported account */}
-          {/* <Tabs.Item title="Reported Account" icon={HiClipboardList}>
-            <UserTable data={shippers} type="reported user" />
-          </Tabs.Item> */}
-
-          {/* Admin manage product */}
-          {/* {/* <Tabs.Item title="Product" icon={AiFillDelete}>
-            <AdminManageVendorProduct />
-          </Tabs.Item> *\} */}
         </Tabs>
       </div>
     </div>
@@ -154,8 +141,8 @@ function UserTable({ data, dataImage, type }) {
   return (
     <>
       <div className="p-4 bg-gray-100">
-        <div className="relative overflow-x-auto">
-          <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
+        <div className="relative">
+          <div class="flex items-center justify-end flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
             <SearchBox setSearchTerm={setSearchTerm} />
           </div>
           <Table hoverable>
@@ -202,87 +189,3 @@ function UserTable({ data, dataImage, type }) {
   )
 }
 
-function ReportedTable() {
-  return (<>
-    <div className="p-4 bg-gray-100">
-      <div className="relative overflow-x-auto">
-        <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
-          <SearchBox />
-        </div>
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Address</Table.HeadCell>
-            <Table.HeadCell>Role</Table.HeadCell>
-            <Table.HeadCell>Previous Reports</Table.HeadCell>
-            <Table.HeadCell>
-              <span className="sr-only">View</span>
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body className="divide-y">
-            <Table.Row className="bg-white">
-              <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src={require("../../Components/images/defaultUserImage.png")}
-                  alt="Jese image"
-                />
-                <div class="ps-3">
-                  <div class="text-base font-medium">Name</div>
-                  <div class="font-normal text-gray-500">
-                    email@gmail.com
-                  </div>
-                </div>
-              </Table.Cell>
-              <Table.Cell>091234567</Table.Cell>
-              <Table.Cell>abc Street</Table.Cell>
-              <Table.Cell>Customer</Table.Cell>
-              <Table.Cell>0</Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300"
-                >
-                  View Report
-                  <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-yellow-800 bg-yellow-200 rounded-full">
-                    1
-                  </span>
-                </a>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row className="bg-white">
-              <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
-                <img
-                  class="w-10 h-10 rounded-full"
-                  src={require("../../Components/images/defaultUserImage.png")}
-                  alt="Jese image" />
-                <div class="ps-3">
-                  <div class="text-base font-medium">Name</div>
-                  <div class="font-normal text-gray-500">
-                    email@gmail.com
-                  </div>
-                </div>
-              </Table.Cell>
-              <Table.Cell>091234567</Table.Cell>
-              <Table.Cell>abc Street</Table.Cell>
-              <Table.Cell>Vendor</Table.Cell>
-              <Table.Cell>2</Table.Cell>
-              <Table.Cell>
-                <a
-                  href="#"
-                  class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300"
-                >
-                  View Report
-                  <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-yellow-800 bg-yellow-200 rounded-full">
-                    3
-                  </span>
-                </a>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </div>
-    </div>
-  </>)
-}

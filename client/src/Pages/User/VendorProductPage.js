@@ -13,6 +13,7 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import SortOptions from "../../Components/SortOptions";
 import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "./LoadingPage";
 
 export default function VendorProductPage() {
   const [follow, setFollow] = useState();
@@ -25,7 +26,6 @@ export default function VendorProductPage() {
   const params = useParams()
   const { hits } = useHits();
   const [vendor, setVendor] = useState()
-  const [vendorImage, setVendorImage] = useState()
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const { user } = useContext(UserContext)
@@ -34,9 +34,8 @@ export default function VendorProductPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/vendor/${params.id}/product`, { withCredentials: true })
+      const res = await axios.get(`https://building-it-system-server.vercel.app/vendor/${params.id}/product`, { withCredentials: true })
       setVendor(res.data.vendor)
-      setVendorImage(res.data.vendorImage)
       setIsLoading(false)
       setNumberOfFollwers(res.data.numberOfFollowers)
       setNumberOfProducts(res.data.numberOfProducts)
@@ -55,8 +54,8 @@ export default function VendorProductPage() {
     fetchData();
   }, [fetchData, follow])
 
-  if (user === undefined || isLoading) {
-    return <div>....is loading</div>
+  if (isLoading) {
+    return <LoadingPage />
   }
 
   return (
@@ -64,7 +63,7 @@ export default function VendorProductPage() {
       {error && <Navigate to={"/"} replace />}
       <section>
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav user={user} vendor={vendor} activeTab={"PRODUCTS"} vendorImage={vendorImage} numberOfFollowers={numberOfFollowers} numberOfProducts={numberOfProducts} setNumberOfFollwers={setNumberOfFollwers} follow={follow} setFollow={setFollow} />
+        <VendorNav user={user} vendor={vendor} activeTab={"PRODUCTS"} numberOfFollowers={numberOfFollowers} numberOfProducts={numberOfProducts} setNumberOfFollwers={setNumberOfFollwers} follow={follow} setFollow={setFollow} />
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 className="text-3xl font-semibold tracking-tight text-gray-900">

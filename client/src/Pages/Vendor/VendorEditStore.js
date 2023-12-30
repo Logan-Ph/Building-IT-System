@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ToastContainer, toast } from 'react-toastify'
+import { useContext, useState, useEffect, useCallback } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { UserContext } from '../../Context/UserContext';
 import axios from "axios";
 
-export default function VendorEditStore({ vendor, vendorImage }) {
+export default function VendorEditStore() {
+  const { user } = useContext(UserContext) 
   const [coverPhoto, setCoverPhoto] = useState();
   const [bigBanner, setBigBanner] = useState();
   const [smallBanner1, setSmallBanner1] = useState();
@@ -12,6 +14,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
   const [loading, setLoading] = useState(false);
   const [numberOfProducts, setNumberofProducts] = useState(0);
   const [numberOfFollowers, setNumberOfFollowers] = useState(0);
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleCoverPhotoChange = (event) => {
     event.preventDefault();
@@ -40,7 +43,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -53,7 +56,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -72,19 +75,21 @@ export default function VendorEditStore({ vendor, vendorImage }) {
 
   const getStoreInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/edit-store", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/edit-store", { withCredentials: true });
       setNumberofProducts(res.data.numberOfProducts);
       setNumberOfFollowers(res.data.numberOfFollowers);
+      setIsLoading(false)
     }
     catch (er) {
       setError(er)
+      setIsLoading(false)
     }
   }, [])
 
   async function axiosPostData() {
     try {
       setLoading(true);
-      await axios.post('http://localhost:4000/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      await axios.post('https://building-it-system-server.vercel.app/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setError('')
           setMsg(res.data)
@@ -93,6 +98,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
         .catch(er => { setError(er.response.data) });
     } catch (error) {
       console.error('Failed to update.', error);
+      setLoading(false)
     }
   }
 
@@ -113,14 +119,16 @@ export default function VendorEditStore({ vendor, vendorImage }) {
     getStoreInfo()
   }, [getStoreInfo])
 
-
+  if (isLoading){
+    return null
+  }
 
   return (
     <>
       <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
         <ToastContainer
           position="top-center"
-          autoClose={10000}
+          autoClose={2000}
           hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
@@ -148,7 +156,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
                 <div
                   id="image-preview"
                   class="max-w-full h-48 p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
-                  style={coverPhoto && { backgroundImage: `url(${URL.createObjectURL(coverPhoto)})` }}
+                  style={ coverPhoto ? { backgroundImage: `url(${URL.createObjectURL(coverPhoto)})` } : (user && user.coverPhoto ? {backgroundImage: `url(${user.coverPhoto})` } : {}) }
                 >
                   <input
                     id="upload"
@@ -191,7 +199,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
                     </div>
                   </label>
                 </div>
-              </div>
+              </div> 
             </div>
           </section>
 
@@ -200,8 +208,8 @@ export default function VendorEditStore({ vendor, vendorImage }) {
             <div class="flex items-center gap-4">
               <img
                 src={
-                  vendorImage
-                    ? `data:image/jpeg;base64,${vendorImage}`
+                  user && user.img
+                    ? `data:image/jpeg;base64,${user.img}`
                     : require("../../Components/images/defaultUserImage.png")
                 }
                 className="vendor-avatar md:w- rounded-full"
@@ -209,7 +217,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
               />
 
               <div class="font-medium">
-                <div class="text-2xl">{vendor && vendor.businessName}</div>
+                <div class="text-2xl">{user && user.businessName}</div>
                 <div class="text-base text-gray-500 mb-2">
                   <span class="border-r border-black pr-3">{numberOfFollowers} follower(s)</span>
                   <span class="pl-2">{numberOfProducts} product(s)</span>
@@ -238,7 +246,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
           <label
             for="bigBanner"
             className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer"
-            style={bigBanner && { backgroundImage: `url(${URL.createObjectURL(bigBanner)})` }}
+            style={ bigBanner ? { backgroundImage: `url(${URL.createObjectURL(bigBanner)})`} : (user && user.bigBanner ? { backgroundImage: `url(${user.bigBanner})`} : {} )}
           >
             <button>
               <input
@@ -284,7 +292,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
             <label
               for="smallBanner1"
               className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
-              style={smallBanner1 && { backgroundImage: `url(${URL.createObjectURL(smallBanner1)})` }}
+              style={smallBanner1 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner1)})` } : (user && user.smallBanner1 ? { backgroundImage: `url(${user.smallBanner1}`} : {})}
             >
               <input
                 id="smallBanner1"
@@ -313,7 +321,7 @@ export default function VendorEditStore({ vendor, vendorImage }) {
             <label
               for="smallBanner2"
               className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
-              style={smallBanner2 && { backgroundImage: `url(${URL.createObjectURL(smallBanner2)})` }}
+              style={smallBanner2 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner2)})` } : (user && user.smallBanner2 ? { backgroundImage: `url(${user.smallBanner2}`} : {})}
             >
               <input
                 id="smallBanner2"

@@ -2,7 +2,7 @@ import { Textarea } from "flowbite-react";
 import { Rating } from "flowbite-react";
 import { useState } from 'react';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function ProductDetailComment({ product }) {
@@ -10,10 +10,11 @@ export default function ProductDetailComment({ product }) {
         document.getElementById("customer_review").className = "block";
     }
     const [newComment, setNewComment] = useState('')
+    const [title, setTitle] = useState('')
 
     const postComment = async () => {
         try {
-            const res = await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment }, { withCredentials: true });
+            const res = await axios.post(`https://building-it-system-server.vercel.app/product/${product._id}/post-comment`, { newComment: newComment, title: title }, { withCredentials: true });
             toast.success(res.data.msg, {
                 position: "top-center",
                 autoClose: 3000,
@@ -25,6 +26,7 @@ export default function ProductDetailComment({ product }) {
                 theme: "light",
             });
             setNewComment('')
+            setTitle('')
             setTimeout(() => {
                 window.location.reload();
             }, 4000);
@@ -40,6 +42,8 @@ export default function ProductDetailComment({ product }) {
                 pauseOnHover: false,
                 theme: "light",
             });
+            setNewComment('')
+            setTitle('')
         }
     };
 
@@ -49,18 +53,6 @@ export default function ProductDetailComment({ product }) {
     };
 
     return (<div className="w-full lg:md:py-12 md:pr-2 xs:py-3">
-        <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover={false}
-            theme="light"
-        />
         <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-2">
             Customer Reviews
         </p>
@@ -116,9 +108,9 @@ export default function ProductDetailComment({ product }) {
                             placeholder="Title..."
                             required
                             rows={1}
-                            value={newComment}
-                            onChange={e => setNewComment(e.target.value)} 
-                            className="mb-2"/>
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            className="mb-2" />
                         <Textarea
                             id="commentText"
                             placeholder="Leave a review..."
@@ -130,7 +122,7 @@ export default function ProductDetailComment({ product }) {
                         <button class="text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none font-medium rounded text-sm px-3 py-2 w-full text-center me-2 mt-2 mb-2" onClick={handleComment} type="submit">Post</button>
                     </div>
 
-                    
+
                 </div>
             </div>
         </div>

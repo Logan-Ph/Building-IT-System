@@ -3,30 +3,21 @@ import VendorNav from "../../Components/VendorNav";
 import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "./LoadingPage";
 export default function VendorHomePage() {
   const [follow, setFollow] = useState();
   const params = useParams()
   const [vendor, setVendor] = useState()
   const [numberOfProducts, setNumberOfProducts] = useState(0)
   const [numberOfFollowers, setNumberOfFollwers] = useState(0)
-  const [vendorImage, setVendorImage] = useState()
   const { user } = useContext(UserContext)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [coverPhoto, setCoverPhoto] = useState();
-  const [bigBanner, setBigBanner] = useState();
-  const [smallBanner1, setSmallBanner1] = useState();
-  const [smallBanner2, setSmallBanner2] = useState();
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/vendor/${params.id}`, { withCredentials: true })
+      const res = await axios.get(`https://building-it-system-server.vercel.app/vendor/${params.id}`, { withCredentials: true })
       setVendor(res.data.vendor)
-      setVendorImage(res.data.vendorImage)
-      setCoverPhoto(res.data.coverPhoto)
-      setBigBanner(res.data.bigBanner)
-      setSmallBanner1(res.data.smallBanner1)
-      setSmallBanner2(res.data.smallBanner2)
       setNumberOfFollwers(res.data.numberOfFollowers)
       setNumberOfProducts(res.data.numberOfProducts)
       setIsLoading(false)
@@ -35,13 +26,12 @@ export default function VendorHomePage() {
     }
   }, [params.id])
 
-
   useEffect(() => {
     fetchData();
   }, [fetchData, follow])
 
   if (isLoading) {
-    return <div>....is loading</div>
+    return <LoadingPage />
   }
 
   return (
@@ -49,7 +39,7 @@ export default function VendorHomePage() {
       {error && <Navigate to={"/"} replace />}
       <section class="my-5">
         {/* <!-- Vendor Profile and Nav section --> */}
-        <VendorNav user={user} vendor={vendor} activeTab={"HOME"} vendorImage={vendorImage} coverPhoto={coverPhoto} numberOfFollowers={numberOfFollowers} numberOfProducts={numberOfProducts} setNumberOfFollwers={setNumberOfFollwers} follow={follow} setFollow={setFollow}/>
+        <VendorNav user={user} vendor={vendor} activeTab={"HOME"} coverPhoto={vendor.coverPhoto ? vendor.coverPhoto : ""} numberOfFollowers={numberOfFollowers} numberOfProducts={numberOfProducts} setNumberOfFollwers={setNumberOfFollwers} follow={follow} setFollow={setFollow} />
         {/*  */}
         {/* Top Product */}
         <div className="lg:container md:container lg:px-12 md:px-12 sm:px-14 xs:px-3 mx-auto mb-10 bg-gray-50">
@@ -146,28 +136,28 @@ export default function VendorHomePage() {
         </div>
         {/* <!-- Banner --> */}
         <div class="md:container mx-auto grid grid-cols-4 gap-4">
-          {smallBanner1 &&
+          {vendor.smallBanner1 &&
             <div class="md:col-span-2 col-span-4">
               <img
                 class="object-fill h-full w-full"
-                src={`data:image/jpeg;base64,${smallBanner1}`}
+                src={vendor.smallBanner1}
                 alt=""
               />
             </div>}
-          {smallBanner2 &&
+          {vendor.smallBanner2 &&
             <div class="md:col-span-2 col-span-4">
               <img
                 class="object-fill h-full w-full"
-                src={`data:image/jpeg;base64,${smallBanner2}`}
+                src={vendor.smallBanner2}
                 alt=""
               />
             </div>}
 
-          {bigBanner &&
+          {vendor.bigBanner &&
             <div class="col-span-4">
               <img
                 class="object-fill h-full w-full"
-                src={`data:image/jpeg;base64,${bigBanner}`}
+                src={vendor.bigBanner}
                 alt=""
               />
             </div>}

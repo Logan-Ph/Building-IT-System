@@ -8,14 +8,14 @@ import { Navigate } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
 
 export default function DashboardPage() {
-  const { user } = useContext(UserContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
+      const res = await axios.get("https://building-it-system-server.vercel.app/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
       setIsLoading(false)
     }
@@ -29,16 +29,13 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData])
 
-  if (user === undefined || isLoading) {
-    return <div>....is loading</div>
+  if (isLoading || user === undefined) {
+    return null
   }
 
   return (
     <>
-      {user && user.role === "User" && <Navigate to={'/'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {error && <Navigate to={'/login'} />}
-      {!user && <Navigate to={'/login'} replace />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"

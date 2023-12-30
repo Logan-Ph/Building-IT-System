@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContainer, toast } from "react-toastify";
 import aa from "search-insights";
+import LoadingPage from "./LoadingPage";
 
 export default function CartPage() {
   const { user } = useContext(UserContext);
@@ -16,7 +17,7 @@ export default function CartPage() {
 
   const fetchCart = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/cart", {
+      const res = await axios.get("https://building-it-system-server.vercel.app/cart", {
         withCredentials: true,
       });
       setProducts(() =>
@@ -30,7 +31,7 @@ export default function CartPage() {
   const removeProduct = async (id) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/remove-product/${id}`,
+        `https://building-it-system-server.vercel.app/remove-product/${id}`,
         { withCredentials: true }
       );
       setProducts((prevProducts) =>
@@ -41,6 +42,21 @@ export default function CartPage() {
       setError(error);
     }
   };
+
+  const removeAllProducts = async () => {
+    const productIds = products.map(product => product.product);
+    try {
+      const res = await axios.post(
+        `https://building-it-system-server.vercel.app/remove-all-products`,
+        { productIds },
+        { withCredentials: true }
+      );
+      setProducts([]);
+      setCart(res.data.cart);
+    } catch (error) {
+      setError(error);
+    }
+  }
 
   const incrementQuantity = (id) => {
     setProducts(
@@ -75,6 +91,13 @@ export default function CartPage() {
     );
   };
 
+  const toggleSelectAll = () => {
+    const areAllProductsChecked = products.every(product => product.checked);
+    setProducts(
+      products.map((product) => ({ ...product, checked: !areAllProductsChecked }))
+    );
+  }
+
   useEffect(() => {
     fetchCart();
     const storedProducts = localStorage.getItem("products");
@@ -87,6 +110,10 @@ export default function CartPage() {
   useEffect(() => {
     setCheckedProducts(products.filter((product) => product.checked));
   }, [products]);
+
+  if (user === undefined) {
+    return <LoadingPage />;
+  }
 
   const handleCheckout = async (user) => {
     if (checkedProducts.length === 0) {
@@ -117,9 +144,10 @@ export default function CartPage() {
     });
     setNavigateTo('/checkout')
   }
+
   return (
     <>
-      {user === null && <Navigate to={"/"} />}
+      {user === null && <Navigate to="/" />}
       {error && <Navigate to="/" />}
       {navigateTo && <Navigate to={navigateTo} />}
       <ToastContainer
@@ -173,16 +201,18 @@ export default function CartPage() {
                         <input
                           id="default-checkbox"
                           type="checkbox"
-                          value=""
+                          checked={products.every(product => product.checked)}
                           class="w-5 h-5 text-black bg-gray-100 border-gray-300 rounded mr-3"
+                          onClick={toggleSelectAll}
                         />
-                        <div class='text-md font-medium'>Select All Product</div>
+                        <div class='text-md font-medium' >Select All Product</div>
 
                       </div>
                       <div class="flex justify-end text-md ">
                         <button
                           type="button"
                           class="font-medium text-indigo-600 hover:text-indigo-500 "
+                          onClick={removeAllProducts}
                         >
                           Remove all
                         </button>
@@ -203,7 +233,7 @@ export default function CartPage() {
                                   <input
                                     id="default-checkbox"
                                     type="checkbox"
-                                    value=""
+                                    checked={product.checked}
                                     class="w-5 h-5 text-black bg-gray-100 border-gray-300 rounded mr-3"
                                     onClick={() => toggleChecked(product.product)}
                                   />

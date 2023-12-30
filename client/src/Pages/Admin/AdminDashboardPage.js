@@ -3,7 +3,6 @@ import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import bannerImage from "../../Components/images/banner1.jpg";
 import { Carousel } from 'flowbite-react';
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Navigate } from "react-router-dom";
@@ -57,13 +56,15 @@ export default function DashboardPage() {
   }
 
   async function uploadHomepageCarousel(title, files) {
+    if (!files) return;
     setLoading(true);
     const fd = new FormData();
     for (let i = 0; i < files.length; i++) {
       fd.append('files', files[i]);
     }
     fd.append('title', title);
-    await axios.post("http://localhost:4000/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+    await axios.post("https://building-it-system-server.vercel.app/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+    await axios.post("https://building-it-system-server.vercel.app/upload-homepage-carousel", fd, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         setMsg(res.data)
         setError('')
@@ -80,7 +81,7 @@ export default function DashboardPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/admin/dashboard", {
+      const res = await axios.get("https://building-it-system-server.vercel.app/admin/dashboard", {
         withCredentials: true,
       });
       setNumberOfUsers(res.data.numberOfUsers);
@@ -90,6 +91,21 @@ export default function DashboardPage() {
     } catch (error) {
       setError(error);
     }
+  }, []);
+
+  const [bigImages, setBigImages] = useState();
+  const [smallImages, setSmallImages] = useState();
+  const fetchImages = async () => {
+    try {
+      await axios.get("https://building-it-system-server.vercel.app/slider", { withCredentials: true })
+        .then(res => setBigImages(res.data.images))
+      await axios.get("https://building-it-system-server.vercel.app/middle-banner", { withCredentials: true }).then(res => setSmallImages(res.data.images))
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  }
+  useEffect(() => {
+    fetchImages();
   }, []);
 
   useEffect(() => {
@@ -105,7 +121,9 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData]);
 
-
+  if (user === undefined) {
+    return null;
+  }
 
   return (
     <>
@@ -127,7 +145,7 @@ export default function DashboardPage() {
         pauseOnHover={false}
         theme="light"
       />
-      <div class=" max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden ">
+      <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
         <div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4">
           <h1 class="font-bold  lg:pl-5  uppercase text-black text-2xl  pt-10 ">
             Homepage Decoration
@@ -142,51 +160,72 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1">
             <div className="h-80 ">
               {!bigCarousel && (
-                <div
-                  id="image-preview"
-                  class="max-w-full h-64 p-6 mb-4 bg-gray-700 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer object-fit bg-cover bg-center bg-no-repeat bg-blend-multiply"
-                  style={{ backgroundImage: `url(${bannerImage})` }}
+                <Carousel leftControl={
+                  <ArrowLeft />
+                }
+                  rightControl={
+                    <ArrowRight />
+                  }
                 >
-                  <input onChange={handleBigCarouselChange}
-                    id="upload"
-                    type="file"
-                    class="hidden"
-                    accept="image/*"
-                    multiple
-                  />
-                  <label for="upload" class="cursor-pointer">
-                    <div class="font-extrabold tracking-tight leading-none text-white">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-8 h-8 mx-auto mb-4"
+                  {bigImages && bigImages.map((image, index) => (
+                    <div key={index}>
+                      <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xl  mb-3">
+                        Carousel #{index + 1}
+                      </h1>
+                      {/* <div>
+                      <img
+                        src={require("../../Components/images/banner1.jpg")}
+                        alt="banner"
+                        class="bg-center bg-no-repeat bg-gray-700 bg-blend-multiply"
+                      />
+                    </div> */}
+                      <div
+                        id="image-preview"
+                        class="max-w-full h-64 p-6 mb-4 bg-gray-700 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer object-fit bg-cover bg-center bg-no-repeat bg-blend-multiply"
+                        style={{ backgroundImage: `url(${image})` }}
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                        <input onChange={handleBigCarouselChange}
+                          id="upload"
+                          type="file"
+                          class="hidden"
+                          accept="image/*"
+                          required
                         />
-                      </svg>
-                      <h5 class="mb-2 text-xl">Upload Cover Image</h5>
-                      <p class="font-normal text-sm md:px-6">
-                        You should choose photo size with{" "}
-                        <b class="italic ...">height {">"} 950px</b> and{" "}
-                        <b class="italic ...">width {"<"} 300px</b>
-                      </p>
-                      <p class="font-normal text-sm md:px-6">
-                        and must be in{" "}
-                        <b class="italic ...">JPG, PNG, or GIF</b> format.
-                      </p>
-                      <span
-                        id="filename"
-                        class="text-gray-500 bg-gray-200 z-50"
-                      ></span>
-                    </div>
-                  </label>
-                </div>
+                        <label for="upload" class="cursor-pointer">
+                          <div class="font-extrabold tracking-tight leading-none text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="w-8 h-8 mx-auto mb-4"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                              />
+                            </svg>
+                            <h5 class="mb-2 text-xl">Upload Cover Image</h5>
+                            <p class="font-normal text-sm md:px-6">
+                              You should choose photo size with{" "}
+                              <b class="italic ...">height {">"} 950px</b> and{" "}
+                              <b class="italic ...">width {"<"} 300px</b>
+                            </p>
+                            <p class="font-normal text-sm md:px-6">
+                              and must be in{" "}
+                              <b class="italic ...">JPG, PNG, or GIF</b> format.
+                            </p>
+                            <span
+                              id="filename"
+                              class="text-gray-500 bg-gray-200 z-50"
+                            ></span>
+                          </div>
+                        </label>
+                      </div>
+                    </div>))}
+                </Carousel>
               )}
               {bigCarousel && (
                 <Carousel leftControl={
@@ -275,53 +314,67 @@ export default function DashboardPage() {
             </h1>
             <div className="flex grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid sm:flex-col xs:flex-col ">
               {!smallCarousel && (
-                <div>
-                  <div
-                    id="image-preview"
-                    class="max-w-full h-48 p-6 mb-4 bg-gray-700 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
-                    style={{ backgroundImage: `url(${bannerImage})` }}
-                  >
-                    <input onChange={handleSmallCarouselChange}
-                      id="smallCarousel"
-                      type="file"
-                      class="hidden"
-                      accept="image/*"
-                      multiple
-                    />
-                    <label for="smallCarousel" class="cursor-pointer">
-                      <div class="font-extrabold tracking-tight leading-none text-white">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="w-8 h-8 mx-auto mb-4"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                          />
-                        </svg>
-                        <h5 class="mb-2 text-xl">Upload Cover Image</h5>
-                        <p class="font-normal text-sm md:px-6">
-                          You should choose photo size with{" "}
-                          <b class="italic ...">height {">"} 950px</b> and{" "}
-                          <b class="italic ...">width {"<"} 300px</b>
-                        </p>
-                        <p class="font-normal text-sm md:px-6">
-                          and must be in{" "}
-                          <b class="italic ...">JPG, PNG, or GIF</b> format.
-                        </p>
-                        <span
-                          id="filename"
-                          class="text-gray-500 bg-gray-200 z-50"
-                        ></span>
+                <Carousel leftControl={
+                  <ArrowLeft />
+                }
+                  rightControl={
+                    <ArrowRight />
+                  }
+                >
+                  {smallImages && smallImages.map((image, index) =>
+                    <div key={index}>
+                      <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xl  mb-3">
+                        Carousel #{index + 1}
+                      </h1>
+                      <div
+                        id="image-preview"
+                        class="max-w-full h-64 p-6 mb-4 bg-gray-700 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer object-fit bg-cover bg-center bg-no-repeat bg-blend-multiply"
+                        style={{ backgroundImage: `url(${image})` }}
+                      >
+                        <input onChange={handleSmallCarouselChange}
+                          id="smallCarousel"
+                          type="file"
+                          class="hidden"
+                          accept="image/*"
+                          required multiple
+                        />
+                        <label for="smallCarousel" class="cursor-pointer">
+                          <div class="font-extrabold tracking-tight leading-none text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              class="w-8 h-8 mx-auto mb-4"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                              />
+                            </svg>
+                            <h5 class="mb-2 text-xl">Upload Cover Image</h5>
+                            <p class="font-normal text-sm md:px-6">
+                              You should choose photo size with{" "}
+                              <b class="italic ...">height {">"} 950px</b> and{" "}
+                              <b class="italic ...">width {"<"} 300px</b>
+                            </p>
+                            <p class="font-normal text-sm md:px-6">
+                              and must be in{" "}
+                              <b class="italic ...">JPG, PNG, or GIF</b> format.
+                            </p>
+                            <span
+                              id="filename"
+                              class="text-gray-500 bg-gray-200 z-50"
+                            ></span>
+                          </div>
+                        </label>
                       </div>
-                    </label>
-                  </div>
-                </div>)}
+                    </div>
+                  )}
+                </Carousel>
+              )}
               {smallCarousel && (
                 <div>
                   <Carousel leftControl={
@@ -353,9 +406,9 @@ export default function DashboardPage() {
                             type="file"
                             class="hidden"
                             accept="image/*"
-                            required
+                            multiple
                           />
-                          <label for="smallCa" class="cursor-pointer">
+                          <label for="smallCarousel" class="cursor-pointer">
                             <div class="font-extrabold tracking-tight leading-none text-white">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -529,7 +582,7 @@ export default function DashboardPage() {
             <div id="last-users"></div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }

@@ -13,7 +13,8 @@ import { UserContext } from "../../Context/UserContext";
 import { MessagesSquare, Store } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
+import LoadingPage from "./LoadingPage";
+const recommendClient = recommend('DN0WBRQ8A3', '329a2a4f7a299b7d02bbc2fbd6d1da55');
 const indexName = 'rBuy';
 
 export default function TestingPage() {
@@ -36,7 +37,7 @@ export default function TestingPage() {
   const createThread = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:4000/chat", { vendorId: product.owner }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-server.vercel.app/chat", { vendorId: product.owner }, { withCredentials: true });
       localStorage.setItem("threadId", res.data.thread._id);
       window.location.href = "/chat";
     } catch (error) {
@@ -55,7 +56,7 @@ export default function TestingPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
+      const res = await axios.get(`https://building-it-system-server.vercel.app/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
       setVendorName(res.data.vendorName);
       setNumberOfFollowers(res.data.numberOfFollowers);
@@ -70,8 +71,8 @@ export default function TestingPage() {
     fetchData()
   }, [fetchData, comments])
 
-  if (user === undefined || isLoading) {
-    return <div>....is loading</div>
+  if (isLoading) {
+    return <LoadingPage />
   }
 
   return (

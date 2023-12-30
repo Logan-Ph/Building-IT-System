@@ -32,7 +32,7 @@ export default function RegisterPage() {
     const notify = (error) => {
         toast.error(error, {
             position: "top-center",
-            autoClose: 5000,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -45,7 +45,7 @@ export default function RegisterPage() {
     const success = (error) => {
         toast.success(error, {
             position: "top-center",
-            autoClose: 10000,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -65,7 +65,7 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('http://localhost:4000/user-register', data, { withCredentials: true })
+                    await axios.post('https://building-it-system-server.vercel.app/user-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -79,7 +79,7 @@ export default function RegisterPage() {
                         setMsg('');
                         return;
                     }
-                    await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
+                    await axios.post('https://building-it-system-server.vercel.app/vendor-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('http://localhost:4000/shipper-register', data, { withCredentials: true })
+                    await axios.post('https://building-it-system-server.vercel.app/shipper-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             console.log(res.data)
@@ -123,20 +123,7 @@ export default function RegisterPage() {
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={10000}
-                hideProgressBar={true}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover={false}
-                theme="light"
-            />
-
-            <ToastContainer
-                position="top-center"
-                autoClose={5000}
+                autoClose={1000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick

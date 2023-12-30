@@ -1,13 +1,59 @@
 import axios from "axios";
 import { useSearchBox } from "react-instantsearch";
-import { useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { Modal } from "flowbite-react";
+import { ToastContainer, toast } from "react-toastify";
 
-export default function VandorNav({ user, vendor, activeTab, vendorImage, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
+export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
   const { refine } = useSearchBox();
+  const [openModal, setOpenModal] = useState(false)
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('')
+  const [msg, setMsg] = useState('')
+  const [files, setFiles] = useState();
+
+  const handleFileChange = (event) => {
+    setFiles(event.target.files);
+  };
+
+  async function reportProduct() {
+    try {
+      setLoading(true);
+      const fd = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        fd.append('files', files[i]);
+      }
+      fd.append('vendorID', vendor._id);
+      fd.append('title', title);
+      fd.append('description', description);
+      await axios.post('https://building-it-system-server.vercel.app/report-vendor', fd, { withCredentials: true })
+        .then(res => {
+          setError('')
+          setMsg(res.data)
+          setLoading(false)
+        })
+        .catch(error => {
+          setError("Failed to report!" + error)
+          setLoading(false)
+        });
+    } catch (error) {
+      console.error('Failed to report.', error);
+    }
+  }
+
+  const handleReport = (e) => {
+    e.preventDefault();
+    reportProduct();
+    if (error) {
+      notify(error);
+    }
+  }
 
   const fetchData = useCallback(async () => {
     try {
-      await axios.get(`http://localhost:4000/check-follow/${vendor._id}/${user._id}`, { withCredentials: true })
+      await axios.get(`https://building-it-system-server.vercel.app/check-follow/${vendor._id}/${user._id}`, { withCredentials: true })
         .then(res => {
           setFollow(res.data.following);
         })
@@ -22,7 +68,7 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
       userID: user._id
     }
     try {
-      await axios.post("http://localhost:4000/unfollow-vendor", data, { withCredentials: true })
+      await axios.post("https://building-it-system-server.vercel.app/unfollow-vendor", data, { withCredentials: true })
         .then(res => {
           setFollow(res.data.following);
         })
@@ -37,7 +83,7 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
       userID: user._id
     }
     try {
-      await axios.post("http://localhost:4000/follow-vendor", data, { withCredentials: true })
+      await axios.post("https://building-it-system-server.vercel.app/follow-vendor", data, { withCredentials: true })
         .then(res => {
           setFollow(res.data.following);
         })
@@ -54,25 +100,76 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
   const createThread = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:4000/chat", { vendorId: vendor._id }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-server.vercel.app/chat", { vendorId: vendor._id }, { withCredentials: true });
       localStorage.setItem("threadId", res.data.thread._id);
       window.location.href = "/chat";
     } catch (err) {
       console.log(err);
     }
   }
+
+  const notify = useCallback(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+
+    if (msg) {
+      toast.success(msg, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+  }, [error, msg]);
+
+  useEffect(() => {
+    if (error || msg) {
+      notify();
+    }
+  }, [error, msg, notify]);
+
   useEffect(() => {
     user && fetchData();
   }, [fetchData, user])
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       {/* Profile Section */}
       <div class="md:container mx-auto">
-        <img class="h-auto max-w-full" src={`data:image/jpeg;base64,${coverPhoto}`} alt="" />
+        <img class="h-auto max-w-full" src={coverPhoto} alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            <img src={(vendorImage) ? `data:image/jpeg;base64,${vendorImage}` : require("../Components/images/defaultUserImage.png")} className="vendor-avatar md:w- rounded-full w-[133px] h-[133px]" alt="" />
+            {vendor && (vendor.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+              src={`data:image/jpeg;base64,${vendor.img}`}
+              alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+              <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            </div>)}
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">
@@ -100,6 +197,44 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
                       <i class="fa-regular fa-plus"></i> Follow
                     </button>)
                 }
+                <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
+                <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
+                  <Modal.Header>
+                    <div>
+                      <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
+                    </div>
+
+                  </Modal.Header>
+                  <Modal.Body className="overflow-y-auto">
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      name="reportedReason"
+                      id="reportedReason"
+                      className="w-full my-2"
+                      placeholder="Report Title"
+                    />
+                    <div className="my-2">
+                      <textarea onChange={(e) => setDescription(e.target.value)} id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
+                    </div>
+                    <p>Upload proof images</p>
+                    <input onChange={handleFileChange}
+                      type="file"
+                      name="files"
+                      id="files"
+                      className="w-full my-2"
+                      accept="image/*" // Specify the file types allowed, adjust as needed
+                      multiple // Allow multiple files to be selected
+                    />
+                  </Modal.Body>
+
+
+                  <Modal.Footer>
+                    <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>
+                  </Modal.Footer>
+
+                </Modal>
               </div>
             </div>
           </div>
@@ -143,7 +278,6 @@ export default function VandorNav({ user, vendor, activeTab, vendorImage, coverP
               </div>
             </form>
           </div>
-
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
               <li className={getTabClass("HOME")}>

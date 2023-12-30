@@ -16,7 +16,7 @@ export default function VendorEditProfile() {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -29,7 +29,7 @@ export default function VendorEditProfile() {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -53,13 +53,13 @@ export default function VendorEditProfile() {
   async function axiosPostData() {
     try {
       setLoading(true);
-      await axios.post('http://localhost:4000/update-vendor', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      await axios.post('https://building-it-system-server.vercel.app/update-vendor', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setMsg(res.data)
           setError('')
           setLoading(false)
         })
-        .catch(er => { setError(er.response.data); setMsg() });
+        .catch(er => { setError(er.response.data); setMsg(); setLoading(false) });
     } catch (error) {
       console.error('Failed to update.', error);
     }
@@ -78,12 +78,16 @@ export default function VendorEditProfile() {
     msg && success(msg)
   }, [error, msg]);
 
+  if (user === undefined){
+    return null;
+  }
+
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
       {error && <Navigate to='/login' replace={true} />}
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={2000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick

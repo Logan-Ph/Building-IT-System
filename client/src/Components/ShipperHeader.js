@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import axios from 'axios'
 import { Navigate } from 'react-router-dom'
+import LoadingPage from '../Pages/User/LoadingPage';
 
 export default function ShipperHeader() {
     const { user, setUser } = useContext(UserContext)
@@ -11,7 +12,7 @@ export default function ShipperHeader() {
 
     const fetchUser = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+            const res = await axios.get("https://building-it-system-server.vercel.app/login/success", { withCredentials: true });
             setUser(res.data.user);
         } catch (er) {
             setUser(null)
@@ -20,7 +21,7 @@ export default function ShipperHeader() {
     }, [setUser])
 
     const handleLogout = async () => {
-        const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
+        const res = await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
         if (res.data === "Logged out successfully") {
             setUser(undefined)
             setNavigateTo('/login');
@@ -32,7 +33,7 @@ export default function ShipperHeader() {
     }, [fetchUser])
 
     if (user === undefined) {
-        return <div>Loading....</div>
+        return <LoadingPage />
     }
 
     return (

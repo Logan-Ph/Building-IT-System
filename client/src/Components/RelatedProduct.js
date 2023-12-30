@@ -33,33 +33,6 @@ export default function RelatedProduct({ item }) {
           </div>
         </div>
       </div>
-
-      {/* <div className=" px-6 py-6 shadow-lg hover:shadow-inner transition duration-500 bg-white rounded-lg">
-       
-        <a className="flex justify-center items-center w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto" href={`/product/${item.objectID}`}>
-          <img src={item.image_link} alt="" className="object-full lg:md:scale-75" />
-        </a>
-
-        <div className="pt-4 pb-3">
-          <div>
-            <h3 className="capitalize font-medium xl:text-md lg:text-mb md:text-sm sm:text-sm xs:text-xs mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">
-              <a href={`/product/${item.objectID}`}>
-                {item.product_name}
-              </a>
-            </h3>
-            <Rating>
-              <p className="text-md text-gray-500 xs:text-[10px]">Ratings: {item.ratings}</p>
-              <Rating.Star className="mt-1 mx-1 h-3 w-3" />
-            </Rating>
-          </div>
-          <p className="text-lg text-red-500 font-semibold mb-2">${item.price}.00</p>
-        </div>
-
-
-
-      </div> */}
-
-
     </>
   )
 }

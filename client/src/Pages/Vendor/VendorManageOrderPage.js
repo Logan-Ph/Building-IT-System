@@ -1,17 +1,13 @@
 import '../../css/mangeorder.css'
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { UserContext } from '../../Context/UserContext';
+import React, { useCallback, useEffect, useState } from "react";
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
-import { Navigate } from 'react-router-dom';
 import OrdersInfo from '../../Components/OrdersInfo';
 
 export default function ManageOrderPage() {
-    const { user } = useContext(UserContext)
-    const [error, setError] = useState();
     const [orders, setOrders] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const initialStatuses = {
         "Unpaid": null,
         "To Ship": null,
@@ -24,12 +20,12 @@ export default function ManageOrderPage() {
 
     const getOrders = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server.vercel.app/manage-order", { withCredentials: true })
             setOrders(res.data.orders)
             setIsLoading(false)
         }
         catch (error) {
-            setError(error)
+            console.log(error)
             setIsLoading(false)
         }
     }, [setOrders])
@@ -38,18 +34,15 @@ export default function ManageOrderPage() {
         getOrders();
     }, [getOrders])
 
-    if (user === undefined || isLoading) {
-        return <div>Loading....</div>
+    if (isLoading) {
+        return null
     }
 
     return (
         <>
-            {user && user.role === "User" && <Navigate to={'/'} replace />}
-            {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
-            {(!user || error) && <Navigate to={'/login'} replace />}
             <ToastContainer
                 position="top-center"
-                autoClose={10000}
+                autoClose={2000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
