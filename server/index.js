@@ -10,7 +10,7 @@ const app = express();
 const cors = require('cors')
 const port = process.env.PORT || 4000;
 const routes = require('./routes/userRoutes.js')
-require('./config/passport-config')
+require('./config/passport-config.js')
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
