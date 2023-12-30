@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContainer, toast } from "react-toastify";
 import aa from "search-insights";
+import LoadingPage from "./LoadingPage";
 
 export default function CartPage() {
   const { user } = useContext(UserContext);
@@ -110,6 +111,10 @@ export default function CartPage() {
     setCheckedProducts(products.filter((product) => product.checked));
   }, [products]);
 
+  if (user === undefined) {
+    return <LoadingPage />;
+  }
+
   const handleCheckout = async (user) => {
     if (checkedProducts.length === 0) {
       toast.error("Please select at least one product to checkout", {
@@ -142,6 +147,7 @@ export default function CartPage() {
 
   return (
     <>
+      {user === null && <Navigate to="/" />}
       {error && <Navigate to="/" />}
       {navigateTo && <Navigate to={navigateTo} />}
       <ToastContainer

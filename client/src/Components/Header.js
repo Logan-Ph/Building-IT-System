@@ -70,15 +70,15 @@ export default function Header() {
     });
   };
 
-  const handleLogout = async () => {
-    const res = await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
-    if (res.data === "Logged out successfully") {
-      setNavigateTo('/login');
-    }
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
+    setUser(undefined)
+    window.location.href = "/login"
   }
 
   if (user === undefined) {
-    return null
+    return <LoadingPage />
   }
 
   return (

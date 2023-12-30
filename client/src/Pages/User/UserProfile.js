@@ -5,6 +5,7 @@ import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
 import UserSidebar from "../../Components/UserSidebar";
 import { Navigate } from 'react-router';
+import LoadingPage from './LoadingPage';
 
 export default function UserProfile() {
     const [activeTab, setActiveTab] = useState("profile")
@@ -87,9 +88,13 @@ export default function UserProfile() {
         msg && success(msg)
     }, [error, msg]);
 
+    if (user === undefined) {
+        return <LoadingPage />
+    }
+
     return (
         <>
-            {user === null && <Navigate to="/" replace/>}
+            {user === null && <Navigate to="/" replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={2000}
