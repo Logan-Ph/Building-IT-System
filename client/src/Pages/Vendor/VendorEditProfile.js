@@ -53,7 +53,7 @@ export default function VendorEditProfile() {
   async function axiosPostData() {
     try {
       setLoading(true);
-      await axios.post('https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/update-vendor', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      await axios.post('https://building-it-system-server.vercel.app/update-vendor', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setMsg(res.data)
           setError('')
