@@ -26,6 +26,7 @@ export default function Header() {
       setUser(res.data.user);
       setCart(res.data.cart)
     } catch (er) {
+      console.log(er)
       setUser(null)
     }
   }, [setUser, setCart])
