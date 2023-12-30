@@ -12,7 +12,7 @@ export default function VendorHeader() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-frontend.vercel.app/login/success", { withCredentials: true });
       setUser(res.data.user);
     } catch (er) {
       setUser(null)
@@ -21,7 +21,7 @@ export default function VendorHeader() {
   }, [setUser])
 
   const handleLogout = async () => {
-    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    const res = await axios.get("https://building-it-system-frontend.vercel.app/logout", { withCredentials: true });
     if (res.data === "Logged out successfully") {
       setUser(undefined)
       setNavigateTo('/login');

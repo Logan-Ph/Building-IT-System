@@ -14,7 +14,7 @@ require('./config/passport-config')
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://building-it-system-frontend.vercel.app/",
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }));

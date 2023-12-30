@@ -14,7 +14,7 @@ export default function ProductDetailComment({ product }) {
 
     const postComment = async () => {
         try {
-            const res = await axios.post(`http://localhost:4000/product/${product._id}/post-comment`, { newComment: newComment, title: title }, { withCredentials: true });
+            const res = await axios.post(`https://building-it-system-frontend.vercel.app/product/${product._id}/post-comment`, { newComment: newComment, title: title }, { withCredentials: true });
             toast.success(res.data.msg, {
                 position: "top-center",
                 autoClose: 3000,

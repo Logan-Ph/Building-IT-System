@@ -28,7 +28,7 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
       fd.append('vendorID', vendor._id);
       fd.append('title', title);
       fd.append('description', description);
-      await axios.post('http://localhost:4000/report-vendor', fd, { withCredentials: true })
+      await axios.post('https://building-it-system-frontend.vercel.app/report-vendor', fd, { withCredentials: true })
         .then(res => {
           setError('')
           setMsg(res.data)
@@ -53,7 +53,7 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
 
   const fetchData = useCallback(async () => {
     try {
-      await axios.get(`http://localhost:4000/check-follow/${vendor._id}/${user._id}`, { withCredentials: true })
+      await axios.get(`https://building-it-system-frontend.vercel.app/check-follow/${vendor._id}/${user._id}`, { withCredentials: true })
         .then(res => {
           setFollow(res.data.following);
         })
@@ -68,7 +68,7 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
       userID: user._id
     }
     try {
-      await axios.post("http://localhost:4000/unfollow-vendor", data, { withCredentials: true })
+      await axios.post("https://building-it-system-frontend.vercel.app/unfollow-vendor", data, { withCredentials: true })
         .then(res => {
           setFollow(res.data.following);
         })
@@ -83,7 +83,7 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
       userID: user._id
     }
     try {
-      await axios.post("http://localhost:4000/follow-vendor", data, { withCredentials: true })
+      await axios.post("https://building-it-system-frontend.vercel.app/follow-vendor", data, { withCredentials: true })
         .then(res => {
           setFollow(res.data.following);
         })
@@ -100,7 +100,7 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
   const createThread = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:4000/chat", { vendorId: vendor._id }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-frontend.vercel.app/chat", { vendorId: vendor._id }, { withCredentials: true });
       localStorage.setItem("threadId", res.data.thread._id);
       window.location.href = "/chat";
     } catch (err) {

@@ -18,7 +18,7 @@ export default function ReportInfoPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/admin/${params.id}/report`, { withCredentials: true });
+      const res = await axios.get(`https://building-it-system-frontend.vercel.app/admin/${params.id}/report`, { withCredentials: true });
       setUserInfo(res.data.user);
       setOrders(res.data.orders);
       setReports(res.data.report);

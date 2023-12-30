@@ -45,7 +45,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                 setLoading(false)
                 return
             }
-            await axios.post('http://localhost:4000/report-product', reportData, { withCredentials: true })
+            await axios.post('https://building-it-system-frontend.vercel.app/report-product', reportData, { withCredentials: true })
                 .then(res => {
                     setError('')
                     setMsg(res.data)
@@ -117,7 +117,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
     const addProduct = async (productId) => {
         notify()
         try {
-            const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
+            const res = await axios.get(`https://building-it-system-frontend.vercel.app/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
             setMsg(res.data.msg);
             setError('');
             setQuantity(1);

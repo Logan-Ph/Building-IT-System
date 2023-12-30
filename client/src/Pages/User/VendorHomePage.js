@@ -16,7 +16,7 @@ export default function VendorHomePage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/vendor/${params.id}`, { withCredentials: true })
+      const res = await axios.get(`https://building-it-system-frontend.vercel.app/vendor/${params.id}`, { withCredentials: true })
       setVendor(res.data.vendor)
       setNumberOfFollwers(res.data.numberOfFollowers)
       setNumberOfProducts(res.data.numberOfProducts)

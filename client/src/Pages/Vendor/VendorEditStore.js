@@ -74,7 +74,7 @@ export default function VendorEditStore() {
 
   const getStoreInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/edit-store", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-frontend.vercel.app/edit-store", { withCredentials: true });
       setNumberofProducts(res.data.numberOfProducts);
       setNumberOfFollowers(res.data.numberOfFollowers);
     }
@@ -86,7 +86,7 @@ export default function VendorEditStore() {
   async function axiosPostData() {
     try {
       setLoading(true);
-      await axios.post('http://localhost:4000/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      await axios.post('https://building-it-system-frontend.vercel.app/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setError('')
           setMsg(res.data)

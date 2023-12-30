@@ -16,7 +16,7 @@ export default function CartPage() {
 
   const fetchCart = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/cart", {
+      const res = await axios.get("https://building-it-system-frontend.vercel.app/cart", {
         withCredentials: true,
       });
       setProducts(() =>
@@ -30,7 +30,7 @@ export default function CartPage() {
   const removeProduct = async (id) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/remove-product/${id}`,
+        `https://building-it-system-frontend.vercel.app/remove-product/${id}`,
         { withCredentials: true }
       );
       setProducts((prevProducts) =>
@@ -46,7 +46,7 @@ export default function CartPage() {
     const productIds = products.map(product => product.product);
     try {
       const res = await axios.post(
-        `http://localhost:4000/remove-all-products`,
+        `https://building-it-system-frontend.vercel.app/remove-all-products`,
         { productIds },
         { withCredentials: true }
       );
