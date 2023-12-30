@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import CheckoutInfo from "../../Components/CheckoutInfo"
 import OrderSummary from "../../Components/OrderSummary";
+import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "./LoadingPage";
 
 export default function CheckoutPage() {
   const [products, setProducts] = useState()
   const [error, setError] = useState('')
   const [checkoutInfo, setCheckoutInfo] = useState({})
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
@@ -26,8 +29,13 @@ export default function CheckoutPage() {
     }
   }, [fetchData]);
 
+  if (user === undefined) {
+    return <LoadingPage />
+  }
+
   return (
     <>
+      {user === null && <Navigate to={"/"} replace />}
       {error && <Navigate to={"/"} replace />}
       <section>
         <div class="mx-auto px-10 my-10">

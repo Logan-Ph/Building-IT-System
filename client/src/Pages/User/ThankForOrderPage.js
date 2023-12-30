@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "./LoadingPage";
+import { Navigate } from "react-router-dom";
 
 export default function ThankForOrderPage() {
   const [products, setProducts] = useState([]);
   const [shippingFee, setShippingFee] = useState(0)
   const [checkoutInfo, setCheckoutInfo] = useState({});
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
     const storedProducts = localStorage.getItem('products');
@@ -20,9 +24,13 @@ export default function ThankForOrderPage() {
     };
   }, []);
 
+  if (user === undefined) {
+    return <LoadingPage />;
+  }
 
   return (
     <>
+      {user === null && <Navigate to={"/"} replace />}
       <section class="mx-auto px-6 my-10 md:max-w-5xl">
         <div class="mb-10">
           <h1 class="text-center text-4xl font-bold pb-5">

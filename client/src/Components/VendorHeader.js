@@ -3,7 +3,6 @@ import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import axios from 'axios'
 import { Navigate } from 'react-router-dom'
-import LoadingPage from '../Pages/User/LoadingPage';
 
 export default function VendorHeader() {
   const { user, setUser } = useContext(UserContext)
@@ -29,10 +28,6 @@ export default function VendorHeader() {
   useEffect(() => {
     fetchUser()
   }, [fetchUser])
-
-  if (user === undefined) {
-    return <LoadingPage />
-  }
 
   return (
     <>
