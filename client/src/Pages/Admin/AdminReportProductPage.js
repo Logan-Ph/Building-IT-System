@@ -17,7 +17,7 @@ export default function ReportedProductPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/admin/manage-vendor-product/${params.id}`, { withCredentials: true });
+      const res = await axios.get(`https://building-it-system-server.vercel.app/admin/manage-vendor-product/${params.id}`, { withCredentials: true });
       setIsLoading(false)
       setProduct(res.data.product)
       setVendor(res.data.vendor)

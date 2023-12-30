@@ -17,7 +17,7 @@ export default function ReportInfo({reports}) {
 
   const banUser = useCallback(async () => {
     try {
-      const res = await axios.post("http://localhost:4000/ban-user", { userId: params.id, startDate: startDate, endDate: endDate }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-server.vercel.app/ban-user", { userId: params.id, startDate: startDate, endDate: endDate }, { withCredentials: true });
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 5000,
@@ -35,7 +35,7 @@ export default function ReportInfo({reports}) {
 
   const removeUser = useCallback(async () => {
     try {
-      const res = await axios.post("http://localhost:4000/ban-user", { remove: true, userId: params.id }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-server.vercel.app/ban-user", { remove: true, userId: params.id }, { withCredentials: true });
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 5000,
