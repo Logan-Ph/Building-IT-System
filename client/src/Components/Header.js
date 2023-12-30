@@ -8,6 +8,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { PackageCheck, ShoppingBag } from 'lucide-react';
+import LoadingPage from '../Pages/User/LoadingPage';
 
 export default function Header() {
   const { cart, setCart } = useContext(CartContext)
@@ -76,7 +77,7 @@ export default function Header() {
   }
 
   if (user === undefined) {
-    return <div>Loading....</div>
+    return null
   }
 
   return (

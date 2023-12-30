@@ -1,19 +1,18 @@
 import axios from 'axios'
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { ToastContainer } from 'react-toastify'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import 'react-toastify/dist/ReactToastify.css'
 import '../../css/homepage.css'
 import Slider from '../../Components/Slider';
 import Banner from '../../Components/Banner';
-import { UserContext } from '../../Context/UserContext';
 import ProductCard from '../../Components/ProductCard';
 import { Navigate } from 'react-router-dom';
 import { Carousel } from 'flowbite-react';
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import LoadingPage from './LoadingPage';
 
 export default function Homepage() {
-    const { user } = useContext(UserContext)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [navigateTo, setNavigateTo] = useState("");
@@ -32,17 +31,16 @@ export default function Homepage() {
         fetchProduct();
     }, [fetchProduct]);
 
-    if (user === undefined || isLoading) {
-        return <div>Loading....</div>
+    if (isLoading) {
+        return <LoadingPage />
     }
-
 
     return (
         <>
             {navigateTo && <Navigate to={navigateTo} replace={true} />}
             <ToastContainer
                 position="top-center"
-                autoClose={10000}
+                autoClose={2000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
@@ -109,16 +107,16 @@ function MiddleBanner({ setNavigateTo }) {
 
             <div className="h-80">
                 <Carousel leftControl={
-                <ArrowLeft /> 
-                 
-                
-              }
-            rightControl={
-              <ArrowRight />
-            }>
-                {images && images.map((image, index) => (
-                    <img key={index} src={image} alt="banner" className=' border border-gray-200 shadow-lg' />
-                ))}
+                    <ArrowLeft />
+
+
+                }
+                    rightControl={
+                        <ArrowRight />
+                    }>
+                    {images && images.map((image, index) => (
+                        <img key={index} src={image} alt="banner" className=' border border-gray-200 shadow-lg' />
+                    ))}
                 </Carousel>
             </div>
 

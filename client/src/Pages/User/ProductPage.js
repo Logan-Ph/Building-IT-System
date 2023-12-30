@@ -13,7 +13,8 @@ import { UserContext } from "../../Context/UserContext";
 import { MessagesSquare, Store } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-const recommendClient = recommend('IZX7MYSNRD', 'd8ac69cc1ecc43ac91c32ca6d0fb4305');
+import LoadingPage from "./LoadingPage";
+const recommendClient = recommend('DN0WBRQ8A3', '329a2a4f7a299b7d02bbc2fbd6d1da55');
 const indexName = 'rBuy';
 
 export default function TestingPage() {
@@ -70,8 +71,8 @@ export default function TestingPage() {
     fetchData()
   }, [fetchData, comments])
 
-  if ( isLoading) {
-    return <div>....is loading</div>
+  if (isLoading) {
+    return <LoadingPage />
   }
 
   return (
@@ -148,12 +149,12 @@ export default function TestingPage() {
             breakpoints={{
               300: {
                 spaceBetween: 7,
-                slidesPerView: 3,
+                slidesPerView: 2,
               },
 
               576: {
                 spaceBetween: 10,
-                slidesPerView: 3,
+                slidesPerView: 2,
               },
 
               898: {

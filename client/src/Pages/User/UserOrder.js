@@ -4,9 +4,10 @@ import Pagination from "../../Components/Pagination";
 import { Navigate } from 'react-router';
 import axios from "axios";
 import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "./LoadingPage";
 
 export default function UserOrder() {
-    const {user} = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const [error, setError] = useState("");
     const [orders, setOrders] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -39,16 +40,15 @@ export default function UserOrder() {
     }, [getOrders])
 
     if (isLoading) {
-        return (<div>...Loading</div>)
+        return <LoadingPage />
     }
 
     return (
         <>
-            {user === null && <Navigate to={'/'} replace />}
+            {user === null && <Navigate to="/" replace />}
             {error && <Navigate to="/" />}
             <UserSidebar activeMenu={activeMenu} />
             <div className="pl-0 md:pl-64 transition-all" id="main">
-
                 <div className='pl-8 mt-6 p-5'>
                     <h1 class="font-bold text-black text-3xl">
                         My Orders

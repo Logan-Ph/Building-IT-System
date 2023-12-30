@@ -72,6 +72,9 @@ router.get('/add-product/:id', userController.addProduct);
 // user remove product from cart route
 router.get('/remove-product/:id', userController.removeProduct);
 
+// user remove all products from cart route
+router.post('/remove-all-products', userController.removeAllProducts);
+
 // user update profile route
 router.post('/update-user', upload.single('file'), userController.updateUser);
 

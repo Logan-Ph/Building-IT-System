@@ -6,6 +6,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "../User/LoadingPage";
 
 export default function DashboardPage() {
   const { user } = useContext(UserContext)
@@ -29,16 +30,13 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData])
 
-  if (user === undefined || isLoading) {
-    return <div>....is loading</div>
+  if (isLoading) {
+    return <LoadingPage />
   }
 
   return (
     <>
-      {user && user.role === "User" && <Navigate to={'/'} replace />}
-      {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {error && <Navigate to={'/login'} />}
-      {!user && <Navigate to={'/login'} replace />}
       <link
         rel="stylesheet"
         href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"

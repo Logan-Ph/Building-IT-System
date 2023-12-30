@@ -42,15 +42,16 @@ import AdminSideBar from "./AdminSideBar";
 import aa from 'search-insights';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 import ShipperHeader from "./ShipperHeader";
+import LoadingPage from "../Pages/User/LoadingPage";
 
 const searchClient = algoliasearch(
-  "IZX7MYSNRD",
-  "d8ac69cc1ecc43ac91c32ca6d0fb4305"
+  "DN0WBRQ8A3",
+  "329a2a4f7a299b7d02bbc2fbd6d1da55"
 );
 
 aa('init', {
-  appId: 'IZX7MYSNRD',
-  apiKey: "d8ac69cc1ecc43ac91c32ca6d0fb4305",
+  appId: 'DN0WBRQ8A3',
+  apiKey: "329a2a4f7a299b7d02bbc2fbd6d1da55",
 });
 
 export default function Router() {
@@ -228,6 +229,10 @@ export default function Router() {
           path: "/user/:token/forgot-password",
           element: <ResetPasswordPage />,
         },
+        {
+          path: "/loading-page",
+          element: <LoadingPage />,
+        },
       ],
     },
     {
@@ -262,7 +267,11 @@ export default function Router() {
         {
           path: "/chat",
           element: (
-            <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+            <InstantSearch
+              searchClient={searchClient}
+              indexName="rBuy"
+              insights={true}
+            >
               <div className="h-screen overflow-hidden">
                 <Header />
                 <ChatPage />
@@ -273,7 +282,11 @@ export default function Router() {
         {
           path: "/vendor-chat",
           element: (
-            <InstantSearch searchClient={searchClient} indexName="rBuy" insights={true}>
+            <InstantSearch
+              searchClient={searchClient}
+              indexName="rBuy"
+              insights={true}
+            >
               <div className="h-screen overflow-hidden">
                 <VendorHeader />
                 <ChatPage />
@@ -292,7 +305,7 @@ export default function Router() {
           element: <ShipperDashboardPage />,
         },
       ],
-    }
+    },
   ]);
 
   return (

@@ -37,7 +37,6 @@ export default function ManageOrderPage() {
 
     return (
         <>
-            {user === null && <Navigate to={'/'} replace />}
             {error && <Navigate to={"/"} replace />}
             <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
                 <div

@@ -16,7 +16,7 @@ export default function VendorPostingProduct() {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -29,7 +29,7 @@ export default function VendorPostingProduct() {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -89,7 +89,7 @@ export default function VendorPostingProduct() {
     <div className="container mx-auto my-8 px-4 rounded-lg bg-gray-100 shadow p-4 max-w-4xl">
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={2000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
@@ -103,9 +103,6 @@ export default function VendorPostingProduct() {
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">
           <div class="border-b border-gray-900/10 pb-12">
-
-            {/* Cái element này để upload image */}
-
             <div class="col-span-full">
               <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Product Images</label>
               <p class="mt-1 text-sm leading-6 text-gray-600">Upload real, high resolution, clear product images. You should choose images with 1:1 resolution</p>
@@ -142,12 +139,7 @@ export default function VendorPostingProduct() {
                 </div>
               </section>
             </div>
-
-            {/* Javascript của element upload image */}
-
-
             <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
               <div class="col-span-full">
                 <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Product Name</label>
                 <p class="mt-3 text-sm leading-6 text-gray-600">Product name must use proper accented Vietnamese or English, with no shortened words, and contain at least 10 characters. For all Shop, maximum product name must not exceed 120 characters, including spaces.</p>

@@ -73,7 +73,6 @@ export default function ChatPage() {
 
   return (
     <section>
-      {user === null && <Navigate to={'/'} replace />}
       {/* Component */}
       <div className="flex">
         {/* <!-- Sidebar --> */}

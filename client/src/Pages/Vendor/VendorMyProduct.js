@@ -1,12 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../Context/UserContext";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify'
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 export default function VendorMyProduct() {
-  const { user } = useContext(UserContext)
   const [products, setProducts] = useState([])
   const [dataSlice, setDataSlice] = useState([])
   const [error, setError] = useState('')
@@ -14,27 +11,27 @@ export default function VendorMyProduct() {
 
   const notify = (error) => {
     toast.error(error, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        pauseOnHover: false,
-        theme: "light",
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
     });
   }
 
   const success = (success) => {
     toast.success(success, {
-        position: "top-center",
-        autoClose: 10000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        pauseOnHover: false,
-        theme: "light",
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
     });
   }
 
@@ -58,7 +55,7 @@ export default function VendorMyProduct() {
         setMsg(res.data)
         setError('')
       })
-      .catch(er => { setError(er.response.data); setMsg() });    
+        .catch(er => { setError(er.response.data); setMsg() });
     } catch (error) {
       console.error('Error:', error);
     }
@@ -74,23 +71,19 @@ export default function VendorMyProduct() {
     fetchProducts();
   }, [error, msg]);
 
-  if (user === undefined) {
-    return <div>Loading...</div>
-  }
-
   return (
     <>
       <ToastContainer
-          position="top-center"
-          autoClose={10000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover={false}
-          theme="light"
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
       />
       <div class=" bg-gray-100 h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
@@ -142,31 +135,31 @@ export default function VendorMyProduct() {
         </div>
 
 
-      <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
-        <div class="mb-4 flex justify-between items-center">
-          <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-                <ul class="flex flex-wrap -mb-px">
-                    <li class="me-2">
-                        <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</a>
-                    </li>
-                    <li class="me-2">
-                        <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</a>
-                    </li>
-                </ul>
+        <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
+          <div class="mb-4 flex justify-between items-center">
+            <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+              <ul class="flex flex-wrap -mb-px">
+                <li class="me-2">
+                  <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
+                </li>
+                <li class="me-2">
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</a>
+                </li>
+                <li class="me-2">
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</a>
+                </li>
+                <li class="me-2">
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</a>
+                </li>
+                <li class="me-2">
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</a>
+                </li>
+              </ul>
+            </div>
+            <div class="space-x-2">
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
+            </div>
           </div>
-          <div class="space-x-2">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
-          </div>
-        </div>
 
           <div class="relative overflow-x-auto sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -188,36 +181,36 @@ export default function VendorMyProduct() {
                     <span class="sr-only">Edit</span>
                   </th>
                 </tr>
-            </thead>
-            <tbody>
-              {dataSlice.map((product) => (
-                <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  {/* ... Table data goes here ... */}
-                  <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {product.product_name}
-                  </td>
-                  <td className="px-6 py-4">
-                    ${product.price}
-                  </td>
-                  <td className="px-6 py-4">
-                    {product.stock}
-                  </td>
-                  <td className="px-6 py-4">
-                    {product.description}
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dataSlice.map((product) => (
+                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    {/* ... Table data goes here ... */}
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {product.product_name}
+                    </td>
+                    <td className="px-6 py-4">
+                      ${product.price}
+                    </td>
+                    <td className="px-6 py-4">
+                      {product.stock}
+                    </td>
+                    <td className="px-6 py-4">
+                      {product.description}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                      <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+        {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
       </div>
-    {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
-    </div>
-  </>
+    </>
   )
 }
 

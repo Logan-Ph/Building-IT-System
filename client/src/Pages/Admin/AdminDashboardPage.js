@@ -3,7 +3,6 @@ import AdminBarChart from "../../Components/AdminBarChart";
 import AdminInsight from "../../Components/AdminInsight";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import bannerImage from "../../Components/images/banner1.jpg";
 import { Carousel } from 'flowbite-react';
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Navigate } from "react-router-dom";
@@ -121,8 +120,6 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData]);
 
-
-
   return (
     <>
       {user === null && <Navigate to={"/"} replace />}
@@ -143,7 +140,7 @@ export default function DashboardPage() {
         pauseOnHover={false}
         theme="light"
       />
-      <div class=" max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden ">
+      <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
         <div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] bg-gray-100 mb-10 px-4">
           <h1 class="font-bold  lg:pl-5  uppercase text-black text-2xl  pt-10 ">
             Homepage Decoration
