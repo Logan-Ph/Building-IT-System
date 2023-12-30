@@ -232,7 +232,7 @@ exports.chatbotMessage = async (req, res) => {
   if (!threadId) {
     const thread = await openai.beta.threads.create();
     threadId = thread.id;
-    res.cookie("threadId", threadId, { httpOnly: true }); // pass thread id into the cookies
+    res.cookie("threadId", threadId, { httpOnly: true, sameSite: 'none', secure: true }); // pass thread id into the cookies
   }
   let messages;
   await openai.beta.threads.messages.create(threadId, {

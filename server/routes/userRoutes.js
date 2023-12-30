@@ -194,7 +194,7 @@ router.post('/login', (req, res, next) => {
                 return next(err);
             }
             const accessToken = generateAccessToken(user); // create access token 
-            res.cookie('accessToken', accessToken, { httpOnly: true }); // pass access token into the cookies
+            res.cookie('accessToken', accessToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             return res.json({ user: user, message: info.message });
         });
     })(req, res, next);
@@ -217,7 +217,7 @@ router.get('/auth/google/callback', (req, res, next) => {
                 return;
             }
             const accessToken = generateAccessToken(user); // create access token
-            res.cookie('accessToken', accessToken, { httpOnly: true }); // pass access token into the cookies
+            res.cookie('accessToken', accessToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);
         });
     })(req, res);
