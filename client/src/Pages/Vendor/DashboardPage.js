@@ -16,7 +16,7 @@ export default function DashboardPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/dashboard", { withCredentials: true })
+      const res = await axios.get("https://building-it-system-server.vercel.app/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
       setIsLoading(false)
     }

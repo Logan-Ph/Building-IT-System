@@ -16,7 +16,7 @@ export default function CartPage() {
 
   const fetchCart = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/cart", {
+      const res = await axios.get("https://building-it-system-server.vercel.app/cart", {
         withCredentials: true,
       });
       setProducts(() =>
@@ -30,7 +30,7 @@ export default function CartPage() {
   const removeProduct = async (id) => {
     try {
       const res = await axios.get(
-        `https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/remove-product/${id}`,
+        `https://building-it-system-server.vercel.app/remove-product/${id}`,
         { withCredentials: true }
       );
       setProducts((prevProducts) =>
@@ -46,7 +46,7 @@ export default function CartPage() {
     const productIds = products.map(product => product.product);
     try {
       const res = await axios.post(
-        `https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/remove-all-products`,
+        `https://building-it-system-server.vercel.app/remove-all-products`,
         { productIds },
         { withCredentials: true }
       );

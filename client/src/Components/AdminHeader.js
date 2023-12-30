@@ -13,7 +13,7 @@ export default function AdminHeader() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/login/success", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/login/success", { withCredentials: true });
       setUser(res.data.user);
       setIsLoading(false)
     } catch (error) {
@@ -24,7 +24,7 @@ export default function AdminHeader() {
   }, [setUser])
 
   const handleLogout = async () => {
-    const res = await axios.get("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/logout", { withCredentials: true });
+    const res = await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
     if (res.data === "Logged out successfully") {
       setNavigateTo('/login');
     }

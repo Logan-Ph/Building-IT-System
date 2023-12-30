@@ -65,7 +65,7 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/user-register', data, { withCredentials: true })
+                    await axios.post('https://building-it-system-server.vercel.app/user-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -79,7 +79,7 @@ export default function RegisterPage() {
                         setMsg('');
                         return;
                     }
-                    await axios.post('https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/vendor-register', data, { withCredentials: true })
+                    await axios.post('https://building-it-system-server.vercel.app/vendor-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/shipper-register', data, { withCredentials: true })
+                    await axios.post('https://building-it-system-server.vercel.app/shipper-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             console.log(res.data)

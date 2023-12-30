@@ -14,7 +14,7 @@ export default function ChatPage() {
 
   const getThreads = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/chat", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/chat", { withCredentials: true });
       setUsers(res.data.users);
       console.log(res.data.users)
       setThreads(res.data.threads);
@@ -27,7 +27,7 @@ export default function ChatPage() {
     e.preventDefault();
     try {
       if (!message) return;
-      const res = await axios.post(`https://building-it-system-server-ppt2mxwor-logan-phs-projects.vercel.app/chat/${threads[threadIndex]._id}`, { content: message }, { withCredentials: true });
+      const res = await axios.post(`https://building-it-system-server.vercel.app/chat/${threads[threadIndex]._id}`, { content: message }, { withCredentials: true });
       setThreads(threads.map((thread, i) => (
         i === threadIndex
           ? { ...thread, content: [...thread.content, res.data.message] }
