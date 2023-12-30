@@ -7,6 +7,7 @@ import OrdersInfo from '../../Components/OrdersInfo';
 export default function ManageOrderPage() {
     const [orders, setOrders] = useState([])
     const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
     const initialStatuses = {
         "Unpaid": null,
         "To Ship": null,
@@ -19,17 +20,23 @@ export default function ManageOrderPage() {
 
     const getOrders = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server.vercel.app/manage-order", { withCredentials: true })
             setOrders(res.data.orders)
+            setIsLoading(false)
         }
         catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
     }, [setOrders])
 
     useEffect(() => {
         getOrders();
     }, [getOrders])
+
+    if (isLoading) {
+        return null
+    }
 
     return (
         <>

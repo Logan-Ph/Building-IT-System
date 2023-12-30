@@ -15,6 +15,7 @@ export default function VendorEditPostingProduct() {
   const [msg, setMsg] = useState('')
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const notify = (error) => {
     toast.error(error, {
@@ -44,8 +45,9 @@ export default function VendorEditPostingProduct() {
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/edit-product/${params.id}`, { withCredentials: true });
+      const response = await axios.get(`https://building-it-system-server.vercel.app/edit-product/${params.id}`, { withCredentials: true });
       setProduct(response.data.product);
+      setIsLoading(false)
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -71,13 +73,13 @@ export default function VendorEditPostingProduct() {
 
   async function axiosPostData() {
     setLoading(true)
-    await axios.post(`http://localhost:4000/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+    await axios.post(`https://building-it-system-server.vercel.app/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         setMsg(res.data)
         setError('')
         setLoading(false)
       })
-      .catch(er => { setError(er.response.data); setMsg() });
+      .catch(er => { setError(er.response.data); setMsg(); setIsLoading(false) });
   }
 
   const handleSubmit = (e) => {
@@ -94,6 +96,9 @@ export default function VendorEditPostingProduct() {
     fetchProduct();
   }, [error, msg, fetchProduct]);
 
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">

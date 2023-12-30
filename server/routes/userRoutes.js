@@ -26,14 +26,14 @@ const uploadMultiple = multer({ storage }).array('files', 10);
 
 // authenticate token 
 function authenticateToken(req, res, next) {
-    jwt.verify(req.cookies.accessToken, process.env.ACCESS_TOKEN, (err, user) => { // verify the cookies on the header 
+    jwt.verify(req.cookies.userToken, process.env.ACCESS_TOKEN, (err, user) => { // verify the cookies on the header 
         if (err) return res.status(500).json({ error: "You must login first!" })
         next()
     })
 }
 
 // generate access token function 
-function generateAccessToken(user) {
+function generateToken(user) {
     const accessToken = jwt.sign({ user: user }, process.env.ACCESS_TOKEN, { expiresIn: '1h' }); // sign the user with the access token
     return accessToken
 }
@@ -193,8 +193,8 @@ router.post('/login', (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            const accessToken = generateAccessToken(user); // create access token 
-            res.cookie('accessToken', accessToken, { httpOnly: true }); // pass access token into the cookies
+            const userToken = generateToken(user); // create access token 
+            res.cookie('userToken', userToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             return res.json({ user: user, message: info.message });
         });
     })(req, res, next);
@@ -216,8 +216,9 @@ router.get('/auth/google/callback', (req, res, next) => {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
                 return;
             }
-            const accessToken = generateAccessToken(user); // create access token
-            res.cookie('accessToken', accessToken, { httpOnly: true }); // pass access token into the cookies
+            console.log(user)
+            const userToken = generateToken(user); // create access token
+            res.cookie('userToken', userToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);
         });
     })(req, res);

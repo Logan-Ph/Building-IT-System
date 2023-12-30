@@ -8,6 +8,7 @@ export default function VendorMyProduct() {
   const [dataSlice, setDataSlice] = useState([])
   const [error, setError] = useState('')
   const [msg, setMsg] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const notify = (error) => {
     toast.error(error, {
@@ -37,15 +38,17 @@ export default function VendorMyProduct() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/manage-product", { withCredentials: true });
+      const response = await axios.get("https://building-it-system-server.vercel.app/manage-product", { withCredentials: true });
       setProducts(response.data.products);
+      setIsLoading(false)
     } catch (error) {
       console.error('Error fetching products:', error);
+      setIsLoading(false)
     }
   };
 
   const handleDelete = async (productID) => {
-    const apiUrl = `http://localhost:4000/delete-product/${productID}`;
+    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productID}`;
     try {
       await axios.delete(apiUrl, {
         headers: {
@@ -70,6 +73,10 @@ export default function VendorMyProduct() {
     msg && success(msg)
     fetchProducts();
   }, [error, msg]);
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <>

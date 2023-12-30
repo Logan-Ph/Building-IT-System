@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../../Context/UserContext";
-import { Navigate } from "react-router-dom";
 
 export default function ChatPage() {
   const [isChatAreaVisible, setChatAreaVisible] = useState(false);
@@ -14,7 +13,7 @@ export default function ChatPage() {
 
   const getThreads = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/chat", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/chat", { withCredentials: true });
       setUsers(res.data.users);
       console.log(res.data.users)
       setThreads(res.data.threads);
@@ -27,7 +26,7 @@ export default function ChatPage() {
     e.preventDefault();
     try {
       if (!message) return;
-      const res = await axios.post(`http://localhost:4000/chat/${threads[threadIndex]._id}`, { content: message }, { withCredentials: true });
+      const res = await axios.post(`https://building-it-system-server.vercel.app/chat/${threads[threadIndex]._id}`, { content: message }, { withCredentials: true });
       setThreads(threads.map((thread, i) => (
         i === threadIndex
           ? { ...thread, content: [...thread.content, res.data.message] }

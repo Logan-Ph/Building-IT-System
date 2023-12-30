@@ -1,6 +1,6 @@
 import { Table } from 'flowbite-react';
 import { Button, Modal } from 'flowbite-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { FiAlertTriangle } from "react-icons/fi";
 import { Tabs } from "flowbite-react";
 import { FaCircle } from "react-icons/fa";
@@ -9,14 +9,16 @@ import axios from 'axios';
 import Pagination from '../../Components/Pagination';
 import { ToastContainer, toast } from 'react-toastify';
 import { MdReportProblem } from "react-icons/md";
+import { UserContext } from '../../Context/UserContext';
 
 export default function AdminManageVendorProduct() {
   const [products, setProducts] = useState([]);
   const [reportedProducts, setReportedProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { user } = useContext(UserContext);
 
   const getProducts = useCallback(async () => {
-    const res = await axios.get("http://localhost:4000/admin/manage-product/query=", { withCredentials: true });
+    const res = await axios.get("https://building-it-system-server.vercel.app/admin/manage-product/query=", { withCredentials: true });
     setReportedProducts(res.data.products.filter(product => product.isReported === true));
     setProducts(res.data.products);
   }, [])
@@ -27,13 +29,17 @@ export default function AdminManageVendorProduct() {
   };
 
   const serachProduct = useCallback(async () => {
-    const res = await axios.get(`http://localhost:4000/admin/manage-product/query=${searchTerm}`, { withCredentials: true });
+    const res = await axios.get(`https://building-it-system-server.vercel.app/admin/manage-product/query=${searchTerm}`, { withCredentials: true });
     setProducts(res.data.products);
   }, [searchTerm])
 
   useEffect(() => {
     getProducts();
   }, [getProducts])
+
+  if (user === undefined) {
+    return null;
+  }
 
   return <>
     <ToastContainer
@@ -195,7 +201,7 @@ function DeleteButtonPopup({ productId }) {
   }
 
   const handleDelete = async () => {
-    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productId}`;
     try {
       await axios.delete(apiUrl, {
         headers: {

@@ -13,7 +13,7 @@ export default function AdminHeader() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/login/success", { withCredentials: true });
       setUser(res.data.user);
       setIsLoading(false)
     } catch (error) {
@@ -23,11 +23,11 @@ export default function AdminHeader() {
     }
   }, [setUser])
 
-  const handleLogout = async () => {
-    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
-    if (res.data === "Logged out successfully") {
-      setNavigateTo('/login');
-    }
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
+    setUser(undefined)
+    window.location.href = "/login"
   }
 
   useEffect(() => {
@@ -114,7 +114,7 @@ function DropdownAva({ user, handleLogout }) {
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full px-4 py-2 text-left text-sm'
                     )}
-                    onClick={handleLogout}
+                    onClick={(e) => handleLogout(e)}
                   >
                     <i className="fas fa-sign-out-alt mr-1"></i>
                     Log Out

@@ -6,17 +6,16 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
-import LoadingPage from "../User/LoadingPage";
 
 export default function DashboardPage() {
-  const { user } = useContext(UserContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
+      const res = await axios.get("https://building-it-system-server.vercel.app/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
       setIsLoading(false)
     }
@@ -30,8 +29,8 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData])
 
-  if (isLoading) {
-    return <LoadingPage />
+  if (isLoading || user === undefined) {
+    return null
   }
 
   return (

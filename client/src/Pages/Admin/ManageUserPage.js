@@ -1,13 +1,14 @@
 import axios from "axios";
 import { Tabs } from "flowbite-react";
 import { Table } from "flowbite-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { HiAdjustments, HiUserCircle } from "react-icons/hi";
 import { FaShoppingBag } from "react-icons/fa";
 import { Navigate } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
 import LoadingPage from "../User/LoadingPage";
+import { UserContext } from "../../Context/UserContext";
 
 export default function ManageUserPage() {
   const [users, setUsers] = useState([]);
@@ -15,10 +16,11 @@ export default function ManageUserPage() {
   const [shippers, setShippers] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const {user} = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
+      const res = await axios.get("https://building-it-system-server.vercel.app/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
       setVendors(res.data.vendors);
       setShippers(res.data.shippers);
@@ -34,7 +36,7 @@ export default function ManageUserPage() {
     fetchData();
   }, [fetchData])
 
-  if (isLoading) {
+  if (isLoading || user === undefined) {
     return <LoadingPage />
   }
 

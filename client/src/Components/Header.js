@@ -22,7 +22,7 @@ export default function Header() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/login/success", { withCredentials: true });
       setUser(res.data.user);
       setCart(res.data.cart)
     } catch (er) {
@@ -70,7 +70,7 @@ export default function Header() {
   };
 
   const handleLogout = async () => {
-    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    const res = await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
     if (res.data === "Logged out successfully") {
       setNavigateTo('/login');
     }

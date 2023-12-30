@@ -14,6 +14,7 @@ export default function VendorEditStore() {
   const [loading, setLoading] = useState(false);
   const [numberOfProducts, setNumberofProducts] = useState(0);
   const [numberOfFollowers, setNumberOfFollowers] = useState(0);
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleCoverPhotoChange = (event) => {
     event.preventDefault();
@@ -74,19 +75,21 @@ export default function VendorEditStore() {
 
   const getStoreInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/edit-store", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/edit-store", { withCredentials: true });
       setNumberofProducts(res.data.numberOfProducts);
       setNumberOfFollowers(res.data.numberOfFollowers);
+      setIsLoading(false)
     }
     catch (er) {
       setError(er)
+      setIsLoading(false)
     }
   }, [])
 
   async function axiosPostData() {
     try {
       setLoading(true);
-      await axios.post('http://localhost:4000/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      await axios.post('https://building-it-system-server.vercel.app/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setError('')
           setMsg(res.data)
@@ -95,6 +98,7 @@ export default function VendorEditStore() {
         .catch(er => { setError(er.response.data) });
     } catch (error) {
       console.error('Failed to update.', error);
+      setLoading(false)
     }
   }
 
@@ -114,6 +118,10 @@ export default function VendorEditStore() {
   useEffect(() => {
     getStoreInfo()
   }, [getStoreInfo])
+
+  if (isLoading){
+    return null
+  }
 
   return (
     <>

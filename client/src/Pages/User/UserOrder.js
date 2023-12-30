@@ -25,7 +25,7 @@ export default function UserOrder() {
 
     const getOrders = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/user-order", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server.vercel.app/user-order", { withCredentials: true })
             setOrders(res.data.orders)
             setIsLoading(false)
         }
