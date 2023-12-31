@@ -2,9 +2,11 @@
   color-scheme: only light;
 }
 
-@media (prefers-color-scheme:dark) {
+@media (prefers-color-scheme: dark) {
   body {
-    background: white;
+    background-color: white; /* Your preferred light mode color */
+    color: black; /* Your preferred light mode text color */
+    /* Add other style overrides here */
   }
 }
 
