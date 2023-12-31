@@ -2,6 +2,12 @@
   color-scheme: only light;
 }
 
+@media (prefers-color-scheme:dark) {
+  body {
+    background: white;
+  }
+}
+
 .gradient-background {
   background: linear-gradient(300deg, rgba(0, 0, 84, 0.9), rgba(0, 0, 84, 0.7), #222160);
   background-size: 180% 180%;
@@ -253,7 +259,7 @@ body {
 
 /* Vendor hompage */
 .vendor-avatar {
-  width: 30% !important; 
+  width: 30% !important;
 }
 
 /* Shopping cart */
