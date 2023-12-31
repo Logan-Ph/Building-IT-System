@@ -21,7 +21,7 @@ function App() {
     });
   }, []);
   return (
-    <Flowbite theme={{ dark: false }}>
+    <Flowbite theme={{ theme, dark: false }}>
       <>
         <Router />
       </>
