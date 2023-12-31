@@ -2,6 +2,8 @@
 module.exports = {
   darkMode: 'false',
   darkMode: false,
+  darkMode: 'class',
+
 
   mode: 'jit',
   content: ["./src/**/*.{js,jsx,ts,tsx}"
