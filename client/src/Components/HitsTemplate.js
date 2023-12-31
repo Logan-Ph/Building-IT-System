@@ -1,6 +1,6 @@
 export default function Hit({ hit }) {
     return (
-        <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" key={hit.objectID}>
+        <div className="bg-white overflow-hidden group rounded-lg shadow-lg  group" key={hit.objectID}>
             <div className="relative">
                 <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px]">
                     <img src={hit.image_link} className="object-full h-full w-full" alt={hit.product_name} />

@@ -113,7 +113,7 @@ export default function ResetPassword() {
         <section className="bg-white">
             <div className="mx-auto max-w-screen-md">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                    <div className="w-full p-6 bg-gray-50 border-gray-50 rounded-lg shadow dark:border md:mt-0 sm:max-w-md sm:p-8">
+                    <div className="w-full p-6 bg-gray-50 border-gray-50 rounded-lg shadow  md:mt-0 sm:max-w-md sm:p-8">
                         <h2 className="mb-1 text-2xl font-bold leading-tight tracking-tight text-[#000053] md:text-xl">Password Reset</h2>
                         <p className="my-2 text-md font-light leading-tight tracking-tight text-gray-900 md:text-sm">Your New Password should different from Old Password</p>
 

@@ -66,22 +66,22 @@ export default function UserOrder() {
                 </div>
 
 
-                <div class="pl-5 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                <div class="pl-5 text-md font-medium text-center text-gray-500 border-b border-gray-200 ">
                     <ul class="flex flex-wrap -mb-px">
                         <li class="me-2">
-                            <span className={`${activeTab === "Unpaid" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Unpaid")}>Waiting for proccessing</span>
+                            <span className={`${activeTab === "Unpaid" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active " : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "}`} onClick={() => setActiveTab("Unpaid")}>Waiting for proccessing</span>
                         </li>
                         <li class="me-2">
-                            <span className={`${activeTab === "To Ship" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("To Ship")}>To ship</span>
+                            <span className={`${activeTab === "To Ship" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active " : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "}`} onClick={() => setActiveTab("To Ship")}>To ship</span>
                         </li>
                         <li class="me-2">
-                            <span className={`${activeTab === "Completed" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Completed")}>Completed</span>
+                            <span className={`${activeTab === "Completed" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active " : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "}`} onClick={() => setActiveTab("Completed")}>Completed</span>
                         </li>
                         <li class="me-2">
-                            <span className={`${activeTab === "Cancelled" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Cancelled")}>Cancelled</span>
+                            <span className={`${activeTab === "Cancelled" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active " : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "}`} onClick={() => setActiveTab("Cancelled")}>Cancelled</span>
                         </li>
                         <li class="me-2">
-                            <span className={`${activeTab === "Failed Delivery" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Failed Delivery")}>Failed Delivery</span>
+                            <span className={`${activeTab === "Failed Delivery" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active " : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "}`} onClick={() => setActiveTab("Failed Delivery")}>Failed Delivery</span>
                         </li>
                     </ul>
                 </div>
@@ -106,7 +106,7 @@ function OrdersInfo({ orders, searchTerm, initialStatuses, activeTab }) {
     }, [orders, initialStatuses]);
 
     return (
-        <div class="flex flex-col justify-center dark:bg-gray-800 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
+        <div class="flex flex-col justify-center  bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
             {Object.entries(categorizedOrder).map(([title, orders]) => (
                 activeTab === title && (orders ? <OrderContent orders={orders} searchTerm={searchTerm} /> : <div className="overflow-x-auto">
                     <div className='border border-gray my-1 py-32'>
@@ -158,7 +158,7 @@ function OrderContent({ orders, searchTerm }) {
                                     <div className="inline-flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-check"><path d="m16 16 2 2 4-4" /><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /><path d="m7.5 4.27 9 5.15" /><polyline points="3.29 7 12 12 20.71 7" /><line x1="12" x2="12" y1="22" y2="12" /></svg>
                                         <h1 class="pl-2 text-lg font-medium">{data.status}</h1>
-                                        <div className="ml-2 inline-block w-0.5 self-stretch bg-gray-300 opacity-50 dark:opacity-50"></div>
+                                        <div className="ml-2 inline-block w-0.5 self-stretch bg-gray-300 opacity-50"></div>
                                         <h1 class="pl-2 text-md font-medium" >ID: {data._id}</h1>
                                     </div>
                                 </div>

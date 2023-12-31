@@ -255,7 +255,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
 
                             <Modal.Footer>
-                                <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>                                <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
+                                <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>                                <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 ">Cancel</button>
                             </Modal.Footer>
 
                         </Modal>
@@ -278,7 +278,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <form class="max-w-xs mx-auto">
                                 <label
                                     for="quantity-input"
-                                    class="block mb-2 text-md font-medium text-gray-900 dark:text-white"
+                                    class="block mb-2 text-md font-medium text-gray-900"
                                 >
                                     Choose quantity:
                                 </label>
@@ -287,11 +287,11 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                         type="button"
                                         id="decrement-button"
                                         data-input-counter-decrement="quantity-input"
-                                        class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                                        class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
                                         onClick={() => setQuantity((prev) => prev > 1 ? prev - 1 : 1)}
                                     >
                                         <svg
-                                            class="w-3 h-3 text-gray-900 dark:text-white"
+                                            class="w-3 h-3 text-gray-900 "
                                             aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
@@ -313,7 +313,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                         data-input-counter-min="1"
                                         data-input-counter-max="50"
                                         aria-describedby="helper-text-explanation"
-                                        class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5  "
                                         placeholder="999"
                                         value={quantity}
                                         required
@@ -322,11 +322,11 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                                         type="button"
                                         id="increment-button"
                                         data-input-counter-increment="quantity-input"
-                                        class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                                        class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100  focus:ring-2 focus:outline-none"
                                         onClick={() => { setQuantity((prev) => prev + 1) }}
                                     >
                                         <svg
-                                            class="w-3 h-3 text-gray-900 dark:text-white"
+                                            class="w-3 h-3 text-gray-900 "
                                             aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"

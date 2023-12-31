@@ -113,7 +113,7 @@ export default function ReportInfo({reports}) {
         <div class="flex justify-end my-5">
           {/* Warning Button */}
           <Button
-            className="bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:hover:bg-yellow-500 mr-4"
+            className="bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300  mr-4"
             onClick={() => setOpenModalBlock(true)}
           >
             Block
@@ -192,7 +192,7 @@ export default function ReportInfo({reports}) {
 
           {/* Remove Button */}
           <Button
-            className="bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 dark:hover:bg-yellow-500"
+            className="bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 "
             onClick={() => { setOpenModalRemove(true) }}
           >
             Remove

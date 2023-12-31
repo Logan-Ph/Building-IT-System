@@ -89,7 +89,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                   <div class="flex items-center mb-2 xs:px-2 xs:pt-4">
                     {comment.userImg ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
                       src={`data:image/jpeg;base64,${comment.userImg}`}
-                      alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                      alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full ">
                       <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                     </div>}
                     <div class="flex items-center flex-1 px-4 font-bold leading-tight">
@@ -97,14 +97,14 @@ export default function CustomerReview({ product, setComments, comments }) {
                         {comment.userName}{" "}
                         <time
                           datetime="2014-08-16 19:00"
-                          class="block text-sm text-gray-500 dark:text-gray-400"
+                          class="block text-sm text-gray-500 "
                         >
                           {formattedDate}
                         </time>
                       </p>
                     </div>
                   </div>
-                  <h3 class=" text-lg xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2">
+                  <h3 class=" text-lg xs:text-md font-semibold text-gray-900  mb-2 xs:px-2">
                     {comment.title || "Thinking to buy another one!"}
                   </h3>
                   <div class="flex items-center mb-1 space-x-1 rtl:space-x-reverse xs:px-2">
@@ -161,7 +161,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                     </div>
                     {/* NEW ADDED */}
                     <div className={activeCommentId === comment._id ? "" : "hidden"} id={comment._id}>
-                      <div className='text-md xs:text-md font-semibold text-gray-900 dark:text-white mb-2 xs:px-2 mt-5'>Add Comment</div>
+                      <div className='text-md xs:text-md font-semibold text-gray-900 mb-2 xs:px-2 mt-5'>Add Comment</div>
                       <div className=" mt-2" >
                         <Textarea
                           id="commentText"
@@ -185,7 +185,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                               class="w-12 h-12 border-2 border-gray-300 rounded-full"
                               alt="Vendor's avatar"
                               src={`data:image/jpeg;base64,${reply.userImg || reply.vendorImg}`}
-                            /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                            /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full ">
                               <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                             </div>}
                             <div class="flex-col mt-1 xs:px-2">

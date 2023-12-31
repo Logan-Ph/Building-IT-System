@@ -138,7 +138,7 @@ function TableProductContent({ products, dataslice, setDataSlice }) {
     <>
       <Table.Body className="border-b border-gray-200">
         {dataslice.length !== 0 && dataslice.map((product) => (
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 border-b border-gray-200">
+          <Table.Row className="bg-white  border-b border-gray-200">
             <Table.Cell className='!px-4 !py-2'>
               <span>{product._id}</span>
             </Table.Cell>
