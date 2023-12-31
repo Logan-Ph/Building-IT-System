@@ -10,32 +10,23 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    if (mediaQuery.matches) {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       applyLightTheme();
     }
 
-    function handleChange(e) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       if (e.matches) {
         applyLightTheme();
       }
-    }
-
-    mediaQuery.addEventListener('change', handleChange);
-
-    // Cleanup function
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    });
   }, []);
-
-  // Define your theme object here if needed
-  // const theme = {...};
-
   return (
-    <Flowbite theme={{ dark: false }}>
-      <Router />
+    <Flowbite theme={{ theme, dark: false }}>
+      <>
+        <Router />
+      </>
     </Flowbite>
+
   );
 }
-
 export default App;
