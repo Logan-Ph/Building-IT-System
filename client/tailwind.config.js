@@ -5,6 +5,10 @@ module.exports = {
     , "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
     './node_modules/flowbite-react/lib/esm/**/*.js',
+    'node_modules/flowbite-react/lib/esm/**/*.js',
+    "./node_modules/flowbite/**/*.js",
+
+
 
 
   ],
@@ -22,8 +26,8 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
     require('flowbite/plugin'),
+    require('@tailwindcss/forms'),
     {
       tailwindcss: {},
       autoprefixer: {},
