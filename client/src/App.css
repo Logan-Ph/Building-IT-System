@@ -7469,6 +7469,10 @@ input:checked + .toggle-bg {
       margin-left: 0.75rem;
     }
 
+    .lg\:md\:grid {
+      display: grid;
+    }
+
     .lg\:md\:h-40 {
       height: 10rem;
     }
@@ -7673,14 +7677,6 @@ input:checked + .toggle-bg {
   .xl\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
-  }
-
-  @media (min-width: 1200px) {
-    @media (min-width: 898px) {
-      .xl\:lg\:md\:grid {
-        display: grid;
-      }
-    }
   }
 }
 
@@ -7927,19 +7923,11 @@ input:checked + .toggle-bg {
     .sm\:xs\:ml-0 {
       margin-left: 0px;
     }
-  }
-}
 
-@media (max-width: 575px) {
-  @media (min-width: 300px) {
-    .xs\:sm\:hidden {
+    .sm\:xs\:hidden {
       display: none;
     }
-  }
-}
 
-@media (min-width: 300px) {
-  @media (max-width: 575px) {
     .sm\:xs\:h-24 {
       height: 6rem;
     }
