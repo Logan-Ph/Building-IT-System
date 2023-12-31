@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: false, // or 'media' or 'class'
-  darkMode: 'false',
-
+  darkMode: 'class',
   mode: 'jit',
   content: ["./src/**/*.{js,jsx,ts,tsx}"
     , "./src/**/*.{js,jsx,ts,tsx}",
@@ -10,10 +8,6 @@ module.exports = {
     './node_modules/flowbite-react/lib/esm/**/*.js',
     'node_modules/flowbite-react/lib/esm/**/*.js',
     "./node_modules/flowbite/**/*.js",
-
-
-
-
   ],
 
   theme: {
