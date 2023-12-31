@@ -3,10 +3,15 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: white; /* Your preferred light mode color */
-    color: black; /* Your preferred light mode text color */
-    /* Add other style overrides here */
+  html {
+    color-scheme: light !important;
+  }
+}
+
+
+@layer base {
+  html {
+    color-scheme: light !important;
   }
 }
 
