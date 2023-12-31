@@ -7,8 +7,8 @@ module.exports = {
     './node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
 
   ],
-  
-  theme: {    
+
+  theme: {
     extend: {
       screens: {
         '2xs': { min: '300px' },
@@ -23,8 +23,8 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    require('flowbite/plugin'),    
-     {
+    require('flowbite/plugin'),
+    {
       tailwindcss: {},
       autoprefixer: {},
       ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})
