@@ -7208,6 +7208,10 @@ input:checked + .toggle-bg {
       justify-content: normal;
     }
 
+    .lg\:md\:justify-between {
+      justify-content: space-between;
+    }
+
     .lg\:md\:px-4 {
       padding-left: 1rem;
       padding-right: 1rem;
