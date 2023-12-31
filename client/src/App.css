@@ -4993,7 +4993,7 @@ html {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: light !important;
-  }
+  };
 
   .dark\:hover\:bg-gray-600:hover {
     background-color: rgb(249 250 251) !important;
@@ -5005,9 +5005,7 @@ html {
 
   .dark\:bg-gray-800 {
     background-color: white !important;
-  }
-
-    ;
+  };
 
   .element {
     background-color: white !important;
