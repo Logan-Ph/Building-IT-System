@@ -7317,10 +7317,6 @@ input:checked + .toggle-bg {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
-  .lg\:flex-row {
-    flex-direction: row;
-  }
-
   .lg\:flex-col {
     flex-direction: column;
   }
@@ -7331,10 +7327,6 @@ input:checked + .toggle-bg {
 
   .lg\:justify-end {
     justify-content: flex-end;
-  }
-
-  .lg\:justify-between {
-    justify-content: space-between;
   }
 
   .lg\:gap-6 {
@@ -7531,10 +7523,6 @@ input:checked + .toggle-bg {
       justify-content: normal;
     }
 
-    .lg\:md\:justify-between {
-      justify-content: space-between;
-    }
-
     .lg\:md\:px-4 {
       padding-left: 1rem;
       padding-right: 1rem;
@@ -7633,20 +7621,12 @@ input:checked + .toggle-bg {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
-  .xl\:flex-row {
-    flex-direction: row;
-  }
-
   .xl\:justify-start {
     justify-content: flex-start;
   }
 
   .xl\:justify-end {
     justify-content: flex-end;
-  }
-
-  .xl\:justify-between {
-    justify-content: space-between;
   }
 
   .xl\:gap-6 {
