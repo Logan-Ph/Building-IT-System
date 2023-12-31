@@ -68,7 +68,7 @@ export default function Homepage() {
                             <div className='w-8 h-8'>
                                 <img src={require("../../Components/images/trending.png")} className="object-cover" alt='trending product' />
                             </div>
-                            <h2 className="xl:ml-2 lg:ml-2 md:ml-1 sm:ml-1 xs:ml-1 col-span-full text-center xs:text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl font-bold text-[#E61E2A]">rBuy suggestion</h2>
+                            <h2 className="xl:ml-2 lg:ml-2 md:ml-1 sm:ml-1 xs:ml-1 col-span-full text-center xs:text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl font-bold text-[#E61E2A]">rBuy Suggestion</h2>
                         </div>
 
                         <div className="grid xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 gap-x-4 gap-y-4">
