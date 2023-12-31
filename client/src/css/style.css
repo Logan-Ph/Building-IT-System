@@ -9,12 +9,6 @@
 }
 
 
-@layer base {
-  html {
-    color-scheme: light !important;
-  }
-}
-
 .gradient-background {
   background: linear-gradient(300deg, rgba(0, 0, 84, 0.9), rgba(0, 0, 84, 0.7), #222160);
   background-size: 180% 180%;
