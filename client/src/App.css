@@ -7465,6 +7465,10 @@ input:checked + .toggle-bg {
       margin-left: 0.75rem;
     }
 
+    .lg\:md\:flex {
+      display: flex;
+    }
+
     .lg\:md\:grid {
       display: grid;
     }
@@ -7525,6 +7529,10 @@ input:checked + .toggle-bg {
 
     .lg\:md\:justify-normal {
       justify-content: normal;
+    }
+
+    .lg\:md\:justify-between {
+      justify-content: space-between;
     }
 
     .lg\:md\:px-4 {

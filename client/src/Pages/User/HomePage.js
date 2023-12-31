@@ -103,7 +103,7 @@ function MiddleBanner({ setNavigateTo }) {
         fetchImages();
     }, []);
     return <>
-        <div className='grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 lg:md:grid sm:xs:hidden'>
+        <div className='grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 lg:md:grid sm:xs:hidden'>
 
             <div className="h-80">
                 <Carousel leftControl={
