@@ -6,6 +6,10 @@
     html {
       color-scheme: light !important;
     }
+
+    .dark\:bg-gray-700 {
+        background-color: white !important;
+      };
   }
   
   
