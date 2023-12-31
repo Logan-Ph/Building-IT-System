@@ -2,6 +2,8 @@ import Router from './Components/Router'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Flowbite } from 'flowbite-react';
+import React, { useEffect } from 'react';
+
 function App() {
   useEffect(() => {
     function applyLightTheme() {
