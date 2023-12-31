@@ -4986,7 +4986,6 @@ select {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-<<<<<<< HEAD
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: light !important;
@@ -4999,8 +4998,7 @@ select {
   }
 }
 
-=======
->>>>>>> parent of ce1b6f9 (a)
+
 @media (min-width: 898px) {
   .md\:container {
     width: 100%;
