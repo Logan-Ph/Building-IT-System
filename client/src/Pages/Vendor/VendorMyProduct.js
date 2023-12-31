@@ -215,6 +215,7 @@ export default function VendorMyProduct() {
             </table>
           </div>
         </div>
+        
         {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
       </div>
     </>
