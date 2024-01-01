@@ -59,7 +59,7 @@ export default function ProductCard({ product }) {
     }
 
     return (
-        <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 
+        <div className="bg-white overflow-hidden group rounded-lg shadow-lg
     group xs:mx-auto"
             key={product._id}>
             <div className="relative">

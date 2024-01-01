@@ -3,7 +3,7 @@ import { Rating } from "flowbite-react";
 export default function RelatedProduct({ item }) {
   return (
     <>
-      <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 
+      <div className="bg-white overflow-hidden group rounded-lg shadow-lg  
     group xs:mx-auto">
         <div className="relative">
           <a className="flex justify-center items-center w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto" href={`/product/${item.objectID}`}>

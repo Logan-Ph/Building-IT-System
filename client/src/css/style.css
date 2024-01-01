@@ -1,3 +1,32 @@
+:root {
+  color-scheme: only light;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+      color-scheme: light !important;
+  };
+  
+  .dark\:hover\:bg-gray-600:hover {
+  background-color: rgb(249 250 251) !important;
+  };
+
+  .dark\:bg-gray-700 {
+      background-color: white !important;
+  };
+
+  .dark\:bg-gray-800 {
+      background-color: white !important;
+  };
+
+  .element {
+      background-color: white !important;
+
+  }
+
+}
+
+
 .gradient-background {
   background: linear-gradient(300deg, rgba(0, 0, 84, 0.9), rgba(0, 0, 84, 0.7), #222160);
   background-size: 180% 180%;
@@ -249,7 +278,7 @@ body {
 
 /* Vendor hompage */
 .vendor-avatar {
-  width: 30% !important; 
+  width: 30% !important;
 }
 
 /* Shopping cart */

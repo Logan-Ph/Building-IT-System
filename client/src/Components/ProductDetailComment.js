@@ -62,11 +62,11 @@ export default function ProductDetailComment({ product }) {
             <Rating.Star />
             <Rating.Star />
             <Rating.Star filled={false} />
-            <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+            <p className="ml-2 text-sm font-medium text-gray-500">
                 {product.ratings} out of 5
             </p>
         </Rating>
-        <p className="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+        <p className="mb-4 text-sm font-medium text-gray-500 ">
             {Number(product.no_of_ratings).toLocaleString()} global ratings
         </p>
         <Rating.Advanced percentFilled={70} className="mb-2 ">

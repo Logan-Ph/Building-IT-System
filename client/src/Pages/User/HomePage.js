@@ -68,7 +68,7 @@ export default function Homepage() {
                             <div className='w-8 h-8'>
                                 <img src={require("../../Components/images/trending.png")} className="object-cover" alt='trending product' />
                             </div>
-                            <h2 className="xl:ml-2 lg:ml-2 md:ml-1 sm:ml-1 xs:ml-1 col-span-full text-center xs:text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl font-bold text-[#E61E2A]">rBuy suggestion</h2>
+                            <h2 className="xl:ml-2 lg:ml-2 md:ml-1 sm:ml-1 xs:ml-1 col-span-full text-center xs:text-sm sm:text-md md:text-xl lg:text-2xl xl:text-3xl font-bold text-[#E61E2A]">rBuy Suggestion</h2>
                         </div>
 
                         <div className="grid xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 gap-x-4 gap-y-4">
@@ -78,7 +78,7 @@ export default function Homepage() {
                         </div>
 
                         <div className='flex flex-col items-center my-10'>
-                            <button type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
+                            <button type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
                         </div>
                     </div>
 
@@ -103,7 +103,7 @@ function MiddleBanner({ setNavigateTo }) {
         fetchImages();
     }, []);
     return <>
-        <div className='grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid sm:hidden xs:hidden'>
+        <div className='grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 lg:md:grid sm:xs:hidden'>
 
             <div className="h-80">
                 <Carousel leftControl={

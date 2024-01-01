@@ -242,10 +242,10 @@ export default function VendorEditStore() {
         </div>
 
         {/* Upload Banner */}
-        <div className="p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
+        <div className="p-4 border-2 border-gray-400 border-dashed rounded-lg ">
           <label
             for="bigBanner"
-            className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer"
+            className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100  cursor-pointer"
             style={ bigBanner ? { backgroundImage: `url(${URL.createObjectURL(bigBanner)})`} : (user && user.bigBanner ? { backgroundImage: `url(${user.bigBanner})`} : {} )}
           >
             <button>
@@ -291,7 +291,7 @@ export default function VendorEditStore() {
           <div className="grid grid-cols-2 gap-4">
             <label
               for="smallBanner1"
-              className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              className="flex items-center justify-center rounded bg-gray-100 h-28 "
               style={smallBanner1 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner1)})` } : (user && user.smallBanner1 ? { backgroundImage: `url(${user.smallBanner1}`} : {})}
             >
               <input
@@ -301,7 +301,7 @@ export default function VendorEditStore() {
                 className="hidden"
                 accept="image/*"
               />
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
+              <p className="text-2xl text-gray-400 ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -320,7 +320,7 @@ export default function VendorEditStore() {
             </label>
             <label
               for="smallBanner2"
-              className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              className="flex items-center justify-center rounded bg-gray-100 h-28 "
               style={smallBanner2 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner2)})` } : (user && user.smallBanner2 ? { backgroundImage: `url(${user.smallBanner2}`} : {})}
             >
               <input
@@ -330,7 +330,7 @@ export default function VendorEditStore() {
                 className="hidden"
                 accept="image/*"
               />
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
+              <p className="text-2xl text-gray-400 ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

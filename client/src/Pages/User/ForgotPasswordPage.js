@@ -86,7 +86,7 @@ export default function ForgotPassword() {
         <section className="bg-white">
             <div className="mx-auto">
                 <div className="flex flex-col items-center mx-auto py-10 xs:px-10">
-                    <div className="w-full px-6 rounded-lg shadow dark:border md:mt-0 sm:max-w-md bg-gray-50 border-gray-50 sm:p-8">
+                    <div className="w-full px-6 rounded-lg shadow  md:mt-0 sm:max-w-md bg-gray-50 border-gray-50 sm:p-8">
                         <div className="flex flex-row items-center">
                             <button className="border-black">
                                 <a href="\login" className="text-2xl text-[#E61E2A]">

@@ -67,7 +67,7 @@ export default function TableComponent({ orders, headerContent }) {
                                     buttonBorderColor = "border-gray-100";
                             }
                             return (
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Row className="bg-white">
                                     <Table.Cell className='!px-4 !py-2'>{order._id}</Table.Cell>
                                     <Table.Cell className='!px-4 !py-2'>{order.userName}</Table.Cell>
                                     <Table.Cell className='!px-4 !py-2'>{formattedDate}</Table.Cell>

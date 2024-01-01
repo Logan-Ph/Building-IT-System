@@ -1,17 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'false',
+  darkMode: false,
+  darkMode: 'class',
+
+
   mode: 'jit',
   content: ["./src/**/*.{js,jsx,ts,tsx}"
     , "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
-    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
-
+    './node_modules/flowbite-react/lib/esm/**/*.js',
+    'node_modules/flowbite-react/lib/esm/**/*.js',
   ],
-  
-  theme: {    
+
+  theme: {
     extend: {
       screens: {
-        '2xs': { min: '300px' },
         xs: { max: '575px' }, // Mobile (iPhone 3 - iPhone XS Max).
         sm: { min: '300px' }, // Mobile (matches max: iPhone 11 Pro Max landscape @ 896px).
         md: { min: '898px' }, // Tablet (matches max: iPad Pro @ 1112px).
@@ -22,10 +26,9 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
     require('flowbite/plugin'),
-    
-     {
+    require('@tailwindcss/forms'),
+    {
       tailwindcss: {},
       autoprefixer: {},
       ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})

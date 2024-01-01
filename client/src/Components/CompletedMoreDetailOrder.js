@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function CompletedMoreDetailOrder() {
     const [openModal, setOpenModal] = useState(false);
     return <>
-        <span href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
+        <span href="#" className="font-medium text-cyan-600 hover:underline " onClick={() => setOpenModal(true)}>
             More
         </span>
         <Modal show={openModal} onClose={() => setOpenModal(false)}>

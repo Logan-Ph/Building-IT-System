@@ -144,22 +144,22 @@ export default function VendorMyProduct() {
 
         <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
           <div class="mb-4 flex justify-between items-center">
-            <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 ">
               <ul class="flex flex-wrap -mb-px">
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
+                  <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active " aria-current="page">All</a>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</a>
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 ">Live</a>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</a>
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 ">Sold Out</a>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</a>
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 ">Reviewing</a>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</a>
+                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 ">Delisted</a>
                 </li>
               </ul>
             </div>
@@ -169,8 +169,8 @@ export default function VendorMyProduct() {
           </div>
 
           <div class="relative overflow-x-auto sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                 <tr>
                   <th scope="col" class="px-6 py-3">
                     Product name
@@ -191,9 +191,9 @@ export default function VendorMyProduct() {
               </thead>
               <tbody>
                 {dataSlice.map((product) => (
-                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr key={product._id} className="bg-white border-b  hover:bg-gray-50 ">
                     {/* ... Table data goes here ... */}
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                       {product.product_name}
                     </td>
                     <td className="px-6 py-4">
@@ -206,8 +206,8 @@ export default function VendorMyProduct() {
                       {product.description}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                      <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                      <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600  hover:underline">Edit</a>
+                      <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 hover:underline">Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -215,6 +215,7 @@ export default function VendorMyProduct() {
             </table>
           </div>
         </div>
+        
         {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
       </div>
     </>

@@ -83,7 +83,7 @@ export default function ChatPage() {
             <h1 className="text-2xl font-semibold mb-3">Chat</h1>
             <label
               for="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only "
             >
               Search
             </label>
@@ -138,7 +138,7 @@ export default function ChatPage() {
             <div className="bg-gray-300 rounded-full mr-3">
               {users[threadIndex] && users[threadIndex].img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
                 src={`data:image/jpeg;base64,${users[threadIndex].img}`}
-                alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
                 <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
               </div>}
             </div>
@@ -221,7 +221,7 @@ function ContactList({ users, searchTerm, toggleChatArea, threadIndex }) {
       >
         {user.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
           src={`data:image/jpeg;base64,${user.img}`}
-          alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+          alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full ">
           <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
         </div>}
         <div className="ml-3 flex-1 truncate ...">
