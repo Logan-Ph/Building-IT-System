@@ -8,7 +8,10 @@ module.exports = {
     , "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
     './node_modules/flowbite-react/lib/esm/**/*.js',
-    'node_modules/flowbite-react/lib/esm/**/*.js',
+    './node_modules/flowbite-react/lib/esm/**/*.js',
+    "./src/Pages/**/*.{js,ts,jsx,tsx}",
+    "./src/Components/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/tw-elements/dist/js/**/*.{js,ts,jsx,tsx}",
   ],
 
   theme: {
@@ -26,6 +29,7 @@ module.exports = {
   plugins: [
     require('flowbite/plugin'),
     require('@tailwindcss/forms'),
+    require('tw-elements/dist/plugin'),
     {
       tailwindcss: {},
       autoprefixer: {},
