@@ -1,39 +1,33 @@
 import Router from './Components/Router'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./App.css";
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Flowbite } from 'flowbite-react';
-import React, { useEffect } from 'react';
-import "./App.css"
+
+// Create a theme context
+const ThemeContext = createContext();
+
+// Use this hook to access theme in components
+export function useTheme() {
+  return useContext(ThemeContext);
+}
 
 function App() {
+  const [theme, setTheme] = useState('light'); // Default theme is light
+
   useEffect(() => {
-    // Always remove the 'dark' class from the HTML tag
-    document.querySelector('html').classList.remove('dark');
-    localStorage.setItem('theme', 'light'); // Set the theme in localStorage to 'light'
-
-
-    
-    // Function to be executed when the "dark" class in the HTML tag changes
-    const handleDarkModeChange = (mutationsList, observer) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          const htmlElement = document.querySelector('html');
-          if (htmlElement.classList.contains('dark')) {
-            htmlElement.classList.remove('dark'); // Remove 'dark' class if it's added
-          }
-        }
-      }
-    };
-
-    // Create a new MutationObserver
-    const htmlElement = document.querySelector('html');
-    const observer = new MutationObserver(handleDarkModeChange);
-
-    // Observe changes in the "class" attribute of the HTML tag
-    observer.observe(htmlElement, { attributes: true, attributeFilter: ['class'] });
-
+    // Check local storage for theme
+    const storedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(storedTheme); // Set the theme from local storage or default to light
+    document.querySelector('html').classList.toggle('dark', storedTheme === 'dark');
   }, []);
 
+  useEffect(() => {
+    // Persist theme changes to local storage
+    localStorage.setItem('theme', theme);
+    document.querySelector('html').classList.toggle('dark', theme === 'dark');
+  }, [theme]);
 
   return (
     // <Flowbite theme={{ dark: false }}>
