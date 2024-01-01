@@ -6,6 +6,7 @@
     "@adobe/react-spectrum": "^3.32.2",
     "@algolia/recommend": "^4.20.0",
     "@algolia/recommend-react": "^1.10.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@canvasjs/charts": "^3.7.29",
     "@chatscope/chat-ui-kit-react": "^1.10.1",
     "@headlessui/react": "^1.7.17",
