@@ -11,6 +11,8 @@ function App() {
     document.querySelector('html').classList.remove('dark');
     localStorage.setItem('theme', 'light'); // Set the theme in localStorage to 'light'
 
+
+    
     // Function to be executed when the "dark" class in the HTML tag changes
     const handleDarkModeChange = (mutationsList, observer) => {
       for (const mutation of mutationsList) {
