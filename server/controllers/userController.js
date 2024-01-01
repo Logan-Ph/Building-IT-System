@@ -1167,8 +1167,8 @@ exports.getThreads = async (req, res) => {
     const threads = await Thread.find({ $or: [{ userId: user._id }, { vendorId: user._id }] }).populate('content');
     let users = [];
     for (const thread of threads) {
-      const user = convertUser((user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
-      users.push(user);
+      let chatUser = convertUser((user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
+      users.push(chatUser);
     }
     return res.status(200).json({ threads: threads, users: users });
   } catch (error) {

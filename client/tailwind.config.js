@@ -1,16 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'false',
-  darkMode: false,
   darkMode: 'class',
-
 
   mode: 'jit',
   content: ["./src/**/*.{js,jsx,ts,tsx}"
     , "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
     './node_modules/flowbite-react/lib/esm/**/*.js',
-    'node_modules/flowbite-react/lib/esm/**/*.js',
+    './node_modules/flowbite-react/lib/esm/**/*.js',
+    './node_modules/tw-elements/dist/js/**/*.{js,ts,jsx,tsx}',
   ],
 
   theme: {
@@ -28,6 +26,7 @@ module.exports = {
   plugins: [
     require('flowbite/plugin'),
     require('@tailwindcss/forms'),
+    require('tw-elements/dist/plugin'),
     {
       tailwindcss: {},
       autoprefixer: {},
@@ -35,4 +34,18 @@ module.exports = {
     },
     require('tailwind-accent-color'),
   ],
+
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'postcss-loader'
+        ],
+      },
+    ],
+  },
+
 }

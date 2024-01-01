@@ -5,23 +5,53 @@ import { Flowbite } from 'flowbite-react';
 import React, { useEffect } from 'react';
 
 function App() {
+  // useEffect(() => {
+  //   function applyLightTheme() {
+  //     document.documentElement.classList.remove('dark');
+  //   }
+
+  //   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  //     applyLightTheme();
+  //   }
+
+  //   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  //     if (e.matches) {
+  //       applyLightTheme();
+  //     }
+  //   });
+  // }, []);
   useEffect(() => {
-    function applyLightTheme() {
+    function applyDarkTheme() {
+      document.documentElement.classList.add('dark');
+    }
+
+    function removeDarkTheme() {
       document.documentElement.classList.remove('dark');
     }
 
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      applyLightTheme();
+      applyDarkTheme();
+    } else {
+      removeDarkTheme();
     }
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       if (e.matches) {
-        applyLightTheme();
+        applyDarkTheme();
+      } else {
+        removeDarkTheme();
       }
     });
   }, []);
+
   return (
-    <Flowbite theme={{ dark: false }}>
+    // <Flowbite theme={{ dark: false }}>
+    //   <>
+    //     <Router />
+    //   </>
+    // </Flowbite>
+
+    <Flowbite>
       <>
         <Router />
       </>
