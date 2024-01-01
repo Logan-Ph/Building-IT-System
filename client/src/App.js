@@ -21,7 +21,6 @@ function App() {
   //     }
   //   });
   // }, []);
-
   useEffect(() => {
     function applyDarkTheme() {
       document.documentElement.classList.add('dark');
