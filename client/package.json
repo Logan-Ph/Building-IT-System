@@ -43,6 +43,7 @@
     "swiper": "^11.0.5",
     "tailwind-accent-color": "^1.0.2",
     "tw-elements": "^1.1.0",
+    "vercel": "^33.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
