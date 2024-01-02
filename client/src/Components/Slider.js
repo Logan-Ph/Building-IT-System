@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import axios from 'axios';
-import 'swiper/css/navigation';
-import "swiper/css";
+// import 'swiper/css/navigation';
+// import "swiper/css";
 import '../css/homepage.css'
 
 // import required modules
