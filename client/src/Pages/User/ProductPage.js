@@ -1,4 +1,3 @@
-import "swiper/css";
 import { Navigate, useParams } from "react-router-dom"
 import { useState, useEffect, useCallback, useContext } from 'react'
 import axios from "axios"
@@ -12,7 +11,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { UserContext } from "../../Context/UserContext";
 import { MessagesSquare, Store } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import LoadingPage from "./LoadingPage";
 const recommendClient = recommend('DN0WBRQ8A3', '329a2a4f7a299b7d02bbc2fbd6d1da55');
 const indexName = 'rBuy';
