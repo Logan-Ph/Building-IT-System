@@ -44,7 +44,7 @@ export default function VendorEditPostingProduct() {
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await axios.get(`https://building-it-system-server.vercel.app/edit-product/${params.id}`, { withCredentials: true });
+      const response = await axios.get(`http://localhost:4000/edit-product/${params.id}`, { withCredentials: true });
       setProduct(response.data.product);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -71,7 +71,7 @@ export default function VendorEditPostingProduct() {
 
   async function axiosPostData() {
     setLoading(true)
-    await axios.post(`https://building-it-system-server.vercel.app/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+    await axios.post(`http://localhost:4000/update-product/${params.id}`, data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(res => {
         setMsg(res.data)
         setError('')

@@ -37,7 +37,7 @@ export default function VendorMyProduct() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("https://building-it-system-server.vercel.app/manage-product", { withCredentials: true });
+      const response = await axios.get("http://localhost:4000/manage-product", { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -45,7 +45,7 @@ export default function VendorMyProduct() {
   };
 
   const handleDelete = async (productID) => {
-    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productID}`;
+    const apiUrl = `http://localhost:4000/delete-product/${productID}`;
     try {
       await axios.delete(apiUrl, {
         headers: {

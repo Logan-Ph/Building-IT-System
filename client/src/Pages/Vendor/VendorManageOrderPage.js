@@ -19,7 +19,7 @@ export default function ManageOrderPage() {
 
     const getOrders = useCallback(async () => {
         try {
-            const res = await axios.get("https://building-it-system-server.vercel.app/manage-order", { withCredentials: true })
+            const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
             setOrders(res.data.orders)
         }
         catch (error) {

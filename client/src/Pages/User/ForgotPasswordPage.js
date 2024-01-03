@@ -50,7 +50,7 @@ export default function ForgotPassword() {
         }
         if (!email) { setError('The field is empty'); return }
         if (!checkBox) { setError('The field is empty'); return }
-        await axios.post("https://building-it-system-server.vercel.app/forgot-password", data, { withCredentials: true })
+        await axios.post("http://localhost:4000/forgot-password", data, { withCredentials: true })
             .then(res => { setMsg(res.data.msg) })
             .catch(er => { console.log(er) });
     }

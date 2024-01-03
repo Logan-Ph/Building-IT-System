@@ -13,7 +13,7 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   const replyComment = async (commentId) => {
     try {
-      const res = await axios.post(`https://building-it-system-server.vercel.app/product/${commentId}/reply-comment`, { replyText: replyText }, { withCredentials: true });
+      const res = await axios.post(`http://localhost:4000/product/${commentId}/reply-comment`, { replyText: replyText }, { withCredentials: true });
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 3000,
@@ -45,7 +45,7 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   const fetchComments = useCallback(async () => {
     try {
-      const res = await axios.get(`https://building-it-system-server.vercel.app/product/${product._id}/view-comment`, { withCredentials: true });
+      const res = await axios.get(`http://localhost:4000/product/${product._id}/view-comment`, { withCredentials: true });
       setComments(res.data.comments);
     } catch (error) {
       console.error("Error fetching comments", error);
@@ -54,7 +54,7 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   const likeComment = async (commentId) => {
     try {
-      await axios.post(`https://building-it-system-server.vercel.app/product/${commentId}/like`, {}, { withCredentials: true });
+      await axios.post(`http://localhost:4000/product/${commentId}/like`, {}, { withCredentials: true });
       setTimeout(() => {
         window.location.reload();
       }, 1000);

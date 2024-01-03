@@ -11,7 +11,7 @@ export default function CheckoutPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-server.vercel.app/checkout", { withCredentials: true });
+      const res = await axios.get("http://localhost:4000/checkout", { withCredentials: true });
       setCheckoutInfo(res.data.checkoutInfo)
     } catch (er) {
       setError(er)

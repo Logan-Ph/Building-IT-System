@@ -43,6 +43,7 @@ import aa from 'search-insights';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 import ShipperHeader from "./ShipperHeader";
 import LoadingPage from "../Pages/User/LoadingPage";
+import ThankForOrderPage from "../Pages/User/ThankForOrderPage"
 
 const searchClient = algoliasearch(
   "DN0WBRQ8A3",
@@ -176,6 +177,10 @@ export default function Router() {
         {
           path: "/search/:query/:category/:price",
           element: <SearchResultPage />,
+        },
+        {
+          path: "/thankfororder",
+          element: <ThankForOrderPage />,
         },
       ],
     },

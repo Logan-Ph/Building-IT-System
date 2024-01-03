@@ -63,7 +63,7 @@ export default function UserProfile() {
 
     async function axiosPostData() {
         try {
-            await axios.post('https://building-it-system-server.vercel.app/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
                 .then(res => {
                     setMsg(res.data)
                     setError('')
@@ -89,7 +89,7 @@ export default function UserProfile() {
 
     return (
         <>
-            {!user && <Navigate to="/" replace/>}
+            {user === null && <Navigate to="/" replace />}
             <ToastContainer
                 position="top-center"
                 autoClose={2000}
