@@ -154,7 +154,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
             <div className="flex items-center justify-center w-full lg:md:w-1/2">
                 <img
                     alt="ecommerce"
-                    className="p-7 lg:md:w-[450px] lg:md:h-[450px] sm:h-auto xs:h-auto rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto "
+                    className="p-7 lg:md:w-[450px] lg:md:h-[450px] sm:h-auto xs:h-auto rounded-lg shadow-md hover:shadow-2xl transition duration-500 mx-auto scale-90 "
                     src={product.image_link}
                 />
             </div>
@@ -233,7 +233,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <Modal.Header>
                                 <div>
                                     <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                    
+
                                 </div>
 
                             </Modal.Header>

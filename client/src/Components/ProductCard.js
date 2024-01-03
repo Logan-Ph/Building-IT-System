@@ -89,7 +89,7 @@ export default function ProductCard({ product }) {
                         <span><i className="fa-solid fa-star"></i></span>
                         <span><i className="fa-solid fa-star"></i></span>
                     </div>
-                    <div className="text-xs xs:text-2xs text-gray-500 block" >Rating {product.ratings}</div>
+                    <div className="text-xs xs:text-2xs text-gray-500 block">Rating {product.ratings}</div>
                 </div>
             </div>
             <span onClick={() => addProduct(product._id)} className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>

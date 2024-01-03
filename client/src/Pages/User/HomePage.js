@@ -11,7 +11,8 @@ import { Navigate } from 'react-router-dom';
 import { Carousel } from 'flowbite-react';
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import LoadingPage from './LoadingPage';
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 export default function Homepage() {
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -248,6 +249,71 @@ function MiddleBanner({ setNavigateTo }) {
             </div>
 
         </div>
+
+
+
+
+        <Swiper
+
+            breakpoints={{
+                300: {
+                    spaceBetween: 7,
+                    slidesPerView: 2,
+                },
+
+                576: {
+                    spaceBetween: 10,
+                    slidesPerView: 2,
+                },
+
+                898: {
+                    spaceBetween: 20,
+                    slidesPerView: 4,
+                },
+                1200: {
+                    spaceBetween: 15,
+                    slidesPerView: 5,
+                },
+                1259: {
+                    spaceBetween: 15,
+                    slidesPerView: 5,
+                },
+            }}
+        >
+            <div className="mt-64">
+                {/* Realated Product */}
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+
+
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+
+                <SwiperSlide>
+                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
+                </SwiperSlide>
+            </div>
+        </Swiper>
+
+
     </>
 }
 
