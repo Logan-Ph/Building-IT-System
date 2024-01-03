@@ -23,6 +23,19 @@ const index = client.initIndex('rBuy_test')
 const { OpenAI } = require('openai')
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+function authenticateToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(user.user);
+      }
+    });
+  });
+}
+
+
 const imagekit = new ImageKit({
   publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
   privateKey: "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
@@ -186,9 +199,10 @@ function sendProductReportNotificationEmail(userEmail, productName, title, descr
 }
 
 exports.loginSuccess = async (req, res) => {
-  if (req.user) {
-    const user = convertUser((await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id)));
-    const cart = await Cart.findOne({ userID: req.user._id })
+  let user = await authenticateToken(req.cookies.userToken);
+  if (user) {
+    user = convertUser((await User.findById(user._id)) || (await Vendor.findById(user._id)) || (await Shipper.findById(user._id)));
+    const cart = await Cart.findOne({ userID: user._id })
     res.status(200).json({ user: user, cart: (cart) ? cart : null });
   } else {
     res.status(500).json({ user: "", cart: null })
@@ -197,7 +211,7 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product.find({}).limit(32);
+    let product = await Product.find({}).limit(60);
     return res.json({ product: product });
   } catch (error) {
     console.log(error)
@@ -485,7 +499,10 @@ exports.verifyEmail = async (req, res) => {
 // Place the Order
 exports.placeOrder = async (req, res) => {
   try {
-    const userID = req.user._id;
+    let user = await authenticateToken(req.cookies.userToken);
+    let userID = user._id;
+    user = await User.findById(user._id, { name: 1 });
+
     if (req.body.checkoutInfo.isRemember) {
       await User.findByIdAndUpdate(userID, { city: req.body.checkoutInfo.city, phoneNumber: req.body.checkoutInfo.phoneNumber, district: req.body.checkoutInfo.district, ward: req.body.checkoutInfo.ward, streetAddress: req.body.checkoutInfo.streetAddress })
     }
@@ -519,7 +536,7 @@ exports.placeOrder = async (req, res) => {
           price: cartItem.product.price,
           product_name: cartItem.product.product_name
         })),
-        userName: req.user.name,
+        userName: user.name,
         shippingAddress: req.body.streetAddress,
         contactNumber: req.body.phoneNumber
       });
@@ -539,10 +556,11 @@ exports.placeOrder = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
-  if (!req.user) {
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) {
     return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
   }
-  const cart = await Cart.findOne({ userID: req.user._id })
+  const cart = await Cart.findOne({ userID: user._id })
 
   const product = await Product.findById(req.params.id);
   if (!product) {
@@ -551,7 +569,7 @@ exports.addProduct = async (req, res) => {
 
   if (!cart) {
     const newCart = new Cart({
-      userID: new mongoose.Types.ObjectId(req.user._id),
+      userID: new mongoose.Types.ObjectId(user._id),
       products: [{
         product: product._id,
         quantity: (req.query.quantity) ? req.query.quantity : 1,
@@ -573,7 +591,8 @@ exports.addProduct = async (req, res) => {
 
 exports.removeProduct = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userID: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const cart = await Cart.findOne({ userID: user._id })
     const product = await Product.findById(req.params.id);
     cart.removeProduct(product._id);
     return res.status(200).json({ cart: cart })
@@ -585,7 +604,8 @@ exports.removeProduct = async (req, res) => {
 
 exports.removeAllProducts = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userID: req.user._id });
+    let user = await authenticateToken(req.cookies.userToken);
+    const cart = await Cart.findOne({ userID: user._id });
     req.body.productIds.forEach(productId => {
       cart.products = cart.products.filter(p => p.product._id.toString() !== productId.toString());
     });
@@ -598,7 +618,8 @@ exports.removeAllProducts = async (req, res) => {
 
 exports.manageOrder = async (req, res) => {
   try {
-    const orders = await Order.find({ vendorID: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const orders = await Order.find({ vendorID: user._id })
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
   } catch {
     return res.status(500).json({ error: "Cannot find order. " })
@@ -653,9 +674,10 @@ exports.confirmOrder = async (req, res) => {
 
 exports.getVendorDashboard = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const orders = await Order.aggregate([
       {
-        $match: { vendorID: new mongoose.Types.ObjectId(req.user._id) }
+        $match: { vendorID: new mongoose.Types.ObjectId(user._id) }
       },
       {
         $group: {
@@ -677,7 +699,8 @@ exports.getVendorDashboard = async (req, res) => {
 
 exports.cartPage = async (req, res) => {
   try {
-    const cart = await Cart.find({ userID: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const cart = await Cart.find({ userID: user._id })
     const products = cart[0].products
     return res.status(200).json({ products: products })
   } catch {
@@ -686,22 +709,32 @@ exports.cartPage = async (req, res) => {
 }
 
 exports.checkout = async (req, res) => {
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) {
+    return res.status(500).json({ error: "You need to login first" })
+  }
+  user = await User.findById(user._id, { phoneNumber: 1, city: 1, district: 1, ward: 1, streetAddress: 1 })
   const checkoutInfo = {
-    phoneNumber: req.user.phoneNumber,
-    city: req.user.city,
-    district: req.user.district,
-    ward: req.user.ward,
-    streetAddress: req.user.streetAddress,
+    phoneNumber: user.phoneNumber,
+    city: user.city,
+    district: user.district,
+    ward: user.ward,
+    streetAddress: user.streetAddress,
   }
   return res.status(200).json({ checkoutInfo: checkoutInfo })
 }
 
 exports.logout = (req, res) => {
-  req.session.destroy();
-  res.clearCookie('accessToken');
-  return res.json('Logged out successfully');
+  try{
+    res.clearCookie("userToken");
+    return res.json('Logged out successfully');
+  }catch{
+    console.log(error)
+    return res.status(500).json({ error: "Cannot logout" })
+  }
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.updateUser = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -736,9 +769,11 @@ exports.updateUser = async (req, res) => {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.updateVendor = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.user._id);
+    let vendor = await authenticateToken(req.cookies.userToken);
+    vendor = await Vendor.findById(vendor._id, { img: 1, address: 1, phoneNumber: 1 });
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),
@@ -764,6 +799,7 @@ exports.updateVendor = async (req, res) => {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.updateShipper = async (req, res) => {
   try {
     const shipper = await Shipper.findOne({ email: req.body.email });
@@ -831,9 +867,11 @@ exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.editStore = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.user._id);
+    let vendor = await authenticateToken(req.cookies.userToken);
+    vendor = await Vendor.findById(vendor._id, { coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
     const uploadImage = async (file) => {
       try {
         const response = await imagekit.upload({
@@ -875,16 +913,19 @@ exports.editStore = async (req, res) => {
 
 exports.getStoreInfo = async (req, res) => {
   try {
-    const numberOfProducts = await Product.find({ owner: req.user._id }).countDocuments();
-    const numberOfFollowers = await FollowerList.find({ vendorID: req.user._id }, { followers: 1 });
+    let user = await authenticateToken(req.cookies.userToken);
+    const numberOfProducts = await Product.find({ owner: user._id }).countDocuments();
+    const numberOfFollowers = await FollowerList.find({ vendorID: user._id }, { followers: 1 });
     return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch {
     return res.status(500).json({ error: "Cannot find store info" })
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.addNewProduct = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const id = new mongoose.Types.ObjectId();
     const uploadImage = async () => {
       try {
@@ -907,7 +948,7 @@ exports.addNewProduct = async (req, res) => {
 
     const newProduct = new Product({
       _id: id,
-      owner: req.user._id,
+      owner: user._id,
       product_name: req.body.productName,
       category: req.body.category,
       price: req.body.price,
@@ -1026,7 +1067,8 @@ exports.updateProduct = async (req, res) => {
 
 exports.manageProduct = async (req, res) => {
   try {
-    const products = await Product.find({ owner: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const products = await Product.find({ owner: user._id })
     return res.status(200).json((products) ? { products: products } : { products: "" });
   } catch {
     return res.status(500).json({ error: "Cannot find products." })
@@ -1086,6 +1128,7 @@ exports.reportPage = async (req, res) => {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.uploadHomepageCarousel = async (req, res) => {
   try {
     let banner = await HomepageBanner.findOne({ title: req.body.title })
@@ -1120,11 +1163,12 @@ exports.uploadHomepageCarousel = async (req, res) => {
 
 exports.getThreads = async (req, res) => {
   try {
-    const threads = await Thread.find({ $or: [{ userId: req.user._id }, { vendorId: req.user._id }] }).populate('content');
+    let user = await authenticateToken(req.cookies.userToken);
+    const threads = await Thread.find({ $or: [{ userId: user._id }, { vendorId: user._id }] }).populate('content');
     let users = [];
     for (const thread of threads) {
-      const user = convertUser((req.user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
-      users.push(user);
+      let chatUser = convertUser((user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
+      users.push(chatUser);
     }
     return res.status(200).json({ threads: threads, users: users });
   } catch (error) {
@@ -1135,13 +1179,13 @@ exports.getThreads = async (req, res) => {
 exports.addMessage = async (req, res) => {
   try {
     const threadId = new mongoose.Types.ObjectId(req.params.id);
-
+    let user = await authenticateToken(req.cookies.userToken);
     const thread = await Thread.findById(threadId);
     if (!thread) return res.status(500).json({ error: "Thread not found" });
 
     const message = new Message({
       content: req.body.content,
-      sender: (req.user.role === "User") ? "User" : "Vendor",
+      sender: (user.role === "User") ? "User" : "Vendor",
     })
 
     await message.save();
@@ -1155,7 +1199,10 @@ exports.addMessage = async (req, res) => {
 
 exports.createThread = async (req, res) => {
   try {
-    const { _id: userId, role } = req.user;
+    let user = await authenticateToken(req.cookies.userToken);
+    user = await User.findById(user._id, { role: 1, img: 1 });
+    const userId = user._id;
+    const role = user.role;
     const otherUserId = role === "User" ? req.body.vendorId : req.body.userId;
 
     let thread = await Thread.findOne({ $or: [{ userId, vendorId: otherUserId }, { vendorId: userId, userId: otherUserId }] }).populate('content');
@@ -1184,7 +1231,8 @@ exports.getAdminDashboard = async (req, res) => {
 
 exports.userOrder = async (req, res) => {
   try {
-    let orders = await Order.find({ userId: req.user._id });
+    let user = await authenticateToken(req.cookies.userToken);
+    let orders = await Order.find({ userId: user._id });
     let vendorIds = [...new Set(orders.map(order => order.vendorID))];
     let vendors = await Vendor.find({ _id: { $in: vendorIds } }, { businessName: 1 });
     let vendorNameMap = {};
@@ -1231,9 +1279,10 @@ exports.getShipperDashboard = async (req, res) => {
 
 exports.reportVendor = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const newReport = new Report({
-      user: req.user._id,
+      user: user._id,
       vendor: req.body.vendorID,
       title: req.body.title,
       description: req.body.description,
@@ -1265,14 +1314,15 @@ exports.reportVendor = async (req, res) => {
 
 exports.reportProduct = async (req, res) => {
   try {
-    if (!req.user) {
+    let user = await authenticateToken(req.cookies.userToken);
+    if (!user) {
       return res.status(500).send('Please log in or create an account to report');
     }
     let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const productName = (await Product.findById(req.body.product, { product_name: 1 })).product_name;
     const newReport = new Report({
-      user: req.user._id,
+      user: user._id,
       vendor: req.body.vendorID,
       product: req.body.product,
       title: req.body.title,
@@ -1291,6 +1341,7 @@ exports.reportProduct = async (req, res) => {
 }
 exports.followVendor = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const vendor = await Vendor.findById(req.body.vendorID)
     const followerList = await FollowerList.findOne({ vendorID: req.body.vendorID })
     if (!vendor) {
@@ -1300,19 +1351,19 @@ exports.followVendor = async (req, res) => {
       const newFollowerList = new FollowerList({
         vendorID: req.body.vendorID,
         followers: [{
-          userID: req.user._id
+          userID: user._id
         }]
       })
       await newFollowerList.save()
     } else {
       const isFollowing = await FollowerList.exists({
         vendorID: req.body.vendorID,
-        "followers.userID": req.user._id
+        "followers.userID": user._id
       });
       if (isFollowing) {
         return res.status(400).json({ error: "User is already following the vendor." });
       }
-      followerList.followers.push({ userID: req.user._id });
+      followerList.followers.push({ userID: user._id });
       await followerList.save();
     }
     return res.status(200).json({ following: true });
@@ -1394,7 +1445,8 @@ exports.viewComments = async (req, res) => {
 exports.postComment = async (req, res) => {
   const productId = req.params.id;
   const product = await Product.findById(productId);
-  if (!req.user) {
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) {
     return res.status(500).json({ error: "Please log in or create an account to comment" })
   }
   if (!product) {
@@ -1402,7 +1454,7 @@ exports.postComment = async (req, res) => {
   }
   const { newComment, title } = req.body;
   try {
-    const user = await User.findById(req.user._id);
+    user = await User.findById(user._id, { name: 1, img: 1 });
     await Comment.create({
       title: title,
       productId: new mongoose.Types.ObjectId(productId),
@@ -1417,14 +1469,15 @@ exports.postComment = async (req, res) => {
 }
 
 exports.replyComment = async (req, res) => {
-  if (!req.user) return res.status(401).json({ error: "Please log in or create an account to reply" });
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) return res.status(401).json({ error: "Please log in or create an account to reply" });
   const { replyText } = req.body;
   const comment_id = req.params.id;
   try {
     const comment = await Comment.findById(comment_id);
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
-    const user = req.user.role === 'User' ? await User.findById(req.user._id) : await Vendor.findById(req.user._id);
+    user = user.role === 'User' ? await User.findById(user._id) : await Vendor.findById(user._id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const reply = {
@@ -1443,14 +1496,15 @@ exports.replyComment = async (req, res) => {
 };
 
 exports.likeComment = async (req, res) => {
-  if (!req.user) return res.status(500).json({ error: "Please log in or create an account to like" });
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) return res.status(500).json({ error: "Please log in or create an account to like" });
   const commentId = req.params.id;
   try {
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
-    await comment.likeComment(req.user._id);
+    await comment.likeComment(user._id);
     return res.status(200).json({ msg: "Like comment successfully" });
   } catch (error) {
     res.status(500).json({ message: 'There was an error updating the comment' });
