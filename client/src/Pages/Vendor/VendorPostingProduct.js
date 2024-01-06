@@ -86,7 +86,7 @@ export default function VendorPostingProduct() {
   }, [error, msg]);
 
   return (
-    <div className="container mx-auto my-8 px-4 rounded-lg bg-gray-100 shadow p-4 max-w-4xl">
+    <div className="container mx-auto px-4 rounded-lg bg-gray-100 shadow p-4 max-w-full">
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -99,7 +99,7 @@ export default function VendorPostingProduct() {
         pauseOnHover={false}
         theme="light"
       />
-      <form>
+      <form className="container mx-auto my-4 px-4 rounded-lg bg-white shadow p-4 max-w-5xl" >
         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
         <div class="space-y-12">
           <div class="border-b border-gray-900/10 pb-12">
