@@ -104,7 +104,9 @@ export default function SRProductCard({ hit, user }) {
           </div>
         </div>
       </a>
-      <span className="block w-full my-4 py-1 text-center text-md font-semibold text-white bg-red-500 rounded-sm border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded-sm transition" onClick={() => handleAddedToCartObjectIDsAfterSearch(hit)}>Add to cart</span>
+      <span className="block w-full my-4 py-1 text-center text-sm font-semibold text-white bg-red-500 rounded-lg border border-red-500  hover:bg-transparent hover:text-red-500 hover:rounded-lg transition">Buy Now</span>
+
+      <span className="block w-full my-4 py-1 text-center text-sm font-semibold text-white  bg-[#EAB308]  border rounded-lg  border-[#EAB308]  hover:bg-transparent hover:text-[#EAB308] hover:rounded-lg transition" onClick={() => handleAddedToCartObjectIDsAfterSearch(hit)}>Add Cart</span>
     </div>
   </>
 }

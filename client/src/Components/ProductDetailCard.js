@@ -350,10 +350,10 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
                     </div>
                     <div className="flex">
-                        <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-black font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
+                        <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-white font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
                             Add to Cart
                         </button>
-                        <button onClick={() => buyProduct(product)} className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-black font-medium bg-[#FF9209] border-0 focus:outline-none hover:bg-[#FF6C22] rounded-lg">
+                        <button onClick={() => buyProduct(product)} className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-white font-medium bg-red-500 border-0 focus:outline-none hover:bg-red-500 rounded-lg">
                             Buy Now
                         </button>
                     </div>
