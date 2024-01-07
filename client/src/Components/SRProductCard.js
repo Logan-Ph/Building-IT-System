@@ -1,16 +1,88 @@
+import axios from 'axios';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { CartContext } from '../Context/CartContext';
 import aa from 'search-insights';
 
 export default function SRProductCard({ hit, user }) {
+  const [quantity, setQuantity] = useState(1)
+  const [error, setError] = useState('')
+  const [msg, setMsg] = useState('')
+  const { setCart } = useContext(CartContext)
+
+  const addProduct = async (productId) => {
+    notify()
+    try {
+      const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
+      setMsg(res.data.msg);
+      setError('');
+      setQuantity(1);
+      setCart(res.data.cart);
+    } catch (er) {
+      setError(er.response.data.error);
+      setMsg('');
+    }
+  }
+
+  const notify = useCallback(() => {
+    if (error) {
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+
+    if (msg) {
+      toast.success(msg, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        pauseOnHover: false,
+        theme: "light",
+      });
+    }
+  }, [error, msg]);
+
+  useEffect(() => {
+    if (error || msg) {
+      notify();
+    }
+  }, [error, msg, notify]);
+
   const handleClickedObjectIDsAfterSearch = (hit) => {
     aa('clickedObjectIDsAfterSearch', {
       userToken: user ? user._id : null,
-      eventName: 'Product Clicked',
+      eventName: 'Product clicked after search',
       index: 'rBuy',
       queryID: hit.__queryID,
       objectIDs: [hit.objectID],
       positions: [hit.__position],
     });
   }
+
+  const handleAddedToCartObjectIDsAfterSearch = (hit) => {
+    aa('addedToCartObjectIDsAfterSearch', {
+      userToken: user ? user._id : null,
+      eventName: 'Product added after Search',
+      index: 'rBuy',
+      queryID: hit.__queryID,
+      objectIDs: [hit.objectID],
+      objectData: [{ price: hit.price, quantity: 1 }],
+      value: hit.price,
+      currency: 'USD',
+    });
+    addProduct(hit.objectID);
+  }
+
   return <>
     <div className="bg-white shadow-md p-4">
       <a className="group relative" href={`/product/${hit.objectID}`} onClick={() => { handleClickedObjectIDsAfterSearch(hit) }}>
@@ -30,9 +102,9 @@ export default function SRProductCard({ hit, user }) {
             <p className="mt-1 text-sm font-light text-gray-700">{hit.category}</p>
             <p className="text-xs font-medium text-[#fac800f1] mt-4">Rating: {hit.ratings}</p>
           </div>
-
         </div>
       </a>
+      <span className="block w-full my-4 py-1 text-center text-md font-semibold text-white bg-red-500 rounded-sm border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded-sm transition" onClick={() => handleAddedToCartObjectIDsAfterSearch(hit)}>Add to cart</span>
     </div>
   </>
 }

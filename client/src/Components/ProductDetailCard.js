@@ -1,16 +1,18 @@
 'use client';
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Rating } from 'flowbite-react';
 import { Navigate } from "react-router";
 import { Modal } from "flowbite-react";
+import { CartContext } from "../Context/CartContext";
 
 export default function ProductDetailCard({ product, vendorName, user }) {
     const [quantity, setQuantity] = useState(1)
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const [navigateTo, setNavigateTo] = useState('')
+    const { setCart } = useContext(CartContext)
 
     const [openModal, setOpenModal] = useState(false)
     const [title, setTitle] = useState('');
@@ -121,6 +123,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
             setMsg(res.data.msg);
             setError('');
             setQuantity(1);
+            setCart(res.data.cart)
         } catch (er) {
             setError(er.response.data.error);
             setMsg('');

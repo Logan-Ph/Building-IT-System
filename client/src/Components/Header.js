@@ -7,8 +7,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
-import { PackageCheck, ShoppingBag } from 'lucide-react';
-import LoadingPage from '../Pages/User/LoadingPage';
+import { PackageCheck, ShoppingBag, MessageCircle } from 'lucide-react';
 
 export default function Header() {
   const { cart, setCart } = useContext(CartContext)
@@ -147,6 +146,12 @@ export default function Header() {
                 </div>
                 {user && (
                   <>
+                    <a className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/chat'>
+                      <MessageCircle color='#eb6767' size={26} />
+                      <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">
+                        Chat
+                      </span>
+                    </a>
                     <a className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/user-order'>
                       <PackageCheck color='#eb6767' size={26} />
                       <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">

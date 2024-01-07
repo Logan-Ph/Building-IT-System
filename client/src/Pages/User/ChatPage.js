@@ -228,7 +228,6 @@ function ContactList({ users, searchTerm, toggleChatArea, threadIndex }) {
         </div>}
         <div className="ml-3 flex-1 truncate ...">
           <h2 className="text-lg font-semibold">{user.businessName || user.name}</h2>
-          <p className="text-gray-600">STATIC</p>
         </div>
       </div>
     ))

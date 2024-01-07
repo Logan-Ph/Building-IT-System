@@ -11,6 +11,7 @@ import { useHits, useRefinementList } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
 import { UserContext } from '../../Context/UserContext';
+import { ToastContainer } from 'react-toastify';
 
 export default function Example() {
   const { hits, sendEvent } = useHits();
@@ -57,6 +58,18 @@ export default function Example() {
 
   return (
     <div className="bg-gray-100">
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       <div>
         {/* Mobile filter dialog */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
