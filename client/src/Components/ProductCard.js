@@ -67,14 +67,15 @@ export default function ProductCard({ product }) {
                 <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto">
                     <img src={product.image_link} className="object-full h-full w-full scale-75" alt={product.product_name} />
 
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
-                    <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
-                        <i className="fa-solid fa-magnifying-glass"></i>
-                    </Link>
-                    <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
-                        <i className="fa-regular fa-heart"></i>
-                    </Link>
+
+                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
+                        <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                            <i className="fa-solid fa-magnifying-glass"></i>
+                        </Link>
+                        <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                            <i className="fa-regular fa-heart"></i>
+                        </Link>
+                    </div>
                 </div>
             </div>
             <div className="pt-4 pb-3 px-4">

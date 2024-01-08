@@ -118,29 +118,40 @@ export default function SRProductCard({ hit, user }) {
   }
 
   return <>
-    <div className="bg-white shadow-md p-4">
-      <Link className="group relative" to={`/product/${hit.objectID}`} onClick={() => { handleClickedObjectIDsAfterSearch(hit) }}>
-        <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] sm:w-3/4 sm:mx-auto xs:w-3/4 xs:mx-auto">
-          <img src={hit.image_link} alt="Front of men&#039;s Basic Tee in black." className="h-full w-full object-fit object-center scale-75 sm:scale-75 xs:scale-75" />
-        </div>
-        <hr className='border border-gray-200 mt-4'></hr>
-        <div className="mt-4 flex items-center">
-          <div>
-            <h3 className="text-md text-gray-900 line-clamp-1">
-              {/* <span> */}
-              <span aria-hidden="true" className="absolute inset-0"></span>
-              {hit.product_name}
-              {/* </span> */}
-            </h3>
-            <p className="mt-1 text-md font-bold text-[#E61E2A]">${hit.price}</p>
-            <p className="mt-1 text-sm font-light text-gray-700">{hit.category}</p>
-            <p className="text-xs font-medium text-[#fac800f1] mt-4">Rating: {hit.ratings}</p>
+
+
+    <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 
+    group xs:mx-auto"
+      key={hit.objectID}>
+        
+    <div className="bg-white p-4">
+      <div className="relative">
+        <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto">
+          <img src={hit.image_link} className="object-full h-full w-full scale-75" alt={hit.product_name} />
+
+          <hr className='border border-gray-200 mt-4'></hr>
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
+            <Link to={`/product/${hit.objectID}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </Link>
+            <Link to={`/product/${hit.objectID}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+              <i className="fa-regular fa-heart"></i>
+            </Link>
           </div>
         </div>
-      </Link>
-      <span className="block w-full my-4 py-1 text-center text-sm font-semibold text-white bg-red-500 rounded-lg border border-red-500  hover:bg-transparent hover:text-red-500 hover:rounded-lg transition" onClick={() => handlePurchasedObjectIDsAfterSearch(hit)}>Buy Now</span>
+      </div>
+      <div className="pt-4 pb-3 px-4">
+        <Link to={`/product/${hit.objectID}`}>
+          <h4 className="text-md text-gray-900 line-clamp-2 mt-2">{hit.product_name}</h4>
+        </Link>
+        <p className="mt-1 text-md font-bold text-[#E61E2A]">${hit.price}</p>
+        <p className="mt-1 text-sm font-light text-gray-700 mb-2">{hit.category}</p>
+        <p className="text-xs font-medium text-[#fac800f1] mt-4">Rating: {hit.ratings}</p>
 
-      <span className="block w-full my-4 py-1 text-center text-sm font-semibold text-white  bg-[#EAB308]  border rounded-lg  border-[#EAB308]  hover:bg-transparent hover:text-[#EAB308] hover:rounded-lg transition" onClick={() => handleAddedToCartObjectIDsAfterSearch(hit)}>Add to Cart</span>
+      </div>
+      <span onClick={() => addProduct(hit.objectID)} className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>
     </div>
+    
   </>
 }
