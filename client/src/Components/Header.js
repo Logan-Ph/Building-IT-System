@@ -182,7 +182,7 @@ export default function Header() {
               </div>
             </div>
             {/* if the user login this will disappear */}
-            {!user && <Link className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white" href='/login'>
+            {!user && <Link className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white" to='/login'>
               <span className="text-md font-medium text-black">Sign in</span>
             </Link>}
           </div>
