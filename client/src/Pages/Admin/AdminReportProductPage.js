@@ -40,7 +40,9 @@ export default function ReportedProductPage() {
     <>
       <section className="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
-
+          <h1 className="m-2 text-xl font-bold text-center xs:text-md">
+            {(reports.length) ? "Reported" : ""} Product Information
+          </h1>
           {/* <!-- Vendor --> */}
           <ReportedVendorCard vendor={vendor} product={product} reports={reports} />
         </div>
@@ -78,9 +80,11 @@ function ReportedVendorCard({ vendor, product, reports }) {
         <div className="text-md text-gray-500 mx-2 line-clamp-2 xs:mx-0 xs:text-sm">{vendor.address}</div>
       </div>
       <hr className="my-2" />
-      <ReportedTableComponent product={product} />
-      <hr className="my-2" />
-      <h1 className="m-0 font-bold text-sm text-gray-900">Reported information in details </h1>
+      <ReportedTableComponent product={product} reports={reports} />
+      {reports.length > 0 && <>
+        <hr className="my-2" />
+        <h1 className="m-0 font-bold text-sm text-gray-900">Reported information in details </h1>
+      </>}
       <div>
         <ReportedProductInfo reports={reports} />
       </div>
@@ -88,7 +92,7 @@ function ReportedVendorCard({ vendor, product, reports }) {
   </>
 }
 
-function ReportedTableComponent({ product }) {
+function ReportedTableComponent({ product, reports }) {
   return (
     <>
       <div>
@@ -101,13 +105,12 @@ function ReportedTableComponent({ product }) {
             <p className="font-light text-gray-900 text-sm">Name: <span className="ms-2 font-medium">{product.product_name}</span></p>
             <p className="font-light text-gray-900 text-sm">Category: <span className="ms-2 font-medium">{product.category}</span></p>
             <p className="font-light text-gray-900 text-sm">Price: <span className="ms-8 font-medium">${product.price}</span></p>
-            <p className="font-light text-gray-900 text-sm">Rating: <span className="ms-6 font-medium">4.0 stars</span></p>
-            <p className="font-light text-gray-900 text-sm">Sold: <span className="ms-9 font-medium">100</span></p>
-            <p className="font-light text-gray-900 text-sm">Status: <span className="ms-7 font-medium text-red-500">Reported</span></p>
+            <p className="font-light text-gray-900 text-sm">Rating: <span className="ms-6 font-medium">{product.ratings} stars</span></p>
+            <p className="font-light text-gray-900 text-sm">Status: <span className={reports.length > 0 ? "ms-7 font-medium text-red-500" : "ms-7 font-medium"}> {(reports.length > 0) ? "Reported" : "No report"}</span></p>
           </div>
         </div>
-        <DeleteButtonPopup />
-      </div>
+        <DeleteButtonPopup product={product} />
+      </div >
     </>
   );
 }
@@ -153,10 +156,28 @@ function ReportedProductInfo({ reports }) {
   );
 }
 
-function DeleteButtonPopup() {
+function DeleteButtonPopup({ product }) {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [openModal, setOpenModal] = useState(false);
+
+  const handleDelete = async () => {
+    const apiUrl = `http://localhost:4000/delete-product/${product._id}`;
+    try {
+      await axios.delete(apiUrl, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(res => {
+        setMsg(res.data)
+        setError('')
+      })
+        .catch(er => { setError(er.response.data); setMsg() });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   return (
     <>
       <div className="flex justify-end">
@@ -172,7 +193,7 @@ function DeleteButtonPopup() {
               Are you sure you want to delete this product?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => setOpenModal(false)}>
+              <Button color="failure" onClick={() => { setOpenModal(false); handleDelete() }}>
                 Yes, I'm sure
               </Button>
               <Button color="gray" onClick={() => { setOpenModal(false) }}>
