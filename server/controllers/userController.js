@@ -676,7 +676,7 @@ exports.confirmOrder = async (req, res) => {
 exports.getVendorDashboard = async (req, res) => {
   try {
     let user = await authenticateToken(req.cookies.userToken);
-    const orders = await Order.aggregate([
+    const ordersCount = await Order.aggregate([
       {
         $match: { vendorID: new mongoose.Types.ObjectId(user._id) }
       },
@@ -687,12 +687,15 @@ exports.getVendorDashboard = async (req, res) => {
         }
       }
     ]);
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: user._id }, { followers: 1 })
+    const orders = await Order.find({ vendorID: user._id });
+    const income = orders.reduce((total, order) => total + order.products.reduce((total, product) => total + Number(product.price) * product.quantity, 0), 0);
 
     const ordersCountByStatus = {};
-    orders.forEach(orderGroup => {
+    ordersCount.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
     });
-    res.status(200).json({ ordersByStatus: ordersCountByStatus });
+    res.status(200).json({ ordersByStatus: ordersCountByStatus, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income, orders: orders });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

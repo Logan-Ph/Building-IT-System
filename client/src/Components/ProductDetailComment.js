@@ -56,12 +56,10 @@ export default function ProductDetailComment({ product }) {
         <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-2">
             Customer Reviews
         </p>
-        <Rating className="mb-2 ">
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star filled={false} />
+        <Rating size="mb-2">
+            {[...Array(5)].map((_, i) => (
+                <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-6 !h-6" />
+            ))}
             <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
                 {product.ratings} out of 5
             </p>

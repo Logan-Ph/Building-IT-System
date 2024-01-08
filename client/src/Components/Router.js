@@ -277,7 +277,7 @@ export default function Router() {
               indexName="rBuy"
               insights={true}
             >
-              <div className="h-full overflow-hidden">
+              <div className="h-screen overflow-hidden">
                 <Header />
                 <ChatPage />
               </div>
