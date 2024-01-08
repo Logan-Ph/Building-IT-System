@@ -96,7 +96,7 @@ export default function Header() {
                 className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
                 alt="logo"
               />
-              <span href='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
+              <span to='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
                 rBuy
               </span>
             </Link>
@@ -146,19 +146,19 @@ export default function Header() {
                 </div>
                 {user && (
                   <>
-                    <Link className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/chat'>
+                    <Link className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" to='/chat'>
                       <MessageCircle color='#eb6767' size={26} />
                       <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">
                         Chat
                       </span>
                     </Link>
-                    <Link className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/user-order'>
+                    <Link className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" to='/user-order'>
                       <PackageCheck color='#eb6767' size={26} />
                       <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">
                         Orders
                       </span>
                     </Link>
-                    <Link href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
+                    <Link to='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
                       <div className="relative">
                         <ShoppingBag color='#eb6767' />
                         {/* <!-- number on the cart --> */}
@@ -213,7 +213,7 @@ export default function Header() {
             </span>
           </div>
           <div>
-            {!user && <Link href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+            {!user && <Link to='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
               Become a vendor
             </Link>}
           </div>
