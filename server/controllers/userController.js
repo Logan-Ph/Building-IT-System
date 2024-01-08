@@ -1242,6 +1242,7 @@ exports.userOrder = async (req, res) => {
       jsonOrder.vendorName = vendorNameMap[order.vendorID.toString()];
       return jsonOrder;
     });
+    orders.reverse();
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find order. " })

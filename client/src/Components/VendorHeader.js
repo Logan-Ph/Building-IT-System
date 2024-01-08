@@ -2,12 +2,11 @@ import { Fragment, useCallback, useContext, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import axios from 'axios'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import LoadingPage from '../Pages/User/LoadingPage';
 
 export default function VendorHeader() {
   const { user, setUser } = useContext(UserContext)
-  const [navigateTo, setNavigateTo] = useState("");
   const [error, setError] = useState('')
 
   const fetchUser = useCallback(async () => {
@@ -20,12 +19,11 @@ export default function VendorHeader() {
     }
   }, [setUser])
 
-  const handleLogout = async () => {
-    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
-    if (res.data === "Logged out successfully") {
-      setUser(undefined)
-      setNavigateTo('/login');
-    }
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    setUser(undefined)
+    window.location.href = "/login"
   }
 
   useEffect(() => {
@@ -43,21 +41,20 @@ export default function VendorHeader() {
       {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
       {user && user.role === "Shipper" && <Navigate to={'/shipper/dashboard'} replace />}
       {error && <Navigate to={'/login'} replace />}
-      {navigateTo && <Navigate to={navigateTo} replace={true} />}
       <section>
         <div className="w-full">
           <div className="border py-3 px-6 white border-[#E61E2A]">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {/* <!-- logo --> */}
-                <a className="flex items-center lg:ml-10 " href='\vendor\dashboard'>
+                <Link className="flex items-center lg:ml-10 " to='/vendor/dashboard'>
                   <img
                     src={require("./images/logo1.png")}
                     className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
                     alt="logo" />
                   <span className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
                   </span>
-                </a>
+                </Link>
                 {/* Vendor page */}
                 <h1 className="lg:text-2xl xs:text-xs sm:text-md md:text-lg xl:text-3xl text-gray-900 flex items-center font-semibold xl:ml-12 lg:ml-10 xs:ml-1 sm:ml-2 md:ml-2">Seller Centre</h1>
               </div>
@@ -107,15 +104,15 @@ function DropdownAva({ user, handleLogout }) {
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="/edit-vendor-profile"
+                <Link
+                  to="/edit-vendor-profile"
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm'
                   )}>
                   <i className="far fa-edit mr-1"></i>
                   Shop Information
-                </a>
+                </Link>
               )}
             </Menu.Item>
 
@@ -128,7 +125,7 @@ function DropdownAva({ user, handleLogout }) {
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block w-full px-4 py-2 text-left text-sm'
                     )}
-                    onClick={handleLogout}
+                    onClick={(e) => handleLogout(e)}
                   >
                     <i className="fas fa-sign-out-alt mr-1"></i>
                     Log Out

@@ -3,7 +3,7 @@ import { useSearchBox } from 'react-instantsearch';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 import { UserContext } from '../Context/UserContext';
-import { Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import axios from 'axios';
@@ -69,11 +69,11 @@ export default function Header() {
     });
   };
 
-  const handleLogout = async () => {
-    const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
-    if (res.data === "Logged out successfully") {
-      setNavigateTo('/login');
-    }
+  const handleLogout = async (e) => {
+    e.preventDefault()
+    await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    setUser(undefined)
+    window.location.href = "/login"
   }
 
   if (user === undefined) {
@@ -90,7 +90,7 @@ export default function Header() {
         <div className="border py-3 px-6 gradient-background">
           <div className="flex justify-between">
             {/* <!-- logo --> */}
-            <a className="flex items-center lg:ml-10 " href='\'>
+            <Link className="flex items-center lg:ml-10 " to='/'>
               <img
                 src={require("./images/logo1.png")}
                 className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
@@ -99,7 +99,7 @@ export default function Header() {
               <span href='\' className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
                 rBuy
               </span>
-            </a>
+            </Link>
             <form onSubmit={submitSearch} className="ml-64 flex-1 items-center lg:flex md:hidden sm:hidden xs:hidden ">
               <input
                 type="text"
@@ -146,19 +146,19 @@ export default function Header() {
                 </div>
                 {user && (
                   <>
-                    <a className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/chat'>
+                    <Link className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/chat'>
                       <MessageCircle color='#eb6767' size={26} />
                       <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">
                         Chat
                       </span>
-                    </a>
-                    <a className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/user-order'>
+                    </Link>
+                    <Link className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400" href='/user-order'>
                       <PackageCheck color='#eb6767' size={26} />
                       <span className="text-xl font-medium lg:flex md:hidden sm:hidden xs:hidden ">
                         Orders
                       </span>
-                    </a>
-                    <a href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
+                    </Link>
+                    <Link href='/cart' className="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 text-white hover:text-gray-400 transition duration-400 mr-4 ">
                       <div className="relative">
                         <ShoppingBag color='#eb6767' />
                         {/* <!-- number on the cart --> */}
@@ -170,7 +170,7 @@ export default function Header() {
                       <span className="text-xl font-medium  lg:flex md:hidden sm:hidden xs:hidden">
                         Cart
                       </span>
-                    </a>
+                    </Link>
                   </>
                 )}
                 {/* if user login this will appear: avatar icon*/}
@@ -182,9 +182,9 @@ export default function Header() {
               </div>
             </div>
             {/* if the user login this will disappear */}
-            {!user && <a className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white" href='\login'>
+            {!user && <Link className="ml-3 lg:flex hidden cursor-pointer rounded-md border border-black h-10 px-8 hover:bg-slate-200 items-center m-auto bg-white" href='/login'>
               <span className="text-md font-medium text-black">Sign in</span>
-            </a>}
+            </Link>}
           </div>
         </div>
         <div className="flex items-center justify-between py-2">
@@ -213,9 +213,9 @@ export default function Header() {
             </span>
           </div>
           <div>
-            {!user && <a href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
+            {!user && <Link href='/register' className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 mr-10 lg:flex sm:hidden md:hidden xs:hidden">
               Become a vendor
-            </a>}
+            </Link>}
           </div>
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function Header() {
               id="sidenav-main"
             >
               <div className="flex shrink-0 px-8 items-center justify-between h-[96px]">
-                <a
+                <Link
                   className="transition-colors duration-200 ease-in-out flex items-center"
                   href="/"
                 >
@@ -241,7 +241,7 @@ export default function Header() {
                   <span className="pl-3.5 font-semibold text-white lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">
                     rBuy
                   </span>
-                </a>
+                </Link>
                 <button className="navbar-close" onClick={openCloseBurger}>
                   <svg
                     className="h-6 w-6 text-gray-400 cursor-pointer hover:text-gray-500"
@@ -437,13 +437,13 @@ export default function Header() {
                 </div>
 
               </div>
-              <a className="mt-5" href={user ? "/logout" : "/login"}>
+              <Link className="mt-5" href={user ? "/logout" : "/login"}>
                 <div className="mt-40 flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
                   <span className="text-md font-medium text-black">
                     {user ? "logout" : "Sign in"}
                   </span>
                 </div>
-              </a>
+              </Link>
             </aside>
           </div>
         </div>
@@ -483,15 +483,15 @@ function DropdownAva({ user, handleLogout }) {
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="/profile"
+                <Link
+                  to="/profile"
                   className={classNames(
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm'
                   )}>
                   <i class="fas fa-user-circle mr-1"></i>
                   My profile
-                </a>
+                </Link>
               )}
             </Menu.Item>
 
@@ -503,7 +503,7 @@ function DropdownAva({ user, handleLogout }) {
                       active ? 'bg-gray-100 text-gray-900' : '',
                       'block w-full px-4 py-2 text-left text-sm'
                     )}
-                    onClick={handleLogout}
+                    onClick={(e) => handleLogout(e)}
                   >
                     <i className="fas fa-sign-out-alt mr-1"></i>
                     Log Out

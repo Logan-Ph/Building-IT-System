@@ -4,6 +4,7 @@ import { useState, useContext, useEffect } from 'react'
 import { UserContext } from '../../Context/UserContext';
 import { ToastContainer, toast } from 'react-toastify'
 import { Navigate } from 'react-router';
+import { Link } from 'react-router-dom';
 export default function VendorEditProfile() {
   const [address, setAddress] = useState()
   const [phoneNumber, setPhoneNumber] = useState()
@@ -78,6 +79,10 @@ export default function VendorEditProfile() {
     msg && success(msg)
   }, [error, msg]);
 
+  if (!user){
+    return null;
+  }
+
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
       {error && <Navigate to='/login' replace={true} />}
@@ -94,7 +99,7 @@ export default function VendorEditProfile() {
         theme="light"
       />
       <h2 className="text-2xl font-semibold">Shop Profile</h2>
-      <a href="/edit-store">Edit Shop Frontpage</a>
+      <Link to="/edit-store">Edit Shop Frontpage</Link>
       <div className="border-b border-gray-900/10 pb-12">
 
         <div className="mt-5">

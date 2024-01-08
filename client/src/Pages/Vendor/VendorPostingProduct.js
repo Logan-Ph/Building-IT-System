@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
+import { UserContext } from '../../Context/UserContext';
 
 export default function VendorPostingProduct() {
   const [productName, setProductName] = useState('');
@@ -12,6 +13,7 @@ export default function VendorPostingProduct() {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const {user} = useContext(UserContext)
 
   const notify = (error) => {
     toast.error(error, {
@@ -84,6 +86,10 @@ export default function VendorPostingProduct() {
     error && notify(error)
     msg && success(msg)
   }, [error, msg]);
+
+  if (!user){
+    return null;
+  }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-gray-100 shadow p-4 max-w-4xl">

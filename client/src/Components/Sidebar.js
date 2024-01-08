@@ -2,11 +2,14 @@
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { useEffect } from "react";
+import { UserContext } from "../Context/UserContext";
+import { Link } from "react-router-dom";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
   const [width, setWidth] = useState(window.innerWidth);
   const [expanded, setExpanded] = useState(true);
+  const { user } = useContext(UserContext)
 
   function getSize() {
     setWidth(window.innerWidth);
@@ -26,6 +29,9 @@ export default function Sidebar({ children }) {
     };
   }, [width]);
 
+  if (!user) {
+    return null
+  }
   return (
     <aside className="">
       <nav className=" h-screen flex flex-col bg-white border-r shadow-sm">
@@ -104,13 +110,13 @@ export function SidebarItem({ icon, text, active, alert, subitems }) {
       {expanded && subitems && showSubitems && (
         <ul className="ml-3">
           {subitems.map((subitem, index) => (
-            <a href={subitem.href} key={index}>
+            <Link to={subitem.href} key={index}>
               <li
                 className="py-2 px-8 my-1 font-medium rounded-md cursor-pointer hover:bg-indigo-50 text-gray-600 "
               >
                 <span>{subitem.text}</span>
               </li>
-            </a>
+            </Link>
           ))}
         </ul>
       )

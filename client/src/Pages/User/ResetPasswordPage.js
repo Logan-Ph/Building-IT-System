@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
@@ -138,7 +138,7 @@ export default function ResetPassword() {
                                 <button type="submit" onClick={handleSubmit} className="flex w-1/2 justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save New Password</button>
 
                                 <div className="my-5">
-                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <a className="font-medium text-[#E61E2A] text-md hover:underline text-center" href="/login">Login</a></label>
+                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <Link className="font-medium text-[#E61E2A] text-md hover:underline text-center" to="/login">Login</Link></label>
                                 </div>
                             </div>
                         </form>

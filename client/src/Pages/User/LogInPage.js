@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect, useContext } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { UserContext } from '../../Context/UserContext'
@@ -110,7 +110,7 @@ export default function LogInPage() {
                                     <label className="ms-2 text-sm font-medium text-gray-900 ">Remember Me</label>
                                 </div>
                                 <div>
-                                    <a href="\forgot-password" className="ms-2 text-sm font-medium text-blue-600 hover:underline">Forgot password?</a>
+                                    <Link to="/forgot-password" className="ms-2 text-sm font-medium text-blue-600 hover:underline">Forgot password?</Link>
                                 </div>
                             </div>
                             <div>
@@ -131,9 +131,9 @@ export default function LogInPage() {
                             <div className="mt-6 flex justify-center items-center gap-1">
                                 <p className="font-medium text-base">Don't have an account yet?</p>
                                 <button className="font-semibold leading-6 text-[#222160] hover:text-[#000053]" >
-                                    <a href='\register'>
+                                    <Link to='/register'>
                                         Sign up
-                                    </a>
+                                    </Link>
                                 </button>
                             </div>
                         </form>

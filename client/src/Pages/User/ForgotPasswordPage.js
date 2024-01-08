@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -89,9 +90,9 @@ export default function ForgotPassword() {
                     <div className="w-full px-6 rounded-lg shadow dark:border md:mt-0 sm:max-w-md bg-gray-50 border-gray-50 sm:p-8">
                         <div className="flex flex-row items-center">
                             <button className="border-black">
-                                <a href="\login" className="text-2xl text-[#E61E2A]">
+                                <Link to="/login" className="text-2xl text-[#E61E2A]">
                                     <i className="fa-solid fa-arrow-left"></i>
-                                </a>
+                                </Link>
                             </button>
                             <h1 className="ml-10 text-2xl font-bold leading-tight tracking-tight text-[#000053] md:text-2xl xs:text-xl xs:ml-4">Forgot your password?</h1>
                         </div>

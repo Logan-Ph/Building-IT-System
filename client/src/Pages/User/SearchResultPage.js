@@ -78,7 +78,7 @@ export default function Example() {
 
             <div className="flex items-center">
               <SortOptions sortOptions={sortOptions} setSortOptions={setSortOptions} />
-              <FilterSideBar />
+              <FilterSideBar setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
             </div>
 
           </div>
@@ -134,11 +134,7 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
   );
 }
 
-function FilterSideBar() {
-  const { refine } = useRefinementList({ attribute: 'category', operator: 'or' });
-  const [valueFilter, setValueFilter] = useState([]);
-  const oldCategoryRef = useRef();
-
+function FilterSideBar({ setValueFilter, valueFilter, refine, oldCategoryRef }) {
   const [open, setOpen] = useState(false);
 
   const handleFilterSidebar = () => {

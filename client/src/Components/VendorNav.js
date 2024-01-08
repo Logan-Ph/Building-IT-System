@@ -3,6 +3,7 @@ import { useSearchBox } from "react-instantsearch";
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "flowbite-react";
 import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
   const { refine } = useSearchBox();
@@ -281,21 +282,21 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
               <li className={getTabClass("HOME")}>
-                <a
-                  href={vendor ? `/vendor/${vendor._id}/home` : ""}
+                <Link
+                  to={vendor ? `/vendor/${vendor._id}/home` : ""}
                   class="text-gray-900hover:underline text-sm font-light md:text-lg"
                   aria-current="page"
                 >
                   HOME
-                </a>
+                </Link>
               </li>
               <li className={getTabClass("PRODUCTS")}>
-                <a
-                  href={vendor ? `/vendor/${vendor._id}/product` : ""}
+                <Link
+                  to={vendor ? `/vendor/${vendor._id}/product` : ""}
                   class="text-gray-900hover:underline text-sm md:text-lg font-light"
                 >
                   PRODUCTS
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,11 +1,13 @@
 import '../../css/mangeorder.css'
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import OrdersInfo from '../../Components/OrdersInfo';
+import { UserContext } from '../../Context/UserContext';
 
 export default function ManageOrderPage() {
     const [orders, setOrders] = useState([])
+    const { user } = useContext(UserContext)
     const [searchTerm, setSearchTerm] = useState('');
     const initialStatuses = {
         "Unpaid": null,
@@ -30,6 +32,10 @@ export default function ManageOrderPage() {
     useEffect(() => {
         getOrders();
     }, [getOrders])
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <>

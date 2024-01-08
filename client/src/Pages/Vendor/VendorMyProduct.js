@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify'
 import axios from "axios";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { UserContext } from "../../Context/UserContext";
 
 export default function VendorMyProduct() {
   const [products, setProducts] = useState([])
   const [dataSlice, setDataSlice] = useState([])
   const [error, setError] = useState('')
   const [msg, setMsg] = useState('')
+  const {user} = useContext(UserContext)
 
   const notify = (error) => {
     toast.error(error, {
@@ -70,6 +72,10 @@ export default function VendorMyProduct() {
     msg && success(msg)
     fetchProducts();
   }, [error, msg]);
+
+  if (!user){
+    return null;
+  }
 
   return (
     <>
@@ -140,19 +146,19 @@ export default function VendorMyProduct() {
             <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul class="flex flex-wrap -mb-px">
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</a>
+                  <span href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</span>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</a>
+                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</span>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</a>
+                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</span>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</a>
+                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</span>
                 </li>
                 <li class="me-2">
-                  <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</a>
+                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</span>
                 </li>
               </ul>
             </div>
