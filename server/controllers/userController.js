@@ -513,6 +513,7 @@ exports.placeOrder = async (req, res) => {
     if (!userCart) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
+    console.log(products)
 
     // Group products by owner
     const productsByOwner = userCart.products.reduce((groups, cartItem) => {
@@ -542,6 +543,7 @@ exports.placeOrder = async (req, res) => {
       });
 
       await order.save();
+      console.log(order)
     }
 
     for (const product of products) {
