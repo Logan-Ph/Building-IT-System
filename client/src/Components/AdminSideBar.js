@@ -10,11 +10,11 @@ export default function AdminSideBar() {
                 <SidebarItem icon={<Home size={20} />} text="Dashboard" />
             </Link>
 
-            <Link href="/admin/manage-user">
+            <Link to="/admin/manage-user">
                 <SidebarItem icon={<UserCog size={20} />} text="Manage User" />
             </Link>
 
-            <Link href="/admin/manage-product">
+            <Link to="/admin/manage-product">
                 <SidebarItem icon={<FaOpencart size={20} />} text="Manage Product" />
             </Link>
         </Sidebar>)
