@@ -82,6 +82,9 @@ export default function ShipperCard({ user, orders }) {
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
+        <h1 class="m-2 text-2xl font-bold text-center xs:text-md">
+          Account Information
+        </h1>
         <div class="flex items-center gap-4 mt-4 flex-wrap">
           <img
             src={
@@ -103,29 +106,17 @@ export default function ShipperCard({ user, orders }) {
             </span>
           </div>
         </div>
+        <div class="text-lg mt-3 text-black font-medium">Address: <span class="text-lg font-normal">{user.address}</span></div>
 
-        <div class="text-lg mt-3 text-black font-medium">Adresses</div>
         <div class="my-3">
-          <div class="text-base text-gray-500 border-t border-gray-200 py-5 px-3">
-            <div class="text-gray-500 mb-2">
-              <span class="border-r border-gray-300 pr-3 text-black">
-                {user.name}
-              </span>
-              <span class="pl-2">{user.phoneNumber}</span>
-            </div>
-            <div class="text-gray-500">Street Adress</div>
-            <div class="text-gray-500">{user.address}</div>
-            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-300">
-              Default
-            </span>
-          </div>
+        
           {/* <!-- Second address --> */}
         </div>
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 pb-4">
           <div class="text-lg mt-3 text-black font-medium">
             Purchases History
           </div>
-          <div className="flex items-center py-10">
+          <div className="flex items-center">
             <div className="flex flex-row items-center">
               <input
                 type="text"
