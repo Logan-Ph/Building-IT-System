@@ -437,7 +437,7 @@ export default function Header() {
                 </div>
 
               </div>
-              <Link className="mt-5" href={user ? "/logout" : "/login"}>
+              <Link className="mt-5" to={user ? "/logout" : "/login"}>
                 <div className="mt-40 flex cursor-pointer justify-center  rounded-md border border-black h-10 sm:h-9 xs:h-9 w-52 sm:w-46 xs:w-40 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
                   <span className="text-md font-medium text-black">
                     {user ? "logout" : "Sign in"}

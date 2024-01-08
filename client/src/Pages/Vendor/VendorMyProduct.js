@@ -119,17 +119,6 @@ export default function VendorMyProduct() {
                     <label for="category" className="block text-sm">Category</label>
                     <input type="text" id="category" name="category" placeholder="Category" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div>
-                      <label for="sales-min" className="block text-sm">Sales Min</label>
-                      <input type="number" id="sales-min" name="sales-min" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                    </div>
-                    <div className="text-xl pt-5">-</div>
-                    <div>
-                      <label for="sales-max" className="block text-sm">Sales Max</label>
-                      <input type="number" id="sales-max" name="sales-max" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                    </div>
-                  </div>
                 </div>
               </div>
               <div className="mt-4">
@@ -142,31 +131,7 @@ export default function VendorMyProduct() {
 
 
         <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
-          <div class="mb-4 flex justify-between items-center">
-            <div class="flex space-x-2 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-              <ul class="flex flex-wrap -mb-px">
-                <li class="me-2">
-                  <span href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">All</span>
-                </li>
-                <li class="me-2">
-                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Live</span>
-                </li>
-                <li class="me-2">
-                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Sold Out</span>
-                </li>
-                <li class="me-2">
-                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Reviewing</span>
-                </li>
-                <li class="me-2">
-                  <span href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Delisted</span>
-                </li>
-              </ul>
-            </div>
-            <div class="space-x-2">
-              <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"> + Add a new product</button>
-            </div>
-          </div>
-
+          <div class="mb-4 flex justify-between items-center" />
           <div class="relative overflow-x-auto sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -179,9 +144,6 @@ export default function VendorMyProduct() {
                   </th>
                   <th scope="col" class="px-6 py-3">
                     Stock
-                  </th>
-                  <th scope="col" class="px-6 py-3">
-                    Sales
                   </th>
                   <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Edit</span>
@@ -199,10 +161,7 @@ export default function VendorMyProduct() {
                       ${product.price}
                     </td>
                     <td className="px-6 py-4">
-                      {product.stock}
-                    </td>
-                    <td className="px-6 py-4">
-                      {product.description}
+                      {product.stock || 0}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>

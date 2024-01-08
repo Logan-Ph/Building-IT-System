@@ -1506,7 +1506,7 @@ exports.likeComment = async (req, res) => {
       return res.status(404).json({ message: 'Comment not found' });
     }
     await comment.likeComment(user._id);
-    return res.status(200).json({ msg: "Like comment successfully" });
+    return res.status(200).json({ msg: "Like comment successfully", comment: comment });
   } catch (error) {
     res.status(500).json({ message: 'There was an error updating the comment' });
   }

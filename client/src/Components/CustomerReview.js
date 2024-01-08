@@ -1,11 +1,14 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useContext } from 'react';
 import { Textarea } from "flowbite-react";
+import { ThumbsUp } from "lucide-react"
+import { UserContext } from '../Context/UserContext';
 
 import axios from 'axios'
 import { toast } from 'react-toastify';
 export default function CustomerReview({ product, setComments, comments }) {
   const [activeCommentId, setActiveCommentId] = useState(null);
   const [replyText, setReplyText] = useState('');
+  const { user } = useContext(UserContext);
 
   const toggleCmt = (id) => {
     setActiveCommentId(prevId => prevId === id ? null : id);
@@ -13,6 +16,20 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   const replyComment = async (commentId) => {
     try {
+      setActiveCommentId(prevId => prevId === commentId ? null : commentId);
+      if (replyText.length < 1) {
+        toast.error("Reply text is required", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          pauseOnHover: false,
+          theme: "light",
+        });
+        return;
+      }
       const res = await axios.post(`http://localhost:4000/product/${commentId}/reply-comment`, { replyText: replyText }, { withCredentials: true });
       toast.success(res.data.msg, {
         position: "top-center",
@@ -24,10 +41,19 @@ export default function CustomerReview({ product, setComments, comments }) {
         pauseOnHover: false,
         theme: "light",
       });
-      setReplyText('')
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
+      setComments(comments.map((comment) => {
+        if (comment._id === commentId) {
+          // Add the new reply to the comment's replyMessage array
+          comment.replyMessage.push({
+            replyText: replyText,
+            postedOn: new Date(), // Use the current date as the postedOn date
+            userImg: user.img,
+            userName: user.name,
+          });
+        }
+        return comment;
+      }));
+      setReplyText('');
     } catch (err) {
       toast.error(err.response.data.error, {
         position: "top-center",
@@ -54,10 +80,22 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   const likeComment = async (commentId) => {
     try {
+      setComments(comments.map((comment) => {
+        if (comment._id === commentId) {
+          const userLiked = comment.like.find((like) => like.likeBy === user._id);
+          if (userLiked) {
+            // If the user already liked the comment, remove their ID from the likes array (unlike)
+            comment.like = comment.like.filter((like) => like.likeBy !== user._id);
+            comment.likes -= 1;
+          } else {
+            // If the user hasn't liked the comment, add their ID to the likes array (like)
+            comment.like.push({ likeBy: user._id });
+            comment.likes += 1;
+          }
+        }
+        return comment;
+      }));
       await axios.post(`http://localhost:4000/product/${commentId}/like`, {}, { withCredentials: true });
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
     } catch (err) {
       toast.error(err.response.data.error, {
         position: "top-center",
@@ -143,20 +181,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                         </svg>
                       </button>
                       <button class="inline-flex items-center px-1 -ml-1 flex-column" onClick={() => likeComment(comment._id)}>
-                        <svg
-                          class="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-700"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                          ></path>
-                        </svg>
+                        <ThumbsUp size={20} color={comment.like.find((like) => like.likeBy === user._id) && "blue"} />
                       </button>
                     </div>
                     {/* NEW ADDED */}

@@ -121,7 +121,7 @@ export default function VendorEditStore() {
 
   return (
     <>
-      <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
+      <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <ToastContainer
           position="top-center"
           autoClose={2000}
@@ -135,7 +135,7 @@ export default function VendorEditStore() {
           theme="light"
         />
         <div>
-          <h1 class="font-bold  lg:pl-5 text-black lg:md:text-2xl text-lg ">
+          <h1 class="font-bold  lg:pl-5 text-black lg:md:text-2xl text-lg mt-8">
             Shop Decoration
           </h1>
           <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base mb-3">

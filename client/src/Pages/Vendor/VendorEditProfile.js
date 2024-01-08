@@ -84,7 +84,7 @@ export default function VendorEditProfile() {
   }
 
   return (
-    <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
+    <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
       {error && <Navigate to='/login' replace={true} />}
       <ToastContainer
         position="top-center"
@@ -98,8 +98,9 @@ export default function VendorEditProfile() {
         pauseOnHover={false}
         theme="light"
       />
-      <h2 className="text-2xl font-semibold">Shop Profile</h2>
-      <Link to="/edit-store">Edit Shop Frontpage</Link>
+      <div>
+      <h2 className="font-bold  lg:pl-5 text-black lg:md:text-2xl text-lg mt-8">Shop Profile</h2>
+      <Link to="/edit-store" className='font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base mb-3'>Edit Shop Frontpage</Link>
       <div className="border-b border-gray-900/10 pb-12">
 
         <div className="mt-5">
@@ -135,6 +136,8 @@ export default function VendorEditProfile() {
           <button onClick={handleSubmit} disabled={loading} type="submit" class={`rounded-md px-3 py-2 text-sm font-semibold shadow-sm ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 text-white'}`}>Save changes</button>
         </div>
       </div>
+      </div>
+     
     </div>
   )
 }
