@@ -58,8 +58,10 @@ cartSchema.methods.getTotalProducts = function () {
 }
 
 cartSchema.methods.removeProduct = function (productId) {
-    this.products = this.products.filter(p => p.product._id.toString() !== productId.toString());
-    return this.save();
+    if (productId) {
+        this.products = this.products.filter(p => p.product._id.toString() !== productId.toString());
+        return this.save();
+    }
 };
 
 cartSchema.methods.clearCart = function () {

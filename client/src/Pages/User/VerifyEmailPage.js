@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect, useCallback } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 
 
 export default function VerifyEmailPage() {
@@ -30,13 +30,13 @@ export default function VerifyEmailPage() {
                     <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 focus:outline-non"> <a href='/login'>Login</a></button>
                     <div className="flex flex-row items-center">
                         <div className="text-gray-900 text-lg font-medium">
-                            <a href="/login">
+                            <Link to="/login">
                                 <i class="fa-solid fa-arrow-left"></i>
-                            </a>
+                            </Link>
                         </div>
 
                         <div className="ml-5">
-                            <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <a className="font-medium text-gray-900 hover:underline text-center" href="/register">SignUp</a></label>
+                            <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <Link className="font-medium text-gray-900 hover:underline text-center" to="/register">SignUp</Link></label>
                         </div>
                     </div>
                 </div>

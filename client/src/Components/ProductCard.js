@@ -2,6 +2,7 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
+import { Link } from "react-router-dom";
 
 
 export default function ProductCard({ product }) {
@@ -68,18 +69,18 @@ export default function ProductCard({ product }) {
 
                 </div>
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
-                    <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                    <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
                         <i className="fa-solid fa-magnifying-glass"></i>
-                    </a>
-                    <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                    </Link>
+                    <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
                         <i className="fa-regular fa-heart"></i>
-                    </a>
+                    </Link>
                 </div>
             </div>
             <div className="pt-4 pb-3 px-4">
-                <a href={`/product/${product._id}`}>
+                <Link to={`/product/${product._id}`}>
                     <h4 className="capitalize font-medium xl:text-md lg:text-mb md:text-sm sm:text-sm xs:text-xs mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">{product.product_name}</h4>
-                </a>
+                </Link>
                 <p className="text-lg text-red-500 font-semibold mb-2">${product.price}</p>
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex text-xs text-[#FAC800]">

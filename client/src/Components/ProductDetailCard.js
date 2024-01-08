@@ -1,16 +1,19 @@
 'use client';
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Rating } from 'flowbite-react';
 import { Navigate } from "react-router";
 import { Modal } from "flowbite-react";
+import { CartContext } from "../Context/CartContext";
+import { Link } from "react-router-dom";
 
 export default function ProductDetailCard({ product, vendorName, user }) {
     const [quantity, setQuantity] = useState(1)
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const [navigateTo, setNavigateTo] = useState('')
+    const { setCart } = useContext(CartContext)
 
     const [openModal, setOpenModal] = useState(false)
     const [title, setTitle] = useState('');
@@ -121,6 +124,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
             setMsg(res.data.msg);
             setError('');
             setQuantity(1);
+            setCart(res.data.cart)
         } catch (er) {
             setError(er.response.data.error);
             setMsg('');
@@ -166,13 +170,13 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     <ol className="flex items-center">
                         <li className="text-left">
                             <div className="-m-1">
-                                <a
-                                    href="/"
+                                <Link
+                                    to="/"
                                     className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                 >
                                     {" "}
                                     Home{" "}
-                                </a>
+                                </Link>
                             </div>
                         </li>
 
@@ -180,13 +184,13 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <div className="flex items-center">
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
-                                    <a
-                                        href="\search\query=\category=\price="
+                                    <Link
+                                        to="/search/query=/category=/price="
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                     >
                                         {" "}
                                         Products{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </li>
@@ -195,14 +199,14 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <div className="flex items-center">
                                 <span className="mx-2 text-gray-400">/</span>
                                 <div className="-m-1">
-                                    <a
-                                        href={`/vendor/${product.owner}/home`}
+                                    <Link
+                                        to={`/vendor/${product.owner}/home`}
                                         className="rounded-md p-1 text-md font-medium text-gray-600 focus:text-gray-900 focus:shadow hover:text-gray-800"
                                         aria-current="page"
                                     >
                                         {" "}
                                         {vendorName}{" "}
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </li>
@@ -233,7 +237,7 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                             <Modal.Header>
                                 <div>
                                     <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                                    
+
                                 </div>
 
                             </Modal.Header>
@@ -347,10 +351,10 @@ export default function ProductDetailCard({ product, vendorName, user }) {
 
                     </div>
                     <div className="flex">
-                        <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-black font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
+                        <button onClick={() => addProduct(product._id)} className="w-48 h-12 xs:text-[15px] text-lg text-white font-medium bg-[#EAB308] border-0  focus:outline-none hover:bg-[#EAA000] rounded-lg">
                             Add to Cart
                         </button>
-                        <button onClick={() => buyProduct(product)} className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-black font-medium bg-[#FF9209] border-0 focus:outline-none hover:bg-[#FF6C22] rounded-lg">
+                        <button onClick={() => buyProduct(product)} className="w-48 h-12 xs:text-[15px] text-lg ml-10 text-white font-medium bg-red-500 border-0 focus:outline-none hover:bg-red-500 rounded-lg">
                             Buy Now
                         </button>
                     </div>

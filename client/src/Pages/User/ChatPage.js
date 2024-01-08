@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../../Context/UserContext";
-import { Navigate } from "react-router-dom";
 
 export default function ChatPage() {
   const [isChatAreaVisible, setChatAreaVisible] = useState(false);
@@ -70,6 +69,10 @@ export default function ChatPage() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <section>
@@ -228,7 +231,6 @@ function ContactList({ users, searchTerm, toggleChatArea, threadIndex }) {
         </div>}
         <div className="ml-3 flex-1 truncate ...">
           <h2 className="text-lg font-semibold">{user.businessName || user.name}</h2>
-          <p className="text-gray-600">STATIC</p>
         </div>
       </div>
     ))

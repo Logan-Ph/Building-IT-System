@@ -244,7 +244,7 @@ function MiddleBanner({ setNavigateTo }) {
                 <div
                     className="transition duration-300 group-hover:-translate-y-1 mt-2 xs:line-clamp-1"
                     style={{ transformOrigin: "center center" }}
-                > Entertainment</div>
+                > Baby Products</div>
             </div>
 
         </div>

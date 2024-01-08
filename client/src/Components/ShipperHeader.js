@@ -2,7 +2,7 @@ import { Fragment, useCallback, useContext, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import axios from 'axios'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import LoadingPage from '../Pages/User/LoadingPage';
 
 export default function ShipperHeader() {
@@ -50,14 +50,14 @@ export default function ShipperHeader() {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 {/* <!-- logo --> */}
-                                <a className="flex items-center lg:ml-10 " href='\shipper\dashboard'>
+                                <Link className="flex items-center lg:ml-10 " to='/shipper/dashboard'>
                                     <img
                                         src={require("./images/logo1.png")}
                                         className="w-14 mb-2 lg:w-14 md:w-12 sm:w-10 xs:w-8"
                                         alt="logo" />
                                     <span className="pl-3.5 font-semibold text-[#E61E2A] lg:text-2xl md:text-2xl sm:text-lg xs:text-md ">rBuy
                                     </span>
-                                </a>
+                                </Link>
                                 {/* Vendor page */}
                                 <h1 className="lg:text-2xl xs:text-xs sm:text-md md:text-lg xl:text-3xl text-gray-900 flex items-center font-semibold xl:ml-12 lg:ml-10 xs:ml-1 sm:ml-2 md:ml-2">Seller Centre</h1>
                             </div>

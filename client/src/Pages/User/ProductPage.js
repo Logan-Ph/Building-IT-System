@@ -1,5 +1,5 @@
 import "swiper/css";
-import { Navigate, useParams } from "react-router-dom"
+import { Link, Navigate, useParams } from "react-router-dom"
 import { useState, useEffect, useCallback, useContext } from 'react'
 import axios from "axios"
 import recommend from '@algolia/recommend';
@@ -111,7 +111,7 @@ export default function TestingPage() {
                 </button>
                 <button class="ml-1 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200    inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
                   <Store size={20} />
-                  <a href={`/vendor/${product.owner}/home`} className="ml-1.5">View Shop</a>
+                  <Link to={`/vendor/${product.owner}/home`} className="ml-1.5">View Shop</Link>
                 </button>
               </div>
             </div>

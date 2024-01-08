@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -137,7 +138,7 @@ export default function RegisterPage() {
                 <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900">Sign Up</h2>
                     <p class="mb-5 lg:mb-7 font-light text-center text-gray-500 sm:text-xl">Already have account?
-                        <a href="\login" class="font-semibold leading-6 text-[#222160] hover:text-[#000053]"> Sign In</a>
+                        <Link to="/login" class="font-semibold leading-6 text-[#222160] hover:text-[#000053]"> Sign In</Link>
                     </p>
                     <div className="mb-4 border-b border-gray-200">
                         <ul className="text-lg flex justify-center flex-wrap -mb-px font-medium text-center " role="tablist">

@@ -11,6 +11,7 @@ import { useHits, useRefinementList } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
 import { UserContext } from '../../Context/UserContext';
+import { ToastContainer } from 'react-toastify';
 
 export default function Example() {
   const { hits, sendEvent } = useHits();
@@ -57,6 +58,18 @@ export default function Example() {
 
   return (
     <div className="bg-gray-100">
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       <div>
         {/* Mobile filter dialog */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -65,7 +78,7 @@ export default function Example() {
 
             <div className="flex items-center">
               <SortOptions sortOptions={sortOptions} setSortOptions={setSortOptions} />
-              <FilterSideBar />
+              <FilterSideBar setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
             </div>
 
           </div>
@@ -121,11 +134,7 @@ function CheckboxLabel({ setValueFilter, valueFilter, refine, oldCategoryRef }) 
   );
 }
 
-function FilterSideBar() {
-  const { refine } = useRefinementList({ attribute: 'category', operator: 'or' });
-  const [valueFilter, setValueFilter] = useState([]);
-  const oldCategoryRef = useRef();
-
+function FilterSideBar({ setValueFilter, valueFilter, refine, oldCategoryRef }) {
   const [open, setOpen] = useState(false);
 
   const handleFilterSidebar = () => {

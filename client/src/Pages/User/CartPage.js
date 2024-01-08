@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/UserContext";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContainer, toast } from "react-toastify";
 import aa from "search-insights";
@@ -173,9 +173,9 @@ export default function CartPage() {
           </div>
           <div class="pb-3 pt-5">
             <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-[#000054] to-[#E61E2A] group-hover:from-[#000054]  group-hover:to-[#E61E2A] hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300">
-              <a class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0" href="\">
+              <Link class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0" to="/">
                 Start Shopping
-              </a>
+              </Link>
             </button>
           </div>
         </div>

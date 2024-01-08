@@ -5,11 +5,9 @@ import ToDoList from "../../Components/ToDoList";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../../Context/UserContext";
 import LoadingPage from "../User/LoadingPage";
 
 export default function DashboardPage() {
-  const { user } = useContext(UserContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
@@ -31,7 +29,7 @@ export default function DashboardPage() {
   }, [fetchData])
 
   if (isLoading) {
-    return <LoadingPage />
+    return null
   }
 
   return (

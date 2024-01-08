@@ -115,6 +115,10 @@ export default function VendorEditStore() {
     getStoreInfo()
   }, [getStoreInfo])
 
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
       <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">

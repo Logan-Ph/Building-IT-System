@@ -84,9 +84,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       setError("");
       window.localStorage.setItem("shippingFee", shippingFee)
       window.localStorage.setItem("checkoutInfo", JSON.stringify(checkoutInfo))
-      setTimeout(() => {
-        window.location.href = "/thankfororder"
-      }, 2000);
+      window.location.href = "/thankfororder"
     } catch (er) {
       setError(er);
       setMsg("");

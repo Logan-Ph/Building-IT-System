@@ -4,7 +4,7 @@ import { Table } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 import { HiAdjustments, HiUserCircle } from "react-icons/hi";
 import { FaShoppingBag } from "react-icons/fa";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
 import LoadingPage from "../User/LoadingPage";
@@ -168,12 +168,12 @@ function UserTable({ data, dataImage, type }) {
                       </div>
                     </Table.Cell>
                     <Table.Cell>
-                      <a
-                        href={`/admin/${item._id}/report`}
+                      <Link
+                        to={`/admin/${item._id}/report`}
                         className="font-medium text-cyan-600 hover:underline"
                       >
                         View
-                      </a>
+                      </Link>
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>

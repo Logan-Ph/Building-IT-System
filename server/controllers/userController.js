@@ -558,37 +558,41 @@ exports.placeOrder = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
-  let user = await authenticateToken(req.cookies.userToken);
-  if (!user) {
+  try {
+    let user = await authenticateToken(req.cookies.userToken);
+    if (!user) {
+      return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
+    }
+    const cart = await Cart.findOne({ userID: user._id })
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(500).json({ error: "Cannot find the product." })
+    }
+
+    if (!cart) {
+      const newCart = new Cart({
+        userID: new mongoose.Types.ObjectId(user._id),
+        products: [{
+          product: product._id,
+          quantity: (req.query.quantity) ? req.query.quantity : 1,
+          owner: new mongoose.Types.ObjectId(product.owner),
+          image_link: product.image_link,
+          price: product.price,
+          product_name: product.product_name,
+        }]
+      })
+      await newCart.save()
+    } else {
+      await cart.addProduct(
+        await Product.findById(req.params.id),
+        (req.query.quantity) ? req.query.quantity : 1
+      );
+    }
+    return res.status(200).json({ msg: "added to cart", cart: (cart) ? cart : null })
+  } catch {
     return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
   }
-  const cart = await Cart.findOne({ userID: user._id })
-
-  const product = await Product.findById(req.params.id);
-  if (!product) {
-    return res.status(500).json({ error: "Cannot find the product." })
-  }
-
-  if (!cart) {
-    const newCart = new Cart({
-      userID: new mongoose.Types.ObjectId(user._id),
-      products: [{
-        product: product._id,
-        quantity: (req.query.quantity) ? req.query.quantity : 1,
-        owner: new mongoose.Types.ObjectId(product.owner),
-        image_link: product.image_link,
-        price: product.price,
-        product_name: product.product_name,
-      }]
-    })
-    await newCart.save()
-  } else {
-    await cart.addProduct(
-      await Product.findById(req.params.id),
-      (req.query.quantity) ? req.query.quantity : 1
-    );
-  }
-  return res.status(200).json({ msg: "added to cart", cart: (cart) ? cart : null })
 }
 
 exports.removeProduct = async (req, res) => {
@@ -727,16 +731,15 @@ exports.checkout = async (req, res) => {
 }
 
 exports.logout = (req, res) => {
-  try{
+  try {
     res.clearCookie("userToken");
     return res.json('Logged out successfully');
-  }catch{
+  } catch {
     console.log(error)
     return res.status(500).json({ error: "Cannot logout" })
   }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.updateUser = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -771,7 +774,6 @@ exports.updateUser = async (req, res) => {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.updateVendor = async (req, res) => {
   try {
     let vendor = await authenticateToken(req.cookies.userToken);
@@ -801,7 +803,6 @@ exports.updateVendor = async (req, res) => {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.updateShipper = async (req, res) => {
   try {
     const shipper = await Shipper.findOne({ email: req.body.email });
@@ -869,7 +870,6 @@ exports.userProfile = async (req, res) => {
   return res.status(200).json("profile page");
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.editStore = async (req, res) => {
   try {
     let vendor = await authenticateToken(req.cookies.userToken);
@@ -924,7 +924,6 @@ exports.getStoreInfo = async (req, res) => {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.addNewProduct = async (req, res) => {
   try {
     let user = await authenticateToken(req.cookies.userToken);
@@ -1130,7 +1129,6 @@ exports.reportPage = async (req, res) => {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////// can't pass through req
 exports.uploadHomepageCarousel = async (req, res) => {
   try {
     let banner = await HomepageBanner.findOne({ title: req.body.title })
@@ -1246,6 +1244,7 @@ exports.userOrder = async (req, res) => {
       jsonOrder.vendorName = vendorNameMap[order.vendorID.toString()];
       return jsonOrder;
     });
+    orders.reverse();
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find order. " })

@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { Navigate, useParams } from 'react-router-dom';
+import { UserContext } from '../../Context/UserContext';
 
 export default function VendorEditPostingProduct() {
   const params = useParams();
@@ -15,6 +16,7 @@ export default function VendorEditPostingProduct() {
   const [msg, setMsg] = useState('')
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {user} = useContext(UserContext)
 
   const notify = (error) => {
     toast.error(error, {
@@ -94,6 +96,10 @@ export default function VendorEditPostingProduct() {
     fetchProduct();
   }, [error, msg, fetchProduct]);
 
+
+  if (!user){
+    return null;
+  }
 
   return (
     <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
