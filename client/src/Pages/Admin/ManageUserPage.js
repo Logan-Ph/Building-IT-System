@@ -162,7 +162,7 @@ function UserTable({ data, dataImage, type }) {
                     </Table.Cell>
                     {getCellContent(item)}
                     <Table.Cell>
-                      <div class="flex items-center">
+                      <div class="flex items-center whitespace-nowrap">
                         <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
                         No Report
                       </div>
