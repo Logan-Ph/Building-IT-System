@@ -2135,6 +2135,10 @@ input:checked + .toggle-bg {
   height: 100vh;
 }
 
+.h-\[200px\] {
+  height: 200px;
+}
+
 .max-h-\[90vh\] {
   max-height: 90vh;
 }
@@ -2323,6 +2327,10 @@ input:checked + .toggle-bg {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-\[200px\] {
+  width: 200px;
 }
 
 .min-w-0 {
@@ -7826,6 +7834,14 @@ input:checked + .toggle-bg {
     margin-left: 1.5rem;
   }
 
+  .sm\:mb-2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .sm\:ms-0 {
+    margin-inline-start: 0px;
+  }
+
   .sm\:line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -8726,6 +8742,10 @@ input:checked + .toggle-bg {
       margin-left: 0.75rem;
     }
 
+    .lg\:md\:ms-2 {
+      margin-inline-start: 0.5rem;
+    }
+
     .lg\:md\:h-40 {
       height: 10rem;
     }
@@ -8766,6 +8786,10 @@ input:checked + .toggle-bg {
       width: 100%;
     }
 
+    .lg\:md\:max-w-full {
+      max-width: 100%;
+    }
+
     .lg\:md\:scale-75 {
       --tw-scale-x: .75;
       --tw-scale-y: .75;
@@ -8792,6 +8816,11 @@ input:checked + .toggle-bg {
     .lg\:md\:py-12 {
       padding-top: 3rem;
       padding-bottom: 3rem;
+    }
+
+    .lg\:md\:px-5 {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
     }
 
     .lg\:md\:pt-1 {

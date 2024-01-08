@@ -38,11 +38,9 @@ export default function ReportedProductPage() {
 
   return (
     <>
-      <section className="bg-gray-200 max-w-full px-4 sm:px-6 lg:px-8 pb-5 w-full">
+      <section className="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
-          <h1 className="m-2 text-xl font-bold text-center xs:text-md">
-            Reported Product Information
-          </h1>
+
           {/* <!-- Vendor --> */}
           <ReportedVendorCard vendor={vendor} product={product} reports={reports} />
         </div>
@@ -54,7 +52,11 @@ export default function ReportedProductPage() {
 
 function ReportedVendorCard({ vendor, product, reports }) {
   return <>
+
     <div className="p-6 space-y-6 bg-white rounded-lg shadow my-5 xs:p-4">
+      <h1 className="m-2 text-2xl font-bold text-center xs:text-md">
+        Reported Product Information
+      </h1>
       <div className="flex items-center gap-4 mt-4 xs:gap-3 ">
         {(vendor.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
           src={`data:image/jpeg;base64,${vendor.img}`}
@@ -73,7 +75,7 @@ function ReportedVendorCard({ vendor, product, reports }) {
       </div>
       <div className="flex items-center mt-3 xs:flex-col xs:items-start">
         <div className="text-md text-black font-medium whitespace-nowrap">Business Address: </div>
-        <div className="text-md text-gray-500 mx-2 whitespace-nowrap line-clamp-1 xs:mx-0 xs:text-sm">{vendor.address}</div>
+        <div className="text-md text-gray-500 mx-2 line-clamp-2 xs:mx-0 xs:text-sm">{vendor.address}</div>
       </div>
       <hr className="my-2" />
       <ReportedTableComponent product={product} />
@@ -90,13 +92,13 @@ function ReportedTableComponent({ product }) {
   return (
     <>
       <div>
-        <div className="flex items-center">
-          <div className="w-[100px] h-[100px]">
+        <div className="flex sm:flex-col lg:md:flex-row items-center">
+          <div className="w-[200px] h-[200px]">
             <img src={product.image_link} alt="product_img" className="object-cover scale-90" />
           </div>
           <div className="ms-6">
-            <p className="font-light text-gray-900 text-sm">ProductID: <span className="ms-2 font-medium">{product._id}</span></p>
-            <p className="font-bold">{product.product_name}</p>
+            <p className="font-light text-gray-900 text-sm">ProductID: <span className="lg:md:ms-2 sm:ms-0 sm:mb-2 font-medium">{product._id}</span></p>
+            <p className="font-light text-gray-900 text-sm">Name: <span className="ms-2 font-medium">{product.product_name}</span></p>
             <p className="font-light text-gray-900 text-sm">Category: <span className="ms-2 font-medium">{product.category}</span></p>
             <p className="font-light text-gray-900 text-sm">Price: <span className="ms-8 font-medium">${product.price}</span></p>
             <p className="font-light text-gray-900 text-sm">Rating: <span className="ms-6 font-medium">4.0 stars</span></p>
@@ -158,7 +160,7 @@ function DeleteButtonPopup() {
   return (
     <>
       <div className="flex justify-end">
-        <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" onClick={() => setOpenModal(true)}>Delete</button>
+        <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm lg:md:px-5 sm:px-3 sm:py-2 py-2.5 me-2 mb-4" onClick={() => setOpenModal(true)}>Delete</button>
       </div>
 
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>

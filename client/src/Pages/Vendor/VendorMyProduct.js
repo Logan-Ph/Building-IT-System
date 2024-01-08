@@ -91,7 +91,7 @@ export default function VendorMyProduct() {
         pauseOnHover={false}
         theme="light"
       />
-      <div class=" bg-gray-100 h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
+      <div class="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden  ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
             <form>

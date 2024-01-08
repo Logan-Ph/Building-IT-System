@@ -135,10 +135,10 @@ export default function VendorEditStore() {
           theme="light"
         />
         <div>
-          <h1 class="font-bold  lg:pl-5 text-black lg:md:text-2xl text-lg mt-8">
+          <h1 class="text-2xl tracking-tight font-bold text-gray-900 pt-8">
             Shop Decoration
           </h1>
-          <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
+          <h1 class="font-medium  lg:md:pt-1  text-gray-500 text-xs lg:md:text-base mb-3">
             Preview of Shop Homepage
           </h1>
         </div>

@@ -120,7 +120,7 @@ export default function VendorPostingProduct() {
                       <label for="upload" class="cursor-pointer">
                         {file && (
                           <div>
-                            <h2 class="font-normal text-sm text-gray-600 md:px-6 " >Image Preview:</h2>
+                            <h2 class=" " >Image Preview:</h2>
                             <img
                               src={URL.createObjectURL(file)}
                               alt="Preview"
