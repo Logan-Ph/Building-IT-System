@@ -176,6 +176,9 @@ export default function Header() {
                 {/* if user login this will appear: avatar icon*/}
                 <div className='flex items-center'>
                   {/* avatar icon */}
+               
+
+
                   <DropdownAva user={user} handleLogout={handleLogout} />
                   <p className='xs:hidden font-light text-white ml-2 xl:text-lg lg:text-md md:text-sm sm:text-xs'>{user && user.name}</p>
                 </div>

@@ -119,7 +119,7 @@ export default function VendorEditStore() {
     return null;
   }
 
-  return (
+    return (
     <>
       <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
         <ToastContainer
