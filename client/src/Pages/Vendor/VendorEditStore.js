@@ -142,12 +142,12 @@ export default function VendorEditStore() {
         {/* Upload Cover Image */}
         <div class="md:container mx-auto">
           {/* Upload Cover Image */}
-          <section class="container w-full mx-auto items-center pt-8">
+          <div class="my-5 p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
             <div class="max-w-full mx-auto items-center">
-              <div class="px-4 py-4">
+              <div class="">
                 <div
                   id="image-preview"
-                  class="max-w-full h-48 p-6 mb-4 bg-gray-100 border-dashed border-2 border-gray-400 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
+                  class="max-w-full h-48 bg-gray-100 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
                   style={ coverPhoto ? { backgroundImage: `url(${URL.createObjectURL(coverPhoto)})` } : (user && user.coverPhoto ? {backgroundImage: `url(${user.coverPhoto})` } : {}) }
                 >
                   <input
@@ -193,7 +193,7 @@ export default function VendorEditStore() {
                 </div>
               </div> 
             </div>
-          </section>
+          </div>
 
           {/* Avatar, follow button */}
           <div class="md:flex my-3 md:justify-between px-4 md:px-0">
