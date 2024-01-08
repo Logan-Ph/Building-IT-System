@@ -73,10 +73,10 @@ export default function MoreDetailOrder({ order }) {
                 <div>
                     <p className='text-sm font-medium text-[#E61E2A]'>Order ID: <span className='font-light text-gray-500 text-sm ml-1'>{order._id}</span></p>
                     <p className='text-sm font-medium text-[#E61E2A]'>Order placed: <span className='font-light text-gray-500 text-sm ml-1'>{formattedDate}</span> </p>
-                    <p className='text-sm font-medium text-[#E61E2A]'>Shipping Address: <span className='font-light text-gray-500 text-sm ml-1'>{order.address}</span> </p>
-                    <p className='text-sm font-medium text-[#E61E2A]'>Contact: <span className='font-light text-gray-500 text-sm ml-1'>{order.phoneNumer}</span> </p>
-                    <p className='text-sm font-medium text-[#E61E2A]'>Vendor: <span className='font-light text-gray-500 text-sm ml-1'></span> </p>
-                    <p className='text-sm font-medium text-[#E61E2A]'>Vendor Address: <span className='font-light text-gray-500 text-sm ml-1'></span> </p>
+                    <p className='text-sm font-medium text-[#E61E2A]'>Shipping Address: <span className='font-light text-gray-500 text-sm ml-1'>{order.shippingAddress}</span> </p>
+                    <p className='text-sm font-medium text-[#E61E2A]'>Contact: <span className='font-light text-gray-500 text-sm ml-1'>{order.contactNumber}</span> </p>
+                    <p className='text-sm font-medium text-[#E61E2A]'>Vendor: <span className='font-light text-gray-500 text-sm ml-1'>{user.businessName}</span></p>
+                    <p className='text-sm font-medium text-[#E61E2A]'>Vendor Address: <span className='font-light text-gray-500 text-sm ml-1'>{user.address}</span> </p>
                 </div>
             </Modal.Header>
             <Modal.Body className='overflow-y-auto'>

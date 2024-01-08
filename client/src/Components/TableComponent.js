@@ -3,6 +3,7 @@ import React from "react";
 import MoreDetailOrder from './MoreDetailOrder';
 
 export default function TableComponent({ orders, headerContent }) {
+    console.log(orders)
     return (
         <>
             <div className='w-full overflow-x-auto'>

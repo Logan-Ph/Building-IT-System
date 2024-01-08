@@ -25,11 +25,11 @@ const orderSchema = new mongoose.Schema({
       },
     }
   ],
-  shippingAddress:{
+  shippingAddress: {
     type: String,
     require: true,
   },
-  contactNumber:{
+  contactNumber: {
     type: String,
     require: true,
   },
@@ -50,6 +50,10 @@ const orderSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now()
+  },
+  city: {
+    type: String,
+    require: true,
   },
   status: {
     type: String,

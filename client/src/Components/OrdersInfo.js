@@ -15,8 +15,11 @@ export default function OrdersInfo({ orders, searchTerm, initialStatuses, filter
             return acc;
         }, initialStatuses);
 
+        orderStatus["All"] = orders;
+
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders, initialStatuses]);
+
 
     return (
         <Tabs aria-label="Tabs with icons">

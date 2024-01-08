@@ -22,7 +22,12 @@ export default function ManageOrderPage() {
     const getOrders = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
-            setOrders(res.data.orders)
+            const orders = res.data.orders
+            const statusOrder = ["unpaid", "to ship", "shipping", "completed" , "cancelled", "failed delivery"];
+            orders.sort((a, b) => {
+                return statusOrder.indexOf(a.status.toLowerCase()) - statusOrder.indexOf(b.status.toLowerCase());
+            });
+            setOrders(orders)
         }
         catch (error) {
             console.log(error)

@@ -538,18 +538,14 @@ exports.placeOrder = async (req, res) => {
           product_name: cartItem.product.product_name
         })),
         userName: user.name,
-        shippingAddress: req.body.streetAddress,
-        contactNumber: req.body.phoneNumber
+        shippingAddress: req.body.checkoutInfo.streetAddress,
+        contactNumber: req.body.checkoutInfo.phoneNumber,
       });
-
       await order.save();
-      console.log(order)
     }
-
     for (const product of products) {
       await userCart.removeProduct(product.product); // Remove each product from the cart
     }
-
     res.status(200).json({ message: 'Orders placed successfully!', cart: userCart });
   } catch (error) {
     console.error(error);
@@ -651,7 +647,6 @@ exports.vendorProductPage = async (req, res) => {
     const numberOfFollowers = await FollowerList.findOne({ vendorID: req.params.id }, { followers: 1 })
     return res.status(200).json({ vendor: vendor, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
   }
 }

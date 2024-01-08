@@ -40,9 +40,6 @@ export default function ReportedProductPage() {
     <>
       <section className="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
-          <h1 className="m-2 text-xl font-bold text-center xs:text-md">
-            {(reports.length) ? "Reported" : ""} Product Information
-          </h1>
           {/* <!-- Vendor --> */}
           <ReportedVendorCard vendor={vendor} product={product} reports={reports} />
         </div>
@@ -57,7 +54,7 @@ function ReportedVendorCard({ vendor, product, reports }) {
 
     <div className="p-6 space-y-6 bg-white rounded-lg shadow my-5 xs:p-4">
       <h1 className="m-2 text-2xl font-bold text-center xs:text-md">
-        Reported Product Information
+        {(reports.length) ? "Reported" : ""} Product Information
       </h1>
       <div className="flex items-center gap-4 mt-4 xs:gap-3 ">
         {(vendor.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
@@ -102,7 +99,7 @@ function ReportedTableComponent({ product, reports }) {
           </div>
           <div className="ms-6">
             <p className="font-light text-gray-900 text-sm">ProductID: <span className="lg:md:ms-2 sm:ms-0 sm:mb-2 font-medium">{product._id}</span></p>
-            <p className="font-light text-gray-900 text-sm">Name: <span className="ms-2 font-medium">{product.product_name}</span></p>
+            <p className="font-light text-gray-900 text-sm">Product name: <span className="ms-2 font-medium">{product.product_name}</span></p>
             <p className="font-light text-gray-900 text-sm">Category: <span className="ms-2 font-medium">{product.category}</span></p>
             <p className="font-light text-gray-900 text-sm">Price: <span className="ms-8 font-medium">${product.price}</span></p>
             <p className="font-light text-gray-900 text-sm">Rating: <span className="ms-6 font-medium">{product.ratings} stars</span></p>
