@@ -15,6 +15,9 @@ export default function VendorCard({ user, orders }) {
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
+        <h1 class="m-2 text-2xl font-bold text-center xs:text-md">
+          Account Information
+        </h1>
         <div class="flex items-center gap-4 mt-4 flex-wrap">
           <img src={(user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-16 aspect-square object-cover rounded" alt="" />
           <div>
@@ -27,15 +30,11 @@ export default function VendorCard({ user, orders }) {
             </span>
           </div>
         </div>
-        <div class="text-lg mt-3 text-black font-medium">Business Address</div>
-        <div class="my-2">
-          <div class="text-lg text-gray-500 border-t border-gray-200 py-5 px-3">
-            <div class="text-lg text-gray-500">{user.address}</div>
-          </div>
-        </div>
+        <div class="text-lg mt-3 text-black font-medium">Address: <span class="text-lg font-normal">{user.address}</span></div>
+       
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 pb-4">
           <div class="text-lg mt-3 text-black font-medium">Orders</div>
-          <div className="flex items-center py-10">
+          <div className="flex items-center ">
             <div className="flex flex-row items-center">
               <input type="text" name="search" placeholder="Please enter order info here "
                 className="rounded-md w-full border border-slate-400 pl-4 pr-20 py-2 text-md hover:border-black" onChange={(e) => setSearchTerm(e.target.value)} />

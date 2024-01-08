@@ -40,12 +40,10 @@ export default function ReportInfoPage() {
 
   return (
     <>
-      <section class="bg-gray-200 w-5/6 md:w-full">
+      <section class="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         {error && <Navigate to={"/"} replace />}
         <div class="md:container mx-auto p-5">
-          <h1 class="m-5 text-3xl font-light text-center">
-            Account Information
-          </h1>
+          
           {/* <!-- Customer --> */}
           {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} orders={orders} />}
           {/* <!-- Vendor --> */}
