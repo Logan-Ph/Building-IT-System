@@ -144,10 +144,10 @@ export default function VendorEditStore() {
           {/* Upload Cover Image */}
           <div class="my-5 p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
             <div class="max-w-full mx-auto items-center">
-              <div class="">
+              <div>
                 <div
                   id="image-preview"
-                  class="max-w-full h-48 bg-gray-100 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
+                  class="max-w-full h-48 p-6 bg-gray-100 rounded-lg items-center mx-auto text-center cursor-pointer bg-cover bg-center bg-no-repeat bg-blend-multiply"
                   style={ coverPhoto ? { backgroundImage: `url(${URL.createObjectURL(coverPhoto)})` } : (user && user.coverPhoto ? {backgroundImage: `url(${user.coverPhoto})` } : {}) }
                 >
                   <input
@@ -293,7 +293,7 @@ export default function VendorEditStore() {
                 className="hidden"
                 accept="image/*"
               />
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
+              <p className="text-2xl text-gray-400 dark:text-gray-500 cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -322,7 +322,7 @@ export default function VendorEditStore() {
                 className="hidden"
                 accept="image/*"
               />
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
+              <p className="text-2xl text-gray-400 dark:text-gray-500 cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
