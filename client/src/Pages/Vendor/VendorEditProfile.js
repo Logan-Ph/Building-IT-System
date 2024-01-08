@@ -79,7 +79,8 @@ export default function VendorEditProfile() {
   }, [error, msg]);
 
   return (
-    <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 max-w-4xl">
+  <div className="container mx-auto px-4 rounded-lg bg-gray-100 shadow p-4 max-w-full">
+    <div className="container mx-auto my-4 px-4 rounded-lg bg-white shadow p-4 max-w-5xl">
       {error && <Navigate to='/login' replace={true} />}
       <ToastContainer
         position="top-center"
@@ -120,7 +121,7 @@ export default function VendorEditProfile() {
           <div className="sm:col-span-4">
             <label for="phone" className="block text-sm font-medium leading-6 text-gray-900">Phone number</label>
             <div className="mt-2">
-              <input onChange={(e) => setPhoneNumber(e.target.value)} id="phone" placeholder={user && user.phoneNumber} name="phone" type="phone" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input onChange={(e) => setPhoneNumber(e.target.value)} id="phone" placeholder={user && user.phoneNumber} name="phone" type="phone" className="block w-full rounded-md border-0 py-1.5 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
               </input>
             </div>
           </div>
@@ -131,5 +132,6 @@ export default function VendorEditProfile() {
         </div>
       </div>
     </div>
+  </div>
   )
 }

@@ -85,7 +85,7 @@ export default function VendorMyProduct() {
         pauseOnHover={false}
         theme="light"
       />
-      <div class=" bg-gray-100 h-auto lg:w-5/6 md:w-2/3 w-3/4 mx-auto lg:px-20 md:mr-32 relative py-20 ">
+      <div class=" bg-gray-100 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full overflow-hidden">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
             <form>
@@ -186,8 +186,7 @@ export default function VendorMyProduct() {
                 {dataSlice.map((product) => (
                   <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     {/* ... Table data goes here ... */}
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {product.product_name}
+                    <td className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap dark:text-white truncate ...">                      {product.product_name}
                     </td>
                     <td className="px-6 py-4">
                       ${product.price}
