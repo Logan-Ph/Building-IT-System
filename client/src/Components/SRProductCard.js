@@ -127,9 +127,9 @@ export default function SRProductCard({ hit, user }) {
     <div className="bg-white p-4">
       <div className="relative">
         <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto">
-          <img src={hit.image_link} className="object-full h-full w-full scale-75" alt={hit.product_name} />
+          <img src={hit.image_link} className="object-full h-full w-full scale-75 mb-3" alt={hit.product_name} />
 
-          <hr className='border border-gray-200 mt-4'></hr>
+          <hr className='border border-gray-200'></hr>
           </div>
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
             <Link to={`/product/${hit.objectID}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
@@ -146,8 +146,8 @@ export default function SRProductCard({ hit, user }) {
           <h4 className="text-md text-gray-900 line-clamp-2 mt-2">{hit.product_name}</h4>
         </Link>
         <p className="mt-1 text-md font-bold text-[#E61E2A]">${hit.price}</p>
-        <p className="mt-1 text-sm font-light text-gray-700 mb-2">{hit.category}</p>
-        <p className="text-xs font-medium text-[#fac800f1] mt-4">Rating: {hit.ratings}</p>
+        <p className="mt-1 text-sm font-normal text-gray-700 mb-2">{hit.category}</p>
+        <p className="text-sm font-medium text-[#fac800f1] mt-4">Rating: {hit.ratings}</p>
 
       </div>
       <span onClick={() => addProduct(hit.objectID)} className="block w-full py-1 text-center text-md font-semibold text-white bg-red-500 border border-red-500 rounded-b hover:bg-transparent hover:text-red-500 hover:rounded transition">Add to cart</span>

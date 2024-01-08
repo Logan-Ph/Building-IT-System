@@ -64,7 +64,7 @@ export default function ProductCard({ product }) {
     group xs:mx-auto"
             key={product._id}>
             <div className="relative">
-                <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto">
+                <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto p-3">
                     <img src={product.image_link} className="object-full h-full w-full scale-75" alt={product.product_name} />
 
 

@@ -76,7 +76,7 @@ export default function Example() {
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 className="text-3xl font-semibold tracking-tight text-gray-900 xs:text-lg">Search result for <span className='text-[#E61E2A] font-light xs:text-md'>"{searchQuery}"</span></h1>
 
-            <div className="flex items-center">
+            <div className="flex items-center ">
               <SortOptions sortOptions={sortOptions} setSortOptions={setSortOptions} />
               <FilterSideBar setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />
             </div>
@@ -84,11 +84,11 @@ export default function Example() {
           </div>
 
           {/* Normal Screen */}
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
+          <section aria-labelledby="products-heading" className="pb-24 pt-6 " >
             <div className="xl:justify-start xl:divide-x-2 xl:gap-6 xl:flex lg:flex lg:justify-start lg:divide-x-2 lg:gap-6 md:flex sm:block">
-              <div className='w-full'>
+              <div className='w-full '>
                 {/* Filters */}
-                <div className="xs:hidden sm:hidden md:block lg:block wi">
+                <div className="xs:hidden sm:hidden md:block lg:block wi shadow-lg">
                   <SRPriceRange />
                   <SRStarRating />
                   <CheckboxLabel setValueFilter={setValueFilter} valueFilter={valueFilter} refine={refine} oldCategoryRef={oldCategoryRef} />

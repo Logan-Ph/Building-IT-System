@@ -34,7 +34,7 @@ export default function SRPriceRange() {
             <i className="fa-solid fa-dollar-sign mr-2"></i>
             <input type="number" id="number-input"
               aria-describedby="helper-text-explanation"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-2xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2" placeholder="FROM" required
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-2xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2 text-sm" placeholder="FROM" required
               onChange={(e) => setValues([e.target.value, values[1]])}
             />
           </div>
