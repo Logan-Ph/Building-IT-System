@@ -513,7 +513,6 @@ exports.placeOrder = async (req, res) => {
     if (!userCart) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
-    console.log(products)
 
     // Group products by owner
     const productsByOwner = userCart.products.reduce((groups, cartItem) => {
@@ -540,6 +539,10 @@ exports.placeOrder = async (req, res) => {
         userName: user.name,
         shippingAddress: req.body.checkoutInfo.streetAddress,
         contactNumber: req.body.checkoutInfo.phoneNumber,
+        shippingFee: req.body.shippingFee,
+        city: req.body.checkoutInfo.city,
+        ward: req.body.checkoutInfo.ward,
+        district: req.body.checkoutInfo.district,
       });
       await order.save();
     }
@@ -589,6 +592,16 @@ exports.addProduct = async (req, res) => {
   } catch {
     return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
   }
+}
+
+exports.viewInvoice = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    return res.status(200).json({ order: order });
+  } catch (error) {
+    return res.status(500).json({ error: "Cannot find order" });
+  }
+
 }
 
 exports.removeProduct = async (req, res) => {

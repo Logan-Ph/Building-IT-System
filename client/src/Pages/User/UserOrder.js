@@ -5,6 +5,7 @@ import { Navigate } from 'react-router';
 import axios from "axios";
 import { UserContext } from "../../Context/UserContext";
 import LoadingPage from "./LoadingPage";
+import { Link } from "react-router-dom";
 
 export default function UserOrder() {
     const { user } = useContext(UserContext)
@@ -222,9 +223,9 @@ function OrderContent({ orders, searchTerm }) {
                         })}
                         <div class="flex justify-between items-end h-full pt-2">
                           <div>
-                            <a class="font-medium text-blue-600 hover:underline">
+                            <Link class="font-medium text-blue-600 hover:underline" to={`/${data._id}/view-invoice`}>
                               View Invoice
-                            </a>
+                            </Link>
                           </div>
                           <p class="text-lg font-bold">Total: ${orderPrice}</p>
                         </div>

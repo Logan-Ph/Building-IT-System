@@ -44,6 +44,7 @@ import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 import ShipperHeader from "./ShipperHeader";
 import LoadingPage from "../Pages/User/LoadingPage";
 import ThankForOrderPage from "../Pages/User/ThankForOrderPage"
+import Invoice from "../Pages/User/Invoice";
 
 const searchClient = algoliasearch(
   "DN0WBRQ8A3",
@@ -182,6 +183,10 @@ export default function Router() {
           path: "/thankfororder",
           element: <ThankForOrderPage />,
         },
+        {
+          path: "/:id/view-invoice",
+          element: <Invoice />
+        }
       ],
     },
     {

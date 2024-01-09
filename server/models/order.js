@@ -55,6 +55,18 @@ const orderSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  shippingFee: {
+    type: Number,
+    require: true,
+  },
+  ward: {
+    type: String,
+    require: true,
+  },
+  district: {
+    type: String,
+    require: true,
+  },
   status: {
     type: String,
     required: true,
