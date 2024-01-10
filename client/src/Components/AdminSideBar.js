@@ -2,8 +2,16 @@ import { Home, UserCog } from "lucide-react";
 import Sidebar, { SidebarItem } from "./Sidebar";
 import { FaOpencart } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../Context/UserContext";
 
 export default function AdminSideBar() {
+    const {user} = useContext(UserContext)
+
+    if (!user){
+        return null
+    }
+
     return (
         <Sidebar>
             <Link to="/admin/dashboard">
