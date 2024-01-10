@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { UserContext } from '../Context/UserContext'
 import axios from 'axios'
 import { Link, Navigate } from 'react-router-dom'
+import LoadingPage from '../Pages/User/LoadingPage'
 
 export default function AdminHeader() {
   const { user, setUser } = useContext(UserContext)
@@ -34,7 +35,7 @@ export default function AdminHeader() {
 
 
   if (user === undefined || isLoading) {
-    return null;
+    return <LoadingPage />;
   }
 
   return (

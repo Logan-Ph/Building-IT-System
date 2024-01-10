@@ -4,22 +4,24 @@ import ToDoList from "../../Components/ToDoList";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { UserContext } from "../../Context/UserContext";
 
 export default function DashboardPage() {
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
-  const [numberOfFollowers, setNumberOfFollowers] = useState(0)
-  const [income, setIncome] = useState(0)
-  const [orders, setOrders] = useState()
-
+  const [orders, setOrders] = useState([])
+  const {user} = useContext(UserContext)
+  const [numberOfFollowers, setNumberOfFollowers] = useState()
+  const [income, setIncome] = useState()
+  
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
+      setOrders(res.data.orders)
       setNumberOfFollowers(res.data.numberOfFollowers)
       setIncome(res.data.income)
-      setOrders(res.data.orders)
       setIsLoading(false)
     }
     catch (er) {
@@ -32,7 +34,7 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData])
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return null
   }
 
@@ -76,7 +78,7 @@ export default function DashboardPage() {
               </h1>
 
             </div>
-            <div className="relative">
+            <div className="relative" >
               <VendorBarChart orders={orders} />
             </div>
           </div>

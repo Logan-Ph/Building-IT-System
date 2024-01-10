@@ -513,7 +513,6 @@ exports.placeOrder = async (req, res) => {
     if (!userCart) {
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
-    console.log(products)
 
     // Group products by owner
     const productsByOwner = userCart.products.reduce((groups, cartItem) => {
@@ -540,6 +539,10 @@ exports.placeOrder = async (req, res) => {
         userName: user.name,
         shippingAddress: req.body.checkoutInfo.streetAddress,
         contactNumber: req.body.checkoutInfo.phoneNumber,
+        shippingFee: req.body.shippingFee,
+        city: req.body.checkoutInfo.city,
+        ward: req.body.checkoutInfo.ward,
+        district: req.body.checkoutInfo.district,
       });
       await order.save();
     }
@@ -589,6 +592,16 @@ exports.addProduct = async (req, res) => {
   } catch {
     return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
   }
+}
+
+exports.viewInvoice = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    return res.status(200).json({ order: order });
+  } catch (error) {
+    return res.status(500).json({ error: "Cannot find order" });
+  }
+
 }
 
 exports.removeProduct = async (req, res) => {
@@ -676,7 +689,7 @@ exports.confirmOrder = async (req, res) => {
 exports.getVendorDashboard = async (req, res) => {
   try {
     let user = await authenticateToken(req.cookies.userToken);
-    const ordersCount = await Order.aggregate([
+    const ordersStatus = await Order.aggregate([
       {
         $match: { vendorID: new mongoose.Types.ObjectId(user._id) }
       },
@@ -687,15 +700,14 @@ exports.getVendorDashboard = async (req, res) => {
         }
       }
     ]);
-    const numberOfFollowers = await FollowerList.findOne({ vendorID: user._id }, { followers: 1 })
     const orders = await Order.find({ vendorID: user._id });
-    const income = orders.reduce((total, order) => total + order.products.reduce((total, product) => total + Number(product.price) * product.quantity, 0), 0);
-
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: user._id }, { followers: 1 })
     const ordersCountByStatus = {};
-    ordersCount.forEach(orderGroup => {
+    ordersStatus.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
     });
-    res.status(200).json({ ordersByStatus: ordersCountByStatus, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income, orders: orders });
+    const income = orders.reduce((total, order) => total + order.products.reduce((total, product) => total + product.price * product.quantity, 0), 0);
+    res.status(200).json({ ordersByStatus: ordersCountByStatus, orders: orders, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

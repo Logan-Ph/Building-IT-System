@@ -92,6 +92,9 @@ router.post('/chat', userController.createThread);
 router.post('/report-vendor', uploadMultiple, userController.reportVendor);
 router.post('/report-product', userController.reportProduct);
 
+// user view invoice route
+router.get('/:id/view-invoice', userController.viewInvoice);
+
 // vendor update profile route
 router.post('/update-vendor', upload.single('file'), userController.updateVendor);
 
