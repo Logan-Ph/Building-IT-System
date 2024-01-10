@@ -1,21 +1,25 @@
-import AdminBarChart from "../../Components/AdminBarChart";
-
+import VendorBarChart from "../../Components/VendorBarChart";
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import LoadingPage from "../User/LoadingPage";
 
 export default function DashboardPage() {
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const [numberOfFollowers, setNumberOfFollowers] = useState(0)
+  const [income, setIncome] = useState(0)
+  const [orders, setOrders] = useState()
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
+      setNumberOfFollowers(res.data.numberOfFollowers)
+      setIncome(res.data.income)
+      setOrders(res.data.orders)
       setIsLoading(false)
     }
     catch (er) {
@@ -65,7 +69,7 @@ export default function DashboardPage() {
               Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
             </h1>
 
-            <Insight />
+            <Insight orders={Object.values(ordersByStatus).reduce((total, orders) => total + Number(orders), 0)} numberOfFollowers={numberOfFollowers} income={income} />
             <div className="mt-4">
               <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black text-2xl ">
                 Last Month Incomes
@@ -73,7 +77,7 @@ export default function DashboardPage() {
 
             </div>
             <div className="relative">
-              <AdminBarChart />
+              <VendorBarChart orders={orders} />
             </div>
           </div>
         </div>
