@@ -701,7 +701,6 @@ exports.getVendorDashboard = async (req, res) => {
       }
     ]);
     const orders = await Order.find({ vendorID: user._id });
-
     const ordersCountByStatus = {};
     ordersStatus.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
