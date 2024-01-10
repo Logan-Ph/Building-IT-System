@@ -15,7 +15,6 @@ export default function ChatPage() {
     try {
       const res = await axios.get("http://localhost:4000/chat", { withCredentials: true });
       setUsers(res.data.users);
-      console.log(res.data.users)
       setThreads(res.data.threads);
     } catch (err) {
       console.log(err);
