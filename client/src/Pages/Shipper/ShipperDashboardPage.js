@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import OrdersInfo from '../../Components/OrdersInfo';
 import { UserContext } from '../../Context/UserContext';
+import { ToastContainer } from 'react-toastify';
 
 export default function ManageOrderPage() {
     const [orders, setOrders] = useState();
@@ -24,7 +25,12 @@ export default function ManageOrderPage() {
     const getData = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:4000/shipper/dashboard", { withCredentials: true })
-            setOrders(res.data.orders)
+            const orders = res.data.orders
+            const statusOrder = ["to ship", "shipping", "completed", "cancelled", "failed delivery"];
+            orders.sort((a, b) => {
+                return statusOrder.indexOf(a.status.toLowerCase()) - statusOrder.indexOf(b.status.toLowerCase());
+            });
+            setOrders(orders)
             setOrdersCountByStatus(res.data.ordersCountByStatus);
         } catch (error) {
             setError(error)
@@ -35,9 +41,36 @@ export default function ManageOrderPage() {
         getData();
     }, [getData])
 
+    if (!user) {
+        return null;
+    }
+
+    const handleConfirmOrder = async (orderId) => {
+        setOrders(orders.filter(order => order._id !== orderId))
+        if (orders.find(order => order._id === orderId).status === "To Ship") {
+            setOrdersCountByStatus(prev => ({...prev, "To Ship": prev["To Ship"] - 1, "Shipping": prev["Shipping"] + 1}))
+        }
+
+        if (orders.find(order => order._id === orderId).status === "Shipping") {
+            setOrdersCountByStatus(prev => ({...prev, "Shipping": prev["Shipping"] - 1, "Completed": prev["Completed"] + 1}))
+        }
+    }
+
     return (
         <>
             {error && <Navigate to={"/"} replace />}
+            <ToastContainer
+                position="top-center"
+                autoClose={1000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="light"
+            />
             <div class="max-w-full mb-10 pb-5 lg:md:w-full w-5/6 overflow:hidden">
                 <div
                     id="content"
@@ -65,7 +98,7 @@ export default function ManageOrderPage() {
                     </div>
 
                     <div>
-                        {orders && <OrdersInfo orders={orders} searchTerm={searchTerm} initialStatuses={initialStatuses} filterOrders={filterOrders} headerContent={headerContent} />}
+                        {orders && <OrdersInfo orders={orders} searchTerm={searchTerm} initialStatuses={initialStatuses} filterOrders={filterOrders} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} />}
                     </div>
                 </div>
             </div>
