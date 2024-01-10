@@ -1,21 +1,22 @@
-import AdminBarChart from "../../Components/AdminBarChart";
+import VendorBarChart from "../../Components/VendorBarChart";
 
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-import LoadingPage from "../User/LoadingPage";
 
 export default function DashboardPage() {
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const [orders, setOrders] = useState([])
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
+      setOrders(res.data.orders)
       setIsLoading(false)
     }
     catch (er) {
@@ -72,8 +73,8 @@ export default function DashboardPage() {
               </h1>
 
             </div>
-            <div className="relative">
-              <AdminBarChart />
+            <div className="relative" >
+              <VendorBarChart orders={orders} />
             </div>
           </div>
         </div>

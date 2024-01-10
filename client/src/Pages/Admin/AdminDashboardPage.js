@@ -1,5 +1,5 @@
 "use client";
-import AdminBarChart from "../../Components/AdminBarChart";
+import AdminBarChart from "../../Components/VendorBarChart";
 import AdminInsight from "../../Components/AdminInsight";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -568,12 +568,6 @@ export default function DashboardPage() {
             numbersOfShippers={numberOfShippers}
             numbersOfProducts={numberOfProducts}
           />
-          <div className="mt-4">
-            <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black text-2xl">
-              Last Month Users
-            </h1>
-            <AdminBarChart />
-          </div>
           <div id="last-users"></div>
         </div>
       </div>
