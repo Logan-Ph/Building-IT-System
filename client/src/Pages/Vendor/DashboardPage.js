@@ -2,15 +2,17 @@ import VendorBarChart from "../../Components/VendorBarChart";
 
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import { UserContext } from "../../Context/UserContext";
 
 export default function DashboardPage() {
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const [orders, setOrders] = useState([])
+  const {user} = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
@@ -29,7 +31,7 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData])
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return null
   }
 
