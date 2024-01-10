@@ -1,5 +1,4 @@
 "use client";
-import AdminBarChart from "../../Components/VendorBarChart";
 import AdminInsight from "../../Components/AdminInsight";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
