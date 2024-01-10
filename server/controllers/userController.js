@@ -35,7 +35,6 @@ function authenticateToken(token) {
   });
 }
 
-
 const imagekit = new ImageKit({
   publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
   privateKey: "private_cbWm9zohUJFQN1mBMEOxC6ZNjrY=",
@@ -89,7 +88,7 @@ function sendEmailVerification(userEmail) {
     let message = {
       from: "rBuy@gmail.com",
       to: userEmail,
-      subject: "Forgot password verification",
+      subject: "Email verification",
       html: mail
     }
     transporter.sendMail(message)
@@ -496,6 +495,20 @@ exports.verifyEmail = async (req, res) => {
   })
 }
 
+exports.postVerifyEmail = async (req, res) => {
+  try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const email = req.body.email;
+    if (!emailRegex.test(email)) {
+      throw new Error("Invalid email address");
+    }
+    sendEmailVerification(email)
+    return res.status(200).json({ msg: "A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder." });
+  } catch (error) {
+    res.status(500).send(error.message || "Error Occured");
+  }
+}
+
 // Place the Order
 exports.placeOrder = async (req, res) => {
   try {
@@ -700,12 +713,14 @@ exports.getVendorDashboard = async (req, res) => {
         }
       }
     ]);
-    const orders = await Order.find({ vendorID: user._id });
+    const orders = await Order.find({ vendorID: user._id, status: "Completed" });
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: user._id }, { followers: 1 })
     const ordersCountByStatus = {};
     ordersStatus.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
     });
-    res.status(200).json({ ordersByStatus: ordersCountByStatus, orders: orders });
+    const income = orders.reduce((total, order) => total + order.products.reduce((total, product) => total + product.price * product.quantity, 0), 0);
+    res.status(200).json({ ordersByStatus: ordersCountByStatus, orders: orders, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

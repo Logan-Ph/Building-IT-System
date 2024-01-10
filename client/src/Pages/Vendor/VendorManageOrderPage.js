@@ -18,6 +18,9 @@ export default function ManageOrderPage() {
         "Failed Delivery": null
     };
     const headerContent = ["Order ID", "Customer Name", "Order Date", "Shipping Address", "Contact Number", "Status"]
+    const handleConfirmOrder = async (orderId) => {
+        setOrders(orders.filter(order => order._id !== orderId))
+    }
 
     const getOrders = useCallback(async () => {
         try {
@@ -46,7 +49,7 @@ export default function ManageOrderPage() {
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={2000}
+                autoClose={1000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
@@ -64,7 +67,7 @@ export default function ManageOrderPage() {
                     </div>
                 </div>
                 <div className='relative'>
-                    <OrdersInfo orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} initialStatuses={initialStatuses} headerContent={headerContent} className="w-full" />
+                    <OrdersInfo orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} initialStatuses={initialStatuses} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} className="w-full" />
                 </div>
             </div>
         </>
@@ -76,6 +79,7 @@ function filterOrders(orders, searchTerm) {
     return orders.map(order => {
         const date = new Date(order.date);
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+        console.log(formattedDate)
         return { ...order, date: formattedDate };
     }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
 }

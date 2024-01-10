@@ -41,6 +41,9 @@ function generateToken(user) {
 // user verify email route
 router.get('/user/:token/verify-email', userController.verifyEmail);
 
+// user verify email
+router.post('/verify-email', userController.postVerifyEmail);
+
 // user forgot password route
 router.get('/user/:token/forgot-password', userController.resetPassword);
 router.post('/user/:token/forgot-password', userController.postResetPassword);

@@ -1,10 +1,10 @@
 import axios from "axios";
 import { Modal } from "flowbite-react";
 import { useContext, useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import { UserContext } from "../Context/UserContext";
+import { toast } from "react-toastify";
 
-export default function MoreDetailOrder({ order }) {
+export default function MoreDetailOrder({ order, handleConfirmOrder }) {
     const { user } = useContext(UserContext);
     const [openModal, setOpenModal] = useState(false);
     const [orderQuantity, setOrderQuantity] = useState(0);
@@ -29,7 +29,6 @@ export default function MoreDetailOrder({ order }) {
         await axios.post("http://localhost:4000/confirm-order", { orderId: order._id }, { withCredentials: true })
             .then(res => {
                 notify(res.data.msg)
-                window.location.reload();
             })
             .catch(err => { notify(err.response.data.error) })
     }
@@ -37,7 +36,7 @@ export default function MoreDetailOrder({ order }) {
     const notify = (msg) => {
         toast.success(msg, {
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -50,21 +49,11 @@ export default function MoreDetailOrder({ order }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         postData()
+        handleConfirmOrder(order._id)
+        setOpenModal(false)
     }
 
     return (<>
-        <ToastContainer
-            position="top-center"
-            autoClose={10000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover={false}
-            theme="light"
-        />
         <span className="font-medium text-cyan-600 hover:underline dark:text-cyan-500" onClick={() => setOpenModal(true)}>
             More
         </span>

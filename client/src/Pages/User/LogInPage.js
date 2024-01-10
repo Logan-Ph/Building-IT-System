@@ -6,12 +6,20 @@ import 'react-toastify/dist/ReactToastify.css'
 import { UserContext } from '../../Context/UserContext'
 
 export default function LogInPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState('');
     const { user, setUser } = useContext(UserContext);
+    const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
+        const savedEmail = localStorage.getItem('email');
+        const savedPassword = localStorage.getItem('password');
+        if (savedEmail) {
+            setEmail(savedEmail);
+            setPassword(savedPassword);
+            setRememberMe(true);
+        }
         if (error) {
             notify(error);
         }
@@ -36,7 +44,14 @@ export default function LogInPage() {
         }
 
         await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
-            .then(res => { setUser(res.data.user); setError(res.data.message); })
+            .then(res => {
+                setUser(res.data.user);
+                setError(res.data.message);
+                if (rememberMe) {
+                    localStorage.setItem('email', email);
+                    localStorage.setItem('password', password);
+                }
+            })
             .catch(er => {
                 console.log(er);
             });
@@ -95,19 +110,19 @@ export default function LogInPage() {
                             <div>
                                 <label for="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
                                 <div className="mt-2">
-                                    <input type="text" id="email" name="email" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Email must be in the format: name@domain.com" onChange={e => setEmail(e.target.value)} />
+                                    <input type="text" id="email" name="email" required defaultValue={email} className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Email must be in the format: name@domain.com" onChange={e => setEmail(e.target.value)} />
                                 </div>
                             </div>
                             <div>
                                 <label for="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                 <div className="mt-2">
-                                    <input id="password" name="password" type="password" required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." onChange={e => setPassword(e.target.value)} />
+                                    <input id="password" name="password" type="password" defaultValue={password} required className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." onChange={e => setPassword(e.target.value)} />
                                 </div>
                             </div>
                             <div className="mt-3 flex justify-between items-center">
                                 <div>
-                                    <input id="terms" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " />
-                                    <label className="ms-2 text-sm font-medium text-gray-900 ">Remember Me</label>
+                                    <input id="terms" type="checkbox" checked={rememberMe} onChange={() => setRememberMe(prev => !prev)} value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " />
+                                    <label className="ms-2 text-sm font-medium text-gray-900" >Remember Me</label>
                                 </div>
                                 <div>
                                     <Link to="/forgot-password" className="ms-2 text-sm font-medium text-blue-600 hover:underline">Forgot password?</Link>
@@ -133,6 +148,15 @@ export default function LogInPage() {
                                 <button className="font-semibold leading-6 text-[#222160] hover:text-[#000053]" >
                                     <Link to='/register'>
                                         Sign up
+                                    </Link>
+                                </button>
+                            </div>
+
+                            <div className="mt-6 flex justify-center items-center gap-1">
+                                <p className="font-medium text-base">Forgot to verify your email?</p>
+                                <button className="font-semibold leading-6 text-[#222160] hover:text-[#000053]" >
+                                    <Link to='/verify-email'>
+                                        Verify email
                                     </Link>
                                 </button>
                             </div>

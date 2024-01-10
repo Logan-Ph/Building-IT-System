@@ -1,5 +1,4 @@
 import VendorBarChart from "../../Components/VendorBarChart";
-
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -13,12 +12,16 @@ export default function DashboardPage() {
   const [error, setError] = useState("")
   const [orders, setOrders] = useState([])
   const {user} = useContext(UserContext)
-
+  const [numberOfFollowers, setNumberOfFollowers] = useState()
+  const [income, setIncome] = useState()
+  
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
       setOrders(res.data.orders)
+      setNumberOfFollowers(res.data.numberOfFollowers)
+      setIncome(res.data.income)
       setIsLoading(false)
     }
     catch (er) {
@@ -68,7 +71,7 @@ export default function DashboardPage() {
               Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
             </h1>
 
-            <Insight />
+            <Insight orders={Object.values(ordersByStatus).reduce((total, orders) => total + Number(orders), 0)} numberOfFollowers={numberOfFollowers} income={income} />
             <div className="mt-4">
               <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black text-2xl ">
                 Last Month Incomes

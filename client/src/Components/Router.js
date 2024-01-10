@@ -45,6 +45,7 @@ import ShipperHeader from "./ShipperHeader";
 import LoadingPage from "../Pages/User/LoadingPage";
 import ThankForOrderPage from "../Pages/User/ThankForOrderPage"
 import Invoice from "../Pages/User/Invoice";
+import ForgotVerifyEmail from "../Pages/User/ForgotVerifyEmail";
 
 const searchClient = algoliasearch(
   "DN0WBRQ8A3",
@@ -243,6 +244,10 @@ export default function Router() {
           path: "/loading-page",
           element: <LoadingPage />,
         },
+        {
+          path: "/verify-email",
+          element: <ForgotVerifyEmail />,
+        },
       ],
     },
     {
@@ -282,7 +287,7 @@ export default function Router() {
               indexName="rBuy"
               insights={true}
             >
-              <div className="h-full overflow-hidden">
+              <div className="h-screen overflow-hidden">
                 <Header />
                 <ChatPage />
               </div>

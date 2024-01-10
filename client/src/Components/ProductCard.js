@@ -3,6 +3,8 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
 import { Link } from "react-router-dom";
+import { Rating } from 'flowbite-react';
+
 
 
 export default function ProductCard({ product }) {
@@ -85,11 +87,11 @@ export default function ProductCard({ product }) {
                 <p className="text-lg text-red-500 font-semibold mb-2">${product.price}</p>
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex text-xs text-[#FAC800]">
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
+                        <Rating size="md">
+                            {[...Array(5)].map((_, i) => (
+                                <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-5 !h-5" />
+                            ))}
+                        </Rating>
                     </div>
                     <div className="text-xs xs:text-2xs text-gray-500 block" >Rating {product.ratings}</div>
                 </div>

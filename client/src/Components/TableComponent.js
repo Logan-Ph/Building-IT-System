@@ -2,8 +2,7 @@ import { Table } from 'flowbite-react';
 import React from "react";
 import MoreDetailOrder from './MoreDetailOrder';
 
-export default function TableComponent({ orders, headerContent }) {
-    console.log(orders)
+export default function TableComponent({ orders, headerContent, handleConfirmOrder }) {
     return (
         <>
             <div className='w-full overflow-x-auto'>
@@ -82,7 +81,7 @@ export default function TableComponent({ orders, headerContent }) {
                                         </button>
                                     </Table.Cell>
                                     <Table.Cell className='!px-4 !py-2'>
-                                        <MoreDetailOrder order={order} />
+                                        <MoreDetailOrder order={order} handleConfirmOrder={handleConfirmOrder}/>
                                     </Table.Cell>
                                 </Table.Row>
                             )

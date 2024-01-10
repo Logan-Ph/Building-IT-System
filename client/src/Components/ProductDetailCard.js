@@ -224,13 +224,11 @@ export default function ProductDetailCard({ product, vendorName, user }) {
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center">
                             <Rating size="md">
-                                <Rating.Star className="!w-6 !h-6" />
-                                <Rating.Star className="!w-6 !h-6" />
-                                <Rating.Star className="!w-6 !h-6" />
-                                <Rating.Star className="!w-6 !h-6" />
-                                <Rating.Star filled={false} className="!w-6 !h-6" />
+                                {[...Array(5)].map((_, i) => (
+                                    <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-6 !h-6" />
+                                ))}
                             </Rating>
-                            <div className="ml-2 whitespace-nowrap font-semibold">Rating 4.0</div>
+                            <div className="ml-2 whitespace-nowrap font-semibold">{product.ratings}</div>
                         </div>
                         <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
                         <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
