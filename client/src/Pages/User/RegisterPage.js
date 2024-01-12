@@ -58,11 +58,17 @@ export default function RegisterPage() {
 
     async function axiosPostData() {
         try {
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
             switch (formType) {
                 case 'customer':
                     data.name = name;
                     if (!(email && password && phoneNumber && address && name && checkBox)) {
                         setError("The field is empty");
+                        setMsg('')
+                        return;
+                    }
+                    if (!passwordPattern.test(password)) {
+                        setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
                         setMsg('')
                         return;
                     }
@@ -80,6 +86,11 @@ export default function RegisterPage() {
                         setMsg('');
                         return;
                     }
+                    if (!passwordPattern.test(password)) {
+                        setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
+                        setMsg('')
+                        return;
+                    }
                     await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
@@ -91,8 +102,12 @@ export default function RegisterPage() {
                     data.name = name;
                     data.distributionHub = distributionHub;
                     if (!(email && password && phoneNumber && address && name && distributionHub)) {
-                        console.log(data)
                         setError("The field is empty");
+                        setMsg('')
+                        return;
+                    }
+                    if (!passwordPattern.test(password)) {
+                        setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
                         setMsg('')
                         return;
                     }
