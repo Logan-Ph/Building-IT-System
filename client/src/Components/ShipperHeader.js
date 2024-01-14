@@ -59,7 +59,7 @@ export default function ShipperHeader() {
                                     </span>
                                 </Link>
                                 {/* Vendor page */}
-                                <h1 className="lg:text-2xl xs:text-xs sm:text-md md:text-lg xl:text-3xl text-gray-900 flex items-center font-semibold xl:ml-12 lg:ml-10 xs:ml-1 sm:ml-2 md:ml-2">Seller Centre</h1>
+                                <h1 className="lg:text-2xl xs:text-xs sm:text-md md:text-lg xl:text-3xl text-gray-900 flex items-center font-semibold xl:ml-12 lg:ml-10 xs:ml-1 sm:ml-2 md:ml-2">Shipper Centre</h1>
                             </div>
                             <div className='flex items-center'>
                                 {/* avatar icon */}
