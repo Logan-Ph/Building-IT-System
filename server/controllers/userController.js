@@ -210,7 +210,14 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product.find({}).limit(60);
+    const page = parseInt(req.query.page);
+    let product;
+    if (page > 1) {
+      product = await Product.find({}).limit(60 + 30 * page);
+      product = product.slice(-30);
+    } else {
+      product = await Product.find({}).limit(60);
+    }
     return res.json({ product: product });
   } catch (error) {
     console.log(error)
@@ -659,7 +666,11 @@ exports.vendorHomepage = async (req, res) => {
     const vendor = convertUser(await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 }));
     const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
     const numberOfFollowers = await FollowerList.findOne({ vendorID: req.params.id }, { followers: 1 })
-    return res.status(200).json({ vendor: vendor, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
+    const trendingProducts = await Product.find({ owner: req.params.id })
+      .sort({ ratings: -1, no_of_ratings: -1 }) // sort in descending order based on salesCount
+      .limit(5) // limit the result to 5
+      .exec();
+    return res.status(200).json({ vendor: vendor, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, trendingProducts: trendingProducts });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
