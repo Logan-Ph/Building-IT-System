@@ -46,13 +46,21 @@ export default function ManageOrderPage() {
     }
 
     const handleConfirmOrder = async (orderId) => {
-        setOrders(orders.filter(order => order._id !== orderId))
-        if (orders.find(order => order._id === orderId).status === "To Ship") {
-            setOrdersCountByStatus(prev => ({...prev, "To Ship": prev["To Ship"] - 1, "Shipping": prev["Shipping"] + 1}))
-        }
+        const orderIndex = orders.findIndex(order => order._id === orderId);
+        if (orderIndex !== -1) {
+            let newStatus = '';
+            if (orders[orderIndex].status === "To Ship") {
+                newStatus = "Shipping";
+                setOrdersCountByStatus(prev => ({ ...prev, "To Ship": prev["To Ship"] - 1, "Shipping": prev["Shipping"] + 1 }));
+            } else if (orders[orderIndex].status === "Shipping") {
+                newStatus = "Completed";
+                setOrdersCountByStatus(prev => ({ ...prev, "Shipping": prev["Shipping"] - 1, "Completed": prev["Completed"] + 1 }));
+            }
 
-        if (orders.find(order => order._id === orderId).status === "Shipping") {
-            setOrdersCountByStatus(prev => ({...prev, "Shipping": prev["Shipping"] - 1, "Completed": prev["Completed"] + 1}))
+            // Update the status of the order in the orders array
+            const newOrders = [...orders];
+            newOrders[orderIndex].status = newStatus;
+            setOrders(newOrders);
         }
     }
 
@@ -108,9 +116,7 @@ export default function ManageOrderPage() {
 
 function filterOrders(orders, searchTerm) {
     const regex = new RegExp(searchTerm, 'i');
-    return orders.map(order => {
-        const date = new Date(order.date);
-        const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-        return { ...order, date: formattedDate };
-    }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
+    return orders.filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress)).map(order => {
+        return order
+    });
 }

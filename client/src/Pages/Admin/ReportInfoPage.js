@@ -57,7 +57,7 @@ export default function ReportInfoPage() {
           {/* <!-- Shipper --> */}
           {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} orders={orders} />}
           {/* Report Section */}
-          {reports && <ReportInfo reports={reports} />}
+          {<ReportInfo reports={reports} />}
         </div>
       </section>
     </>

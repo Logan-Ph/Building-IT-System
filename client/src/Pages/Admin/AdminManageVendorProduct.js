@@ -15,7 +15,7 @@ export default function AdminManageVendorProduct() {
   const [products, setProducts] = useState([]);
   const [reportedProducts, setReportedProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const getProducts = useCallback(async () => {
     const res = await axios.get("http://localhost:4000/admin/manage-product/query=", { withCredentials: true });
@@ -37,14 +37,14 @@ export default function AdminManageVendorProduct() {
     getProducts();
   }, [getProducts])
 
-  if (!user){
+  if (!user) {
     return null
   }
 
   return <>
     <ToastContainer
       position="top-center"
-      autoClose={10000}
+      autoClose={2000}
       hideProgressBar={true}
       newestOnTop={false}
       closeOnClick
@@ -59,10 +59,10 @@ export default function AdminManageVendorProduct() {
         <Tabs aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
           <Tabs.Item active title="All Products" icon={FaCircle}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} />
+            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} setProducts={setProducts} />
           </Tabs.Item>
           <Tabs.Item active title="Reported Product" icon={MdReportProblem}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} />
+            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} setProducts={setReportedProducts} />
           </Tabs.Item>
         </Tabs>
       </div>
@@ -70,7 +70,7 @@ export default function AdminManageVendorProduct() {
   </>
 }
 
-function TableComponent({ setSearchTerm, products, handleSubmit }) {
+function TableComponent({ setSearchTerm, products, handleSubmit, setProducts }) {
   const [dataslice, setDataSlice] = useState(products)
 
   useEffect(() => {
@@ -125,7 +125,7 @@ function TableComponent({ setSearchTerm, products, handleSubmit }) {
               <span className="sr-only">Delete</span>
             </Table.HeadCell>
           </Table.Head>
-          <TableProductContent products={products} dataslice={dataslice} setDataSlice={setDataSlice} />
+          <TableProductContent products={products} dataslice={dataslice} setDataSlice={setDataSlice} setProducts={setProducts} />
         </Table>
       </div>
       {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
@@ -133,7 +133,7 @@ function TableComponent({ setSearchTerm, products, handleSubmit }) {
   );
 }
 
-function TableProductContent({ products, dataslice, setDataSlice }) {
+function TableProductContent({ products, dataslice, setDataSlice, setProducts }) {
   return (
     <>
       <Table.Body className="border-b border-gray-200">
@@ -157,7 +157,7 @@ function TableProductContent({ products, dataslice, setDataSlice }) {
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>${product.price}</Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
-              <DeleteButtonPopup productId={product._id} />
+              <DeleteButtonPopup productId={product._id} setProducts={setProducts} />
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
               <Link to={`/admin/reported-product-page/${product._id}`} href="" className="font-medium text-cyan-600 hover:underline">View</Link>
@@ -169,7 +169,7 @@ function TableProductContent({ products, dataslice, setDataSlice }) {
   )
 }
 
-function DeleteButtonPopup({ productId }) {
+function DeleteButtonPopup({ productId, setProducts }) {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [openModal, setOpenModal] = useState(false);
@@ -177,7 +177,7 @@ function DeleteButtonPopup({ productId }) {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 200,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -190,7 +190,7 @@ function DeleteButtonPopup({ productId }) {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -210,8 +210,10 @@ function DeleteButtonPopup({ productId }) {
       }).then(res => {
         setMsg(res.data)
         setError('')
+        setProducts(prev => prev.filter(product => product._id !== productId));
       })
         .catch(er => { setError(er.response.data); setMsg() });
+
     } catch (error) {
       console.error('Error:', error);
     }
@@ -236,10 +238,10 @@ function DeleteButtonPopup({ productId }) {
               Are you sure you want to delete this product?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => setOpenModal(false)}>
+              <Button color="failure" onClick={() => { setOpenModal(false); handleDelete() }}>
                 Yes, I'm sure
               </Button>
-              <Button color="gray" onClick={() => { setOpenModal(false); handleDelete() }}>
+              <Button color="gray" onClick={() => { setOpenModal(false) }}>
                 Cancel
               </Button>
             </div>

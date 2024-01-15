@@ -1,4 +1,4 @@
-import { Store, CircleUserRound, Users, Package } from 'lucide-react';
+import { Store, CircleUserRound, Users, Package, Truck } from 'lucide-react';
 export default function AdminInsight({ numbersOfUser, numbersOfVendors, numbersOfShippers, numbersOfProducts }) {
   return (
     <>
@@ -64,6 +64,28 @@ export default function AdminInsight({ numbersOfUser, numbersOfVendors, numbersO
                   <div class=" w-auto pl-4 flex-initial">
                     <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-yellow-400">
                       <Store />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 w-full lg:w-6/12 xl:w-3/12 lg:px-5">
+            <div class=" flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+              <div class="flex-auto p-4">
+                <div class="flex flex-wrap">
+                  <div class=" w-full pr-4 max-w-full flex-grow flex-1">
+                    <h5 class="text-gray-400 uppercase font-bold lg:md:text-sm text-xs">
+                      Total Shippers
+                    </h5>
+                    <span class="font-semibold text-xl text-gray-700">
+                      {numbersOfShippers}
+                    </span>
+                  </div>
+                  <div class=" w-auto pl-4 flex-initial">
+                    <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full  bg-yellow-400">
+                      <Truck />
                     </div>
                   </div>
                 </div>

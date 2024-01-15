@@ -5,6 +5,7 @@ import axios from "axios";
 import { Button, Modal } from 'flowbite-react';
 import { FiAlertTriangle } from "react-icons/fi";
 import { UserContext } from "../../Context/UserContext";
+import { ToastContainer, toast } from "react-toastify";
 
 
 export default function ReportedProductPage() {
@@ -13,7 +14,7 @@ export default function ReportedProductPage() {
   const [vendor, setVendor] = useState()
   const [reports, setReports] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
@@ -32,12 +33,24 @@ export default function ReportedProductPage() {
     fetchData()
   }, [fetchData])
 
-  if (!user || isLoading){
+  if (!user || isLoading) {
     return null
   }
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       <section className="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
           {/* <!-- Vendor --> */}
@@ -158,6 +171,32 @@ function DeleteButtonPopup({ product }) {
   const [msg, setMsg] = useState('');
   const [openModal, setOpenModal] = useState(false);
 
+  const notify = (error) => {
+    toast.error(error, {
+      position: "top-center",
+      autoClose: 200,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
+    });
+  }
+
+  const success = (success) => {
+    toast.success(success, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
+    });
+  }
+
   const handleDelete = async () => {
     const apiUrl = `http://localhost:4000/delete-product/${product._id}`;
     try {
@@ -168,12 +207,20 @@ function DeleteButtonPopup({ product }) {
       }).then(res => {
         setMsg(res.data)
         setError('')
+        setTimeout(() => {
+          window.location.href = "/admin/manage-product"
+        }, 2500)
       })
         .catch(er => { setError(er.response.data); setMsg() });
     } catch (error) {
       console.error('Error:', error);
     }
   }
+
+  useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
+  }, [error, msg]);
 
   return (
     <>

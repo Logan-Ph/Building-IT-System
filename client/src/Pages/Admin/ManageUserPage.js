@@ -2,12 +2,11 @@ import axios from "axios";
 import { Tabs } from "flowbite-react";
 import { Table } from "flowbite-react";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { HiAdjustments, HiUserCircle } from "react-icons/hi";
+import { HiUserCircle, HiTruck } from "react-icons/hi";
 import { FaShoppingBag } from "react-icons/fa";
 import { Link, Navigate } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
-import LoadingPage from "../User/LoadingPage";
 import { UserContext } from "../../Context/UserContext";
 
 export default function ManageUserPage() {
@@ -16,13 +15,14 @@ export default function ManageUserPage() {
   const [shippers, setShippers] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
       setVendors(res.data.vendors);
+      console.log(res.data.vendors);
       setShippers(res.data.shippers);
       setIsLoading(false)
     }
@@ -54,7 +54,7 @@ export default function ManageUserPage() {
             <UserTable data={vendors} type="vendor" />
           </Tabs.Item>
           {/* Admin manage shipper account */}
-          <Tabs.Item title="Shipper" icon={HiAdjustments}>
+          <Tabs.Item title="Shipper" icon={HiTruck}>
             <UserTable data={shippers} type="shipper" />
           </Tabs.Item>
         </Tabs>
@@ -165,8 +165,8 @@ function UserTable({ data, dataImage, type }) {
                     {getCellContent(item)}
                     <Table.Cell>
                       <div class="flex items-center whitespace-nowrap">
-                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-                        No Report
+                        <div class={`h-2.5 w-2.5 rounded-full me-2 ${item.reportCount ? "bg-red-500" : "bg-green-500"}`}></div>
+                        {item.reportCount ? "Reported" : "No Report"}
                       </div>
                     </Table.Cell>
                     <Table.Cell>
