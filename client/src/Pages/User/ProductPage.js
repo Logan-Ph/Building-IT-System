@@ -31,7 +31,7 @@ export default function TestingPage() {
     recommendClient,
     indexName,
     objectIDs: [params.id],
-    maxRecommendations: 10
+    maxRecommendations: 30
   });
 
   const createThread = async (e) => {
@@ -43,7 +43,7 @@ export default function TestingPage() {
     } catch (error) {
       toast.error(error.response.data.error, {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
@@ -80,7 +80,7 @@ export default function TestingPage() {
       {error && <Navigate to={"/"} replace />}
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={2000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
