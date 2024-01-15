@@ -9,7 +9,9 @@ export default function VendorMyProduct() {
   const [dataSlice, setDataSlice] = useState([])
   const [error, setError] = useState('')
   const [msg, setMsg] = useState('')
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
+  const [productName, setProductName] = useState('')
+  const [category, setCategory] = useState('')
 
   const notify = (error) => {
     toast.error(error, {
@@ -37,9 +39,24 @@ export default function VendorMyProduct() {
     });
   }
 
+  const handleSearch = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent the form from refreshing the page
+    handleSearch(e); // Update the searchTerm state with the current input value
+  };
+
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/manage-product", { withCredentials: true });
+      const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -73,7 +90,7 @@ export default function VendorMyProduct() {
     fetchProducts();
   }, [error, msg]);
 
-  if (!user){
+  if (!user) {
     return null;
   }
 
@@ -94,30 +111,19 @@ export default function VendorMyProduct() {
       <div class="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden  ">
         <div className="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4">
           <div className="mb-4">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <div>
                     <label for="product-name" className="block text-sm">Product Name</label>
-                    <input type="text" id="product-name" name="product-name" placeholder="Please input at least 2 characters or words" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <input onChange={(e) => setProductName(e.target.value)} type="text" id="product-name" name="product-name" placeholder="Please input at least 2 characters or words" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     <p className="text-xs text-gray-400"></p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div>
-                      <label for="stock-min" className="block text-sm">Stock Min</label>
-                      <input type="number" id="stock-min" name="stock-min" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                    </div>
-                    <div className="text-xl pt-5">-</div>
-                    <div>
-                      <label for="stock-max" className="block text-sm">Stock Max</label>
-                      <input type="number" id="stock-max" name="stock-max" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                    </div>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
                     <label for="category" className="block text-sm">Category</label>
-                    <input type="text" id="category" name="category" placeholder="Category" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                    <input onChange={(e) => setCategory(e.target.value)} type="text" id="category" name="category" placeholder="Category" className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                   </div>
                 </div>
               </div>
@@ -172,8 +178,8 @@ export default function VendorMyProduct() {
               </tbody>
             </table>
           </div>
+          {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
         </div>
-        {Math.floor(products.length / 10) >= 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
       </div>
     </>
   )

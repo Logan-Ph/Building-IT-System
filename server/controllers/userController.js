@@ -18,8 +18,8 @@ const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
 // Connect and authenticate with your Algolia app
-const client = algoliasearch('DN0WBRQ8A3', '329a2a4f7a299b7d02bbc2fbd6d1da55')
-const index = client.initIndex('rBuy_test')
+const client = algoliasearch('DN0WBRQ8A3', '87e65f85b52eb5c1bae1aa2dcf58a318')
+const index = client.initIndex('rBuy')
 const { OpenAI } = require('openai')
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -43,6 +43,7 @@ const imagekit = new ImageKit({
 
 const fs = require("fs");
 const { error } = require('console')
+const vendor = require('../models/vendor')
 require('dotenv').config()
 
 function convertUser(user) {
@@ -1102,7 +1103,20 @@ exports.updateProduct = async (req, res) => {
 exports.manageProduct = async (req, res) => {
   try {
     let user = await authenticateToken(req.cookies.userToken);
-    const products = await Product.find({ owner: user._id })
+    const { product_name, category } = req.query; // extract product_name and category from query parameters
+
+    // build the query object
+    let query = { owner: user._id };
+
+    if (product_name) {
+      query.product_name = new RegExp(product_name, 'i');
+    }
+    if (category) {
+      query.category = new RegExp(category, 'i');
+    }
+
+    const products = await Product.find(query);
+
     return res.status(200).json((products) ? { products: products } : { products: "" });
   } catch {
     return res.status(500).json({ error: "Cannot find products." })
@@ -1124,6 +1138,27 @@ exports.manageUser = async (req, res) => {
     const users = (await User.find({})).filter(user => user.role !== "Admin").map(user => convertUser(user));
     const vendors = (await Vendor.find({})).map(vendor => convertUser(vendor));
     const shippers = (await Shipper.find({})).map(shipper => convertUser(shipper));
+
+    const reportCounts = await Report.aggregate([
+      {
+        $group: {
+          _id: "$vendor",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const reportCountsByVendor = {};
+    reportCounts.forEach(reportGroup => {
+      reportCountsByVendor[reportGroup._id.toString()] = reportGroup.count;
+    });
+
+    vendors.forEach(vendor => {
+      vendor.reportCount = reportCountsByVendor[vendor._id.toString()] || 0;
+    });
+
+    vendors.sort((a, b) => b.reportCount - a.reportCount);
+
     return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find user. " })
@@ -1153,7 +1188,7 @@ exports.reportPage = async (req, res) => {
     };
 
     if (shipper) {
-      const orders = await Order.find({})
+      const orders = await Order.find({ status: { $ne: "Unpaid" } });
       return res.status(200).json({ user: shipper, orders: orders });
     }
     if (!user && !vendor && !shipper) throw new Error("User not found");
@@ -1286,7 +1321,10 @@ exports.userOrder = async (req, res) => {
 
 exports.getShipperDashboard = async (req, res) => {
   try {
-    const orders = await Order.find({ status: { $ne: "Unpaid" } });
+    const orders = await Order.find({ status: { $ne: "Unpaid" } }).populate({
+      path: 'vendorID',
+      select: 'address businessName -_id'
+    });
 
     const ordersCount = await Order.aggregate([
       {

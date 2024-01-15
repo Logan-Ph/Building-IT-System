@@ -43,6 +43,14 @@ const orderSchema = new mongoose.Schema({
     ref: "Vendor",
     require: true,
   },
+  vendorBusinessName: {
+    type: String,
+    require: true,
+  },
+  vendorAddress: {
+    type: String,
+    require: true,
+  },
   userName: {
     type: String,
     require: true,

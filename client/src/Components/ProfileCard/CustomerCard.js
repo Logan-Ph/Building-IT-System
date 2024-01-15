@@ -69,9 +69,7 @@ export default function CustomerCard({ user, orders }) {
 
 function filterOrders(orders, searchTerm) {
   const regex = new RegExp(searchTerm, 'i');
-  return orders.map(order => {
-    const date = new Date(order.date);
-    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-    return { ...order, date: formattedDate };
-  }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
+  return orders.filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress)).map(order => {
+    return order
+  })
 }

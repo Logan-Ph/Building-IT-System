@@ -7,7 +7,6 @@ import LoadingPage from '../Pages/User/LoadingPage';
 
 export default function ShipperHeader() {
     const { user, setUser } = useContext(UserContext)
-    const [navigateTo, setNavigateTo] = useState("");
     const [error, setError] = useState('')
 
     const fetchUser = useCallback(async () => {
@@ -20,12 +19,11 @@ export default function ShipperHeader() {
         }
     }, [setUser])
 
-    const handleLogout = async () => {
-        const res = await axios.get("http://localhost:4000/logout", { withCredentials: true });
-        if (res.data === "Logged out successfully") {
-            setUser(undefined)
-            setNavigateTo('/login');
-        }
+    const handleLogout = async (e) => {
+        e.preventDefault()
+        await axios.get("http://localhost:4000/logout", { withCredentials: true });
+        setUser(undefined)
+        window.location.href = "/login"
     }
 
     useEffect(() => {
@@ -43,7 +41,6 @@ export default function ShipperHeader() {
             {user && user.role === "Admin" && <Navigate to={'/admin/manage-user'} replace />}
             {user && user.role === "Vendor" && <Navigate to={'/vendor/dashboard'} replace />}
             {error && <Navigate to={'/login'} replace />}
-            {navigateTo && <Navigate to={navigateTo} replace={true} />}
             <section>
                 <div className="w-full">
                     <div className="border py-3 px-6 white border-[#E61E2A]">
