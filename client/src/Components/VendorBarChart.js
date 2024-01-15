@@ -35,6 +35,8 @@ export default function BarAnimation({ orders }) {
     return Object.entries(incomePerDay).map(([x, y]) => ({ x, y }));
   }, [orders]);
 
+  console.log(lastMonthIncomeData);
+
   const xLabels = lastMonthIncomeData.slice(0, itemNb).map(item => item.x);
 
   const highlightScope = {
@@ -58,15 +60,19 @@ export default function BarAnimation({ orders }) {
 
   return (
     <Box sx={{ width: "100%" }} >
-      <BarChart
-        height={500}
-        series={series
-          .slice(0, 1)
-          .map((s) => ({ ...s, data: s.data.slice(0, itemNb) }))}
-        skipAnimation={skipAnimation}
-        xAxis={[{ data: xLabels, scaleType: 'band' }]}
-        margin={{ left:70 }}
-      />
+      {lastMonthIncomeData.length > 0 ? (
+        <BarChart
+          height={500}
+          series={series
+            .slice(0, 1)
+            .map((s) => ({ ...s, data: s.data.slice(0, itemNb) }))}
+          skipAnimation={skipAnimation}
+          xAxis={[{ data: xLabels, scaleType: 'band' }]}
+          margin={{ left: 70 }}
+        />
+      ) : (
+        <Typography>No data available for the chart.</Typography>
+      )}
       <FormControlLabel
         checked={skipAnimation}
         control={

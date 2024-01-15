@@ -18,7 +18,7 @@ const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
 // Connect and authenticate with your Algolia app
-const client = algoliasearch('DN0WBRQ8A3', '87e65f85b52eb5c1bae1aa2dcf58a318')
+const client = algoliasearch('DN0WBRQ8A3', '97b9021b42c870239d32f46da97d83cb')
 const index = client.initIndex('rBuy')
 const { OpenAI } = require('openai')
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
