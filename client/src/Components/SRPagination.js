@@ -1,6 +1,5 @@
-import { Pagination, usePagination } from 'react-instantsearch';
-import { ChevronLeftIcon, ChevronRightIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon} from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { usePagination } from 'react-instantsearch';
+import { ChevronLeftIcon, ChevronRightIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/20/solid";
 
 
 export default function Example() {
@@ -12,17 +11,18 @@ export default function Example() {
   } = usePagination();
   const previousPageIndex = (currentRefinement - 1) > 0 ? currentRefinement - 1 : 0;
   const nextPageIndex = (currentRefinement + 1) === nbPages ? currentRefinement : currentRefinement + 1;
+  const lastPageIndex = nbPages - 1;
+  const firstPageIndex = 0;
   return (
     <div className="flex items-center mt-5">
       <div className="xs:flex xs:flex-1 xs:justify-end sm:flex sm:flex-1 sm:items-center sm:justify-end lg:justify-end">
         <div>
           <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
 
-          <span
-            className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-            <span className="sr-only">First page</span>
-            <ChevronDoubleLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </span>
+            <span
+              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+              <ChevronDoubleLeftIcon className="h-5 w-5" aria-hidden="true" onClick={() => { refine(firstPageIndex) }}/>
+            </span>
 
             <span
               href="#"
@@ -57,9 +57,8 @@ export default function Example() {
 
             <span
               className="relative inline-flex rounded-r-md items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-              <span className="sr-only">Last page</span>
-              <ChevronDoubleRightIcon className="h-5 w-5" aria-hidden="true" />
-          </span>
+              <ChevronDoubleRightIcon className="h-5 w-5" aria-hidden="true" onClick={() => { refine(lastPageIndex) }} />
+            </span>
           </nav>
         </div>
       </div>

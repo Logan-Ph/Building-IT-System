@@ -94,23 +94,20 @@ export default function Example() {
                 </div>
               </div>
 
-              <div className='mx-auto items-center my-auto'>
-                {/* NO PRODUCT FOUND OPTION */}
+              {hits.length > 0 ? <div className='xl:w-3/4 lg:w-3/4 grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
+                {/* Product grid */}
+                {hits.map(hit => (
+                  <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
+                ))}
+              </div> : <div className='mx-auto items-center my-auto'>
                 <div className='w-full mx-auto flex flex-col justify-center items-center border border-gray-100'>
                   <img src={require("../../Components/images/no_products.png")} className="object-cover" alt='no product found' />
                   <span className='font-bold text-5xl text-red-700 mb-5'>Oops!</span>
                   <span className='font-semibold text-4xl'>No Product Found</span>
                 </div>
-              </div>
-
-              {/* <div className='xl:w-3/4 lg:w-3/4 grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'> */}
-                {/* Product grid */}
-                {/* {hits.map(hit => (
-                  <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
-                ))} */}
-              </div>
-            {/* </div> */}
-            {/* <SRPagination /> */}
+              </div>}
+            </div>
+            <SRPagination />
           </section>
         </main>
       </div>
