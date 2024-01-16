@@ -86,7 +86,7 @@ export default function Example() {
           {/* Normal Screen */}
           <section aria-labelledby="products-heading" className="pb-24 pt-6 " >
             <div className="xl:justify-start xl:divide-x-2 xl:gap-6 xl:flex lg:flex lg:justify-start lg:divide-x-2 lg:gap-6 md:flex sm:block">
-              <div className='w-full '>
+              <div className='w-1/4 '>
                 {/* Filters */}
                 <div className="xs:hidden sm:hidden md:block lg:block wi shadow-lg">
                   <SRPriceRange />
@@ -95,7 +95,7 @@ export default function Example() {
                 </div>
               </div>
 
-              <div className='grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
+              <div className='xl:w-3/4 lg:w-3/4 grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
                 {/* Product grid */}
                 {hits.map(hit => (
                   <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
