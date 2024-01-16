@@ -6,7 +6,6 @@ import SRProductCard from '../../Components/SRProductCard'
 import SRPagination from '../../Components/SRPagination'
 import SRPriceRange from '../../Components/SRPriceRange'
 import SRStarRating from '../../Components/SRStarRating'
-
 import { useHits, useRefinementList } from 'react-instantsearch';
 import { useParams } from 'react-router-dom';
 import SortOptions from '../../Components/SortOptions';
@@ -104,7 +103,6 @@ export default function Example() {
             </div>
             <SRPagination />
           </section>
-
         </main>
       </div>
     </div>
