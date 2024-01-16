@@ -73,6 +73,7 @@ export default function CustomerReview({ product, setComments, comments }) {
     try {
       const res = await axios.get(`http://localhost:4000/product/${product._id}/view-comment`, { withCredentials: true });
       setComments(res.data.comments);
+      console.log(res.data.comments)
     } catch (error) {
       console.error("Error fetching comments", error);
     }
