@@ -103,21 +103,6 @@ export default function ReportInfo({ reports }) {
                 <form class="max-w-sm mx-auto">
                   <div class="mb-5">
                     <label
-                      for="block-message"
-                      class="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                      Block Message
-                    </label>
-                    <textarea
-                      id="block-message"
-                      rows="4"
-                      class="w-full p-2.5 text-sm text-gray-900 bg-gray-50 border-gray-300 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Write block message to user..."
-                      required
-                    ></textarea>
-                  </div>
-                  <div class="mb-5">
-                    <label
                       for="block-start-date"
                       class="block mb-2 text-sm font-medium text-gray-900"
                     >
