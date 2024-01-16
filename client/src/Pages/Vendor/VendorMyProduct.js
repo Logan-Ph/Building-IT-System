@@ -1,5 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify'
+import { Button, Modal } from 'flowbite-react';
+import { FiAlertTriangle } from "react-icons/fi";
 import axios from "axios";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { UserContext } from "../../Context/UserContext";
@@ -7,37 +9,10 @@ import { UserContext } from "../../Context/UserContext";
 export default function VendorMyProduct() {
   const [products, setProducts] = useState([])
   const [dataSlice, setDataSlice] = useState([])
-  const [error, setError] = useState('')
-  const [msg, setMsg] = useState('')
   const { user } = useContext(UserContext)
   const [productName, setProductName] = useState('')
   const [category, setCategory] = useState('')
 
-  const notify = (error) => {
-    toast.error(error, {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      pauseOnHover: false,
-      theme: "light",
-    });
-  }
-
-  const success = (success) => {
-    toast.success(success, {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      pauseOnHover: false,
-      theme: "light",
-    });
-  }
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -54,41 +29,22 @@ export default function VendorMyProduct() {
     handleSearch(e); // Update the searchTerm state with the current input value
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
-  };
-
-  const handleDelete = async (productID) => {
-    const apiUrl = `http://localhost:4000/delete-product/${productID}`;
-    try {
-      await axios.delete(apiUrl, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(res => {
-        setMsg(res.data)
-        setError('')
-      })
-        .catch(er => { setError(er.response.data); setMsg() });
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+  }, [productName, category]);
 
   useEffect(() => {
     setDataSlice(products.slice(0, 10));
   }, [products]);
 
   useEffect(() => {
-    error && notify(error)
-    msg && success(msg)
     fetchProducts();
-  }, [error, msg]);
+  }, [fetchProducts]);
 
   if (!user) {
     return null;
@@ -171,7 +127,7 @@ export default function VendorMyProduct() {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                      <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                      <DeleteButtonPopup productId={product._id} setProducts={setProducts} />
                     </td>
                   </tr>
                 ))}
@@ -252,5 +208,88 @@ function Pagination({ pages, setDataSlice, data }) {
         </div>
       </div>
     </div>
+  )
+}
+
+function DeleteButtonPopup({ productId, setProducts }) {
+  const [error, setError] = useState('');
+  const [msg, setMsg] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+
+  const notify = (error) => {
+    toast.error(error, {
+      position: "top-center",
+      autoClose: 200,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
+    });
+  }
+
+  const success = (success) => {
+    toast.success(success, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
+    });
+  }
+
+  const handleDelete = async () => {
+    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    try {
+      await axios.delete(apiUrl, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(res => {
+        setMsg(res.data)
+        setError('')
+        setProducts(prev => prev.filter(product => product._id !== productId));
+      })
+        .catch(er => { setError(er.response.data); setMsg() });
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
+  }, [error, msg]);
+
+  return (
+    <>
+      <span className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
+        Delete
+      </span>
+      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
+            <h3 className="mb-5 text-lg font-normal text-gray-900">
+              Are you sure you want to delete this product?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => { setOpenModal(false); handleDelete() }}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => { setOpenModal(false) }}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
   )
 }
