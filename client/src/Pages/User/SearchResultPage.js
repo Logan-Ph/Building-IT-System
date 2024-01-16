@@ -84,7 +84,7 @@ export default function Example() {
 
           {/* Normal Screen */}
           <section aria-labelledby="products-heading" className="pb-24 pt-6 " >
-            <div className="xl:justify-start xl:divide-x-2 xl:gap-6 xl:flex lg:flex lg:justify-start lg:divide-x-2 lg:gap-6 md:flex sm:block">
+            <div className="xl:justify-start xl:gap-6 xl:flex lg:flex lg:justify-start lg:gap-6 md:flex sm:block">
               <div className='w-1/4 '>
                 {/* Filters */}
                 <div className="xs:hidden sm:hidden md:block lg:block wi shadow-lg">
@@ -94,14 +94,23 @@ export default function Example() {
                 </div>
               </div>
 
-              <div className='xl:w-3/4 lg:w-3/4 grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'>
-                {/* Product grid */}
-                {hits.map(hit => (
-                  <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
-                ))}
+              <div className='mx-auto items-center my-auto'>
+                {/* NO PRODUCT FOUND OPTION */}
+                <div className='w-full mx-auto flex flex-col justify-center items-center border border-gray-100'>
+                  <img src={require("../../Components/images/no_products.png")} className="object-cover" alt='no product found' />
+                  <span className='font-bold text-5xl text-red-700 mb-5'>Oops!</span>
+                  <span className='font-semibold text-4xl'>No Product Found</span>
+                </div>
               </div>
-            </div>
-            <SRPagination />
+
+              {/* <div className='xl:w-3/4 lg:w-3/4 grid xs:grid-cols-2 xs:gap-x-2 xs:gap-y-4 sm:grid-cols-4 sm:gap-x-2 sm:gap-y-4 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8'> */}
+                {/* Product grid */}
+                {/* {hits.map(hit => (
+                  <SRProductCard hit={hit} user={user} sendEvent={sendEvent} />
+                ))} */}
+              </div>
+            {/* </div> */}
+            {/* <SRPagination /> */}
           </section>
         </main>
       </div>
