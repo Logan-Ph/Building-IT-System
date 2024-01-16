@@ -214,10 +214,10 @@ exports.homePage = async (req, res) => {
     const page = parseInt(req.query.page);
     let product;
     if (page > 1) {
-      product = await Product.find({}).limit(60 + 30 * page);
+      product = await Product.find({}).limit(30 + 30 * page);
       product = product.slice(-30);
     } else {
-      product = await Product.find({}).limit(60);
+      product = await Product.find({}).limit(30);
     }
     return res.json({ product: product });
   } catch (error) {
