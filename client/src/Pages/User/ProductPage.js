@@ -133,7 +133,7 @@ export default function TestingPage() {
       <section className="lg:container md:container mx-auto ">
         <div className="lg:container md:container lg:px-9 md:px-9 sm:px-3 xs:px-4 mx-auto mt-10 bg-gray-50 lg:flex ">
           {/*Comment section */}
-          <ProductDetailComment product={product} />
+          <ProductDetailComment product={product} setComments={setComments} user={user}/>
           <div className="flex flex-col">
             {/* comment  */}
             <CustomerReview product={product} comments={comments} setComments={setComments} />

@@ -1527,14 +1527,14 @@ exports.postComment = async (req, res) => {
   const { newComment, title } = req.body;
   try {
     user = await User.findById(user._id, { name: 1, img: 1 });
-    await Comment.create({
+    const comment = await Comment.create({
       title: title,
       productId: new mongoose.Types.ObjectId(productId),
       commentText: newComment,
       userName: user.name,
       userImg: user.img,
     })
-    return res.status(200).json({ msg: "Add comment successfully" });
+    return res.status(200).json({ msg: "Add comment successfully", commentId: comment._id });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
