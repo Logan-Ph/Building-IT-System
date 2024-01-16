@@ -730,12 +730,13 @@ exports.getVendorDashboard = async (req, res) => {
     ]);
     const orders = await Order.find({ vendorID: user._id, status: "Completed" });
     const numberOfFollowers = await FollowerList.findOne({ vendorID: user._id }, { followers: 1 })
+    const numberOfProducts = await Product.find({ owner: user._id }).countDocuments();
     const ordersCountByStatus = {};
     ordersStatus.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
     });
     const income = orders.reduce((total, order) => total + order.products.reduce((total, product) => total + product.price * product.quantity, 0), 0);
-    res.status(200).json({ ordersByStatus: ordersCountByStatus, orders: orders, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income });
+    res.status(200).json({ ordersByStatus: ordersCountByStatus, orders: orders, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income, numberOfProducts: numberOfProducts });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

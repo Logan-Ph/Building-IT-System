@@ -19,14 +19,22 @@ export default function ManageOrderPage() {
     };
     const headerContent = ["Order ID", "Customer Name", "Order Date", "Shipping Address", "Contact Number", "Status"]
     const handleConfirmOrder = async (orderId) => {
-        setOrders(orders.filter(order => order._id !== orderId))
+        const statusOrder = ["Unpaid", "To Ship"];
+        setOrders(orders.map(order => {
+            if (order._id === orderId) {
+                const currentStatusIndex = statusOrder.indexOf(order.status);
+                const nextStatus = statusOrder[currentStatusIndex + 1] || "To Ship";
+                return { ...order, status: nextStatus };
+            }
+            return order;
+        }));
     }
 
     const getOrders = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
             const orders = res.data.orders
-            const statusOrder = ["unpaid", "to ship", "shipping", "completed" , "cancelled", "failed delivery"];
+            const statusOrder = ["unpaid", "to ship", "shipping", "completed", "cancelled", "failed delivery"];
             orders.sort((a, b) => {
                 return statusOrder.indexOf(a.status.toLowerCase()) - statusOrder.indexOf(b.status.toLowerCase());
             });
