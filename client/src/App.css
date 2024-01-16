@@ -2333,6 +2333,10 @@ input:checked + .toggle-bg {
   width: 100vw;
 }
 
+.w-1\/4 {
+  width: 25%;
+}
+
 .min-w-0 {
   min-width: 0px;
 }
@@ -8499,6 +8503,10 @@ input:checked + .toggle-bg {
     width: 100%;
   }
 
+  .lg\:w-3\/4 {
+    width: 75%;
+  }
+
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -8813,6 +8821,10 @@ input:checked + .toggle-bg {
 
   .xl\:w-3\/12 {
     width: 25%;
+  }
+
+  .xl\:w-3\/4 {
+    width: 75%;
   }
 
   .xl\:grid-cols-6 {

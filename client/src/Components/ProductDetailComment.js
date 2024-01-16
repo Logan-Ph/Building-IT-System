@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-export default function ProductDetailComment({ product }) {
+export default function ProductDetailComment({ product, setComments, user }) {
     const textMessage = () => {
         document.getElementById("customer_review").className = "block";
     }
@@ -25,11 +25,20 @@ export default function ProductDetailComment({ product }) {
                 pauseOnHover: false,
                 theme: "light",
             });
+            setComments((prev) => [...prev, {
+                commentText: newComment,
+                like: [],
+                likes: 0,
+                postedOn: new Date(),
+                productId: product._id,
+                replyMessage: [],
+                userImg: user.img,
+                userName: user.name,
+                title: title,
+                _id: res.data.commentId,
+            }])
             setNewComment('')
             setTitle('')
-            setTimeout(() => {
-                window.location.reload();
-            }, 4000);
         }
         catch (error) {
             toast.error(error.response.data.error, {

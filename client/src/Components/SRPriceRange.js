@@ -26,7 +26,7 @@ export default function SRPriceRange() {
 
   return (
     <div className='flex px-6 border border-gray-50 py-6 bg-white'>
-      <div className='w-full'>
+      <div>
         <h3 className='font-medium mb-2'>Price <span className='font-medium'>Range</span></h3>
 
         <div className='flex justify-center items-center'>
