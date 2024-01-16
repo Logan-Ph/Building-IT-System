@@ -1623,6 +1623,11 @@ input:checked + .toggle-bg {
   margin-bottom: 2rem;
 }
 
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .-mb-px {
   margin-bottom: -1px;
 }
@@ -2167,6 +2172,10 @@ input:checked + .toggle-bg {
   width: 33.333333%;
 }
 
+.w-1\/4 {
+  width: 25%;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -2331,14 +2340,6 @@ input:checked + .toggle-bg {
 
 .w-screen {
   width: 100vw;
-}
-
-.w-2\/3 {
-  width: 66.666667%;
-}
-
-.w-1\/4 {
-  width: 25%;
 }
 
 .min-w-0 {
@@ -8220,10 +8221,6 @@ input:checked + .toggle-bg {
     align-items: center;
   }
 
-  .md\:justify-end {
-    justify-content: flex-end;
-  }
-
   .md\:justify-between {
     justify-content: space-between;
   }
@@ -8487,6 +8484,10 @@ input:checked + .toggle-bg {
     width: 3.5rem;
   }
 
+  .lg\:w-3\/4 {
+    width: 75%;
+  }
+
   .lg\:w-3\/5 {
     width: 60%;
   }
@@ -8505,10 +8506,6 @@ input:checked + .toggle-bg {
 
   .lg\:w-full {
     width: 100%;
-  }
-
-  .lg\:w-3\/4 {
-    width: 75%;
   }
 
   .lg\:grid-cols-3 {
