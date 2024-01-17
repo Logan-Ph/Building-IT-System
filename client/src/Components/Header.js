@@ -36,6 +36,7 @@ export default function Header() {
       setNavigateTo(`/search/query=${inputQuery}/category=/price=`);
       refine(inputQuery)
       setInputQuery("")
+      openCloseBurger()
     }
   }
 
@@ -176,7 +177,7 @@ export default function Header() {
                 {/* if user login this will appear: avatar icon*/}
                 <div className='flex items-center'>
                   {/* avatar icon */}
-               
+
 
 
                   <DropdownAva user={user} handleLogout={handleLogout} />
@@ -193,12 +194,6 @@ export default function Header() {
         <div className="flex items-center justify-between py-2">
           <div className="flex gap-x-2 py-1 px-2"></div>
           <div className="lg:flex gap-x-8 sm:hidden md:hidden xs:hidden">
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100 ">
-              Best Seller
-            </span>
-            <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100">
-              New Releases
-            </span>
             <span className="cursor-pointer rounded-sm py-1 px-2 text-md font-medium hover:bg-gray-100" onClick={() => setNavigateTo(`/search/query=/category=${"Electronics"}/price=`)}>
               Electronics
             </span>
@@ -289,6 +284,7 @@ export default function Header() {
                   type="text"
                   className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-xs text-gray-600 focus:outline-none"
                   placeholder="Search"
+                  value={inputQuery}
                   onChange={(e) => setInputQuery(e.currentTarget.value)}
                 />
                 <button className="rounded-tr-md rounded-br-md px-2 py-3 hidden md:block text-white">
@@ -310,38 +306,6 @@ export default function Header() {
               <div className="  lg:block  border-neutral-200">
 
                 <div id="menu" class="flex flex-col xs:space-y-1.5 sm:space-y-1.5 md:space-y-2 ml-3 md:ml-5 my-4 md:my-5 text-white">
-                  <span
-                    href=""
-                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:text-base rounded-md transition duration-150 ease-in-out"
-                  >
-                    <svg
-                      class="w-6 h-6 fill-current inline-block"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                      ></path>
-                    </svg>
-                    <span class="ml-2 md:text-[16px] xs:text-[12.24px] ">Best Seller</span>
-                  </span>
-                  <span
-                    href=""
-                    class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
-                  >
-                    <svg
-                      class="w-6 h-6 fill-current inline-block"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z"
-                      ></path>
-                    </svg>
-                    <span class="ml-2 xs:text-[12.24px] md:text-[16px]">New Releases</span>
-                  </span>
                   <span
                     href=""
                     class="text-sm font-medium  py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
