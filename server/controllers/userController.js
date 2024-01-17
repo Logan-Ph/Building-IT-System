@@ -25,13 +25,17 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 function authenticateToken(token) {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(user.user);
-      }
-    });
+    try {
+      jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+        if (err) {
+          resolve(null);
+        } else {
+          resolve(user.user);
+        }
+      });
+    } catch (error) {
+      return null;
+    }
   });
 }
 
@@ -43,7 +47,6 @@ const imagekit = new ImageKit({
 
 const fs = require("fs");
 const { error } = require('console')
-const vendor = require('../models/vendor')
 require('dotenv').config()
 
 function convertUser(user) {
