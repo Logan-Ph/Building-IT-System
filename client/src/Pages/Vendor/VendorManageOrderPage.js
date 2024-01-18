@@ -82,8 +82,13 @@ export default function ManageOrderPage() {
     )
 }
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterOrders(orders, searchTerm) {
-    const regex = new RegExp(searchTerm, 'i');
+    const escapedSearchTerm = escapeRegExp(searchTerm);
+    const regex = new RegExp(escapedSearchTerm, 'i');
     return orders.map(order => {
         const date = new Date(order.date);
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;

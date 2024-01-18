@@ -205,10 +205,16 @@ export default function ChatPage() {
   );
 }
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterUsers(users, searchTerm) {
-  const regex = new RegExp(searchTerm, 'i');
+  const escapedSearchTerm = escapeRegExp(searchTerm);
+  const regex = new RegExp(escapedSearchTerm, 'i');
   return users.filter(user => regex.test(user.businessName || user.name));
 }
+
 
 function ContactList({ users, searchTerm, toggleChatArea, threadIndex }) {
   const [dataSlice, setDataSlice] = useState(users);

@@ -249,7 +249,13 @@ body {
 
 /* Vendor hompage */
 .vendor-avatar {
-  width: 30% !important; 
+  width: 30% !important;
 }
 
 /* Shopping cart */
+
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
