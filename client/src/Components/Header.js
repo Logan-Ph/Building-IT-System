@@ -36,7 +36,6 @@ export default function Header() {
       setNavigateTo(`/search/query=${inputQuery}/category=/price=`);
       refine(inputQuery)
       setInputQuery("")
-      openCloseBurger()
     }
   }
 
