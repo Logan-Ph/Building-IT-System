@@ -1,23 +1,30 @@
 import axios from 'axios'
 import { useState, useEffect, useCallback } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import LoadingPage from './LoadingPage'
 
 
 export default function VerifyEmailPage() {
     const params = useParams();
-    const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState(true)
 
     const fetchData = useCallback(async () => {
         await axios.get(`http://localhost:4000/user/${params.token}/verify-email`, { withCredentials: true })
-            .catch(er => setError(er))
+            .then(res => { setIsLoading(false) })
+            .catch(er => {
+                window.location.href = '/login'
+            })
     }, [params.token])
 
     useEffect(() => {
         fetchData();
     }, [fetchData])
 
+    if (isLoading) {
+        return <LoadingPage />
+    }
+
     return <>
-        {error && <Navigate to={'/login'} replace={true} />}
         <section className="bg-white">
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <div className="flex flex-col items-center bg-gray-50 py-10 border-gray-50 shadow-md">

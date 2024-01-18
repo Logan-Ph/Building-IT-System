@@ -1,43 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from 'react-toastify'
+import { Button, Modal } from 'flowbite-react';
+import { FiAlertTriangle } from "react-icons/fi";
 import axios from "axios";
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { UserContext } from "../../Context/UserContext";
+import Pagination from "../../Components/Pagination";
 
 export default function VendorMyProduct() {
   const [products, setProducts] = useState([])
   const [dataSlice, setDataSlice] = useState([])
-  const [error, setError] = useState('')
-  const [msg, setMsg] = useState('')
   const { user } = useContext(UserContext)
   const [productName, setProductName] = useState('')
   const [category, setCategory] = useState('')
 
-  const notify = (error) => {
-    toast.error(error, {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      pauseOnHover: false,
-      theme: "light",
-    });
-  }
-
-  const success = (success) => {
-    toast.success(success, {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      pauseOnHover: false,
-      theme: "light",
-    });
-  }
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -54,41 +29,22 @@ export default function VendorMyProduct() {
     handleSearch(e); // Update the searchTerm state with the current input value
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
-  };
-
-  const handleDelete = async (productID) => {
-    const apiUrl = `http://localhost:4000/delete-product/${productID}`;
-    try {
-      await axios.delete(apiUrl, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(res => {
-        setMsg(res.data)
-        setError('')
-      })
-        .catch(er => { setError(er.response.data); setMsg() });
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+  }, [productName, category]);
 
   useEffect(() => {
     setDataSlice(products.slice(0, 10));
   }, [products]);
 
   useEffect(() => {
-    error && notify(error)
-    msg && success(msg)
     fetchProducts();
-  }, [error, msg]);
+  }, [fetchProducts]);
 
   if (!user) {
     return null;
@@ -171,7 +127,7 @@ export default function VendorMyProduct() {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                      <button onClick={() => handleDelete(product._id)} className="font-medium text-red-600 dark:red-blue-500 hover:underline">Delete</button>
+                      <DeleteButtonPopup productId={product._id} setProducts={setProducts} />
                     </td>
                   </tr>
                 ))}
@@ -185,72 +141,85 @@ export default function VendorMyProduct() {
   )
 }
 
-function Pagination({ pages, setDataSlice, data }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const maxPageNumbersToShow = 5;
+function DeleteButtonPopup({ productId, setProducts }) {
+  const [error, setError] = useState('');
+  const [msg, setMsg] = useState('');
+  const [openModal, setOpenModal] = useState(false);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+  const notify = (error) => {
+    toast.error(error, {
+      position: "top-center",
+      autoClose: 200,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
+    });
+  }
+
+  const success = (success) => {
+    toast.success(success, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      pauseOnHover: false,
+      theme: "light",
+    });
+  }
+
+  const handleDelete = async () => {
+    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    try {
+      await axios.delete(apiUrl, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(res => {
+        setMsg(res.data)
+        setError('')
+        setProducts(prev => prev.filter(product => product._id !== productId));
+      })
+        .catch(er => { setError(er.response.data); setMsg() });
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
-  const getPaginationNumbers = () => {
-    const numbers = [];
-    let start = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 10));
-    let end = Math.min(pages, start + maxPageNumbersToShow - 1);
-    if (currentPage <= Math.floor(maxPageNumbersToShow / 10)) {
-      end = Math.min(pages, maxPageNumbersToShow);
-    }
-    if (currentPage > pages - Math.floor(maxPageNumbersToShow / 10)) {
-      start = Math.max(1, pages - maxPageNumbersToShow + 1);
-    }
-    for (let i = start; i <= end; i++) {
-      numbers.push(i);
-    }
-    return numbers;
-  };
+  useEffect(() => {
+    error && notify(error)
+    msg && success(msg)
+  }, [error, msg]);
 
   return (
-    <div className="flex items-center justify-end py-3 mt-5">
-      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between lg:justify-end xl:justify-end">
-        <div>
-          <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            {pages > 1 &&
-              <>
-                <span
-                  href="#"
-                  className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  onClick={() => { (currentPage - 1) > 0 && handlePageChange(currentPage - 1) }}
-                >
-                  <span className="sr-only">Previous</span>
-                  <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                </span>
-                {getPaginationNumbers().map((pageNumber) => (
-                  <span
-                    key={pageNumber}
-                    className={(pageNumber === currentPage) ? "relative z-2 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" : "relative items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"}
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handlePageChange(pageNumber);
-                      setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
-                    }}>
-                    {pageNumber}
-                  </span>
-                ))}
-                <span
-                  href="#"
-                  className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  onClick={() => { (currentPage + 1) <= pages && handlePageChange(currentPage + 1) }}
-                >
-                  <span className="sr-only">Next</span>
-                  <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                </span>
-              </>
-            }
-          </nav>
-        </div>
-      </div>
-    </div>
+    <>
+      <span className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
+        Delete
+      </span>
+      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
+            <h3 className="mb-5 text-lg font-normal text-gray-900">
+              Are you sure you want to delete this product?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => { setOpenModal(false); handleDelete() }}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => { setOpenModal(false) }}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
   )
 }

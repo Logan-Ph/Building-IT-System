@@ -89,7 +89,7 @@ export default function ProductCard({ product }) {
                     <div className="flex text-xs text-[#FAC800]">
                         <Rating size="md">
                             {[...Array(5)].map((_, i) => (
-                                <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-5 !h-5" />
+                                <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-4 !h-4" />
                             ))}
                         </Rating>
                     </div>
