@@ -15,6 +15,8 @@ export default function TableComponent({ orders, headerContent, handleConfirmOrd
         });
     }, []);
 
+
+    
     return (
         <>
             <div ref={ref} className='w-full overflow-x-auto'>

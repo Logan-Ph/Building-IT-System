@@ -41,22 +41,107 @@ export default function ManageUserPage() {
     return null
   }
 
+  const customTheme = {
+    "base": "flex flex-col gap-2",
+    "tablist": {
+      "base": "flex text-center",
+      "styles": {
+        "default": "flex-wrap border-b border-gray-200 dark:border-gray-200",
+        "underline": "flex-wrap -mb-px border-b border-gray-200 dark:border-gray-200",
+        "pills": "flex-wrap font-medium text-sm text-gray-500 dark:text-gray-500 space-x-2",
+        "fullWidth": "w-full text-sm font-medium divide-x divide-gray-200 shadow grid grid-flow-col dark:divide-gray-200  rounded-none"
+      },
+      "tabitem": {
+        "base": "flex items-center justify-center p-4 rounded-t-lg text-sm font-medium first:ml-0 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-400 focus:ring-4 focus:ring-cyan-300 focus:outline-none",
+        "styles": {
+          "default": {
+            "base": "rounded-t-lg",
+            "active": {
+              "on": "bg-gray-100 text-cyan-600 dark:bg-gray-100 dark:text-cyan-600",
+              "off": "text-gray-500 hover:bg-gray-50 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-50  dark:hover:text-gray-600"
+            }
+          },
+          "underline": {
+            "base": "rounded-t-lg",
+            "active": {
+              "on": "text-cyan-600 rounded-t-lg border-b-2 border-cyan-600 active dark:text-cyan-600 dark:border-cyan-600",
+              "off": "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-600"
+            }
+          },
+          "pills": {
+            "base": "",
+            "active": {
+              "on": "rounded-lg bg-cyan-600 text-white",
+              "off": "rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:text-gray-900"
+            }
+          },
+          "fullWidth": {
+            "base": "ml-0 first:ml-0 w-full rounded-none flex",
+            "active": {
+              "on": "p-4 text-gray-900 bg-gray-100 active dark:bg-gray-100 dark:text-gray-900 rounded-none",
+              "off": "bg-white hover:text-gray-700 hover:bg-gray-50 dark:hover:text-gray-700 dark:bg-white dark:hover:bg-gray-50 rounded-none"
+            }
+          }
+        },
+        "icon": "mr-2 h-5 w-5"
+      }
+    },
+    "tabitemcontainer": {
+      "base": "",
+      "styles": {
+        "default": "",
+        "underline": "",
+        "pills": "",
+        "fullWidth": ""
+      }
+    },
+    "tabpanel": "py-3",
+    
+  
+  
+  
+  
+  
+    "root": {
+      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-500",
+      "shadow": "absolute bg-white dark:bg-white w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
+      "wrapper": "relative"
+    },
+    "body": {
+      "base": "group/body",
+      "cell": {
+        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-6 py-4"
+      }
+    },
+    "head": {
+      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-700",
+      "cell": {
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-gray-50 dark:bg-gray-50 px-6 py-3"
+      }
+    },
+    "row": {
+      "base": "group/row",
+      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-50",
+      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-white even:dark:bg-gray-50"
+    }
+  };
+
   return (
     <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       {error && <Navigate to={"/"} replace />}
       <div>
-        <Tabs aria-label="Full width tabs" style="fullWidth">
+        <Tabs  theme={customTheme} aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
-          <Tabs.Item active title="Customer" icon={HiUserCircle}>
-            <UserTable data={users} type="user" />
+          <Tabs.Item  theme={customTheme} active title="Customer" icon={HiUserCircle}>
+            <UserTable data={users } customTheme={customTheme}  type="user" />
           </Tabs.Item>
           {/* Admin manage vendor account */}
-          <Tabs.Item title="Vendor" icon={FaShoppingBag}>
-            <UserTable data={vendors} type="vendor" />
+          <Tabs.Item  theme={customTheme} title="Vendor" icon={FaShoppingBag}>
+            <UserTable data={vendors} customTheme={customTheme} type="vendor" />
           </Tabs.Item>
           {/* Admin manage shipper account */}
-          <Tabs.Item title="Shipper" icon={HiTruck}>
-            <UserTable data={shippers} type="shipper" />
+          <Tabs.Item  theme={customTheme} title="Shipper" icon={HiTruck}>
+            <UserTable data={shippers} customTheme={customTheme} type="shipper" />
           </Tabs.Item>
         </Tabs>
       </div>
@@ -69,7 +154,7 @@ function filterUsers(users, searchTerm) {
   return users.filter(user => regex.test(user.email) || regex.test(user.name) || regex.test(user.phoneNumber) || regex.test(user.address) || regex.test(user.distributionHub));
 }
 
-function UserTable({ data, dataImage, type }) {
+function UserTable({ data, dataImage, type ,customTheme}) {
   const [dataSlice, setDataSlice] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -87,22 +172,22 @@ function UserTable({ data, dataImage, type }) {
       case 'user':
         return (
           <>
-            <Table.HeadCell className="dark:bg-white">Name</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Phone Number</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Default Address</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Status</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">View</Table.HeadCell>
+            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Name</Table.HeadCell>
+            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Phone Number</Table.HeadCell>
+            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Default Address</Table.HeadCell>
+            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Status</Table.HeadCell>
+            <Table.HeadCell  theme={customTheme} className="dark:bg-white">View</Table.HeadCell>
           </>
         );
       case 'shipper':
         return (
           <>
-            <Table.HeadCell className="dark:bg-white">Name</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Phone Number</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Default Address</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Distribution Hub</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">Status</Table.HeadCell>
-            <Table.HeadCell className="dark:bg-white">View</Table.HeadCell>
+            <Table.HeadCell theme={customTheme} className="dark:bg-white">Name</Table.HeadCell>
+            <Table.HeadCell theme={customTheme} className="dark:bg-white">Phone Number</Table.HeadCell>
+            <Table.HeadCell theme={customTheme} className="dark:bg-white">Default Address</Table.HeadCell>
+            <Table.HeadCell theme={customTheme} className="dark:bg-white">Distribution Hub</Table.HeadCell>
+            <Table.HeadCell theme={customTheme} className="dark:bg-white">Status</Table.HeadCell>
+            <Table.HeadCell theme={customTheme} className="dark:bg-white">View</Table.HeadCell>
           </>
         );
       default:
@@ -115,7 +200,7 @@ function UserTable({ data, dataImage, type }) {
       case 'user':
         return (
           <>
-            <Table.Cell>{item.phoneNumber}</Table.Cell>
+            <Table.Cell >{item.phoneNumber}</Table.Cell>
             <Table.Cell>{item.address}</Table.Cell>
           </>
         );
@@ -138,6 +223,8 @@ function UserTable({ data, dataImage, type }) {
         return null;
     }
   };
+
+
 
   return (
     <>

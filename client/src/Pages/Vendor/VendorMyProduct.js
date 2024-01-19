@@ -50,6 +50,91 @@ export default function VendorMyProduct() {
     return null;
   }
 
+  const customTheme = {
+    "base": "flex flex-col gap-2",
+    "tablist": {
+      "base": "flex text-center",
+      "styles": {
+        "default": "flex-wrap border-b border-gray-200 dark:border-gray-200",
+        "underline": "flex-wrap -mb-px border-b border-gray-200 dark:border-gray-200",
+        "pills": "flex-wrap font-medium text-sm text-gray-500 dark:text-gray-500 space-x-2",
+        "fullWidth": "w-full text-sm font-medium divide-x divide-gray-200 shadow grid grid-flow-col dark:divide-gray-200 dark:text-gray-400 rounded-none"
+      },
+      "tabitem": {
+        "base": "flex items-center justify-center p-4 rounded-t-lg text-sm font-medium first:ml-0 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500 focus:ring-4 focus:ring-cyan-300 focus:outline-none",
+        "styles": {
+          "default": {
+            "base": "rounded-t-lg",
+            "active": {
+              "on": "bg-gray-100 text-cyan-600 dark:bg-gray-100 dark:text-cyan-600",
+              "off": "text-gray-500 hover:bg-gray-50 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-500  dark:hover:text-gray-500"
+            }
+          },
+          "underline": {
+            "base": "rounded-t-lg",
+            "active": {
+              "on": "text-cyan-600 rounded-t-lg border-b-2 border-cyan-600 active dark:text-cyan-600 dark:border-cyan-600",
+              "off": "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-600"
+            }
+          },
+          "pills": {
+            "base": "",
+            "active": {
+              "on": "rounded-lg bg-cyan-600 text-white",
+              "off": "rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-100 dark:hover:text-gray-900"
+            }
+          },
+          "fullWidth": {
+            "base": "ml-0 first:ml-0 w-full rounded-none flex",
+            "active": {
+              "on": "p-4 text-gray-900 bg-gray-100 active dark:bg-gray-700 dark:text-white rounded-none",
+              "off": "bg-white hover:text-gray-700 hover:bg-gray-50 dark:hover:text-gray-700 dark:bg-white dark:hover:bg-gray-50 rounded-none"
+            }
+          }
+        },
+        "icon": "mr-2 h-5 w-5"
+      }
+    },
+    "tabitemcontainer": {
+      "base": "",
+      "styles": {
+        "default": "",
+        "underline": "",
+        "pills": "",
+        "fullWidth": ""
+      }
+    },
+    "tabpanel": "py-3",
+
+
+
+
+
+
+    "root": {
+      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-500",
+      "shadow": "absolute bg-white dark:bg-white w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
+      "wrapper": "relative"
+    },
+    "body": {
+      "base": "group/body",
+      "cell": {
+        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-6 py-4"
+      }
+    },
+    "head": {
+      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-700",
+      "cell": {
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-gray-50 dark:bg-gray-50 px-6 py-3"
+      }
+    },
+    "row": {
+      "base": "group/row",
+      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-50",
+      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-white even:dark:bg-gray-50"
+    }
+  };
+
   return (
     <>
       <ToastContainer
@@ -95,8 +180,8 @@ export default function VendorMyProduct() {
         <div class="container mx-auto my-8 px-4 rounded-lg bg-white shadow p-4 mb-4">
           <div class="mb-4 flex justify-between items-center" />
           <div class="relative overflow-x-auto sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50   dark:text-gray-400">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-500">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50   dark:text-gray-700">
                 <tr>
                   <th scope="col" class="px-6 py-3">
                     Product name
@@ -114,9 +199,9 @@ export default function VendorMyProduct() {
               </thead>
               <tbody>
                 {dataSlice.map((product) => (
-                  <tr key={product._id} className="bg-white border-b   dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr key={product._id} className="bg-white border-b   hover:bg-white ">
                     {/* ... Table data goes here ... */}
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-gray-900">
                       {product.product_name}
                     </td>
                     <td className="px-6 py-4">
@@ -126,7 +211,7 @@ export default function VendorMyProduct() {
                       {product.stock || 0}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                      <a href={`/edit-product/${product._id}`} className="font-medium pr-4 text-blue-600 dark:text-blue-600 hover:underline">Edit</a>
                       <DeleteButtonPopup productId={product._id} setProducts={setProducts} />
                     </td>
                   </tr>
@@ -196,14 +281,69 @@ function DeleteButtonPopup({ productId, setProducts }) {
     msg && success(msg)
   }, [error, msg]);
 
+  const customTheme1 =
+  {
+    "root": {
+      "base": "fixed top-0 right-0 left-0 z-50 h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full",
+      "show": {
+        "on": "flex bg-gray-900 bg-opacity-50 ",
+        "off": "hidden"
+      },
+      "sizes": {
+        "sm": "max-w-sm",
+        "md": "max-w-md",
+        "lg": "max-w-lg",
+        "xl": "max-w-xl",
+        "2xl": "max-w-2xl",
+        "3xl": "max-w-3xl",
+        "4xl": "max-w-4xl",
+        "5xl": "max-w-5xl",
+        "6xl": "max-w-6xl",
+        "7xl": "max-w-7xl"
+      },
+      "positions": {
+        "top-left": "items-start justify-start",
+        "top-center": "items-start justify-center",
+        "top-right": "items-start justify-end",
+        "center-left": "items-center justify-start",
+        "center": "items-center justify-center",
+        "center-right": "items-center justify-end",
+        "bottom-right": "items-end justify-end",
+        "bottom-center": "items-end justify-center",
+        "bottom-left": "items-end justify-start"
+      }
+    },
+    "content": {
+      "base": "relative h-full w-full p-4 md:h-auto",
+      "inner": "relative rounded-lg bg-white shadow  flex flex-col max-h-[90vh]"
+    },
+    "body": {
+      "base": "p-6 flex-1 overflow-auto",
+      "popup": "pt-0"
+    },
+    "header": {
+      "base": "flex items-start justify-between rounded-t  border-b p-5",
+      "popup": "p-2 border-b-0",
+      "title": "text-xl font-medium text-gray-900 ",
+      "close": {
+        "base": "ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900",
+        "icon": "h-5 w-5"
+      }
+    },
+    "footer": {
+      "base": "flex items-center space-x-2 rounded-b border-gray-200 p-6 ",
+      "popup": "border-t"
+    }
+  }
+
   return (
     <>
       <span className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}>
         Delete
       </span>
-      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+      <Modal theme={customTheme1} show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
         <Modal.Header />
-        <Modal.Body>
+        <Modal.Body theme={customTheme1}>
           <div className="text-center">
             <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
             <h3 className="mb-5 text-lg font-normal text-gray-900">
