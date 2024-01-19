@@ -144,6 +144,20 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
   }, [error, msg, notify]);
 
   useEffect(() => {
+    if (openModal) {
+      setTimeout(() => {
+        const element = document.getElementById('myUniqueModalId').parentNode;
+        const classes = element.className.split(' ');
+        const newClasses = classes.filter(c => !c.startsWith('dark:bg-gray') && !c.startsWith('dark:hover:bg-gray'));
+        element.className = newClasses.join(' ');
+
+        const text = document.getElementById('text').parentElement;
+        text.className = 'text-gray-900';
+      }, 0); // Adjust the delay time as needed
+    }
+  }, [openModal]);
+
+  useEffect(() => {
     user && fetchData();
   }, [fetchData, user])
 
@@ -236,58 +250,59 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
                   onClose={() => setOpenModal(false)}
                   className="!my-auto"
                 >
-                  <Modal.Header>
-                    <div>
-                      <p className="font-semibold text-lg line-clamp-1">
-                        Reporting Appliances Shop
-                      </p>
-                    </div>
-                  </Modal.Header>
-                  <Modal.Body className="overflow-y-auto">
-                    <input
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      name="reportedReason"
-                      id="reportedReason"
-                      className="w-full my-2"
-                      placeholder="Report Title"
-                    />
-                    <div className="my-2">
-                      <textarea
-                        onChange={(e) => setDescription(e.target.value)}
-                        id="w3review"
-                        name="w3review"
-                        rows="4"
-                        cols="50"
-                        placeholder="Report Description (10-50 character allowed)"
-                        className="w-full"
-                      ></textarea>
-                    </div>
-                    <p>Upload proof images</p>
-                    <input
-                      onChange={handleFileChange}
-                      type="file"
-                      name="files"
-                      id="files"
-                      className="w-full my-2"
-                      accept="image/*" // Specify the file types allowed, adjust as needed
-                      multiple // Allow multiple files to be selected
-                    />
-                  </Modal.Body>
+                  <div id="myUniqueModalId">
+                    <Modal.Header className="text-xl font-medium text-gray-900 ">
+                      <div id="text">
+                        <p className="font-semibold text-lg line-clamp-1">
+                          Reporting Appliances Shop
+                        </p>
+                      </div>
+                    </Modal.Header>
+                    <Modal.Body className="overflow-y-auto">
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        name="reportedReason"
+                        id="reportedReason"
+                        className="w-full my-2"
+                        placeholder="Report Title"
+                      />
+                      <div className="my-2">
+                        <textarea
+                          onChange={(e) => setDescription(e.target.value)}
+                          id="w3review"
+                          name="w3review"
+                          rows="4"
+                          cols="50"
+                          placeholder="Report Description (10-50 character allowed)"
+                          className="w-full"
+                        ></textarea>
+                      </div>
+                      <p>Upload proof images</p>
+                      <input
+                        onChange={handleFileChange}
+                        type="file"
+                        name="files"
+                        id="files"
+                        className="w-full my-2"
+                        accept="image/*" // Specify the file types allowed, adjust as needed
+                        multiple // Allow multiple files to be selected
+                      />
+                    </Modal.Body>
 
-                  <Modal.Footer>
-                    <button
-                      onClick={handleReport}
-                      disabled={loading}
-                      type="button"
-                      class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${
-                        loading ? "cursor-not-allowed" : ""
-                      }`}
-                    >
-                      Send Report
-                    </button>
-                  </Modal.Footer>
+                    <Modal.Footer>
+                      <button
+                        onClick={handleReport}
+                        disabled={loading}
+                        type="button"
+                        class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? "cursor-not-allowed" : ""
+                          }`}
+                      >
+                        Send Report
+                      </button>
+                    </Modal.Footer>
+                  </div>
                 </Modal>
               </div>
             </div>

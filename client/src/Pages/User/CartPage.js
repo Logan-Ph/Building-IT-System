@@ -328,7 +328,7 @@ export default function CartPage() {
               </div>
               <div class="md:col-span-1">
                 <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
-                  <div class="container mb-3">
+                  <div class="container mb-3 mx-auto">
                     <div class="text-3xl font-bold my-3">Order Summary</div>
                     <div class="flex items-center justify-between">
                       <span class="text-lg text-gray-900">Items:</span>

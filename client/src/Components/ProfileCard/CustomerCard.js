@@ -41,8 +41,8 @@ export default function CustomerCard({ user, orders }) {
         </div>
 
         <div class="text-lg mt-3 text-black font-medium">Address: <span class="text-lg font-normal">{user.address}</span></div>
-       
-  
+
+
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 pb-4">
           <div class="text-lg mt-3 text-black font-medium">
             Purchases History
@@ -67,8 +67,13 @@ export default function CustomerCard({ user, orders }) {
   );
 }
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterOrders(orders, searchTerm) {
-  const regex = new RegExp(searchTerm, 'i');
+  const escapedSearchTerm = escapeRegExp(searchTerm);
+  const regex = new RegExp(escapedSearchTerm, 'i');
   return orders.filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress)).map(order => {
     return order
   })

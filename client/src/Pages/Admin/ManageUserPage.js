@@ -8,6 +8,7 @@ import { Link, Navigate } from "react-router-dom";
 import Pagination from "../../Components/Pagination";
 import SearchBox from "../../Components/SearchBox";
 import { UserContext } from "../../Context/UserContext";
+import { LightModeTable } from "../../Components/LightModeTable";
 
 export default function ManageUserPage() {
   const [users, setUsers] = useState([]);
@@ -22,7 +23,6 @@ export default function ManageUserPage() {
       const res = await axios.get("http://localhost:4000/admin/manage-user", { withCredentials: true })
       setUsers(res.data.users);
       setVendors(res.data.vendors);
-      console.log(res.data.vendors);
       setShippers(res.data.shippers);
       setIsLoading(false)
     }
@@ -35,6 +35,7 @@ export default function ManageUserPage() {
   useEffect(() => {
     fetchData();
   }, [fetchData])
+
 
   if (isLoading || !user) {
     return null
@@ -86,22 +87,22 @@ function UserTable({ data, dataImage, type }) {
       case 'user':
         return (
           <>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Default Address</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>View</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Name</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Phone Number</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Default Address</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Status</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">View</Table.HeadCell>
           </>
         );
       case 'shipper':
         return (
           <>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Phone Number</Table.HeadCell>
-            <Table.HeadCell>Default Address</Table.HeadCell>
-            <Table.HeadCell>Distribution Hub</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>View</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Name</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Phone Number</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Default Address</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Distribution Hub</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Status</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">View</Table.HeadCell>
           </>
         );
       default:
@@ -145,14 +146,14 @@ function UserTable({ data, dataImage, type }) {
           <div class="flex items-center justify-end flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4">
             <SearchBox setSearchTerm={setSearchTerm} />
           </div>
-          <Table hoverable>
-            <Table.Head>
+          <LightModeTable hoverable>
+            <Table.Head id="TableHeader">
               {getHeadCellContent()}
             </Table.Head>
             {dataSlice.map((item, i) => (
               <>
                 <Table.Body className="divide-y">
-                  <Table.Row className="bg-white">
+                  <Table.Row className="dark:hover:bg-gray-200 bg-white dark:border-gray-700 border-b border-gray-200">
                     <Table.Cell className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                       <img src={(dataSlice[i].img) ? `data:image/jpeg;base64,${dataSlice[i].img}` : require("../../Components/images/defaultUserImage.png")} className="w-10 h-10 aspect-square object-cover rounded-full" alt="avatar_img" />
                       <div class="ps-3">
@@ -181,7 +182,7 @@ function UserTable({ data, dataImage, type }) {
                 </Table.Body>
               </>
             ))}
-          </Table>
+          </LightModeTable>
         </div>
       </div>
       {!searchTerm && Math.ceil(data.length / 10) > 1 && <Pagination pages={Math.ceil(data.length / 10)} setDataSlice={setDataSlice} data={data} />}

@@ -68,19 +68,19 @@ export default function UserOrder() {
         <div class="pl-5 text-md font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
           <ul class="flex flex-wrap -mb-px">
             <li class="me-2">
-              <span className={`${activeTab === "Unpaid" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Unpaid")}>Waiting for proccessing</span>
+              <span className={`${activeTab === "Unpaid" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-500 dark:hover:text-gray-500"}`} onClick={() => setActiveTab("Unpaid")}>Waiting for proccessing</span>
             </li>
             <li class="me-2">
-              <span className={`${activeTab === "To Ship" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("To Ship")}>To ship</span>
+              <span className={`${activeTab === "To Ship" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-500 dark:hover:text-gray-500"}`} onClick={() => setActiveTab("To Ship")}>To ship</span>
             </li>
             <li class="me-2">
-              <span className={`${activeTab === "Completed" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Completed")}>Completed</span>
+              <span className={`${activeTab === "Completed" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-500 dark:hover:text-gray-500"}`} onClick={() => setActiveTab("Completed")}>Completed</span>
             </li>
             <li class="me-2">
-              <span className={`${activeTab === "Cancelled" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Cancelled")}>Cancelled</span>
+              <span className={`${activeTab === "Cancelled" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-500 dark:hover:text-gray-500"}`} onClick={() => setActiveTab("Cancelled")}>Cancelled</span>
             </li>
             <li class="me-2">
-              <span className={`${activeTab === "Failed Delivery" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"}`} onClick={() => setActiveTab("Failed Delivery")}>Failed Delivery</span>
+              <span className={`${activeTab === "Failed Delivery" ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-500 dark:hover:text-gray-500"}`} onClick={() => setActiveTab("Failed Delivery")}>Failed Delivery</span>
             </li>
           </ul>
         </div>
@@ -105,7 +105,7 @@ function OrdersInfo({ orders, searchTerm, initialStatuses, activeTab }) {
   }, [orders, initialStatuses]);
 
   return (
-    <div class="flex flex-col justify-center dark:bg-gray-800 bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
+    <div class="flex flex-col justify-center   bg-gray-50 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
       {Object.entries(categorizedOrder).map(([title, orders]) => (
         activeTab === title && (orders ? <OrderContent orders={orders} searchTerm={searchTerm} /> : <div className="overflow-x-auto">
           <div className='border border-gray my-1 py-32'>

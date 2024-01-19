@@ -1,17 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  
+  darkMode: 'class',
+
   mode: 'jit',
   content: ["./src/**/*.{js,jsx,ts,tsx}"
     , "./src/**/*.{js,jsx,ts,tsx}",
     "./src/**/**/*.{js,jsx,ts,tsx}",
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
-
   ],
-  
 
   theme: {
-    
     extend: {
       screens: {
         '2xs': { min: '300px' },
@@ -27,8 +25,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('flowbite/plugin'),
-    
-     {
+    {
       tailwindcss: {},
       autoprefixer: {},
       ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {})
