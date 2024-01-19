@@ -9,7 +9,7 @@ export default function VerifyEmailPage() {
     const [isLoading, setIsLoading] = useState(true)
 
     const fetchData = useCallback(async () => {
-        await axios.get(`http://localhost:4000/user/${params.token}/verify-email`, { withCredentials: true })
+        await axios.get(`https://building-it-system-server.vercel.app/user/${params.token}/verify-email`, { withCredentials: true })
             .then(res => { setIsLoading(false) })
             .catch(er => {
                 window.location.href = '/login'

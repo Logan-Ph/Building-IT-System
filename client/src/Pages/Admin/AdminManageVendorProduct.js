@@ -19,7 +19,7 @@ export default function AdminManageVendorProduct() {
   const { user } = useContext(UserContext)
 
   const getProducts = useCallback(async () => {
-    const res = await axios.get("http://localhost:4000/admin/manage-product/query=", { withCredentials: true });
+    const res = await axios.get("https://building-it-system-server.vercel.app/admin/manage-product/query=", { withCredentials: true });
     setReportedProducts(res.data.products.filter(product => product.isReported === true));
     setProducts(res.data.products);
   }, [])
@@ -30,7 +30,7 @@ export default function AdminManageVendorProduct() {
   };
 
   const serachProduct = useCallback(async () => {
-    const res = await axios.get(`http://localhost:4000/admin/manage-product/query=${searchTerm}`, { withCredentials: true });
+    const res = await axios.get(`https://building-it-system-server.vercel.app/admin/manage-product/query=${searchTerm}`, { withCredentials: true });
     setProducts(res.data.products);
   }, [searchTerm])
 
@@ -210,7 +210,7 @@ function DeleteButtonPopup({ productId, setProducts }) {
   }
 
   const handleDelete = async () => {
-    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productId}`;
     try {
       await axios.delete(apiUrl, {
         headers: {

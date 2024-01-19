@@ -20,7 +20,7 @@ export default function Homepage() {
 
     const fetchProduct = useCallback(async () => {
         try {
-            const res = await axios.get(`http://localhost:4000/?page=${page}`, { withCredentials: true });
+            const res = await axios.get(`https://building-it-system-server.vercel.app/?page=${page}`, { withCredentials: true });
             setProducts((prev) => [...prev, ...res.data.product]);
             setIsLoading(false)
         } catch (er) {
@@ -94,7 +94,7 @@ function MiddleBanner({ setNavigateTo }) {
     const [images, setImages] = useState();
     const fetchImages = async () => {
         try {
-            const response = await axios.get("http://localhost:4000/middle-banner", { withCredentials: true });
+            const response = await axios.get("https://building-it-system-server.vercel.app/middle-banner", { withCredentials: true });
             setImages(response.data.images);
         } catch (error) {
             console.error('Error fetching products:', error);

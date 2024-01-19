@@ -11,7 +11,7 @@ export default function ShipperHeader() {
 
     const fetchUser = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+            const res = await axios.get("https://building-it-system-server.vercel.app/login/success", { withCredentials: true });
             setUser(res.data.user);
         } catch (er) {
             setUser(null)
@@ -21,7 +21,7 @@ export default function ShipperHeader() {
 
     const handleLogout = async (e) => {
         e.preventDefault()
-        await axios.get("http://localhost:4000/logout", { withCredentials: true });
+        await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
         setUser(undefined)
         window.location.href = "/login"
     }
