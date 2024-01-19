@@ -1,23 +1,29 @@
-import AdminBarChart from "../../Components/AdminBarChart";
-
+import VendorBarChart from "../../Components/VendorBarChart";
 import Insight from "../../Components/Insight";
 import ToDoList from "../../Components/ToDoList";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
-import LoadingPage from "../User/LoadingPage";
 
 export default function DashboardPage() {
-  const { user } = useContext(UserContext)
   const [ordersByStatus, setOrdersByStatus] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
+  const [orders, setOrders] = useState([])
+  const { user } = useContext(UserContext)
+  const [numberOfFollowers, setNumberOfFollowers] = useState()
+  const [numberOfProducts, setNumberOfProducts] = useState()
+  const [income, setIncome] = useState()
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
+      setOrders(res.data.orders)
+      setNumberOfFollowers(res.data.numberOfFollowers)
+      setIncome(res.data.income)
+      setNumberOfProducts(res.data.numberOfProducts)
       setIsLoading(false)
     }
     catch (er) {
@@ -30,8 +36,8 @@ export default function DashboardPage() {
     fetchData();
   }, [fetchData])
 
-  if (isLoading) {
-    return <LoadingPage />
+  if (isLoading || !user) {
+    return null
   }
 
   return (
@@ -67,15 +73,15 @@ export default function DashboardPage() {
               Critical business priorities encompass operational efficiency, market dynamics, and customer engagement
             </h1>
 
-            <Insight />
+            <Insight orders={Object.values(ordersByStatus).reduce((total, orders) => total + Number(orders), 0)} numberOfFollowers={numberOfFollowers} income={income} numberOfProducts={numberOfProducts} />
             <div className="mt-4">
               <h1 class="font-bold  lg:pl-5 py-4 uppercase text-black text-2xl ">
                 Last Month Incomes
               </h1>
 
             </div>
-            <div className="relative">
-              <AdminBarChart />
+            <div className="relative" >
+              <VendorBarChart orders={orders} />
             </div>
           </div>
         </div>

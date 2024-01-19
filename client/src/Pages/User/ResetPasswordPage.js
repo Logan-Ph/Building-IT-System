@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Navigate } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
@@ -49,8 +49,7 @@ export default function ResetPassword() {
                 setUserEmail(res.data.userEmail.user)
                 setIsLoading(false)
             }).catch(er => {
-                console.log(er)
-                setIsLoading(false)
+                window.location.href = '/login'
             })
     }, [params.token])
 
@@ -100,7 +99,7 @@ export default function ResetPassword() {
         {navigate && <Navigate to="/login" replace={true} />}
         <ToastContainer
             position="top-center"
-            autoClose={5000}
+            autoClose={2000}
             hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
@@ -124,7 +123,7 @@ export default function ResetPassword() {
                             </div>
                             <div>
                                 <label for="confirm-password" className="block mb-2 text-sm font-medium text-gray-900">Confirm password</label>
-                                <input type="confirm-password" name="confirm-password" id="confirm-password" placeholder="••••••••" onChange={(e) => setConfirmPassword(e.target.value)} className="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 shadow-md" />
+                                <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" onChange={(e) => setConfirmPassword(e.target.value)} className="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 shadow-md" />
                             </div>
                             <div className="flex items-start">
                                 <div className="flex items-center h-5">
@@ -138,7 +137,7 @@ export default function ResetPassword() {
                                 <button type="submit" onClick={handleSubmit} className="flex w-1/2 justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save New Password</button>
 
                                 <div className="my-5">
-                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <a className="font-medium text-[#E61E2A] text-md hover:underline text-center" href="/login">Login</a></label>
+                                    <label for="terms" className="font-light sm:text-sm text-md text-gray-900 text-center">Back to <Link className="font-medium text-[#E61E2A] text-md hover:underline text-center" to="/login">Login</Link></label>
                                 </div>
                             </div>
                         </form>

@@ -115,9 +115,13 @@ export default function VendorEditStore() {
     getStoreInfo()
   }, [getStoreInfo])
 
-  return (
+  if (!user) {
+    return null;
+  }
+
+    return (
     <>
-      <div className="container mx-auto my-8 px-4 rounded-lg bg-white p-4">
+      <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <ToastContainer
           position="top-center"
           autoClose={2000}
@@ -131,10 +135,10 @@ export default function VendorEditStore() {
           theme="light"
         />
         <div>
-          <h1 class="font-bold  lg:pl-5 text-black lg:md:text-2xl text-lg ">
+          <h1 class="text-2xl tracking-tight font-bold text-gray-900 pt-8">
             Shop Decoration
           </h1>
-          <h1 class="font-medium  lg:md:pt-1 lg:pl-5 text-gray-500 text-xs lg:md:text-base mb-3">
+          <h1 class="font-medium  lg:md:pt-1  text-gray-500 text-xs lg:md:text-base mb-3">
             Preview of Shop Homepage
           </h1>
         </div>
@@ -237,7 +241,7 @@ export default function VendorEditStore() {
         <div className="p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
           <label
             for="bigBanner"
-            className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer"
+            className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100   cursor-pointer"
             style={ bigBanner ? { backgroundImage: `url(${URL.createObjectURL(bigBanner)})`} : (user && user.bigBanner ? { backgroundImage: `url(${user.bigBanner})`} : {} )}
           >
             <button>
@@ -283,7 +287,7 @@ export default function VendorEditStore() {
           <div className="grid grid-cols-2 gap-4">
             <label
               for="smallBanner1"
-              className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              className="flex items-center justify-center rounded bg-gray-100 h-28  "
               style={smallBanner1 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner1)})` } : (user && user.smallBanner1 ? { backgroundImage: `url(${user.smallBanner1}`} : {})}
             >
               <input
@@ -312,7 +316,7 @@ export default function VendorEditStore() {
             </label>
             <label
               for="smallBanner2"
-              className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              className="flex items-center justify-center rounded bg-gray-100 h-28  "
               style={smallBanner2 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner2)})` } : (user && user.smallBanner2 ? { backgroundImage: `url(${user.smallBanner2}`} : {})}
             >
               <input

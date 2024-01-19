@@ -18,10 +18,26 @@ const nodemailer = require('nodemailer')
 const algoliasearch = require('algoliasearch')
 const ImageKit = require("imagekit")
 // Connect and authenticate with your Algolia app
-const client = algoliasearch('DN0WBRQ8A3', '329a2a4f7a299b7d02bbc2fbd6d1da55')
-const index = client.initIndex('rBuy_test')
+const client = algoliasearch('DN0WBRQ8A3', '97b9021b42c870239d32f46da97d83cb')
+const index = client.initIndex('rBuy')
 const { OpenAI } = require('openai')
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+function authenticateToken(token) {
+  return new Promise((resolve, reject) => {
+    try {
+      jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+        if (err) {
+          resolve(null);
+        } else {
+          resolve(user.user);
+        }
+      });
+    } catch (error) {
+      return null;
+    }
+  });
+}
 
 const imagekit = new ImageKit({
   publicKey: "public_/qnMdn3Z1wjuZZM9H8sVN6bwzIQ=",
@@ -76,7 +92,7 @@ function sendEmailVerification(userEmail) {
     let message = {
       from: "rBuy@gmail.com",
       to: userEmail,
-      subject: "Forgot password verification",
+      subject: "Email verification",
       html: mail
     }
     transporter.sendMail(message)
@@ -186,9 +202,10 @@ function sendProductReportNotificationEmail(userEmail, productName, title, descr
 }
 
 exports.loginSuccess = async (req, res) => {
-  if (req.user) {
-    const user = convertUser((await User.findById(req.user._id)) || (await Vendor.findById(req.user._id)) || (await Shipper.findById(req.user._id)));
-    const cart = await Cart.findOne({ userID: req.user._id })
+  let user = await authenticateToken(req.cookies.userToken);
+  if (user) {
+    user = convertUser((await User.findById(user._id)) || (await Vendor.findById(user._id)) || (await Shipper.findById(user._id)));
+    const cart = await Cart.findOne({ userID: user._id })
     res.status(200).json({ user: user, cart: (cart) ? cart : null });
   } else {
     res.status(500).json({ user: "", cart: null })
@@ -197,7 +214,14 @@ exports.loginSuccess = async (req, res) => {
 
 exports.homePage = async (req, res) => {
   try {
-    let product = await Product.find({}).limit(32);
+    const page = parseInt(req.query.page);
+    let product;
+    if (page > 1) {
+      product = await Product.find({}).limit(30 + 30 * page);
+      product = product.slice(-30);
+    } else {
+      product = await Product.find({}).limit(30);
+    }
     return res.json({ product: product });
   } catch (error) {
     console.log(error)
@@ -232,7 +256,7 @@ exports.chatbotMessage = async (req, res) => {
   if (!threadId) {
     const thread = await openai.beta.threads.create();
     threadId = thread.id;
-    res.cookie("threadId", threadId, { httpOnly: true }); // pass thread id into the cookies
+    res.cookie("threadId", threadId, { httpOnly: true, sameSite: 'none', secure: true }); // pass thread id into the cookies
   }
   let messages;
   await openai.beta.threads.messages.create(threadId, {
@@ -482,10 +506,27 @@ exports.verifyEmail = async (req, res) => {
   })
 }
 
+exports.postVerifyEmail = async (req, res) => {
+  try {
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const email = req.body.email;
+    if (!emailRegex.test(email)) {
+      throw new Error("Invalid email address");
+    }
+    sendEmailVerification(email)
+    return res.status(200).json({ msg: "A verification email has been sent to your email address. Please check your inbox and follow the instructions to verify your account. If you don't see the email, please check your spam folder." });
+  } catch (error) {
+    res.status(500).send(error.message || "Error Occured");
+  }
+}
+
 // Place the Order
 exports.placeOrder = async (req, res) => {
   try {
-    const userID = req.user._id;
+    let user = await authenticateToken(req.cookies.userToken);
+    let userID = user._id;
+    user = await User.findById(user._id, { name: 1 });
+
     if (req.body.checkoutInfo.isRemember) {
       await User.findByIdAndUpdate(userID, { city: req.body.checkoutInfo.city, phoneNumber: req.body.checkoutInfo.phoneNumber, district: req.body.checkoutInfo.district, ward: req.body.checkoutInfo.ward, streetAddress: req.body.checkoutInfo.streetAddress })
     }
@@ -519,18 +560,19 @@ exports.placeOrder = async (req, res) => {
           price: cartItem.product.price,
           product_name: cartItem.product.product_name
         })),
-        userName: req.user.name,
-        shippingAddress: req.body.streetAddress,
-        contactNumber: req.body.phoneNumber
+        userName: user.name,
+        shippingAddress: req.body.checkoutInfo.streetAddress,
+        contactNumber: req.body.checkoutInfo.phoneNumber,
+        shippingFee: req.body.shippingFee,
+        city: req.body.checkoutInfo.city,
+        ward: req.body.checkoutInfo.ward,
+        district: req.body.checkoutInfo.district,
       });
-
       await order.save();
     }
-
     for (const product of products) {
       await userCart.removeProduct(product.product); // Remove each product from the cart
     }
-
     res.status(200).json({ message: 'Orders placed successfully!', cart: userCart });
   } catch (error) {
     console.error(error);
@@ -539,41 +581,57 @@ exports.placeOrder = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
-  if (!req.user) {
+  try {
+    let user = await authenticateToken(req.cookies.userToken);
+    if (!user) {
+      return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
+    }
+    const cart = await Cart.findOne({ userID: user._id })
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(500).json({ error: "Cannot find the product." })
+    }
+
+    if (!cart) {
+      const newCart = new Cart({
+        userID: new mongoose.Types.ObjectId(user._id),
+        products: [{
+          product: product._id,
+          quantity: (req.query.quantity) ? req.query.quantity : 1,
+          owner: new mongoose.Types.ObjectId(product.owner),
+          image_link: product.image_link,
+          price: product.price,
+          product_name: product.product_name,
+        }]
+      })
+      await newCart.save()
+    } else {
+      await cart.addProduct(
+        await Product.findById(req.params.id),
+        (req.query.quantity) ? req.query.quantity : 1
+      );
+    }
+    return res.status(200).json({ msg: "added to cart", cart: (cart) ? cart : null })
+  } catch {
     return res.status(500).json({ error: "Please log in or create an account to add items to your cart." })
   }
-  const cart = await Cart.findOne({ userID: req.user._id })
+}
 
-  const product = await Product.findById(req.params.id);
-  if (!product) {
-    return res.status(500).json({ error: "Cannot find the product." })
+exports.viewInvoice = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    return res.status(200).json({ order: order });
+  } catch (error) {
+    return res.status(500).json({ error: "Cannot find order" });
   }
 
-  if (!cart) {
-    const newCart = new Cart({
-      userID: new mongoose.Types.ObjectId(req.user._id),
-      products: [{
-        product: product._id,
-        quantity: (req.query.quantity) ? req.query.quantity : 1,
-        owner: new mongoose.Types.ObjectId(product.owner),
-        image_link: product.image_link,
-        price: product.price,
-        product_name: product.product_name,
-      }]
-    })
-    await newCart.save()
-  } else {
-    await cart.addProduct(
-      await Product.findById(req.params.id),
-      (req.query.quantity) ? req.query.quantity : 1
-    );
-  }
-  return res.status(200).json({ msg: "added to cart", cart: (cart) ? cart : null })
 }
 
 exports.removeProduct = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userID: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const cart = await Cart.findOne({ userID: user._id })
     const product = await Product.findById(req.params.id);
     cart.removeProduct(product._id);
     return res.status(200).json({ cart: cart })
@@ -585,7 +643,8 @@ exports.removeProduct = async (req, res) => {
 
 exports.removeAllProducts = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userID: req.user._id });
+    let user = await authenticateToken(req.cookies.userToken);
+    const cart = await Cart.findOne({ userID: user._id });
     req.body.productIds.forEach(productId => {
       cart.products = cart.products.filter(p => p.product._id.toString() !== productId.toString());
     });
@@ -598,7 +657,8 @@ exports.removeAllProducts = async (req, res) => {
 
 exports.manageOrder = async (req, res) => {
   try {
-    const orders = await Order.find({ vendorID: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const orders = await Order.find({ vendorID: user._id })
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
   } catch {
     return res.status(500).json({ error: "Cannot find order. " })
@@ -610,7 +670,11 @@ exports.vendorHomepage = async (req, res) => {
     const vendor = convertUser(await Vendor.findById(req.params.id, { businessName: 1, address: 1, phoneNumber: 1, email: 1, description: 1, img: 1, coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 }));
     const numberOfProducts = await Product.find({ owner: req.params.id }).countDocuments();
     const numberOfFollowers = await FollowerList.findOne({ vendorID: req.params.id }, { followers: 1 })
-    return res.status(200).json({ vendor: vendor, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
+    const trendingProducts = await Product.find({ owner: req.params.id })
+      .sort({ ratings: -1, no_of_ratings: -1 }) // sort in descending order based on salesCount
+      .limit(5) // limit the result to 5
+      .exec();
+    return res.status(200).json({ vendor: vendor, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, trendingProducts: trendingProducts });
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
@@ -624,7 +688,6 @@ exports.vendorProductPage = async (req, res) => {
     const numberOfFollowers = await FollowerList.findOne({ vendorID: req.params.id }, { followers: 1 })
     return res.status(200).json({ vendor: vendor, numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ error: "Vendor not found" })
   }
 }
@@ -653,9 +716,10 @@ exports.confirmOrder = async (req, res) => {
 
 exports.getVendorDashboard = async (req, res) => {
   try {
-    const orders = await Order.aggregate([
+    let user = await authenticateToken(req.cookies.userToken);
+    const ordersStatus = await Order.aggregate([
       {
-        $match: { vendorID: new mongoose.Types.ObjectId(req.user._id) }
+        $match: { vendorID: new mongoose.Types.ObjectId(user._id) }
       },
       {
         $group: {
@@ -664,12 +728,15 @@ exports.getVendorDashboard = async (req, res) => {
         }
       }
     ]);
-
+    const orders = await Order.find({ vendorID: user._id, status: "Completed" });
+    const numberOfFollowers = await FollowerList.findOne({ vendorID: user._id }, { followers: 1 })
+    const numberOfProducts = await Product.find({ owner: user._id }).countDocuments();
     const ordersCountByStatus = {};
-    orders.forEach(orderGroup => {
+    ordersStatus.forEach(orderGroup => {
       ordersCountByStatus[orderGroup._id] = orderGroup.count;
     });
-    res.status(200).json({ ordersByStatus: ordersCountByStatus });
+    const income = orders.reduce((total, order) => total + order.products.reduce((total, product) => total + product.price * product.quantity, 0), 0);
+    res.status(200).json({ ordersByStatus: ordersCountByStatus, orders: orders, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0, income: income, numberOfProducts: numberOfProducts });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -677,7 +744,8 @@ exports.getVendorDashboard = async (req, res) => {
 
 exports.cartPage = async (req, res) => {
   try {
-    const cart = await Cart.find({ userID: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const cart = await Cart.find({ userID: user._id })
     const products = cart[0].products
     return res.status(200).json({ products: products })
   } catch {
@@ -686,20 +754,29 @@ exports.cartPage = async (req, res) => {
 }
 
 exports.checkout = async (req, res) => {
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) {
+    return res.status(500).json({ error: "You need to login first" })
+  }
+  user = await User.findById(user._id, { phoneNumber: 1, city: 1, district: 1, ward: 1, streetAddress: 1 })
   const checkoutInfo = {
-    phoneNumber: req.user.phoneNumber,
-    city: req.user.city,
-    district: req.user.district,
-    ward: req.user.ward,
-    streetAddress: req.user.streetAddress,
+    phoneNumber: user.phoneNumber,
+    city: user.city,
+    district: user.district,
+    ward: user.ward,
+    streetAddress: user.streetAddress,
   }
   return res.status(200).json({ checkoutInfo: checkoutInfo })
 }
 
 exports.logout = (req, res) => {
-  req.session.destroy();
-  res.clearCookie('accessToken');
-  return res.json('Logged out successfully');
+  try {
+    res.clearCookie("userToken");
+    return res.json('Logged out successfully');
+  } catch {
+    console.log(error)
+    return res.status(500).json({ error: "Cannot logout" })
+  }
 };
 
 exports.updateUser = async (req, res) => {
@@ -738,7 +815,8 @@ exports.updateUser = async (req, res) => {
 
 exports.updateVendor = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.user._id);
+    let vendor = await authenticateToken(req.cookies.userToken);
+    vendor = await Vendor.findById(vendor._id, { img: 1, address: 1, phoneNumber: 1 });
     if (req.file) {
       const image = {
         data: fs.readFileSync("uploads/" + req.file.filename),
@@ -833,7 +911,8 @@ exports.userProfile = async (req, res) => {
 
 exports.editStore = async (req, res) => {
   try {
-    const vendor = await Vendor.findById(req.user._id);
+    let vendor = await authenticateToken(req.cookies.userToken);
+    vendor = await Vendor.findById(vendor._id, { coverPhoto: 1, bigBanner: 1, smallBanner1: 1, smallBanner2: 1 });
     const uploadImage = async (file) => {
       try {
         const response = await imagekit.upload({
@@ -875,8 +954,9 @@ exports.editStore = async (req, res) => {
 
 exports.getStoreInfo = async (req, res) => {
   try {
-    const numberOfProducts = await Product.find({ owner: req.user._id }).countDocuments();
-    const numberOfFollowers = await FollowerList.find({ vendorID: req.user._id }, { followers: 1 });
+    let user = await authenticateToken(req.cookies.userToken);
+    const numberOfProducts = await Product.find({ owner: user._id }).countDocuments();
+    const numberOfFollowers = await FollowerList.find({ vendorID: user._id }, { followers: 1 });
     return res.status(200).json({ numberOfProducts: numberOfProducts, numberOfFollowers: numberOfFollowers ? numberOfFollowers.followers.length : 0 });
   } catch {
     return res.status(500).json({ error: "Cannot find store info" })
@@ -885,6 +965,7 @@ exports.getStoreInfo = async (req, res) => {
 
 exports.addNewProduct = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const id = new mongoose.Types.ObjectId();
     const uploadImage = async () => {
       try {
@@ -907,7 +988,7 @@ exports.addNewProduct = async (req, res) => {
 
     const newProduct = new Product({
       _id: id,
-      owner: req.user._id,
+      owner: user._id,
       product_name: req.body.productName,
       category: req.body.category,
       price: req.body.price,
@@ -953,7 +1034,6 @@ exports.deleteProduct = async (req, res) => {
       return res.status(404).json('Product not found');
     }
     await Product.findByIdAndDelete(productID);
-    console.log(productID);
     index.deleteObject(productID)
       .then(() => { })
       .catch(err => res.json(err));
@@ -1026,7 +1106,21 @@ exports.updateProduct = async (req, res) => {
 
 exports.manageProduct = async (req, res) => {
   try {
-    const products = await Product.find({ owner: req.user._id })
+    let user = await authenticateToken(req.cookies.userToken);
+    const { product_name, category } = req.query; // extract product_name and category from query parameters
+
+    // build the query object
+    let query = { owner: user._id };
+
+    if (product_name) {
+      query.product_name = new RegExp(product_name, 'i');
+    }
+    if (category) {
+      query.category = new RegExp(category, 'i');
+    }
+
+    const products = await Product.find(query);
+
     return res.status(200).json((products) ? { products: products } : { products: "" });
   } catch {
     return res.status(500).json({ error: "Cannot find products." })
@@ -1048,6 +1142,27 @@ exports.manageUser = async (req, res) => {
     const users = (await User.find({})).filter(user => user.role !== "Admin").map(user => convertUser(user));
     const vendors = (await Vendor.find({})).map(vendor => convertUser(vendor));
     const shippers = (await Shipper.find({})).map(shipper => convertUser(shipper));
+
+    const reportCounts = await Report.aggregate([
+      {
+        $group: {
+          _id: "$vendor",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const reportCountsByVendor = {};
+    reportCounts.forEach(reportGroup => {
+      reportCountsByVendor[reportGroup._id.toString()] = reportGroup.count;
+    });
+
+    vendors.forEach(vendor => {
+      vendor.reportCount = reportCountsByVendor[vendor._id.toString()] || 0;
+    });
+
+    vendors.sort((a, b) => b.reportCount - a.reportCount);
+
     return res.status(200).json({ users: users, vendors: vendors, shippers: shippers });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find user. " })
@@ -1077,7 +1192,7 @@ exports.reportPage = async (req, res) => {
     };
 
     if (shipper) {
-      const orders = await Order.find({})
+      const orders = await Order.find({ status: { $ne: "Unpaid" } });
       return res.status(200).json({ user: shipper, orders: orders });
     }
     if (!user && !vendor && !shipper) throw new Error("User not found");
@@ -1120,11 +1235,12 @@ exports.uploadHomepageCarousel = async (req, res) => {
 
 exports.getThreads = async (req, res) => {
   try {
-    const threads = await Thread.find({ $or: [{ userId: req.user._id }, { vendorId: req.user._id }] }).populate('content');
+    let user = await authenticateToken(req.cookies.userToken);
+    const threads = await Thread.find({ $or: [{ userId: user._id }, { vendorId: user._id }] }).populate('content');
     let users = [];
     for (const thread of threads) {
-      const user = convertUser((req.user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
-      users.push(user);
+      let chatUser = convertUser((user.role === "User") ? await Vendor.findById(thread.vendorId, { businessName: 1, img: 1 }) : await User.findById(thread.userId, { name: 1, img: 1 }));
+      users.push(chatUser);
     }
     return res.status(200).json({ threads: threads, users: users });
   } catch (error) {
@@ -1135,13 +1251,13 @@ exports.getThreads = async (req, res) => {
 exports.addMessage = async (req, res) => {
   try {
     const threadId = new mongoose.Types.ObjectId(req.params.id);
-
+    let user = await authenticateToken(req.cookies.userToken);
     const thread = await Thread.findById(threadId);
     if (!thread) return res.status(500).json({ error: "Thread not found" });
 
     const message = new Message({
       content: req.body.content,
-      sender: (req.user.role === "User") ? "User" : "Vendor",
+      sender: (user.role === "User") ? "User" : "Vendor",
     })
 
     await message.save();
@@ -1155,7 +1271,10 @@ exports.addMessage = async (req, res) => {
 
 exports.createThread = async (req, res) => {
   try {
-    const { _id: userId, role } = req.user;
+    let user = await authenticateToken(req.cookies.userToken);
+    user = await User.findById(user._id, { role: 1, img: 1 });
+    const userId = user._id;
+    const role = user.role;
     const otherUserId = role === "User" ? req.body.vendorId : req.body.userId;
 
     let thread = await Thread.findOne({ $or: [{ userId, vendorId: otherUserId }, { vendorId: userId, userId: otherUserId }] }).populate('content');
@@ -1184,7 +1303,8 @@ exports.getAdminDashboard = async (req, res) => {
 
 exports.userOrder = async (req, res) => {
   try {
-    let orders = await Order.find({ userId: req.user._id });
+    let user = await authenticateToken(req.cookies.userToken);
+    let orders = await Order.find({ userId: user._id });
     let vendorIds = [...new Set(orders.map(order => order.vendorID))];
     let vendors = await Vendor.find({ _id: { $in: vendorIds } }, { businessName: 1 });
     let vendorNameMap = {};
@@ -1196,6 +1316,7 @@ exports.userOrder = async (req, res) => {
       jsonOrder.vendorName = vendorNameMap[order.vendorID.toString()];
       return jsonOrder;
     });
+    orders.reverse();
     return res.status(200).json((orders) ? { orders: orders } : { orders: "" });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find order. " })
@@ -1204,7 +1325,10 @@ exports.userOrder = async (req, res) => {
 
 exports.getShipperDashboard = async (req, res) => {
   try {
-    const orders = await Order.find({ status: { $ne: "Unpaid" } });
+    const orders = await Order.find({ status: { $ne: "Unpaid" } }).populate({
+      path: 'vendorID',
+      select: 'address businessName -_id'
+    });
 
     const ordersCount = await Order.aggregate([
       {
@@ -1231,9 +1355,10 @@ exports.getShipperDashboard = async (req, res) => {
 
 exports.reportVendor = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const newReport = new Report({
-      user: req.user._id,
+      user: user._id,
       vendor: req.body.vendorID,
       title: req.body.title,
       description: req.body.description,
@@ -1265,14 +1390,15 @@ exports.reportVendor = async (req, res) => {
 
 exports.reportProduct = async (req, res) => {
   try {
-    if (!req.user) {
+    let user = await authenticateToken(req.cookies.userToken);
+    if (!user) {
       return res.status(500).send('Please log in or create an account to report');
     }
     let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const vendorEmail = (await Vendor.findById(req.body.vendorID)).email;
     const productName = (await Product.findById(req.body.product, { product_name: 1 })).product_name;
     const newReport = new Report({
-      user: req.user._id,
+      user: user._id,
       vendor: req.body.vendorID,
       product: req.body.product,
       title: req.body.title,
@@ -1291,6 +1417,7 @@ exports.reportProduct = async (req, res) => {
 }
 exports.followVendor = async (req, res) => {
   try {
+    let user = await authenticateToken(req.cookies.userToken);
     const vendor = await Vendor.findById(req.body.vendorID)
     const followerList = await FollowerList.findOne({ vendorID: req.body.vendorID })
     if (!vendor) {
@@ -1300,19 +1427,19 @@ exports.followVendor = async (req, res) => {
       const newFollowerList = new FollowerList({
         vendorID: req.body.vendorID,
         followers: [{
-          userID: req.user._id
+          userID: user._id
         }]
       })
       await newFollowerList.save()
     } else {
       const isFollowing = await FollowerList.exists({
         vendorID: req.body.vendorID,
-        "followers.userID": req.user._id
+        "followers.userID": user._id
       });
       if (isFollowing) {
         return res.status(400).json({ error: "User is already following the vendor." });
       }
-      followerList.followers.push({ userID: req.user._id });
+      followerList.followers.push({ userID: user._id });
       await followerList.save();
     }
     return res.status(200).json({ following: true });
@@ -1394,7 +1521,8 @@ exports.viewComments = async (req, res) => {
 exports.postComment = async (req, res) => {
   const productId = req.params.id;
   const product = await Product.findById(productId);
-  if (!req.user) {
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) {
     return res.status(500).json({ error: "Please log in or create an account to comment" })
   }
   if (!product) {
@@ -1402,29 +1530,30 @@ exports.postComment = async (req, res) => {
   }
   const { newComment, title } = req.body;
   try {
-    const user = await User.findById(req.user._id);
-    await Comment.create({
+    user = await User.findById(user._id, { name: 1, img: 1 });
+    const comment = await Comment.create({
       title: title,
       productId: new mongoose.Types.ObjectId(productId),
       commentText: newComment,
       userName: user.name,
       userImg: user.img,
     })
-    return res.status(200).json({ msg: "Add comment successfully" });
+    return res.status(200).json({ msg: "Add comment successfully", commentId: comment._id });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 }
 
 exports.replyComment = async (req, res) => {
-  if (!req.user) return res.status(401).json({ error: "Please log in or create an account to reply" });
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) return res.status(401).json({ error: "Please log in or create an account to reply" });
   const { replyText } = req.body;
   const comment_id = req.params.id;
   try {
     const comment = await Comment.findById(comment_id);
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
-    const user = req.user.role === 'User' ? await User.findById(req.user._id) : await Vendor.findById(req.user._id);
+    user = user.role === 'User' ? await User.findById(user._id) : await Vendor.findById(user._id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const reply = {
@@ -1443,15 +1572,16 @@ exports.replyComment = async (req, res) => {
 };
 
 exports.likeComment = async (req, res) => {
-  if (!req.user) return res.status(500).json({ error: "Please log in or create an account to like" });
+  let user = await authenticateToken(req.cookies.userToken);
+  if (!user) return res.status(500).json({ error: "Please log in or create an account to like" });
   const commentId = req.params.id;
   try {
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
-    await comment.likeComment(req.user._id);
-    return res.status(200).json({ msg: "Like comment successfully" });
+    await comment.likeComment(user._id);
+    return res.status(200).json({ msg: "Like comment successfully", comment: comment });
   } catch (error) {
     res.status(500).json({ message: 'There was an error updating the comment' });
   }

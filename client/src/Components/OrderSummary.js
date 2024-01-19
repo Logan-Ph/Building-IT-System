@@ -67,13 +67,13 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
         setMsg();
         return;
       }
-      const res = await axios.post("http://localhost:4000/checkout", { checkoutInfo: checkoutInfo, products: products }, { withCredentials: true });
+      const res = await axios.post("http://localhost:4000/checkout", { checkoutInfo: checkoutInfo, products: products, shippingFee: shippingFee }, { withCredentials: true });
       setMsg(res.data.message);
       aa('purchasedObjectIDs', {
         userToken: user._id, // required for Node.js
         eventName: 'purchasedObjectIDs',
         index: 'rBuy',
-        objectIDs: products.map(product => product.product),
+        objectIDs: products.map(product => product._id),
         objectData: products.map(product => ({
           price: product.price,
           quantity: product.quantity,
@@ -84,9 +84,7 @@ export default function OrderSummary({ checkoutInfo, price, products }) {
       setError("");
       window.localStorage.setItem("shippingFee", shippingFee)
       window.localStorage.setItem("checkoutInfo", JSON.stringify(checkoutInfo))
-      setTimeout(() => {
-        window.location.href = "/thankfororder"
-      }, 2000);
+      window.location.href = "/thankfororder"
     } catch (er) {
       setError(er);
       setMsg("");

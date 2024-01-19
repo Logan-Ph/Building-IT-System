@@ -4,8 +4,9 @@ import TableComponent from "./TableComponent";
 import Pagination from "./Pagination";
 import '../css/mangeorder.css'
 
-export default function OrdersInfo({ orders, searchTerm, initialStatuses, filterOrders, headerContent }) {
+export default function OrdersInfo({ orders, searchTerm, initialStatuses, filterOrders, headerContent, handleConfirmOrder }) {
     const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
+
     useEffect(() => {
         const orderStatus = orders.reduce((acc, order) => {
             if (!acc[order.status]) {
@@ -15,14 +16,17 @@ export default function OrdersInfo({ orders, searchTerm, initialStatuses, filter
             return acc;
         }, initialStatuses);
 
+        orderStatus["All"] = orders;
+
         setCategorizedOrder(prevState => ({ ...prevState, ...orderStatus }));
     }, [orders, initialStatuses]);
+
 
     return (
         <Tabs aria-label="Tabs with icons">
             {Object.entries(categorizedOrder).map(([title, orders]) => (
                 <Tabs.Item title={title} >
-                    {orders ? <OrderContent orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} headerContent={headerContent} /> : <div className="overflow-x-auto">
+                    {orders ? <OrderContent orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} /> : <div className="overflow-x-auto">
                         <div className='border border-gray my-1 py-32'>
                             <div className='flex flex-col justify-center items-center'>
                                 <div className='w-[100px] h-[80px]'>
@@ -39,7 +43,7 @@ export default function OrdersInfo({ orders, searchTerm, initialStatuses, filter
     )
 }
 
-function OrderContent({ orders, searchTerm, filterOrders, headerContent }) {
+function OrderContent({ orders, searchTerm, filterOrders, headerContent, handleConfirmOrder }) {
     const [dataslice, setDataSlice] = useState(orders)
 
     useEffect(() => {
@@ -48,7 +52,7 @@ function OrderContent({ orders, searchTerm, filterOrders, headerContent }) {
 
     return (
         <>
-            {dataslice.length !== 0 ? <TableComponent orders={dataslice} headerContent={headerContent} /> : <div className="overflow-x-auto">
+            {dataslice.length !== 0 ? <TableComponent orders={dataslice} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} /> : <div className="overflow-x-auto">
                 <div className='border border-gray my-1 py-32'>
                     <div className='flex flex-col justify-center items-center'>
                         <div className='w-[100px] h-[80px]'>

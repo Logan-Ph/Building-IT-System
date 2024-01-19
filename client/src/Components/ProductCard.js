@@ -2,6 +2,9 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Context/CartContext";
+import { Link } from "react-router-dom";
+import { Rating } from 'flowbite-react';
+
 
 
 export default function ProductCard({ product }) {
@@ -63,31 +66,32 @@ export default function ProductCard({ product }) {
     group xs:mx-auto"
             key={product._id}>
             <div className="relative">
-                <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto">
+                <div className="w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto p-3">
                     <img src={product.image_link} className="object-full h-full w-full scale-75" alt={product.product_name} />
 
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
-                    <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
-                        <i className="fa-solid fa-magnifying-glass"></i>
-                    </a>
-                    <a href={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
-                        <i className="fa-regular fa-heart"></i>
-                    </a>
+
+                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
+                        <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                            <i className="fa-solid fa-magnifying-glass"></i>
+                        </Link>
+                        <Link to={`/product/${product._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                            <i className="fa-regular fa-heart"></i>
+                        </Link>
+                    </div>
                 </div>
             </div>
             <div className="pt-4 pb-3 px-4">
-                <a href={`/product/${product._id}`}>
+                <Link to={`/product/${product._id}`}>
                     <h4 className="capitalize font-medium xl:text-md lg:text-mb md:text-sm sm:text-sm xs:text-xs mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">{product.product_name}</h4>
-                </a>
+                </Link>
                 <p className="text-lg text-red-500 font-semibold mb-2">${product.price}</p>
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex text-xs text-[#FAC800]">
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
-                        <span><i className="fa-solid fa-star"></i></span>
+                        <Rating size="md">
+                            {[...Array(5)].map((_, i) => (
+                                <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-4 !h-4" />
+                            ))}
+                        </Rating>
                     </div>
                     <div className="text-xs xs:text-2xs text-gray-500 block">Rating {product.ratings}</div>
                 </div>

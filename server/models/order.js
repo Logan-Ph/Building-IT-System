@@ -25,11 +25,11 @@ const orderSchema = new mongoose.Schema({
       },
     }
   ],
-  shippingAddress:{
+  shippingAddress: {
     type: String,
     require: true,
   },
-  contactNumber:{
+  contactNumber: {
     type: String,
     require: true,
   },
@@ -43,6 +43,14 @@ const orderSchema = new mongoose.Schema({
     ref: "Vendor",
     require: true,
   },
+  vendorBusinessName: {
+    type: String,
+    require: true,
+  },
+  vendorAddress: {
+    type: String,
+    require: true,
+  },
   userName: {
     type: String,
     require: true,
@@ -50,6 +58,22 @@ const orderSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now()
+  },
+  city: {
+    type: String,
+    require: true,
+  },
+  shippingFee: {
+    type: Number,
+    require: true,
+  },
+  ward: {
+    type: String,
+    require: true,
+  },
+  district: {
+    type: String,
+    require: true,
   },
   status: {
     type: String,

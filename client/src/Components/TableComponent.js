@@ -1,19 +1,31 @@
 import { Table } from 'flowbite-react';
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import MoreDetailOrder from './MoreDetailOrder';
+import { LightModeTable } from './LightModeTable';
 
-export default function TableComponent({ orders, headerContent }) {
+export default function TableComponent({ orders, headerContent, handleConfirmOrder }) {
+    const ref = useRef();
+
+    useEffect(() => {
+        const elements = ref.current.querySelectorAll('[class*="dark:bg-gray"], [class*="dark:hover:bg-gray"]');
+        elements.forEach(element => {
+            const classes = element.className.split(' ');
+            const newClasses = classes.filter(c => !c.startsWith('dark:bg-gray') && !c.startsWith('dark:hover:bg-gray'));
+            element.className = newClasses.join(' ');
+        });
+    }, []);
+
     return (
         <>
-            <div className='w-full overflow-x-auto'>
-                <Table hoverable>
+            <div ref={ref} className='w-full overflow-x-auto'>
+                <LightModeTable hoverable>
                     <Table.Head>
                         {headerContent && headerContent.map((header) => (
-                            <Table.HeadCell className='!px-4 !py-2'>
+                            <Table.HeadCell className='!px-4 !py-2 dark:bg-white'>
                                 <span className='whitespace-nowrap'>{header}</span>
                             </Table.HeadCell>
                         ))}
-                        <Table.HeadCell>
+                        <Table.HeadCell className='dark:bg-white'>
                             <span className="sr-only">Edit</span>
                         </Table.HeadCell>
                     </Table.Head>
@@ -67,7 +79,7 @@ export default function TableComponent({ orders, headerContent }) {
                                     buttonBorderColor = "border-gray-100";
                             }
                             return (
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Row className="bg-white dark:border-gray-700  ">
                                     <Table.Cell className='!px-4 !py-2'>{order._id}</Table.Cell>
                                     <Table.Cell className='!px-4 !py-2'>{order.userName}</Table.Cell>
                                     <Table.Cell className='!px-4 !py-2'>{formattedDate}</Table.Cell>
@@ -81,13 +93,13 @@ export default function TableComponent({ orders, headerContent }) {
                                         </button>
                                     </Table.Cell>
                                     <Table.Cell className='!px-4 !py-2'>
-                                        <MoreDetailOrder order={order} />
+                                        <MoreDetailOrder order={order} handleConfirmOrder={handleConfirmOrder} />
                                     </Table.Cell>
                                 </Table.Row>
                             )
                         })}
                     </Table.Body>
-                </Table>
+                </LightModeTable>
             </div>
         </>
     );

@@ -16,6 +16,9 @@ export default function CustomerCard({ user, orders }) {
   return (
     <>
       <div class="p-6 space-y-6 bg-white rounded-lg shadow my-5">
+        <h1 class="m-2 text-2xl font-bold text-center xs:text-md">
+          Account Information
+        </h1>
         <div class="flex items-center gap-4 mt-4 flex-wrap">
           <img
             src={
@@ -37,28 +40,14 @@ export default function CustomerCard({ user, orders }) {
           </div>
         </div>
 
-        <div class="text-lg mt-3 text-black font-medium">Adresses</div>
-        <div class="my-3">
-          <div class="text-base text-gray-500 border-t border-gray-200 py-5 px-3">
-            <div class="text-gray-500 mb-2">
-              <span class="border-r border-gray-300 pr-3 text-black">
-                {user.name}
-              </span>
-              <span class="pl-2">{user.phoneNumber}</span>
-            </div>
-            <div class="text-gray-500">Street Adress</div>
-            <div class="text-gray-500">{user.address}</div>
-            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-300">
-              Default
-            </span>
-          </div>
-          {/* <!-- Second address --> */}
-        </div>
+        <div class="text-lg mt-3 text-black font-medium">Address: <span class="text-lg font-normal">{user.address}</span></div>
+
+
         <div class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 pb-4">
           <div class="text-lg mt-3 text-black font-medium">
             Purchases History
           </div>
-          <div className="flex items-center py-10">
+          <div className="flex items-center ">
             <div className="flex flex-row items-center">
               <input
                 type="text"
@@ -78,11 +67,14 @@ export default function CustomerCard({ user, orders }) {
   );
 }
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterOrders(orders, searchTerm) {
-  const regex = new RegExp(searchTerm, 'i');
-  return orders.map(order => {
-    const date = new Date(order.date);
-    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-    return { ...order, date: formattedDate };
-  }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
+  const escapedSearchTerm = escapeRegExp(searchTerm);
+  const regex = new RegExp(escapedSearchTerm, 'i');
+  return orders.filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress)).map(order => {
+    return order
+  })
 }

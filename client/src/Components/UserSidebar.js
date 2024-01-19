@@ -1,5 +1,6 @@
 import { useContext, useState } from "react"
 import { UserContext } from '../Context/UserContext'
+import { Link } from "react-router-dom";
 
 export default function UserSidebar({ activeMenu }) {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true)
@@ -32,16 +33,16 @@ export default function UserSidebar({ activeMenu }) {
                     <span className="text-sm text-gray-500 uppercase ml-4 inline-block mb-2 sidebar-menu-title">Menu</span>
                     <ul className="sidebar-menu">
                         <li>
-                            <a href="/profile" className={(activeMenu === "profile") ? "active" : ""} >
+                            <Link to="/profile" className={(activeMenu === "profile") ? "active" : ""} >
                                 <i className='bx bx-user-circle sidebar-menu-icon' ></i>
                                 Account
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/user-order" className={(activeMenu === "order") ? "active" : ""} >
+                            <Link to="/user-order" className={(activeMenu === "order") ? "active" : ""} >
                                 <i className='bx bx-receipt sidebar-menu-icon'></i>
                                 Order
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>

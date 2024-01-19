@@ -1,11 +1,13 @@
 import '../../css/mangeorder.css'
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import OrdersInfo from '../../Components/OrdersInfo';
+import { UserContext } from '../../Context/UserContext';
 
 export default function ManageOrderPage() {
     const [orders, setOrders] = useState([])
+    const { user } = useContext(UserContext)
     const [searchTerm, setSearchTerm] = useState('');
     const initialStatuses = {
         "Unpaid": null,
@@ -16,11 +18,27 @@ export default function ManageOrderPage() {
         "Failed Delivery": null
     };
     const headerContent = ["Order ID", "Customer Name", "Order Date", "Shipping Address", "Contact Number", "Status"]
+    const handleConfirmOrder = async (orderId) => {
+        const statusOrder = ["Unpaid", "To Ship"];
+        setOrders(orders.map(order => {
+            if (order._id === orderId) {
+                const currentStatusIndex = statusOrder.indexOf(order.status);
+                const nextStatus = statusOrder[currentStatusIndex + 1] || "To Ship";
+                return { ...order, status: nextStatus };
+            }
+            return order;
+        }));
+    }
 
     const getOrders = useCallback(async () => {
         try {
             const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
-            setOrders(res.data.orders)
+            const orders = res.data.orders
+            const statusOrder = ["unpaid", "to ship", "shipping", "completed", "cancelled", "failed delivery"];
+            orders.sort((a, b) => {
+                return statusOrder.indexOf(a.status.toLowerCase()) - statusOrder.indexOf(b.status.toLowerCase());
+            });
+            setOrders(orders)
         }
         catch (error) {
             console.log(error)
@@ -31,11 +49,15 @@ export default function ManageOrderPage() {
         getOrders();
     }, [getOrders])
 
+    if (!user) {
+        return null;
+    }
+
     return (
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={2000}
+                autoClose={1000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
@@ -53,18 +75,24 @@ export default function ManageOrderPage() {
                     </div>
                 </div>
                 <div className='relative'>
-                    <OrdersInfo orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} initialStatuses={initialStatuses} headerContent={headerContent} className="w-full" />
+                    <OrdersInfo orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} initialStatuses={initialStatuses} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} className="w-full" />
                 </div>
             </div>
         </>
     )
 }
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterOrders(orders, searchTerm) {
-    const regex = new RegExp(searchTerm, 'i');
+    const escapedSearchTerm = escapeRegExp(searchTerm);
+    const regex = new RegExp(escapedSearchTerm, 'i');
     return orders.map(order => {
         const date = new Date(order.date);
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+        console.log(formattedDate)
         return { ...order, date: formattedDate };
     }).filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.userId) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress));
 }

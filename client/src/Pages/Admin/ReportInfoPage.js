@@ -4,9 +4,9 @@ import CustomerCard from "../../Components/ProfileCard/CustomerCard";
 import VendorCard from "../../Components/ProfileCard/VendorCard";
 import ShipperCard from "../../Components/ProfileCard/ShipperCard";
 import { Navigate, useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import LoadingPage from "../User/LoadingPage";
+import { UserContext } from "../../Context/UserContext";
 
 export default function ReportInfoPage() {
   const params = useParams()
@@ -15,12 +15,18 @@ export default function ReportInfoPage() {
   const [reports, setReports] = useState()
   const [error, setError] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const { user } = useContext(UserContext)
 
   const fetchData = useCallback(async () => {
     try {
       const res = await axios.get(`http://localhost:4000/admin/${params.id}/report`, { withCredentials: true });
+      const orders = res.data.orders
+      const statusOrder = ["unpaid", "to ship", "shipping", "completed", "cancelled", "failed delivery"];
+      orders.sort((a, b) => {
+        return statusOrder.indexOf(a.status.toLowerCase()) - statusOrder.indexOf(b.status.toLowerCase());
+      });
+      setOrders(orders)
       setUserInfo(res.data.user);
-      setOrders(res.data.orders);
       setReports(res.data.report);
       setIsLoading(false)
     } catch (error) {
@@ -34,18 +40,16 @@ export default function ReportInfoPage() {
   }, [fetchData])
 
 
-  if (isLoading) {
-    return <LoadingPage />
+  if (isLoading || !user) {
+    return null
   }
 
   return (
     <>
-      <section class="bg-gray-200 w-5/6 md:w-full">
+      <section class="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         {error && <Navigate to={"/"} replace />}
         <div class="md:container mx-auto p-5">
-          <h1 class="m-5 text-3xl font-light text-center">
-            Account Information
-          </h1>
+
           {/* <!-- Customer --> */}
           {userInfo && userInfo.role === "User" && <CustomerCard user={userInfo} orders={orders} />}
           {/* <!-- Vendor --> */}
@@ -53,7 +57,7 @@ export default function ReportInfoPage() {
           {/* <!-- Shipper --> */}
           {userInfo && userInfo.role === "Shipper" && <ShipperCard user={userInfo} orders={orders} />}
           {/* Report Section */}
-          {reports && <ReportInfo reports={reports} />}
+          {<ReportInfo reports={reports} />}
         </div>
       </section>
     </>

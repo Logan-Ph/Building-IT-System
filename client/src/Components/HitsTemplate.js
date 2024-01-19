@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Hit({ hit }) {
     return (
         <div className="bg-white overflow-hidden group rounded-lg shadow-lg dark:border-gray-700 group" key={hit.objectID}>
@@ -6,18 +8,18 @@ export default function Hit({ hit }) {
                     <img src={hit.image_link} className="object-full h-full w-full" alt={hit.product_name} />
                 </div>
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition">
-                    <a href={`/product/${hit._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                    <Link to={`/product/${hit._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
                         <i className="fa-solid fa-magnifying-glass"></i>
-                    </a>
-                    <a href={`/product/${hit._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
+                    </Link>
+                    <Link to={`/product/${hit._id}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">
                         <i className="fa-regular fa-heart"></i>
-                    </a>
+                    </Link>
                 </div>
             </div>
             <div className="pt-4 pb-3 px-4">
-                <a href={`/product/${hit.objectID}`}>
+                <Link to={`/product/${hit.objectID}`}>
                     <h4 className="capitalize font-medium text-md mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">{hit.product_name}</h4>
-                </a>
+                </Link>
                 <p className="text-lg text-red-500 font-semibold mb-2">${hit.price}</p>
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex gap-1 text-xs text-[#FAC800]">

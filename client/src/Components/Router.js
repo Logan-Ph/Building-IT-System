@@ -43,6 +43,9 @@ import aa from 'search-insights';
 import ReportedProductPage from "../Pages/Admin/AdminReportProductPage";
 import ShipperHeader from "./ShipperHeader";
 import LoadingPage from "../Pages/User/LoadingPage";
+import ThankForOrderPage from "../Pages/User/ThankForOrderPage"
+import Invoice from "../Pages/User/Invoice";
+import ForgotVerifyEmail from "../Pages/User/ForgotVerifyEmail";
 
 const searchClient = algoliasearch(
   "DN0WBRQ8A3",
@@ -177,6 +180,14 @@ export default function Router() {
           path: "/search/:query/:category/:price",
           element: <SearchResultPage />,
         },
+        {
+          path: "/thankfororder",
+          element: <ThankForOrderPage />,
+        },
+        {
+          path: "/:id/view-invoice",
+          element: <Invoice />
+        }
       ],
     },
     {
@@ -232,6 +243,10 @@ export default function Router() {
         {
           path: "/loading-page",
           element: <LoadingPage />,
+        },
+        {
+          path: "/verify-email",
+          element: <ForgotVerifyEmail />,
         },
       ],
     },

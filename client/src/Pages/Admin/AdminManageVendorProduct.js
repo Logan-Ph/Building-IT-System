@@ -1,6 +1,6 @@
 import { Table } from 'flowbite-react';
 import { Button, Modal } from 'flowbite-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { FiAlertTriangle } from "react-icons/fi";
 import { Tabs } from "flowbite-react";
 import { FaCircle } from "react-icons/fa";
@@ -9,11 +9,14 @@ import axios from 'axios';
 import Pagination from '../../Components/Pagination';
 import { ToastContainer, toast } from 'react-toastify';
 import { MdReportProblem } from "react-icons/md";
+import { UserContext } from '../../Context/UserContext';
+import { LightModeTable } from '../../Components/LightModeTable';
 
 export default function AdminManageVendorProduct() {
   const [products, setProducts] = useState([]);
   const [reportedProducts, setReportedProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const { user } = useContext(UserContext)
 
   const getProducts = useCallback(async () => {
     const res = await axios.get("http://localhost:4000/admin/manage-product/query=", { withCredentials: true });
@@ -35,10 +38,14 @@ export default function AdminManageVendorProduct() {
     getProducts();
   }, [getProducts])
 
+  if (!user) {
+    return null
+  }
+
   return <>
     <ToastContainer
       position="top-center"
-      autoClose={10000}
+      autoClose={2000}
       hideProgressBar={true}
       newestOnTop={false}
       closeOnClick
@@ -50,13 +57,15 @@ export default function AdminManageVendorProduct() {
     />
     <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       <div className='mx-auto'>
-        <Tabs aria-label="Full width tabs" style="fullWidth">
+        <Tabs className='dark:bg-white' aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
-          <Tabs.Item active title="All Products" icon={FaCircle}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} />
+          {/* dark:text-white */}
+          {/* dark:bg-gray-700 */}
+          <Tabs.Item color='white' active title="All Products" icon={FaCircle}>
+            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} setProducts={setProducts} />
           </Tabs.Item>
-          <Tabs.Item active title="Reported Product" icon={MdReportProblem}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} />
+          <Tabs.Item className='dark:bg-white' active title="Reported Product" icon={MdReportProblem}>
+            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} setProducts={setReportedProducts} />
           </Tabs.Item>
         </Tabs>
       </div>
@@ -64,7 +73,7 @@ export default function AdminManageVendorProduct() {
   </>
 }
 
-function TableComponent({ setSearchTerm, products, handleSubmit }) {
+function TableComponent({ setSearchTerm, products, handleSubmit, setProducts }) {
   const [dataslice, setDataSlice] = useState(products)
 
   useEffect(() => {
@@ -105,34 +114,40 @@ function TableComponent({ setSearchTerm, products, handleSubmit }) {
         </div>
       </form>
       <div className="overflow-x-auto">
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product ID</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2'></Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Product name</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Category</Table.HeadCell>
-            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap'>Price</Table.HeadCell>
-            <Table.HeadCell>
+        <LightModeTable hoverable>
+          <Table.Head id='TableHeader' className="dark:bg-white">
+            {/* dark:bg-gray-700 */}
+            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap dark:bg-white'>Product ID</Table.HeadCell>
+            <Table.HeadCell className='!px-4 !py-2 dark:bg-white'></Table.HeadCell>
+            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap dark:bg-white'>Product name</Table.HeadCell>
+            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap dark:bg-white'>Category</Table.HeadCell>
+            <Table.HeadCell className='!px-4 !py-2 !whitespace-nowrap dark:bg-white'>Price</Table.HeadCell>
+            <Table.HeadCell className='dark:bg-white'>
               <span className="sr-only">View</span>
             </Table.HeadCell>
-            <Table.HeadCell>
+            <Table.HeadCell className='dark:bg-white'>
               <span className="sr-only">Delete</span>
             </Table.HeadCell>
           </Table.Head>
-          <TableProductContent products={products} dataslice={dataslice} setDataSlice={setDataSlice} />
-        </Table>
+          <TableProductContent products={products} dataslice={dataslice} setDataSlice={setDataSlice} setProducts={setProducts} />
+        </LightModeTable>
       </div>
       {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
     </>
   );
 }
 
-function TableProductContent({ products, dataslice, setDataSlice }) {
+// dark:hover:bg-gray-600
+function TableProductContent({ products, dataslice, setDataSlice, setProducts }) {
   return (
     <>
+      {/* from this */}
+      {/* dark:hover:bg-gray-600  */}
+      {/* change into this */}
+      {/* dark:hover:bg-gray-200 */}
       <Table.Body className="border-b border-gray-200">
         {dataslice.length !== 0 && dataslice.map((product) => (
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 border-b border-gray-200">
+          <Table.Row className="dark:hover:bg-gray-200 bg-white dark:border-gray-700 border-b border-gray-200">
             <Table.Cell className='!px-4 !py-2'>
               <span>{product._id}</span>
             </Table.Cell>
@@ -151,7 +166,7 @@ function TableProductContent({ products, dataslice, setDataSlice }) {
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>${product.price}</Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
-              <DeleteButtonPopup productId={product._id} />
+              <DeleteButtonPopup productId={product._id} setProducts={setProducts} />
             </Table.Cell>
             <Table.Cell className='!px-4 !py-2'>
               <Link to={`/admin/reported-product-page/${product._id}`} href="" className="font-medium text-cyan-600 hover:underline">View</Link>
@@ -163,7 +178,7 @@ function TableProductContent({ products, dataslice, setDataSlice }) {
   )
 }
 
-function DeleteButtonPopup({ productId }) {
+function DeleteButtonPopup({ productId, setProducts }) {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [openModal, setOpenModal] = useState(false);
@@ -171,7 +186,7 @@ function DeleteButtonPopup({ productId }) {
   const notify = (error) => {
     toast.error(error, {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 200,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -184,7 +199,7 @@ function DeleteButtonPopup({ productId }) {
   const success = (success) => {
     toast.success(success, {
       position: "top-center",
-      autoClose: 10000,
+      autoClose: 2000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
@@ -204,12 +219,25 @@ function DeleteButtonPopup({ productId }) {
       }).then(res => {
         setMsg(res.data)
         setError('')
+        setProducts(prev => prev.filter(product => product._id !== productId));
       })
         .catch(er => { setError(er.response.data); setMsg() });
+
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    if (openModal) {
+      setTimeout(() => {
+        const element = document.getElementById('myUniqueModalId').parentNode;
+        const classes = element.className.split(' ');
+        const newClasses = classes.filter(c => !c.startsWith('dark:bg-gray') && !c.startsWith('dark:hover:bg-gray'));
+        element.className = newClasses.join(' ');
+      }, 0); // Adjust the delay time as needed
+    }
+  }, [openModal]);
 
   useEffect(() => {
     error && notify(error)
@@ -222,23 +250,25 @@ function DeleteButtonPopup({ productId }) {
         Delete
       </span>
       <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
-            <h3 className="mb-5 text-lg font-normal text-gray-900">
-              Are you sure you want to delete this product?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={() => setOpenModal(false)}>
-                Yes, I'm sure
-              </Button>
-              <Button color="gray" onClick={() => { setOpenModal(false); handleDelete() }}>
-                Cancel
-              </Button>
+        <div id="myUniqueModalId">
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
+              <h3 className="mb-5 text-lg font-normal text-gray-900">
+                Are you sure you want to delete this product?
+              </h3>
+              <div className="flex justify-center gap-4">
+                <Button color="failure" onClick={() => { setOpenModal(false); handleDelete() }}>
+                  Yes, I'm sure
+                </Button>
+                <Button color="gray" onClick={() => { setOpenModal(false) }}>
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
-        </Modal.Body>
+          </Modal.Body>
+        </div>
       </Modal>
     </>
   )

@@ -3,6 +3,7 @@ import { useSearchBox } from "react-instantsearch";
 import { useState, useCallback, useEffect } from "react";
 import { Modal } from "flowbite-react";
 import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberOfFollowers, numberOfProducts, setFollow, follow }) {
   const { refine } = useSearchBox();
@@ -143,6 +144,20 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
   }, [error, msg, notify]);
 
   useEffect(() => {
+    if (openModal) {
+      setTimeout(() => {
+        const element = document.getElementById('myUniqueModalId').parentNode;
+        const classes = element.className.split(' ');
+        const newClasses = classes.filter(c => !c.startsWith('dark:bg-gray') && !c.startsWith('dark:hover:bg-gray'));
+        element.className = newClasses.join(' ');
+
+        const text = document.getElementById('text').parentElement;
+        text.className = 'text-gray-900';
+      }, 0); // Adjust the delay time as needed
+    }
+  }, [openModal]);
+
+  useEffect(() => {
     user && fetchData();
   }, [fetchData, user])
 
@@ -165,84 +180,138 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
         <img class="h-auto max-w-full" src={coverPhoto} alt="" />
         <div class="md:flex my-3 md:justify-between px-4 md:px-0">
           <div class="flex items-center gap-4">
-            {vendor && (vendor.img ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
-              src={`data:image/jpeg;base64,${vendor.img}`}
-              alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-              <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-            </div>)}
+            {vendor &&
+              (vendor.img ? (
+                <img
+                  className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
+                  src={`data:image/jpeg;base64,${vendor.img}`}
+                  alt="avatar_img"
+                />
+              ) : (
+                <div class="relative w-20 h-20 overflow-hidden bg-gray-100 rounded-full">
+                  <svg
+                    class="absolute w-20 h-24 text-gray-400 -left-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </div>
+              ))}
             <div class="font-medium">
               <div class="text-2xl">{vendor && vendor.businessName}</div>
               <div class="text-base text-gray-500 mb-2">
-                <span class="border-r border-black pr-3">{numberOfFollowers} follower(s)</span>
+                <span class="border-r border-black pr-3">
+                  {numberOfFollowers} follower(s)
+                </span>
                 <span class="pl-2">{numberOfProducts} product(s)</span>
               </div>
               <div>
-                {user && <span
-                  onClick={(e) => createThread(e)}
-                  class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                >
-                  <i class="fa-regular fa-comment-dots"></i> Chat
-                </span>}
+                {user && (
+                  <button
+                    onClick={(e) => createThread(e)}
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                  >
+                    <i class="fa-regular fa-comment-dots"></i> Chat
+                  </button>
+                )}
                 {user &&
-                  ((follow) ?
-                    <button onClick={handleUnfollow}
+                  (follow ? (
+                    <button
+                      onClick={handleUnfollow}
                       type="button"
                       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                    >Unfollow
-                    </button> :
-                    <button onClick={handleFollow}
+                    >
+                      <i class="fa-solid fa-check"></i> Unfollow
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleFollow}
                       type="button"
                       class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                     >
                       <i class="fa-regular fa-plus"></i> Follow
-                    </button>)
-                }
-                <div className="font-medium text-[#E61E2A] hover:underline" onClick={() => setOpenModal(true)}> Report </div>
-                <Modal show={openModal} onClose={() => setOpenModal(false)} className="!my-auto">
-                  <Modal.Header>
-                    <div>
-                      <p className='text-sm font-medium text-[#E61E2A]'>Product Name:<span className='font-light text-gray-500 text-sm line-clamp-1'>Havells Velocity Neo High Speed 400mm Table Fan (White)</span></p>
-                    </div>
+                    </button>
+                  ))}
+                <div
+                  className="font-medium text-[#E61E2A] hover:underline"
+                  onClick={() => setOpenModal(true)}
+                >
+                  {" "}
+                  Report{" "}
+                </div>
+                <Modal
+                  show={openModal}
+                  onClose={() => setOpenModal(false)}
+                  className="!my-auto"
+                >
+                  <div id="myUniqueModalId">
+                    <Modal.Header className="text-xl font-medium text-gray-900 ">
+                      <div id="text">
+                        <p className="font-semibold text-lg line-clamp-1">
+                          Reporting Appliances Shop
+                        </p>
+                      </div>
+                    </Modal.Header>
+                    <Modal.Body className="overflow-y-auto">
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        name="reportedReason"
+                        id="reportedReason"
+                        className="w-full my-2"
+                        placeholder="Report Title"
+                      />
+                      <div className="my-2">
+                        <textarea
+                          onChange={(e) => setDescription(e.target.value)}
+                          id="w3review"
+                          name="w3review"
+                          rows="4"
+                          cols="50"
+                          placeholder="Report Description (10-50 character allowed)"
+                          className="w-full"
+                        ></textarea>
+                      </div>
+                      <p>Upload proof images</p>
+                      <input
+                        onChange={handleFileChange}
+                        type="file"
+                        name="files"
+                        id="files"
+                        className="w-full my-2"
+                        accept="image/*" // Specify the file types allowed, adjust as needed
+                        multiple // Allow multiple files to be selected
+                      />
+                    </Modal.Body>
 
-                  </Modal.Header>
-                  <Modal.Body className="overflow-y-auto">
-                    <input
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      name="reportedReason"
-                      id="reportedReason"
-                      className="w-full my-2"
-                      placeholder="Report Title"
-                    />
-                    <div className="my-2">
-                      <textarea onChange={(e) => setDescription(e.target.value)} id="w3review" name="w3review" rows="4" cols="50" placeholder="Report Description (10-50 character allowed)" className="w-full"></textarea>
-                    </div>
-                    <p>Upload proof images</p>
-                    <input onChange={handleFileChange}
-                      type="file"
-                      name="files"
-                      id="files"
-                      className="w-full my-2"
-                      accept="image/*" // Specify the file types allowed, adjust as needed
-                      multiple // Allow multiple files to be selected
-                    />
-                  </Modal.Body>
-
-
-                  <Modal.Footer>
-                    <button onClick={handleReport} disabled={loading} type="button" class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? 'cursor-not-allowed' : ''}`} >Send Report</button>
-                  </Modal.Footer>
-
+                    <Modal.Footer>
+                      <button
+                        onClick={handleReport}
+                        disabled={loading}
+                        type="button"
+                        class={`text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ${loading ? "cursor-not-allowed" : ""
+                          }`}
+                      >
+                        Send Report
+                      </button>
+                    </Modal.Footer>
+                  </div>
                 </Modal>
               </div>
             </div>
           </div>
         </div>
-      </div >
+      </div>
 
       {/* Vendor Nav */}
-      <div div class="md:container mx-auto my-2 sticky top-0 border-b bg-white" >
+      <div div class="md:container mx-auto my-2 sticky top-0 border-b bg-white">
         <div class="px-4 py-2 mx-auto md:flex md:justify-between">
           <div class="md:order-last drop-shadow-md mt-2">
             <form>
@@ -281,26 +350,26 @@ export default function VandorNav({ user, vendor, activeTab, coverPhoto, numberO
           <div class="flex items-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm py-3">
               <li className={getTabClass("HOME")}>
-                <a
-                  href={vendor ? `/vendor/${vendor._id}/home` : ""}
+                <Link
+                  to={vendor ? `/vendor/${vendor._id}/home` : ""}
                   class="text-gray-900hover:underline text-sm font-light md:text-lg"
                   aria-current="page"
                 >
                   HOME
-                </a>
+                </Link>
               </li>
               <li className={getTabClass("PRODUCTS")}>
-                <a
-                  href={vendor ? `/vendor/${vendor._id}/product` : ""}
+                <Link
+                  to={vendor ? `/vendor/${vendor._id}/product` : ""}
                   class="text-gray-900hover:underline text-sm md:text-lg font-light"
                 >
                   PRODUCTS
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }

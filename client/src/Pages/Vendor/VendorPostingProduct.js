@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
+import { UserContext } from '../../Context/UserContext';
 
 export default function VendorPostingProduct() {
   const [productName, setProductName] = useState('');
@@ -12,6 +13,7 @@ export default function VendorPostingProduct() {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const {user} = useContext(UserContext)
 
   const notify = (error) => {
     toast.error(error, {
@@ -85,8 +87,12 @@ export default function VendorPostingProduct() {
     msg && success(msg)
   }, [error, msg]);
 
+  if (!user){
+    return null;
+  }
+
   return (
-    <div className="container mx-auto my-8 px-4 rounded-lg bg-gray-100 shadow p-4 max-w-4xl">
+    <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -100,7 +106,7 @@ export default function VendorPostingProduct() {
         theme="light"
       />
       <form>
-        <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900">Posting Products</h2>
+        <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900 pt-8">Posting Products</h2>
         <div class="space-y-12">
           <div class="border-b border-gray-900/10 pb-12">
             <div class="col-span-full">
@@ -114,7 +120,7 @@ export default function VendorPostingProduct() {
                       <label for="upload" class="cursor-pointer">
                         {file && (
                           <div>
-                            <h2 class="font-normal text-sm text-gray-600 md:px-6 " >Image Preview:</h2>
+                            <h2 class=" " >Image Preview:</h2>
                             <img
                               src={URL.createObjectURL(file)}
                               alt="Preview"

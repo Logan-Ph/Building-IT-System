@@ -5,7 +5,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
-export default function ProductDetailComment({ product }) {
+export default function ProductDetailComment({ product, setComments, user }) {
     const textMessage = () => {
         document.getElementById("customer_review").className = "block";
     }
@@ -25,11 +25,20 @@ export default function ProductDetailComment({ product }) {
                 pauseOnHover: false,
                 theme: "light",
             });
+            setComments((prev) => [...prev, {
+                commentText: newComment,
+                like: [],
+                likes: 0,
+                postedOn: new Date(),
+                productId: product._id,
+                replyMessage: [],
+                userImg: user.img,
+                userName: user.name,
+                title: title,
+                _id: res.data.commentId,
+            }])
             setNewComment('')
             setTitle('')
-            setTimeout(() => {
-                window.location.reload();
-            }, 4000);
         }
         catch (error) {
             toast.error(error.response.data.error, {
@@ -56,12 +65,10 @@ export default function ProductDetailComment({ product }) {
         <p className="lg:text-2xl md:text-2xl xs:text-xl font-semibold mb-2">
             Customer Reviews
         </p>
-        <Rating className="mb-2 ">
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star filled={false} />
+        <Rating size="mb-2">
+            {[...Array(5)].map((_, i) => (
+                <Rating.Star key={i} filled={i < Math.floor(product.ratings + 0.5)} className="!w-6 !h-6" />
+            ))}
             <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
                 {product.ratings} out of 5
             </p>

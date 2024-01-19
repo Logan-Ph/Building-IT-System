@@ -1,5 +1,5 @@
 import "swiper/css";
-import { Navigate, useParams } from "react-router-dom"
+import { Link, Navigate, useParams } from "react-router-dom"
 import { useState, useEffect, useCallback, useContext } from 'react'
 import axios from "axios"
 import recommend from '@algolia/recommend';
@@ -31,7 +31,7 @@ export default function TestingPage() {
     recommendClient,
     indexName,
     objectIDs: [params.id],
-    maxRecommendations: 10
+    maxRecommendations: 30
   });
 
   const createThread = async (e) => {
@@ -43,7 +43,7 @@ export default function TestingPage() {
     } catch (error) {
       toast.error(error.response.data.error, {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: true,
         closeOnClick: true,
         draggable: true,
@@ -80,7 +80,7 @@ export default function TestingPage() {
       {error && <Navigate to={"/"} replace />}
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={2000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
@@ -111,7 +111,7 @@ export default function TestingPage() {
                 </button>
                 <button class="ml-1 text-md font-normal text-gray-900 bg-white rounded  border-gray-400 hover:bg-gray-200    inline-flex items-center py-0.5 px-2 border  hover:border-transparent  ">
                   <Store size={20} />
-                  <a href={`/vendor/${product.owner}/home`} className="ml-1.5">View Shop</a>
+                  <Link to={`/vendor/${product.owner}/home`} className="ml-1.5">View Shop</Link>
                 </button>
               </div>
             </div>
@@ -133,7 +133,7 @@ export default function TestingPage() {
       <section className="lg:container md:container mx-auto ">
         <div className="lg:container md:container lg:px-9 md:px-9 sm:px-3 xs:px-4 mx-auto mt-10 bg-gray-50 lg:flex ">
           {/*Comment section */}
-          <ProductDetailComment product={product} />
+          <ProductDetailComment product={product} setComments={setComments} user={user}/>
           <div className="flex flex-col">
             {/* comment  */}
             <CustomerReview product={product} comments={comments} setComments={setComments} />

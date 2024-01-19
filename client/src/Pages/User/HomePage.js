@@ -17,16 +17,17 @@ export default function Homepage() {
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [navigateTo, setNavigateTo] = useState("");
+    const [page, setPage] = useState(1);
 
     const fetchProduct = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/", { withCredentials: true });
-            setProducts(res.data.product);
+            const res = await axios.get(`http://localhost:4000/?page=${page}`, { withCredentials: true });
+            setProducts((prev) => [...prev, ...res.data.product]);
             setIsLoading(false)
         } catch (er) {
             setIsLoading(false)
         }
-    }, [])
+    }, [page])
 
     useEffect(() => {
         fetchProduct();
@@ -79,7 +80,7 @@ export default function Homepage() {
                         </div>
 
                         <div className='flex flex-col items-center my-10'>
-                            <button type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
+                            <button onClick={() => setPage((prev) => prev + 1)} type="button" class="border-[#FAC800] text-white bg-[#FAC800] bg-gradient-to-r from-red-500 via-red-600 to-yellow-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Explore more</button>
                         </div>
                     </div>
 
@@ -104,7 +105,7 @@ function MiddleBanner({ setNavigateTo }) {
         fetchImages();
     }, []);
     return <>
-        <div className='grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid sm:hidden xs:hidden'>
+        <div className='md:grid grid-cols-2 gap-x-4 xs:overflow-y divide-x-2 xl:grid lg:grid md:grid hidden'>
 
             <div className="h-80">
                 <Carousel leftControl={
@@ -245,7 +246,7 @@ function MiddleBanner({ setNavigateTo }) {
                 <div
                     className="transition duration-300 group-hover:-translate-y-1 mt-2 xs:line-clamp-1"
                     style={{ transformOrigin: "center center" }}
-                > Entertainment</div>
+                > Baby Products</div>
             </div>
 
         </div>
