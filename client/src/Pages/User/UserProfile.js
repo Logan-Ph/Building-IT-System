@@ -63,7 +63,7 @@ export default function UserProfile() {
 
     async function axiosPostData() {
         try {
-            await axios.post('http://localhost:4000/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+            await axios.post('https://building-it-system-server.vercel.app/update-user', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
                 .then(res => {
                     setMsg(res.data)
                     setError('')
@@ -104,12 +104,12 @@ export default function UserProfile() {
             />
             <body className="font-outfit">
                 {/* <!-- SIDEBAR --> */}
-                <UserSidebar activeMenu={activeMenu} />
+                {/* <UserSidebar activeMenu={activeMenu} /> */}
 
                 {/* <!-- SIDEBAR --> */}
 
                 {/* <!-- MAIN --> */}
-                <div className="pl-0 md:pl-64 transition-all" id="main">
+                <div className="pl-0 transition-all md:container md:mx-auto" id="main">
                     <div className="p-4">
                         <div className="flex items-center gap-4 mt-4">
                             <img src={(user && user.img) ? `data:image/jpeg;base64,${user.img}` : require("../../Components/images/defaultUserImage.png")} className="w-28 h-28 object-cover rounded-full" alt="" />
@@ -139,7 +139,7 @@ export default function UserProfile() {
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-3">
+                                        <div className="sm:col-span-4">
                                             <label for="name" className="block text-sm font-medium leading-6 text-gray-900">Full name</label>
                                             <div className="mt-2">
                                                 <input onChange={(e) => setName(e.target.value)} placeholder={user && user.name} type="name" name="name" id="name" autocomplete="name" className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />

@@ -6,6 +6,7 @@ import '../css/mangeorder.css'
 
 export default function OrdersInfo({ orders, searchTerm, initialStatuses, filterOrders, headerContent, handleConfirmOrder }) {
     const [categorizedOrder, setCategorizedOrder] = useState({ "All": orders })
+
     useEffect(() => {
         const orderStatus = orders.reduce((acc, order) => {
             if (!acc[order.status]) {
@@ -25,7 +26,7 @@ export default function OrdersInfo({ orders, searchTerm, initialStatuses, filter
         <Tabs aria-label="Tabs with icons">
             {Object.entries(categorizedOrder).map(([title, orders]) => (
                 <Tabs.Item title={title} >
-                    {orders ? <OrderContent orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder}/> : <div className="overflow-x-auto">
+                    {orders ? <OrderContent orders={orders} searchTerm={searchTerm} filterOrders={filterOrders} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} /> : <div className="overflow-x-auto">
                         <div className='border border-gray my-1 py-32'>
                             <div className='flex flex-col justify-center items-center'>
                                 <div className='w-[100px] h-[80px]'>
@@ -51,7 +52,7 @@ function OrderContent({ orders, searchTerm, filterOrders, headerContent, handleC
 
     return (
         <>
-            {dataslice.length !== 0 ? <TableComponent orders={dataslice} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder}/> : <div className="overflow-x-auto">
+            {dataslice.length !== 0 ? <TableComponent orders={dataslice} headerContent={headerContent} handleConfirmOrder={handleConfirmOrder} /> : <div className="overflow-x-auto">
                 <div className='border border-gray my-1 py-32'>
                     <div className='flex flex-col justify-center items-center'>
                         <div className='w-[100px] h-[80px]'>

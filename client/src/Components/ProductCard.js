@@ -51,7 +51,7 @@ export default function ProductCard({ product }) {
         error && notify();
         msg && notify();
         try {
-            const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { withCredentials: true });
+            const res = await axios.get(`https://building-it-system-server.vercel.app/add-product/${productId}`, { withCredentials: true });
             setCart(res.data.cart)
             setMsg(res.data.msg);
             setError('');

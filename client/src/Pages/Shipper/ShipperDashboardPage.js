@@ -24,7 +24,7 @@ export default function ManageOrderPage() {
 
     const getData = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/shipper/dashboard", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server.vercel.app/shipper/dashboard", { withCredentials: true })
             const orders = res.data.orders
             const statusOrder = ["to ship", "shipping", "completed", "cancelled", "failed delivery"];
             orders.sort((a, b) => {
@@ -114,8 +114,13 @@ export default function ManageOrderPage() {
     )
 }
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterOrders(orders, searchTerm) {
-    const regex = new RegExp(searchTerm, 'i');
+    const escapedSearchTerm = escapeRegExp(searchTerm);
+    const regex = new RegExp(escapedSearchTerm, 'i');
     return orders.filter(order => regex.test(order._id) || regex.test(order.status) || regex.test(order.userName) || regex.test(order.date) || regex.test(order.contactNumber) || regex.test(order.shippingAddress)).map(order => {
         return order
     });

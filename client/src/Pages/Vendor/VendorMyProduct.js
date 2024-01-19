@@ -17,7 +17,7 @@ export default function VendorMyProduct() {
   const handleSearch = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
+      const response = await axios.get(`https://building-it-system-server.vercel.app/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -31,7 +31,7 @@ export default function VendorMyProduct() {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
+      const response = await axios.get(`https://building-it-system-server.vercel.app/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -96,7 +96,7 @@ export default function VendorMyProduct() {
           <div class="mb-4 flex justify-between items-center" />
           <div class="relative overflow-x-auto sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-50   dark:text-gray-400">
                 <tr>
                   <th scope="col" class="px-6 py-3">
                     Product name
@@ -114,7 +114,7 @@ export default function VendorMyProduct() {
               </thead>
               <tbody>
                 {dataSlice.map((product) => (
-                  <tr key={product._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr key={product._id} className="bg-white border-b   dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     {/* ... Table data goes here ... */}
                     <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {product.product_name}
@@ -173,7 +173,7 @@ function DeleteButtonPopup({ productId, setProducts }) {
   }
 
   const handleDelete = async () => {
-    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productId}`;
     try {
       await axios.delete(apiUrl, {
         headers: {

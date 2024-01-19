@@ -32,7 +32,7 @@ export default function ManageOrderPage() {
 
     const getOrders = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
+            const res = await axios.get("https://building-it-system-server.vercel.app/manage-order", { withCredentials: true })
             const orders = res.data.orders
             const statusOrder = ["unpaid", "to ship", "shipping", "completed", "cancelled", "failed delivery"];
             orders.sort((a, b) => {
@@ -82,8 +82,13 @@ export default function ManageOrderPage() {
     )
 }
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
 function filterOrders(orders, searchTerm) {
-    const regex = new RegExp(searchTerm, 'i');
+    const escapedSearchTerm = escapeRegExp(searchTerm);
+    const regex = new RegExp(escapedSearchTerm, 'i');
     return orders.map(order => {
         const date = new Date(order.date);
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;

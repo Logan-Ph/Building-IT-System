@@ -5,9 +5,9 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function RegisterPage() {
-
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassWord] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [address, setAddress] = useState('')
     const [name, setName] = useState('')
@@ -58,7 +58,7 @@ export default function RegisterPage() {
 
     async function axiosPostData() {
         try {
-            // const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
             switch (formType) {
                 case 'customer':
                     data.name = name;
@@ -67,12 +67,17 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    // if (!passwordPattern.test(password)) {
-                    //     setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
-                    //     setMsg('')
-                    //     return;
-                    // }
-                    await axios.post('http://localhost:4000/user-register', data, { withCredentials: true })
+                    if (!passwordPattern.test(password)) {
+                        setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
+                        setMsg('')
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        setError("Password does not match");
+                        setMsg('')
+                        return;
+                    }
+                    await axios.post('https://building-it-system-server.vercel.app/user-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -86,12 +91,17 @@ export default function RegisterPage() {
                         setMsg('');
                         return;
                     }
-                    // if (!passwordPattern.test(password)) {
-                    //     setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
-                    //     setMsg('')
-                    //     return;
-                    // }
-                    await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
+                    if (!passwordPattern.test(password)) {
+                        setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
+                        setMsg('')
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        setError("Password does not match");
+                        setMsg('')
+                        return;
+                    }
+                    await axios.post('https://building-it-system-server.vercel.app/vendor-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -106,12 +116,17 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    // if (!passwordPattern.test(password)) {
-                    //     setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
-                    //     setMsg('')
-                    //     return;
-                    // }
-                    await axios.post('http://localhost:4000/shipper-register', data, { withCredentials: true })
+                    if (!passwordPattern.test(password)) {
+                        setError("Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character, and be at least 8 characters long.");
+                        setMsg('')
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        setError("Password does not match");
+                        setMsg('')
+                        return;
+                    }
+                    await axios.post('https://building-it-system-server.vercel.app/shipper-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
@@ -183,6 +198,12 @@ export default function RegisterPage() {
                                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                         <div class="mt-2">
                                             <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setPassword(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="confirm-password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
+                                        <div class="mt-2">
+                                            <input id="confirm-password" name="confirm-password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setConfirmPassWord(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
                                         </div>
                                     </div>
                                     <div>
@@ -267,12 +288,12 @@ export default function RegisterPage() {
                                             <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setPassword(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
                                         </div>
                                     </div>
-                                    {/* <div>
-                                    <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
-                                    <div class="mt-2">
-                                        <input type="text" name="name" id="name" required minlength="5" title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
+                                    <div>
+                                        <label for="confirm-password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
+                                        <div class="mt-2">
+                                            <input id="confirm-password" name="confirm-password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setConfirmPassWord(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
+                                        </div>
                                     </div>
-                                </div> */}
                                     <div>
                                         <label for="phoneNumber" class="block text-sm font-medium leading-6 text-gray-900">Phone Number</label>
                                         <div class="mt-2 flex">
@@ -288,15 +309,6 @@ export default function RegisterPage() {
                                             <input type="text" name="businessName" id="businessName" required minlength="5" onChange={(e) => { setBusinessName(e.target.value); setError() }} title="Please enter at least 5 characters" class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" />
                                         </div>
                                     </div>
-                                    {/* <div>
-                                    <label for="businessPhone" class="block text-sm font-medium leading-6 text-gray-900">Business Phone Number</label>
-                                    <div class="mt-2 flex">
-                                        <span class="inline-flex items-center px-3 text-sm bg-gray-200 border border-e-0 border-gray-300 rounded-s-md text-gray-400 shadow-sm ">
-                                            <p>(+84)</p>
-                                        </span>
-                                        <input type="tel" name="businessPhone" id="businessPhone" pattern="^(\+84)?[0-9]{8,}$" required class="p-2 block w-full rounded-none rounded-e-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6"/>
-                                    </div>
-                                </div> */}
                                     <div>
                                         <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Business Address</label>
                                         <div class="mt-2">
@@ -360,6 +372,12 @@ export default function RegisterPage() {
                                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                                         <div class="mt-2">
                                             <input id="password" name="password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setPassword(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="confirm-password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
+                                        <div class="mt-2">
+                                            <input id="confirm-password" name="confirm-password" type="password" pattern="(!@#$%^&*+ {8, 20}" onChange={(e) => { setConfirmPassWord(e.target.value); setError() }} required class="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#222160] sm:text-sm sm:leading-6" aria-describedby="usernameHelp" title="Password must contain at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter, has a length from 8 to 20 characters." />
                                         </div>
                                     </div>
                                     <div>

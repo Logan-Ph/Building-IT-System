@@ -1,7 +1,7 @@
 'use client';
 import axios from 'axios';
 import { Button, Modal } from 'flowbite-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -13,7 +13,7 @@ export default function ReportInfo({ reports }) {
 
   const banUser = useCallback(async () => {
     try {
-      const res = await axios.post("http://localhost:4000/ban-user", { userId: params.id, startDate: startDate, endDate: endDate }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-server.vercel.app/ban-user", { userId: params.id, startDate: startDate, endDate: endDate }, { withCredentials: true });
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 5000,
@@ -28,6 +28,20 @@ export default function ReportInfo({ reports }) {
       console.log(error)
     }
   }, [startDate, endDate, params])
+
+  useEffect(() => {
+    if (openModalBlock) {
+      setTimeout(() => {
+        const element = document.getElementById('myUniqueModalId').parentNode;
+        const classes = element.className.split(' ');
+        const newClasses = classes.filter(c => !c.startsWith('dark:bg-gray') && !c.startsWith('dark:hover:bg-gray'));
+        element.className = newClasses.join(' ');
+
+        const text = document.getElementById('text').parentElement;
+        text.className = 'text-gray-900';
+      }, 0); // Adjust the delay time as needed
+    }
+  }, [openModalBlock]);
 
   return (
     <>
@@ -97,57 +111,65 @@ export default function ReportInfo({ reports }) {
             show={openModalBlock}
             onClose={() => setOpenModalBlock(false)}
           >
-            <Modal.Header>Block User</Modal.Header>
-            <Modal.Body>
-              <div class="p-4 md:p-5 space-y-4">
-                <form class="max-w-sm mx-auto">
-                  <div class="mb-5">
-                    <label
-                      for="block-start-date"
-                      class="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                      Start Date
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="block-start-date"
-                      name="block-start-date"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      required
-                      onChange={(e) => setStartDate(e.target.value)}
-                    />
-                  </div>
-                  <div class="mb-5">
-                    <label
-                      for="block-start-date"
-                      class="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                      End Date
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="block-start-date"
-                      name="block-start-date"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                      required
-                      onChange={(e) => setEndDate(e.target.value)}
-                    />
-                  </div>
-                </form>
-              </div>
-            </Modal.Body>
-            <Modal.Footer className="flex justify-end">
-              <Button
-                className=" bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
-                onClick={() => { setOpenModalBlock(false); banUser(); }}
-                disabled={(new Date(startDate) > new Date(endDate)) || !(startDate && endDate)}
-              >
-                Block
-              </Button>
-              <Button color="gray" onClick={() => setOpenModalBlock(false)}>
-                Cancel
-              </Button>
-            </Modal.Footer>
+            <div id="myUniqueModalId">
+              <Modal.Header >
+                <div id="text">
+                  <p className="font-semibold text-lg line-clamp-1">
+                    Block User
+                  </p>
+                </div>
+              </Modal.Header>
+              <Modal.Body>
+                <div class="p-4 md:p-5 space-y-4">
+                  <form class="max-w-sm mx-auto">
+                    <div class="mb-5">
+                      <label
+                        for="block-start-date"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                      >
+                        Start Date
+                      </label>
+                      <input
+                        type="datetime-local"
+                        id="block-start-date"
+                        name="block-start-date"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        required
+                        onChange={(e) => setStartDate(e.target.value)}
+                      />
+                    </div>
+                    <div class="mb-5">
+                      <label
+                        for="block-start-date"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                      >
+                        End Date
+                      </label>
+                      <input
+                        type="datetime-local"
+                        id="block-start-date"
+                        name="block-start-date"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        required
+                        onChange={(e) => setEndDate(e.target.value)}
+                      />
+                    </div>
+                  </form>
+                </div>
+              </Modal.Body>
+              <Modal.Footer className="flex justify-end">
+                <Button
+                  className=" bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"
+                  onClick={() => { setOpenModalBlock(false); banUser(); }}
+                  disabled={(new Date(startDate) > new Date(endDate)) || !(startDate && endDate)}
+                >
+                  Block
+                </Button>
+                <Button color="gray" onClick={() => setOpenModalBlock(false)}>
+                  Cancel
+                </Button>
+              </Modal.Footer>
+            </div>
           </Modal>
         </div>
       </div>

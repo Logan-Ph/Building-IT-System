@@ -8,7 +8,7 @@ export default function RelatedProduct({ item }) {
     group xs:mx-auto">
         <div className="relative">
           <Link className="flex justify-center items-center w-full h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px] xs:w-3/4 xs:mx-auto" to={`/product/${item.objectID}`}>
-            <img src={item.image_link} alt="" className="p-4 object-full lg:md:scale-75" />
+            <img src={item.image_link} alt="" className="p-4 object-full lg:md:scale-75 h-[220px] md:h-[200px] sm:h-[180px] xs:h-[160px]" />
           </Link>
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-4 sm:gap-2 opacity-0 group-hover:opacity-100 transition">
             <Link to={`/product/${item.objectID}`} className="text-white text-xl w-9 h-8 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-800 transition p-2">

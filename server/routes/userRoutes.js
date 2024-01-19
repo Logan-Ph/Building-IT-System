@@ -222,7 +222,6 @@ router.get('/auth/google/callback', (req, res, next) => {
                 res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
                 return;
             }
-            console.log(user)
             const userToken = generateToken(user); // create access token
             res.cookie('userToken', userToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
             res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);

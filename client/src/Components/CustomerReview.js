@@ -30,7 +30,7 @@ export default function CustomerReview({ product, setComments, comments }) {
         });
         return;
       }
-      const res = await axios.post(`http://localhost:4000/product/${commentId}/reply-comment`, { replyText: replyText }, { withCredentials: true });
+      const res = await axios.post(`https://building-it-system-server.vercel.app/product/${commentId}/reply-comment`, { replyText: replyText }, { withCredentials: true });
       toast.success(res.data.msg, {
         position: "top-center",
         autoClose: 3000,
@@ -71,7 +71,7 @@ export default function CustomerReview({ product, setComments, comments }) {
 
   const fetchComments = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/product/${product._id}/view-comment`, { withCredentials: true });
+      const res = await axios.get(`https://building-it-system-server.vercel.app/product/${product._id}/view-comment`, { withCredentials: true });
       setComments(res.data.comments);
       console.log(res.data.comments)
     } catch (error) {
@@ -96,7 +96,7 @@ export default function CustomerReview({ product, setComments, comments }) {
         }
         return comment;
       }));
-      await axios.post(`http://localhost:4000/product/${commentId}/like`, {}, { withCredentials: true });
+      await axios.post(`https://building-it-system-server.vercel.app/product/${commentId}/like`, {}, { withCredentials: true });
     } catch (err) {
       toast.error(err.response.data.error, {
         position: "top-center",
@@ -128,7 +128,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                   <div class="flex items-center mb-2 xs:px-2 xs:pt-4">
                     {comment.userImg ? <img className="inline-block xl:w-10 xl:h-10 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:w-8 sm:h-8 xs:w-5 xs:h-5 rounded-full object-fit ring-2 ring-white"
                       src={`data:image/jpeg;base64,${comment.userImg}`}
-                      alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                      alt="avatar_img" /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full  ">
                       <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                     </div>}
                     <div class="flex items-center flex-1 px-4 font-bold leading-tight">
@@ -211,7 +211,7 @@ export default function CustomerReview({ product, setComments, comments }) {
                               class="w-12 h-12 border-2 border-gray-300 rounded-full"
                               alt="Vendor's avatar"
                               src={`data:image/jpeg;base64,${reply.userImg || reply.vendorImg}`}
-                            /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                            /> : <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full  ">
                               <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                             </div>}
                             <div class="flex-col mt-1 xs:px-2">

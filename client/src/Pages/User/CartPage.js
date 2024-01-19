@@ -16,7 +16,7 @@ export default function CartPage() {
 
   const fetchCart = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/cart", {
+      const res = await axios.get("https://building-it-system-server.vercel.app/cart", {
         withCredentials: true,
       });
       setProducts(() =>
@@ -30,7 +30,7 @@ export default function CartPage() {
   const removeProduct = async (id) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/remove-product/${id}`,
+        `https://building-it-system-server.vercel.app/remove-product/${id}`,
         { withCredentials: true }
       );
       setProducts((prevProducts) =>
@@ -46,7 +46,7 @@ export default function CartPage() {
     const productIds = products.map(product => product.product);
     try {
       const res = await axios.post(
-        `http://localhost:4000/remove-all-products`,
+        `https://building-it-system-server.vercel.app/remove-all-products`,
         { productIds },
         { withCredentials: true }
       );
@@ -328,7 +328,7 @@ export default function CartPage() {
               </div>
               <div class="md:col-span-1">
                 <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
-                  <div class="container mb-3">
+                  <div class="container mb-3 mx-auto">
                     <div class="text-3xl font-bold my-3">Order Summary</div>
                     <div class="flex items-center justify-between">
                       <span class="text-lg text-gray-900">Items:</span>

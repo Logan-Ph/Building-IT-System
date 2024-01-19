@@ -74,7 +74,7 @@ export default function VendorEditStore() {
 
   const getStoreInfo = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/edit-store", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/edit-store", { withCredentials: true });
       setNumberofProducts(res.data.numberOfProducts);
       setNumberOfFollowers(res.data.numberOfFollowers);
     }
@@ -86,7 +86,7 @@ export default function VendorEditStore() {
   async function axiosPostData() {
     try {
       setLoading(true);
-      await axios.post('http://localhost:4000/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
+      await axios.post('https://building-it-system-server.vercel.app/edit-store', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setError('')
           setMsg(res.data)
@@ -241,7 +241,7 @@ export default function VendorEditStore() {
         <div className="p-4 border-2 border-gray-400 border-dashed rounded-lg dark:border-gray-700">
           <label
             for="bigBanner"
-            className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100 dark:bg-gray-800 cursor-pointer"
+            className="flex items-center justify-center text-center h-48 mb-4 rounded bg-gray-100   cursor-pointer"
             style={ bigBanner ? { backgroundImage: `url(${URL.createObjectURL(bigBanner)})`} : (user && user.bigBanner ? { backgroundImage: `url(${user.bigBanner})`} : {} )}
           >
             <button>
@@ -287,7 +287,7 @@ export default function VendorEditStore() {
           <div className="grid grid-cols-2 gap-4">
             <label
               for="smallBanner1"
-              className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              className="flex items-center justify-center rounded bg-gray-100 h-28  "
               style={smallBanner1 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner1)})` } : (user && user.smallBanner1 ? { backgroundImage: `url(${user.smallBanner1}`} : {})}
             >
               <input
@@ -316,7 +316,7 @@ export default function VendorEditStore() {
             </label>
             <label
               for="smallBanner2"
-              className="flex items-center justify-center rounded bg-gray-100 h-28 dark:bg-gray-800"
+              className="flex items-center justify-center rounded bg-gray-100 h-28  "
               style={smallBanner2 ? { backgroundImage: `url(${URL.createObjectURL(smallBanner2)})` } : (user && user.smallBanner2 ? { backgroundImage: `url(${user.smallBanner2}`} : {})}
             >
               <input

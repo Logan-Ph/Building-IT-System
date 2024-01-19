@@ -37,7 +37,7 @@ export default function TestingPage() {
   const createThread = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:4000/chat", { vendorId: product.owner }, { withCredentials: true });
+      const res = await axios.post("https://building-it-system-server.vercel.app/chat", { vendorId: product.owner }, { withCredentials: true });
       localStorage.setItem("threadId", res.data.thread._id);
       window.location.href = "/chat";
     } catch (error) {
@@ -56,7 +56,7 @@ export default function TestingPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/product/${params.id}`, { withCredentials: true });
+      const res = await axios.get(`https://building-it-system-server.vercel.app/product/${params.id}`, { withCredentials: true });
       setProduct(res.data.product);
       setVendorName(res.data.vendorName);
       setNumberOfFollowers(res.data.numberOfFollowers);

@@ -1,6 +1,6 @@
 export default function Banner() {
     return <>
-        <div className="flex xl:flex-row lg:flex-row items-center md:flex-row sm:flex-row xs:flex-col xl:justify-between lg:justify-between md:justify-between py-4 my-6 xs:hidden">
+        <div className="md:flex xl:flex-row lg:flex-row items-center md:flex-row sm:flex-row xs:flex-col xl:justify-between lg:justify-between md:justify-between py-4 my-6 hidden">
 
             <div className="border border-[#FAC800] rounded-md flex items-center xl:px-6 xl:py-4 lg:px-4 lg:py-2 md:px-2 md:py-2 sm:px-1 sm:py-2 xs:hidden shadow-lg shadow-gray-100 bg-white hover:bg-[#fac800e1] transition">
 
