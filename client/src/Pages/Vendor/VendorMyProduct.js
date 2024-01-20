@@ -17,7 +17,7 @@ export default function VendorMyProduct() {
   const handleSearch = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
+      const response = await axios.get(`https://building-it-system-server.vercel.app/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -31,7 +31,7 @@ export default function VendorMyProduct() {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
+      const response = await axios.get(`https://building-it-system-server.vercel.app/manage-product?product_name=${productName}&category=${category}`, { withCredentials: true });
       setProducts(response.data.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -258,7 +258,7 @@ function DeleteButtonPopup({ productId, setProducts }) {
   }
 
   const handleDelete = async () => {
-    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productId}`;
     try {
       await axios.delete(apiUrl, {
         headers: {

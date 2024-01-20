@@ -14,25 +14,24 @@ import { LightModeTable } from '../../Components/LightModeTable';
 
 export default function AdminManageVendorProduct() {
   const [products, setProducts] = useState([]);
-  const [reportedProducts, setReportedProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const { user } = useContext(UserContext)
+  const [page, setPage] = useState(1);
+  const [numberOfProducts, setNumberOfProducts] = useState(0);
+  const [activeTab, setActiveTab] = useState("");
 
   const getProducts = useCallback(async () => {
-    const res = await axios.get("http://localhost:4000/admin/manage-product/query=", { withCredentials: true });
-    setReportedProducts(res.data.products.filter(product => product.isReported === true));
+    const res = await axios.get(`http://localhost:4000/admin/manage-product/?query=${searchTerm}&page=${page}&reported=${activeTab === 1}`, { withCredentials: true });
     setProducts(res.data.products);
-  }, [])
+    setNumberOfProducts(res.data.numberOfProducts)
+  }, [page, activeTab])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the form from refreshing the page
-    serachProduct(); // Update the searchTerm state with the current input value
-  };
-
-  const serachProduct = useCallback(async () => {
-    const res = await axios.get(`http://localhost:4000/admin/manage-product/query=${searchTerm}`, { withCredentials: true });
+    const res = await axios.get(`http://localhost:4000/admin/manage-product/?query=${searchTerm}&page=${page}&reported=${activeTab === 1}`, { withCredentials: true });
     setProducts(res.data.products);
-  }, [searchTerm])
+    setNumberOfProducts(res.data.numberOfProducts)
+  };
 
   useEffect(() => {
     getProducts();
@@ -97,12 +96,6 @@ export default function AdminManageVendorProduct() {
       }
     },
     "tabpanel": "py-3",
-    
-  
-  
-  
-  
-  
     "root": {
       "base": "w-full text-left text-sm text-gray-500 dark:text-gray-500",
       "shadow": "absolute bg-white dark:bg-white w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
@@ -142,15 +135,15 @@ export default function AdminManageVendorProduct() {
     />
     <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       <div className='mx-auto'>
-        <Tabs theme={customTheme} className='dark:bg-white' aria-label="Full width tabs" style="fullWidth">
+        <Tabs theme={customTheme} className='dark:bg-white' aria-label="Full width tabs" style="fullWidth" onActiveTabChange={(tab) => { setActiveTab(tab); setSearchTerm("") }}>
           {/* Admin manage customer account */}
           {/* dark:text-white */}
           {/* dark:bg-gray-700 */}
-          <Tabs.Item theme={customTheme} color='white' active title="All Products" icon={FaCircle}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} setProducts={setProducts} />
+          <Tabs.Item theme={customTheme} color='white' active title="All Products" icon={FaCircle} >
+            <TableComponent setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} setProducts={setProducts} setPage={setPage} numberOfProducts={numberOfProducts} />
           </Tabs.Item>
           <Tabs.Item theme={customTheme} className='dark:bg-white' active title="Reported Product" icon={MdReportProblem}>
-            <TableComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={reportedProducts} handleSubmit={handleSubmit} setProducts={setReportedProducts} />
+            <TableComponent setSearchTerm={setSearchTerm} products={products} handleSubmit={handleSubmit} setProducts={setProducts} setPage={setPage} numberOfProducts={numberOfProducts} />
           </Tabs.Item>
         </Tabs>
       </div>
@@ -158,13 +151,7 @@ export default function AdminManageVendorProduct() {
   </>
 }
 
-function TableComponent({ setSearchTerm, products, handleSubmit, setProducts }) {
-  const [dataslice, setDataSlice] = useState(products)
-
-  useEffect(() => {
-    setDataSlice(products.slice(0, 10))
-  }, [products])
-
+function TableComponent({ setSearchTerm, products, handleSubmit, setProducts, setPage, numberOfProducts }) {
   return (
     <>
       <form class="flex items-center justify-end space-y-4 md:space-y-0 py-4" onSubmit={handleSubmit}>
@@ -214,24 +201,20 @@ function TableComponent({ setSearchTerm, products, handleSubmit, setProducts }) 
               <span className="sr-only">Delete</span>
             </Table.HeadCell>
           </Table.Head>
-          <TableProductContent products={products} dataslice={dataslice} setDataSlice={setDataSlice} setProducts={setProducts} />
+          <TableProductContent products={products} setProducts={setProducts} />
         </LightModeTable>
       </div>
-      {Math.floor(products.length / 10) > 1 && <Pagination pages={Math.ceil(products.length / 10)} setDataSlice={setDataSlice} data={products} />}
+      {Math.floor(numberOfProducts / 10) > 1 && <Pagination pages={Math.ceil(numberOfProducts / 10)} isSetPage={true} setPage={setPage} />}
     </>
   );
 }
 
 // dark:hover:bg-gray-600
-function TableProductContent({ products, dataslice, setDataSlice, setProducts }) {
+function TableProductContent({ products, setProducts }) {
   return (
     <>
-      {/* from this */}
-      {/* dark:hover:bg-gray-600  */}
-      {/* change into this */}
-      {/* dark:hover:bg-gray-200 */}
       <Table.Body className="border-b border-gray-200">
-        {dataslice.length !== 0 && dataslice.map((product) => (
+        {products.length !== 0 && products.map((product) => (
           <Table.Row className="dark:hover:bg-gray-200 bg-white dark:border-gray-700 border-b border-gray-200">
             <Table.Cell className='!px-4 !py-2'>
               <span>{product._id}</span>

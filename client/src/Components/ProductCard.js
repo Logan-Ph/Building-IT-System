@@ -51,7 +51,7 @@ export default function ProductCard({ product }) {
         error && notify();
         msg && notify();
         try {
-            const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { withCredentials: true });
+            const res = await axios.get(`https://building-it-system-server.vercel.app/add-product/${productId}`, { withCredentials: true });
             setCart(res.data.cart)
             setMsg(res.data.msg);
             setError('');
@@ -85,7 +85,7 @@ export default function ProductCard({ product }) {
                     <h4 className="capitalize font-medium xl:text-md lg:text-mb md:text-sm sm:text-sm xs:text-xs mb-2 text-gray-800 hover:text-primary-900 transition line-clamp-2">{product.product_name}</h4>
                 </Link>
                 <p className="text-lg text-red-500 font-semibold mb-2">${product.price}</p>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between ">
                     <div className="flex text-xs text-[#FAC800]">
                         <Rating size="md">
                             {[...Array(5)].map((_, i) => (

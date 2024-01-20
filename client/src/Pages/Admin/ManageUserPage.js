@@ -96,12 +96,12 @@ export default function ManageUserPage() {
       }
     },
     "tabpanel": "py-3",
-    
-  
-  
-  
-  
-  
+
+
+
+
+
+
     "root": {
       "base": "w-full text-left text-sm text-gray-500 dark:text-gray-500",
       "shadow": "absolute bg-white dark:bg-white w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
@@ -130,17 +130,17 @@ export default function ManageUserPage() {
     <div className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       {error && <Navigate to={"/"} replace />}
       <div>
-        <Tabs  theme={customTheme} aria-label="Full width tabs" style="fullWidth">
+        <Tabs theme={customTheme} aria-label="Full width tabs" style="fullWidth">
           {/* Admin manage customer account */}
-          <Tabs.Item  theme={customTheme} active title="Customer" icon={HiUserCircle}>
-            <UserTable data={users } customTheme={customTheme}  type="user" />
+          <Tabs.Item theme={customTheme} active title="Customer" icon={HiUserCircle}>
+            <UserTable data={users} customTheme={customTheme} type="user" />
           </Tabs.Item>
           {/* Admin manage vendor account */}
-          <Tabs.Item  theme={customTheme} title="Vendor" icon={FaShoppingBag}>
+          <Tabs.Item theme={customTheme} title="Vendor" icon={FaShoppingBag}>
             <UserTable data={vendors} customTheme={customTheme} type="vendor" />
           </Tabs.Item>
           {/* Admin manage shipper account */}
-          <Tabs.Item  theme={customTheme} title="Shipper" icon={HiTruck}>
+          <Tabs.Item theme={customTheme} title="Shipper" icon={HiTruck}>
             <UserTable data={shippers} customTheme={customTheme} type="shipper" />
           </Tabs.Item>
         </Tabs>
@@ -154,7 +154,7 @@ function filterUsers(users, searchTerm) {
   return users.filter(user => regex.test(user.email) || regex.test(user.name) || regex.test(user.phoneNumber) || regex.test(user.address) || regex.test(user.distributionHub));
 }
 
-function UserTable({ data, dataImage, type ,customTheme}) {
+function UserTable({ data, dataImage, type, customTheme }) {
   const [dataSlice, setDataSlice] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -172,22 +172,22 @@ function UserTable({ data, dataImage, type ,customTheme}) {
       case 'user':
         return (
           <>
-            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Name</Table.HeadCell>
-            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Phone Number</Table.HeadCell>
-            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Default Address</Table.HeadCell>
-            <Table.HeadCell  theme={customTheme} className="dark:bg-white">Status</Table.HeadCell>
-            <Table.HeadCell  theme={customTheme} className="dark:bg-white">View</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Name</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Phone Number</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Default Address</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Status</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">View</Table.HeadCell>
           </>
         );
       case 'shipper':
         return (
           <>
-            <Table.HeadCell theme={customTheme} className="dark:bg-white">Name</Table.HeadCell>
-            <Table.HeadCell theme={customTheme} className="dark:bg-white">Phone Number</Table.HeadCell>
-            <Table.HeadCell theme={customTheme} className="dark:bg-white">Default Address</Table.HeadCell>
-            <Table.HeadCell theme={customTheme} className="dark:bg-white">Distribution Hub</Table.HeadCell>
-            <Table.HeadCell theme={customTheme} className="dark:bg-white">Status</Table.HeadCell>
-            <Table.HeadCell theme={customTheme} className="dark:bg-white">View</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Name</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Phone Number</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Default Address</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Distribution Hub</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">Status</Table.HeadCell>
+            <Table.HeadCell className="dark:bg-white">View</Table.HeadCell>
           </>
         );
       default:

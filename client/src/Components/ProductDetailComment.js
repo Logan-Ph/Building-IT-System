@@ -4,7 +4,6 @@ import { useState } from 'react';
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
-import type { CustomFlowbiteTheme } from 'flowbite-react';
 
 export default function ProductDetailComment({ product, setComments, user }) {
     const textMessage = () => {

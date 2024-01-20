@@ -37,7 +37,7 @@ export default function MoreDetailOrder({ order, handleConfirmOrder }) {
     }, [order]);
 
     const postData = async () => {
-        await axios.post("http://localhost:4000/confirm-order", { orderId: order._id }, { withCredentials: true })
+        await axios.post("https://building-it-system-server.vercel.app/confirm-order", { orderId: order._id }, { withCredentials: true })
             .then(res => {
                 notify(res.data.msg)
             })

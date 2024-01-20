@@ -163,7 +163,7 @@ router.post('/vendor-register', userController.vendorRegister);
 router.get('/admin/:id/report', userController.reportPage);
 
 // admin manage product page
-router.get('/admin/manage-product/:query', userController.adminManageProduct);
+router.get('/admin/manage-product', userController.adminManageProduct);
 
 // admin manage reported product page
 router.get('/admin/manage-vendor-product/:id', userController.adminManageReportedProduct);

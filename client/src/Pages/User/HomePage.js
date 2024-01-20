@@ -11,7 +11,6 @@ import { Navigate } from 'react-router-dom';
 import { Carousel } from 'flowbite-react';
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import LoadingPage from './LoadingPage';
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 export default function Homepage() {
     const [products, setProducts] = useState([])
@@ -21,7 +20,7 @@ export default function Homepage() {
 
     const fetchProduct = useCallback(async () => {
         try {
-            const res = await axios.get(`http://localhost:4000/?page=${page}`, { withCredentials: true });
+            const res = await axios.get(`https://building-it-system-server.vercel.app/?page=${page}`, { withCredentials: true });
             setProducts((prev) => [...prev, ...res.data.product]);
             setIsLoading(false)
         } catch (er) {
@@ -95,7 +94,7 @@ function MiddleBanner({ setNavigateTo }) {
     const [images, setImages] = useState();
     const fetchImages = async () => {
         try {
-            const response = await axios.get("http://localhost:4000/middle-banner", { withCredentials: true });
+            const response = await axios.get("https://building-it-system-server.vercel.app/middle-banner", { withCredentials: true });
             setImages(response.data.images);
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -248,73 +247,7 @@ function MiddleBanner({ setNavigateTo }) {
                     style={{ transformOrigin: "center center" }}
                 > Baby Products</div>
             </div>
-
         </div>
-
-
-
-
-        <Swiper
-
-            breakpoints={{
-                300: {
-                    spaceBetween: 7,
-                    slidesPerView: 2,
-                },
-
-                576: {
-                    spaceBetween: 10,
-                    slidesPerView: 2,
-                },
-
-                898: {
-                    spaceBetween: 20,
-                    slidesPerView: 4,
-                },
-                1200: {
-                    spaceBetween: 15,
-                    slidesPerView: 5,
-                },
-                1259: {
-                    spaceBetween: 15,
-                    slidesPerView: 5,
-                },
-            }}
-        >
-            <div className="mt-64">
-                {/* Realated Product */}
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-
-
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-
-                <SwiperSlide>
-                    <img src={require("../../Components/images/tv.avif")} alt="tv"></img>
-                </SwiperSlide>
-            </div>
-        </Swiper>
-
-
     </>
 }
 

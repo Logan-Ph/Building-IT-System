@@ -14,7 +14,7 @@ export default function SRProductCard({ hit, user }) {
   const addProduct = async (productId) => {
     notify()
     try {
-      const res = await axios.get(`http://localhost:4000/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
+      const res = await axios.get(`https://building-it-system-server.vercel.app/add-product/${productId}`, { params: { quantity: quantity }, withCredentials: true });
       setMsg(res.data.msg);
       setError('');
       setQuantity(1);

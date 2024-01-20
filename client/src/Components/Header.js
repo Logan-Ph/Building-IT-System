@@ -21,7 +21,7 @@ export default function Header() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:4000/login/success", { withCredentials: true });
+      const res = await axios.get("https://building-it-system-server.vercel.app/login/success", { withCredentials: true });
       setUser(res.data.user);
       setCart(res.data.cart)
     } catch (er) {
@@ -71,7 +71,7 @@ export default function Header() {
 
   const handleLogout = async (e) => {
     e.preventDefault()
-    await axios.get("http://localhost:4000/logout", { withCredentials: true });
+    await axios.get("https://building-it-system-server.vercel.app/logout", { withCredentials: true });
     setUser(undefined)
     window.location.href = "/login"
   }
@@ -403,13 +403,13 @@ export default function Header() {
                 </div>
 
               </div>
-              <Link className="mt-5" to={user ? "/logout" : "/login"}>
+              <span className="mt-5" onClick={(e) => handleLogout(e)}>
                 <div className="mt-40 flex cursor-pointer justify-center rounded-md border border-black h-10 sm:h-9 xs:h-9 w-44 md:w-52 xs:text-sm hover:bg-slate-200 items-center m-auto bg-white mb-6 xs:mb-3">
                   <span className="text-md font-medium text-black">
                     {user ? "logout" : "Sign in"}
                   </span>
                 </div>
-              </Link>
+              </span>
             </aside>
           </div>
         </div>

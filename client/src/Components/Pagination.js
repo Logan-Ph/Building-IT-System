@@ -1,13 +1,17 @@
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 
-export default function Pagination({ pages, setDataSlice, data }) {
+export default function Pagination({ pages, setDataSlice, data, isSetPage, setPage }) {
     const [currentPage, setCurrentPage] = useState(1);
     const maxPageNumbersToShow = 5;
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+        if (isSetPage) {
+            setPage(pageNumber)
+        } else {
+            setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+        }
     };
 
     const getPaginationNumbers = () => {
@@ -53,7 +57,9 @@ export default function Pagination({ pages, setDataSlice, data }) {
                                 onClick={(event) => {
                                     event.preventDefault();
                                     handlePageChange(pageNumber);
-                                    setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+                                    if (!isSetPage) {
+                                        setDataSlice(data.slice((pageNumber - 1) * 10, pageNumber * 10))
+                                    }
                                 }}>
                                 {pageNumber}
                             </span>

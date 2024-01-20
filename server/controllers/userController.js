@@ -78,7 +78,7 @@ function sendEmailVerification(userEmail) {
       }
     })
     const userToken = jwt.sign({ user: userEmail }, process.env.VERIFY_EMAIL, { expiresIn: '10m' });
-    const url = `http://localhost:3000/user/${userToken}/verify-email`;
+    const url = `https://building-it-system.vercel.app/user/${userToken}/verify-email`;
 
     let response = {
       body: {
@@ -450,7 +450,7 @@ exports.forgotPassword = async (req, res) => {
   })
 
   const userToken = jwt.sign({ user: userEmail }, process.env.RESETPWD, { expiresIn: '10m' });
-  const url = `http://localhost:3000/user/${userToken}/forgot-password`;
+  const url = `https://building-it-system.vercel.app/user/${userToken}/forgot-password`;
 
   let response = {
     body: {
@@ -1589,29 +1589,42 @@ exports.likeComment = async (req, res) => {
 
 exports.adminManageProduct = async (req, res) => {
   try {
-    const query = req.params.query.split("=")[1];
+    const query = req.query.query;
+    const isReported = req.query.reported === 'true';
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
     let products;
+    let matchQuery = {};
+    let numberOfProducts;
 
     if (query) {
       const regex = new RegExp(query, 'i');
-      products = await Product.find({
-        $or: [
-          { product_name: regex },
-          { category: regex },
-        ]
-      });
-    } else {
-      products = await Product.find({});
+      matchQuery.$or = [
+        { product_name: regex },
+        { category: regex },
+      ];
     }
 
-    const reportedProductIds = await Report.distinct('product');
-    for (let i = 0; i < products.length; i++) {
-      const productObj = products[i].toObject();
-      const isReported = reportedProductIds.map(id => id.toString()).includes(products[i]._id.toString());
-      productObj.isReported = isReported;
-      products[i] = productObj;
+    if (isReported) {
+      // Find products that have been reported by referencing the 'reports' collection
+      const reportedProductIds = await Report.distinct('product');
+      // Find products that match the search query and have been reported
+      const searchAndReportedQuery = { ...matchQuery, _id: { $in: reportedProductIds } };
+      products = await Product.find(searchAndReportedQuery)
+        .skip(skip)
+        .limit(limit);
+      // Count the total number of matching documents for pagination
+      numberOfProducts = await Product.countDocuments(searchAndReportedQuery);
+    } else {
+      products = await Product.find(matchQuery)
+        .skip(skip)
+        .limit(limit);
+
+      numberOfProducts = await Product.countDocuments(matchQuery);
     }
-    return res.status(200).json({ products: products });
+
+    return res.status(200).json({ products: products, numberOfProducts: numberOfProducts });
   } catch (error) {
     return res.status(500).json({ error: "Cannot find products." });
   }
