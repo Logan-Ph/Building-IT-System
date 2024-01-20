@@ -43,7 +43,7 @@ export default function LogInPage() {
             email: email, password: password
         }
 
-        await axios.post('http://localhost:4000/login', postData, { withCredentials: true })
+        await axios.post('https://building-it-system-server.vercel.app/login', postData, { withCredentials: true })
             .then(res => {
                 setUser(res.data.user);
                 setError(res.data.message);
@@ -59,7 +59,7 @@ export default function LogInPage() {
     };
 
     const googleLogin = async () => {
-        const loginWindow = window.open("http://localhost:4000/auth/google", "_blank");
+        const loginWindow = window.open("https://building-it-system-server.vercel.app/auth/google", "_blank");
 
         window.addEventListener('message', (event) => {
             console.log('Received message event', event);

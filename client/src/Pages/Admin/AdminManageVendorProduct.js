@@ -21,14 +21,14 @@ export default function AdminManageVendorProduct() {
   const [activeTab, setActiveTab] = useState("");
 
   const getProducts = useCallback(async () => {
-    const res = await axios.get(`http://localhost:4000/admin/manage-product/?query=${searchTerm}&page=${page}&reported=${activeTab === 1}`, { withCredentials: true });
+    const res = await axios.get(`https://building-it-system-server.vercel.app/admin/manage-product/?query=${searchTerm}&page=${page}&reported=${activeTab === 1}`, { withCredentials: true });
     setProducts(res.data.products);
     setNumberOfProducts(res.data.numberOfProducts)
   }, [page, activeTab])
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the form from refreshing the page
-    const res = await axios.get(`http://localhost:4000/admin/manage-product/?query=${searchTerm}&page=${page}&reported=${activeTab === 1}`, { withCredentials: true });
+    const res = await axios.get(`https://building-it-system-server.vercel.app/admin/manage-product/?query=${searchTerm}&page=${page}&reported=${activeTab === 1}`, { withCredentials: true });
     setProducts(res.data.products);
     setNumberOfProducts(res.data.numberOfProducts)
   };
@@ -278,7 +278,7 @@ function DeleteButtonPopup({ productId, setProducts }) {
   }
 
   const handleDelete = async () => {
-    const apiUrl = `http://localhost:4000/delete-product/${productId}`;
+    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${productId}`;
     try {
       await axios.delete(apiUrl, {
         headers: {
