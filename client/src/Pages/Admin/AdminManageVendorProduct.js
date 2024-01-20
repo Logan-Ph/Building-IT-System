@@ -135,7 +135,7 @@ export default function AdminManageVendorProduct() {
     />
     <main className="max-w-full px-4 sm:px-6 lg:px-8 bg-gray-100 mb-10 pb-5 w-full">
       <div className='mx-auto'>
-        <Tabs theme={customTheme} className='dark:bg-white' aria-label="Full width tabs" style="fullWidth" onActiveTabChange={(tab) => { setActiveTab(tab); setSearchTerm("") }}>
+        <Tabs theme={customTheme} className='dark:bg-white' aria-label="Full width tabs" style="fullWidth" onActiveTabChange={(tab) => { setActiveTab(tab); setSearchTerm(""); setPage(1) }}>
           {/* Admin manage customer account */}
           {/* dark:text-white */}
           {/* dark:bg-gray-700 */}
