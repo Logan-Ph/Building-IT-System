@@ -56,7 +56,6 @@ export default function LogInPage() {
     window.open("https://building-it-system-server.vercel.app/auth/google", "_blank");
 
     const handleMessage = (event) => {
-      console.log(event);
       if (event.data.user) {
         setUser(event.data.user);
         window.location.href = "/"; // redirect to homepage

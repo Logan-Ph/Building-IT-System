@@ -896,12 +896,12 @@ exports.getVendorDashboard = async (req, res) => {
 exports.cartPage = async (req, res) => {
   try {
     let user = await authenticateToken(req.cookies.userToken);
-    let cart = await Cart.find({ userID: user._id });
+    let cart = await Cart.findOne({ userID: user._id });
     if (!cart){
       cart = new Cart({userID: user._id})
       await cart.save()
     }
-    const products = cart[0].products;
+    const products = cart.products;
     return res.status(200).json({ products: products });
   } catch {
     return res.status(500).json({ error: "Cannot find cart" });

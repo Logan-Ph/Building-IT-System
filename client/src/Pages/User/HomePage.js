@@ -109,8 +109,6 @@ function MiddleBanner({ setNavigateTo }) {
             <div className="h-80">
                 <Carousel leftControl={
                     <ArrowLeft />
-
-
                 }
                     rightControl={
                         <ArrowRight />

@@ -5,6 +5,7 @@ import { Link, Navigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContainer, toast } from "react-toastify";
 import aa from "search-insights";
+import LoadingPage from "./LoadingPage";
 
 export default function CartPage() {
   const { user } = useContext(UserContext);
@@ -13,6 +14,7 @@ export default function CartPage() {
   const [navigateTo, setNavigateTo] = useState("");
   const [checkedProducts, setCheckedProducts] = useState([]); // Array of products that are checked [
   const [products, setProducts] = useState([]); // Array of products in the cart
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchCart = useCallback(async () => {
     try {
@@ -22,8 +24,10 @@ export default function CartPage() {
       setProducts(() =>
         res.data.products.map((product) => ({ ...product, checked: false }))
       );
+      setIsLoading(false);
     } catch (error) {
       setError(error);
+      setIsLoading(false);
     }
   }, []);
 
@@ -43,7 +47,7 @@ export default function CartPage() {
   };
 
   const removeAllProducts = async () => {
-    const productIds = products.map(product => product.product);
+    const productIds = products.map((product) => product.product);
     try {
       const res = await axios.post(
         `https://building-it-system-server.vercel.app/remove-all-products`,
@@ -55,7 +59,7 @@ export default function CartPage() {
     } catch (error) {
       setError(error);
     }
-  }
+  };
 
   const incrementQuantity = (id) => {
     setProducts(
@@ -72,9 +76,9 @@ export default function CartPage() {
       products.map((product) =>
         product.product === id
           ? {
-            ...product,
-            quantity: product.quantity - 1 > 0 ? product.quantity - 1 : 1,
-          }
+              ...product,
+              quantity: product.quantity - 1 > 0 ? product.quantity - 1 : 1,
+            }
           : product
       )
     );
@@ -91,18 +95,17 @@ export default function CartPage() {
   };
 
   const toggleSelectAll = () => {
-    const areAllProductsChecked = products.every(product => product.checked);
+    const areAllProductsChecked = products.every((product) => product.checked);
     setProducts(
-      products.map((product) => ({ ...product, checked: !areAllProductsChecked }))
+      products.map((product) => ({
+        ...product,
+        checked: !areAllProductsChecked,
+      }))
     );
-  }
+  };
 
   useEffect(() => {
     fetchCart();
-    const storedProducts = localStorage.getItem("products");
-    if (storedProducts) {
-      setProducts(JSON.parse(storedProducts));
-    }
   }, [fetchCart]);
 
   // Save products to local storage whenever they change
@@ -124,20 +127,27 @@ export default function CartPage() {
       });
       return;
     }
-    localStorage.setItem('products', JSON.stringify(checkedProducts));
-    aa('addedToCartObjectIDs', {
+    localStorage.setItem("products", JSON.stringify(checkedProducts));
+    aa("addedToCartObjectIDs", {
       userToken: user._id, // required for Node.js
-      eventName: 'addedToCartObjectIDs',
-      index: 'rBuy',
-      objectIDs: checkedProducts.map(product => product.product),
-      objectData: checkedProducts.map(product => ({
+      eventName: "addedToCartObjectIDs",
+      index: "rBuy",
+      objectIDs: checkedProducts.map((product) => product.product),
+      objectData: checkedProducts.map((product) => ({
         price: product.price,
         quantity: product.quantity,
       })),
-      value: checkedProducts.reduce((total, product) => total + product.price * product.quantity, 0),
-      currency: 'USD'
+      value: checkedProducts.reduce(
+        (total, product) => total + product.price * product.quantity,
+        0
+      ),
+      currency: "USD",
     });
-    setNavigateTo('/checkout')
+    setNavigateTo("/checkout");
+  };
+
+  if (isLoading) {
+    return <LoadingPage />;
   }
 
   return (
@@ -157,50 +167,58 @@ export default function CartPage() {
         theme="light"
       />
 
-      {!products.length ? <div class="md:container mx-auto md:px-6 px-2">
-        <div class="flex flex-col items-center w-full px-4 py-2 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
-          <div class="flex justify-center">
-            <img
-              src={require("../../Components/images/cart-empty.png")}
-              alt="product"
-            />
-          </div>
-          <div class="text-center center">
-            <p class="text-lg font-semibold">Your cart is empty</p>
-            <p class="text-base text-gray-800">
-              Looks like you haven't made your choice yet...
-            </p>
-          </div>
-          <div class="pb-3 pt-5">
-            <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-[#000054] to-[#E61E2A] group-hover:from-[#000054]  group-hover:to-[#E61E2A] hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300">
-              <Link class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0" to="/">
-                Start Shopping
-              </Link>
-            </button>
+      {!products.length ? (
+        <div class="md:container mx-auto md:px-6 px-2">
+          <div class="flex flex-col items-center w-full px-4 py-2 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
+            <div class="flex justify-center">
+              <img
+                src={require("../../Components/images/cart-empty.png")}
+                alt="product"
+              />
+            </div>
+            <div class="text-center center">
+              <p class="text-lg font-semibold">Your cart is empty</p>
+              <p class="text-base text-gray-800">
+                Looks like you haven't made your choice yet...
+              </p>
+            </div>
+            <div class="pb-3 pt-5">
+              <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-[#000054] to-[#E61E2A] group-hover:from-[#000054]  group-hover:to-[#E61E2A] hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300">
+                <Link
+                  class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0"
+                  to="/"
+                >
+                  Start Shopping
+                </Link>
+              </button>
+            </div>
           </div>
         </div>
-      </div> :
+      ) : (
         <>
-
           <div class="text-center text-3xl my-5 sticky top-0">
-            Shopping Cart <span class="text-xl">({cart.products?.length})</span>
+            Shopping Cart{" "}
+            <span class="text-xl">
+              ({(cart && cart.products?.length) || 0})
+            </span>
           </div>
           <div class="md:container mx-auto md:px-6 px-2">
             <div class="grid md:grid-cols-3 md:gap-5 my-3">
               <div class="md:col-span-2 row-span-2">
                 <div class="">
                   <div class="w-full items-center bg-white border border-gray-200 rounded-lg shadow  mb-4">
-                    <div class='flex justify-between lg:px-10 md:px-14 sm:xs:px-4 py-5'>
-                      <div class='flex items-center '>
+                    <div class="flex justify-between lg:px-10 md:px-14 sm:xs:px-4 py-5">
+                      <div class="flex items-center ">
                         <input
                           id="default-checkbox"
                           type="checkbox"
-                          checked={products.every(product => product.checked)}
+                          checked={products.every((product) => product.checked)}
                           class="w-5 h-5 text-black bg-gray-100 border-gray-300 rounded mr-3"
                           onClick={toggleSelectAll}
                         />
-                        <div class='text-md font-medium' >Select All Product</div>
-
+                        <div class="text-md font-medium">
+                          Select All Product
+                        </div>
                       </div>
                       <div class="flex justify-end text-md ">
                         <button
@@ -212,8 +230,6 @@ export default function CartPage() {
                         </button>
                       </div>
                     </div>
-
-
                   </div>
                   <div class="w-full lg:md:px-4 xs:px-4 py-2 bg-white border border-gray-200 rounded-lg shadow sm:p-8 mb-2">
                     {/* Test */}
@@ -229,16 +245,26 @@ export default function CartPage() {
                                     type="checkbox"
                                     checked={product.checked}
                                     class="w-5 h-5 text-black bg-gray-100 border-gray-300 rounded mr-3"
-                                    onClick={() => toggleChecked(product.product)}
+                                    onClick={() =>
+                                      toggleChecked(product.product)
+                                    }
                                   />
                                 </div>
                                 <div class="flex justify-center order-product-img">
-                                  <img className="lg:md:h-40 sm:xs:h-24 w-auto " src={product.image_link} alt="product" />
+                                  <img
+                                    className="lg:md:h-40 sm:xs:h-24 w-auto "
+                                    src={product.image_link}
+                                    alt="product"
+                                  />
                                 </div>
                                 <div class="ml-4 flex flex-1 flex-col">
                                   <div class="flex md:flex-row justify-between text-base font-medium text-gray-900 flex-col">
-                                    <h3 className="lg:md:text-md xs:text-sm lg:md:w-2/3">{product.product_name}</h3>
-                                    <p class="flex justify-start text-lg font-semibold text-indigo-600">${product.price}</p>
+                                    <h3 className="lg:md:text-md xs:text-sm lg:md:w-2/3">
+                                      {product.product_name}
+                                    </h3>
+                                    <p class="flex justify-start text-lg font-semibold text-indigo-600">
+                                      ${product.price}
+                                    </p>
                                   </div>
                                   <div class="flex flex-wrap flex-1 lg:md:items-end xs:items-center justify-between text-sm">
                                     <div class="py-2 relative flex items-center max-w-[7rem]">
@@ -318,7 +344,6 @@ export default function CartPage() {
                                 </div>
                               </li>
                             ))}
-                            {/* <!-- More products... --> */}
                           </ul>
                         </div>
                       </div>
@@ -334,7 +359,8 @@ export default function CartPage() {
                       <span class="text-lg text-gray-900">Items:</span>
                       <span class="text-lg text-gray-900">
                         {products.reduce(
-                          (count, product) => (product.checked ? count + 1 : count),
+                          (count, product) =>
+                            product.checked ? count + 1 : count,
                           0
                         )}
                       </span>
@@ -366,7 +392,7 @@ export default function CartPage() {
             </div>
           </div>
         </>
-      }
+      )}
     </>
   );
 }
