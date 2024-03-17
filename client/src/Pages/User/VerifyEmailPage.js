@@ -10,7 +10,7 @@ export default function VerifyEmailPage() {
     const [verifyFailed, setVerifyFailed] = useState(false)
 
     const fetchData = useCallback(async () => {
-        await axios.get(`http://localhost:4000/user/${params.token}/verify-email`, { withCredentials: true })
+        await axios.get(`https://building-it-system-server.vercel.app/user/${params.token}/verify-email`, { withCredentials: true })
             .then(res => { setIsLoading(false) })
             .catch(er => {
                 setIsLoading(false)

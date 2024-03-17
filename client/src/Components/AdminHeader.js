@@ -12,7 +12,7 @@ export default function AdminHeader() {
   const fetchUser = useCallback(async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/login/success",
+        "https://building-it-system-server.vercel.app/login/success",
         { withCredentials: true }
       );
       setUser(res.data.user);
@@ -24,7 +24,7 @@ export default function AdminHeader() {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    await axios.get("http://localhost:4000/logout", {
+    await axios.get("https://building-it-system-server.vercel.app/logout", {
       withCredentials: true,
     });
     setUser(undefined);
