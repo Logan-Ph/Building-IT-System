@@ -32,7 +32,7 @@ export default function ManageOrderPage() {
 
     const getOrders = useCallback(async () => {
         try {
-            const res = await axios.get("https://building-it-system-server.vercel.app/manage-order", { withCredentials: true })
+            const res = await axios.get("http://localhost:4000/manage-order", { withCredentials: true })
             const orders = res.data.orders
             const statusOrder = ["unpaid", "to ship", "shipping", "completed", "cancelled", "failed delivery"];
             orders.sort((a, b) => {

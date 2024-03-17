@@ -18,7 +18,7 @@ export default function ReportedProductPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`https://building-it-system-server.vercel.app/admin/manage-vendor-product/${params.id}`, { withCredentials: true });
+      const res = await axios.get(`http://localhost:4000/admin/manage-vendor-product/${params.id}`, { withCredentials: true });
       setIsLoading(false)
       setProduct(res.data.product)
       setVendor(res.data.vendor)
@@ -28,6 +28,59 @@ export default function ReportedProductPage() {
     }
   }, [params])
 
+  const customTheme =   {
+    "root": {
+      "base": "fixed top-0 right-0 left-0 z-50 h-modal h-screen overflow-y-auto overflow-x-hidden md:inset-0 md:h-full",
+      "show": {
+        "on": "flex bg-gray-900 bg-opacity-50 ",
+        "off": "hidden"
+      },
+      "sizes": {
+        "sm": "max-w-sm",
+        "md": "max-w-md",
+        "lg": "max-w-lg",
+        "xl": "max-w-xl",
+        "2xl": "max-w-2xl",
+        "3xl": "max-w-3xl",
+        "4xl": "max-w-4xl",
+        "5xl": "max-w-5xl",
+        "6xl": "max-w-6xl",
+        "7xl": "max-w-7xl"
+      },
+      "positions": {
+        "top-left": "items-start justify-start",
+        "top-center": "items-start justify-center",
+        "top-right": "items-start justify-end",
+        "center-left": "items-center justify-start",
+        "center": "items-center justify-center",
+        "center-right": "items-center justify-end",
+        "bottom-right": "items-end justify-end",
+        "bottom-center": "items-end justify-center",
+        "bottom-left": "items-end justify-start"
+      }
+    },
+    "content": {
+      "base": "relative h-full w-full p-4 md:h-auto",
+      "inner": "relative rounded-lg bg-white shadow  flex flex-col max-h-[90vh]"
+    },
+    "body": {
+      "base": "p-6 flex-1 overflow-auto",
+      "popup": "pt-0"
+    },
+    "header": {
+      "base": "flex items-start justify-between rounded-t  border-b p-5",
+      "popup": "p-2 border-b-0",
+      "title": "text-xl font-medium text-gray-900 ",
+      "close": {
+        "base": "ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900",
+        "icon": "h-5 w-5"
+      }
+    },
+    "footer": {
+      "base": "flex items-center space-x-2 rounded-b border-gray-200 p-6 ",
+      "popup": "border-t"
+    }
+  };
 
   useEffect(() => {
     fetchData()
@@ -54,7 +107,7 @@ export default function ReportedProductPage() {
       <section className="max-w-full px-4 sm:px-0 lg:px-8 bg-gray-100 mb-10 pb-5 w-full shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] overflow-hidden">
         <div className="container mx-auto p-5 xs:px-2 xs:py-5">
           {/* <!-- Vendor --> */}
-          <ReportedVendorCard vendor={vendor} product={product} reports={reports} />
+          <ReportedVendorCard vendor={vendor} product={product} reports={reports} theme={customTheme} />
         </div>
       </section>
     </>
@@ -62,7 +115,7 @@ export default function ReportedProductPage() {
 }
 
 
-function ReportedVendorCard({ vendor, product, reports }) {
+function ReportedVendorCard({ vendor, product, reports, theme }) {
   return <>
 
     <div className="p-6 space-y-6 bg-white rounded-lg shadow my-5 xs:p-4">
@@ -90,7 +143,7 @@ function ReportedVendorCard({ vendor, product, reports }) {
         <div className="text-md text-gray-500 mx-2 line-clamp-2 xs:mx-0 xs:text-sm">{vendor.address}</div>
       </div>
       <hr className="my-2" />
-      <ReportedTableComponent product={product} reports={reports} />
+      <ReportedTableComponent product={product} reports={reports} theme={theme}/>
       {reports.length > 0 && <>
         <hr className="my-2" />
         <h1 className="m-0 font-bold text-sm text-gray-900">Reported information in details </h1>
@@ -102,7 +155,7 @@ function ReportedVendorCard({ vendor, product, reports }) {
   </>
 }
 
-function ReportedTableComponent({ product, reports }) {
+function ReportedTableComponent({ product, reports, theme }) {
   return (
     <>
       <div>
@@ -119,13 +172,13 @@ function ReportedTableComponent({ product, reports }) {
             <p className="font-light text-gray-900 text-sm">Status: <span className={reports.length > 0 ? "ms-7 font-medium text-red-500" : "ms-7 font-medium"}> {(reports.length > 0) ? "Reported" : "No report"}</span></p>
           </div>
         </div>
-        <DeleteButtonPopup product={product} />
+        <DeleteButtonPopup product={product} theme={theme} />
       </div >
     </>
   );
 }
 
-function ReportedProductInfo({ reports }) {
+function ReportedProductInfo({ reports, theme }) {
   return (
     <>
       <div className="container mx-auto">
@@ -166,7 +219,7 @@ function ReportedProductInfo({ reports }) {
   );
 }
 
-function DeleteButtonPopup({ product }) {
+function DeleteButtonPopup({ product, theme }) {
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [openModal, setOpenModal] = useState(false);
@@ -198,7 +251,7 @@ function DeleteButtonPopup({ product }) {
   }
 
   const handleDelete = async () => {
-    const apiUrl = `https://building-it-system-server.vercel.app/delete-product/${product._id}`;
+    const apiUrl = `http://localhost:4000/delete-product/${product._id}`;
     try {
       await axios.delete(apiUrl, {
         headers: {
@@ -228,9 +281,9 @@ function DeleteButtonPopup({ product }) {
         <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm lg:md:px-5 sm:px-3 sm:py-2 py-2.5 me-2 mb-4" onClick={() => setOpenModal(true)}>Delete</button>
       </div>
 
-      <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
-        <Modal.Header />
-        <Modal.Body>
+      <Modal theme={theme} show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+        <Modal.Header theme={theme}/>
+        <Modal.Body theme={theme}>
           <div className="text-center">
             <FiAlertTriangle className="mx-auto mb-2 h-10 w-10 text-[#FAC800]" />
             <h3 className="mb-5 text-lg font-normal text-gray-900">

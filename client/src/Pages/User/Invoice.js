@@ -8,7 +8,7 @@ export default function Invoice() {
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchData = useCallback(async () => {
-        const res = await axios.get(`https://building-it-system-server.vercel.app/${params.id}/view-invoice`, { withCredentials: true });
+        const res = await axios.get(`http://localhost:4000/${params.id}/view-invoice`, { withCredentials: true });
         setOrder(res.data.order);
         setIsLoading(false)
         console.log(res.data.order);

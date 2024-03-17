@@ -19,7 +19,7 @@ export default function ReportInfoPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get(`https://building-it-system-server.vercel.app/admin/${params.id}/report`, { withCredentials: true });
+      const res = await axios.get(`http://localhost:4000/admin/${params.id}/report`, { withCredentials: true });
       const orders = res.data.orders
       const statusOrder = ["unpaid", "to ship", "shipping", "completed", "cancelled", "failed delivery"];
       orders.sort((a, b) => {

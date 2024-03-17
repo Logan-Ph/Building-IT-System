@@ -17,6 +17,7 @@ export default function RegisterPage() {
     const [error, setError] = useState('')
     const [msg, setMsg] = useState('')
     const [formType, setFormType] = useState('customer')
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         error && notify(error)
@@ -33,7 +34,7 @@ export default function RegisterPage() {
     const notify = (error) => {
         toast.error(error, {
             position: "top-center",
-            autoClose: 1000,
+            autoClose: 10000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -43,10 +44,10 @@ export default function RegisterPage() {
         });
     }
 
-    const success = (error) => {
-        toast.success(error, {
+    const success = (msg) => {
+        toast.success(msg, {
             position: "top-center",
-            autoClose: 1000,
+            autoClose: 10000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -77,10 +78,11 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('https://building-it-system-server.vercel.app/user-register', data, { withCredentials: true })
+                    await axios.post('http://localhost:4000/user-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
+                        setIsLoading(false)
                         })
                         .catch(er => { setError(er.response.data); setMsg() });
                     break;
@@ -101,10 +103,11 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('https://building-it-system-server.vercel.app/vendor-register', data, { withCredentials: true })
+                    await axios.post('http://localhost:4000/vendor-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
+                            setIsLoading(false)
                         })
                         .catch(er => { setError(er.response.data); setMsg() });
                     break;
@@ -126,10 +129,11 @@ export default function RegisterPage() {
                         setMsg('')
                         return;
                     }
-                    await axios.post('https://building-it-system-server.vercel.app/shipper-register', data, { withCredentials: true })
+                    await axios.post('http://localhost:4000/shipper-register', data, { withCredentials: true })
                         .then(res => {
                             setMsg(res.data)
                             setError('')
+                            setIsLoading(false)
                         })
                         .catch(er => { setError(er.response.data); setMsg() });
                     break;
@@ -144,6 +148,7 @@ export default function RegisterPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosPostData();
+        setIsLoading(true)
         if (error) {
             notify(error);
         }
@@ -153,7 +158,7 @@ export default function RegisterPage() {
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={1000}
+                autoClose={10000}
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
@@ -264,7 +269,7 @@ export default function RegisterPage() {
                                     </div>
 
                                     <div>
-                                        <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
+                                        <button type="submit" disabled={isLoading} onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                     </div>
                                 </form>
                             </div>
@@ -351,7 +356,7 @@ export default function RegisterPage() {
                                         </div>
                                     </div>
                                     <div>
-                                        <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
+                                        <button type="submit" disabled={isLoading} onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                     </div>
                                 </form>
                             </div>
@@ -452,7 +457,7 @@ export default function RegisterPage() {
                                     </div>
 
                                     <div>
-                                        <button type="submit" onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
+                                        <button type="submit" disabled={isLoading} onClick={handleSubmit} class="flex w-full justify-center rounded-md bg-[#222160] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#000053] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#000053]">Create Account</button>
                                     </div>
 
                                 </form>

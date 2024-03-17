@@ -7,12 +7,14 @@ import LoadingPage from './LoadingPage'
 export default function VerifyEmailPage() {
     const params = useParams();
     const [isLoading, setIsLoading] = useState(true)
+    const [verifyFailed, setVerifyFailed] = useState(false)
 
     const fetchData = useCallback(async () => {
-        await axios.get(`https://building-it-system-server.vercel.app/user/${params.token}/verify-email`, { withCredentials: true })
+        await axios.get(`http://localhost:4000/user/${params.token}/verify-email`, { withCredentials: true })
             .then(res => { setIsLoading(false) })
             .catch(er => {
-                window.location.href = '/login'
+                setIsLoading(false)
+                setVerifyFailed(true)
             })
     }, [params.token])
 
@@ -29,11 +31,11 @@ export default function VerifyEmailPage() {
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
                 <div className="flex flex-col items-center bg-gray-50 py-10 border-gray-50 shadow-md">
                     <div className="w-1/3 h-full">
-                        <img src={require("../../Components/images/verify.png")} alt='Verify email' className="object-cover" />
+                        {verifyFailed ? <img src={require("../../Components/images/brokenChain.jpg")} alt='Verify email' className="object-cover" /> : <img src={require("../../Components/images/verify.png")} alt='Verify email' className="object-cover" />}
                     </div>
-                    <p className="font-bold text-4xl uppercase my-5">Email Verified</p>
-                    <p className="font-light text-lg text-gray-900">Your email has been successfully verified.</p>
-                    <p className="font-light text-lg text-gray-900 mb-5">You can now navigate to the login page by clicking the button below. </p>
+                    <p className="font-bold text-4xl uppercase my-5">{verifyFailed ? "The link is invalid or expired" : "Email Verified"}</p>
+                    <p className="font-light text-lg text-gray-900">{!verifyFailed && "Your email has been successfully verified."}</p>
+                    <p className="font-light text-lg text-gray-900 mb-5">{verifyFailed ? "Please verify your email again" : "You can now navigate to the login page by clicking the button below."}</p>
                     <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-5 focus:outline-non"> <a href='/login'>Login</a></button>
                     <div className="flex flex-row items-center">
                         <div className="text-gray-900 text-lg font-medium">

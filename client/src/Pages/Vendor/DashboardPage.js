@@ -18,7 +18,7 @@ export default function DashboardPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get("https://building-it-system-server.vercel.app/dashboard", { withCredentials: true })
+      const res = await axios.get("http://localhost:4000/dashboard", { withCredentials: true })
       setOrdersByStatus(res.data.ordersByStatus);
       setOrders(res.data.orders)
       setNumberOfFollowers(res.data.numberOfFollowers)
