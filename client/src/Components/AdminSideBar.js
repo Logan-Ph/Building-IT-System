@@ -8,9 +8,9 @@ import { UserContext } from "../Context/UserContext";
 export default function AdminSideBar() {
     const {user} = useContext(UserContext)
 
-    if (!user){
+    if (user === undefined) {
         return null
-    }
+      }
 
     return (
         <Sidebar>

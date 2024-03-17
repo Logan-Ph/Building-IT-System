@@ -11,6 +11,7 @@ passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "https://building-it-system-server.vercel.app/auth/google/callback",
+  // callbackURL: "http://localhost:4000/auth/google/callback",
   scope: ['profile', 'email'],
 },
   async function verify(accessToken, refreshToken, profile, cb) {

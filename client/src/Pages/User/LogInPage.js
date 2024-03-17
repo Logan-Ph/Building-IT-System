@@ -8,7 +8,6 @@ import { UserContext } from '../../Context/UserContext'
 export default function LogInPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState('');
     const { user, setUser } = useContext(UserContext);
     const [rememberMe, setRememberMe] = useState(false);
 
@@ -20,10 +19,7 @@ export default function LogInPage() {
             setPassword(savedPassword);
             setRememberMe(true);
         }
-        if (error) {
-            notify(error);
-        }
-    }, [error]);
+    }, [rememberMe]);
 
     const notify = (error) => {
         toast.error(error, {
@@ -46,23 +42,20 @@ export default function LogInPage() {
         await axios.post('https://building-it-system-server.vercel.app/login', postData, { withCredentials: true })
             .then(res => {
                 setUser(res.data.user);
-                setError(res.data.message);
+                notify(res.data.message);
                 if (rememberMe) {
                     localStorage.setItem('email', email);
                     localStorage.setItem('password', password);
                 }
             })
-            .catch(er => {
-                console.log(er);
-            });
 
     };
 
     const googleLogin = async () => {
+       
         const loginWindow = window.open("https://building-it-system-server.vercel.app/auth/google", "_blank");
 
         window.addEventListener('message', (event) => {
-
             if (event.data.user) {
                 setUser(event.data.user);
                 window.location.href = '/'; // redirect to homepage
@@ -76,9 +69,6 @@ export default function LogInPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosPostData();
-        if (error) {
-            notify(error);
-        }
     };
 
     return (

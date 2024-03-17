@@ -19,6 +19,7 @@ export default function DashboardPage() {
   const [error, setError] = useState();
   const [msg, setMsg] = useState('')
   const [loading, setLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true)
 
   const handleBigCarouselChange = (event) => {
     setBigCarousel(event.target.files);
@@ -86,8 +87,10 @@ export default function DashboardPage() {
       setNumberOfVendors(res.data.numberOfVendors);
       setNumberOfShippers(res.data.numberOfShippers);
       setNumberOfProducts(res.data.numberOfProducts);
+      setIsPageLoading(false)
     } catch (error) {
       setError(error);
+      setIsPageLoading(false)
     }
   }, []);
 
@@ -123,6 +126,10 @@ export default function DashboardPage() {
     return null;
   }
 
+  if (isPageLoading){
+    return null
+  }
+
   return (
     <>
       {user === null && <Navigate to={"/"} replace />}
@@ -133,7 +140,7 @@ export default function DashboardPage() {
       />
       <ToastContainer
         position="top-center"
-        autoClose={10000}
+        autoClose={5000}
         hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
