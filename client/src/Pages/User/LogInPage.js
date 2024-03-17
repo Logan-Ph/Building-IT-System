@@ -62,9 +62,6 @@ export default function LogInPage() {
         const loginWindow = window.open("https://building-it-system-server.vercel.app/auth/google", "_blank");
 
         window.addEventListener('message', (event) => {
-            console.log('Received message event', event);
-
-            if (event.origin !== "http://localhost:4000") return;
 
             if (event.data.user) {
                 setUser(event.data.user);
