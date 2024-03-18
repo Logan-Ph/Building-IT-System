@@ -607,13 +607,14 @@ exports.placeOrder = async (req, res) => {
         .json({ success: false, message: "Cart not found" });
     }
 
+
     // Group products by owner
-    const productsByOwner = userCart.products.reduce((groups, cartItem) => {
-      const ownerID = cartItem.product.owner.toString();
+    const productsByOwner = products.reduce((groups, product) => {
+      const ownerID = product.owner.toString();
       if (!groups[ownerID]) {
         groups[ownerID] = [];
       }
-      groups[ownerID].push(cartItem);
+      groups[ownerID].push(product);
       return groups;
     }, {});
 
@@ -622,12 +623,12 @@ exports.placeOrder = async (req, res) => {
       const order = new Order({
         userId: userID,
         vendorID: ownerID,
-        products: productsByOwner[ownerID].map((cartItem) => ({
-          productId: cartItem.product._id,
-          quantity: cartItem.quantity,
-          image_link: cartItem.product.image_link,
-          price: cartItem.product.price,
-          product_name: cartItem.product.product_name,
+        products: productsByOwner[ownerID].map((product) => ({
+          productId: product._id,
+          quantity: product.quantity,
+          image_link: product.image_link,
+          price: product.price,
+          product_name: product.product_name,
         })),
         userName: user.name,
         shippingAddress: req.body.checkoutInfo.streetAddress,
