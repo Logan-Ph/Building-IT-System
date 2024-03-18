@@ -56,6 +56,7 @@ export default function LogInPage() {
 
   const googleLogin = async () => {
     const handleMessage = (event) => {
+      console.log("Received message", event);
       if (event.data.user) {
         setUser(event.data.user);
         window.location.href = "/"; // redirect to homepage
