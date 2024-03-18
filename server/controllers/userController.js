@@ -1205,7 +1205,7 @@ exports.addNewProduct = async (req, res) => {
       objectID: id,
       product_name: req.body.productName,
       category: req.body.category,
-      owner: req.user.businessName,
+      owner: req.body.businessName,
       price: parseInt(req.body.price, 10),
       description: req.body.description,
       stock: req.body.stock,

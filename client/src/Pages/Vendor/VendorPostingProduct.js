@@ -48,6 +48,7 @@ export default function VendorPostingProduct() {
     stock: stock,
     description: description,
     file: file,
+    businessName: user.businessName
   }
 
   const handleFileChange = (event) => {

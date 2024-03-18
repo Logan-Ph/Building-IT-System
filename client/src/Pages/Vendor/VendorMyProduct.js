@@ -8,10 +8,7 @@ import Pagination from "../../Components/Pagination";
 
 export default function VendorMyProduct() {
   const [products, setProducts] = useState([]);
-  const [dataSlice, setDataSlice] = useState([]);
   const { user } = useContext(UserContext);
-  const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [numberOfProducts, setNumberOfProducts] = useState(0);
