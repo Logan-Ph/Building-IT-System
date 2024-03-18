@@ -212,19 +212,19 @@ router.get('/auth/google/callback', (req, res, next) => {
     passport.authenticate("google", (err, user, info) => {
         if (err || !user) {
             // Authentication failed
-            res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
+            res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "http://localhost:3000"); window.close();</script>`);
             return;
         }
 
         // Authentication success
         req.logIn(user, async (err) => {
             if (err) {
-                res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "*"); window.close();</script>`);
+                res.send(`<script>window.opener.postMessage({ error: "${info.message}" }, "http://localhost:3000"); window.close();</script>`);
                 return;
             }
             const userToken = generateToken(user); // create access token
             res.cookie('userToken', userToken, { httpOnly: true, sameSite: 'none', secure: true }); // pass access token into the cookies
-            res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "*"); window.close();</script>`);
+            res.send(`<script>window.opener.postMessage({ user: ${JSON.stringify(user)} }, "http://localhost:3000"); window.close();</script>`);
         });
     })(req, res);
 });

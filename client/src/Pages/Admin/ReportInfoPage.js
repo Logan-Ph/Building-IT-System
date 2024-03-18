@@ -7,6 +7,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../../Context/UserContext";
+import LoadingPage from "../User/LoadingPage";
 
 export default function ReportInfoPage() {
   const params = useParams()
@@ -41,7 +42,7 @@ export default function ReportInfoPage() {
 
 
   if (isLoading || !user) {
-    return null
+    return <LoadingPage/>
   }
 
   return (

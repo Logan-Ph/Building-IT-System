@@ -1148,10 +1148,11 @@ exports.getStoreInfo = async (req, res) => {
       { vendorID: user._id },
       { followers: 1 }
     );
+
     return res.status(200).json({
       numberOfProducts: numberOfProducts,
       numberOfFollowers: numberOfFollowers
-        ? numberOfFollowers.followers.length
+        ? numberOfFollowers[0].followers.length
         : 0,
     });
   } catch {

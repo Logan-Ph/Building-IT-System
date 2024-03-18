@@ -57,6 +57,11 @@ export default function LogInPage() {
   const googleLogin = async () => {
     const handleMessage = (event) => {
       console.log("Received message", event);
+      if (event.origin !== "https://building-it-system-server.vercel.app") {
+        // The message is not coming from the correct origin
+        return;
+      }
+
       if (event.data.user) {
         setUser(event.data.user);
         window.location.href = "/"; // redirect to homepage
@@ -67,13 +72,11 @@ export default function LogInPage() {
       window.removeEventListener("message", handleMessage);
     };
 
-    window.addEventListener("message", handleMessage);
+    window.addEventListener("message", handleMessage, { once: true });
 
-    window.open(
-      "https://building-it-system-server.vercel.app/auth/google",
-      "_blank"
-    );
+    window.open("https://building-it-system-server.vercel.app/auth/google", "_blank");
   };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     axiosPostData();

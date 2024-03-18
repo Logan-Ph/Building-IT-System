@@ -6,6 +6,7 @@ import { Navigate } from 'react-router-dom';
 import OrdersInfo from '../../Components/OrdersInfo';
 import { UserContext } from '../../Context/UserContext';
 import { ToastContainer } from 'react-toastify';
+import LoadingPage from '../User/LoadingPage';
 
 export default function ManageOrderPage() {
     const [orders, setOrders] = useState();
@@ -13,6 +14,7 @@ export default function ManageOrderPage() {
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('')
     const [ordersCountByStatus, setOrdersCountByStatus] = useState({});
+    const [isLoading, setIsLoading] = useState(true)
     const initialStatuses = {
         "To Ship": null,
         "Shipping": null,
@@ -32,8 +34,10 @@ export default function ManageOrderPage() {
             });
             setOrders(orders)
             setOrdersCountByStatus(res.data.ordersCountByStatus);
+            setIsLoading(false)
         } catch (error) {
             setError(error)
+            setIsLoading(false)
         }
     }, [])
 
@@ -43,6 +47,10 @@ export default function ManageOrderPage() {
 
     if (!user) {
         return null;
+    }
+
+    if (isLoading) {
+        return <LoadingPage />
     }
 
     const handleConfirmOrder = async (orderId) => {
