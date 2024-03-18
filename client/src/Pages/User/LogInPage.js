@@ -66,7 +66,7 @@ export default function LogInPage() {
       window.removeEventListener("message", handleMessage);
     };
 
-    window.addEventListener("message", handleMessage, { once: true });
+    window.addEventListener("message", handleMessage);
 
     window.open(
       "https://building-it-system-server.vercel.app/auth/google",
