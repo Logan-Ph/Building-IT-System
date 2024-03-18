@@ -11,7 +11,6 @@ export default function Invoice() {
         const res = await axios.get(`https://building-it-system-server.vercel.app/${params.id}/view-invoice`, { withCredentials: true });
         setOrder(res.data.order);
         setIsLoading(false)
-        console.log(res.data.order);
     }, [params])
 
     useEffect(() => {
@@ -73,7 +72,7 @@ export default function Invoice() {
                             <hr class="h-px my-8 bg-gray-200 border-0" />
                             <div class="flex justify-between text-lg font-medium">
                                 <p>Total</p>
-                                <p>${order.shippingFee || 0 + order.products.reduce((total, product) => total + product.price * product.quantity, 0)}</p>
+                                <p>${(order.shippingFee || 0) + order.products.reduce((total, product) => total + product.price * product.quantity, 0)}</p>
                             </div>
                         </div>
                     </div>

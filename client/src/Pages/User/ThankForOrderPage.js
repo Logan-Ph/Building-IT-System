@@ -76,7 +76,7 @@ export default function ThankForOrderPage() {
               <hr class="h-px my-8 bg-gray-200 border-0" />
               <div class="flex justify-between text-lg font-medium">
                 <p>Total</p>
-                <p>${shippingFee + products.reduce((total, product) => total + product.price * product.quantity, 0)}</p>
+                <p>${ Number.parseInt(products.reduce((total, product) => total + product.price * product.quantity, 0)) +  Number.parseInt(shippingFee)}</p>
               </div>
             </div>
           </div>
