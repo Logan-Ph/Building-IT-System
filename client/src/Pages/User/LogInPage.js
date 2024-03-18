@@ -41,7 +41,9 @@ export default function LogInPage() {
     };
 
     await axios
-      .post("https://building-it-system-server.vercel.app/login", postData, { withCredentials: true })
+      .post("https://building-it-system-server.vercel.app/login", postData, {
+        withCredentials: true,
+      })
       .then((res) => {
         setUser(res.data.user);
         notify(res.data.message);
@@ -53,8 +55,6 @@ export default function LogInPage() {
   };
 
   const googleLogin = async () => {
-    window.open("https://building-it-system-server.vercel.app/auth/google", "_blank");
-
     const handleMessage = (event) => {
       if (event.data.user) {
         setUser(event.data.user);
@@ -67,6 +67,11 @@ export default function LogInPage() {
     };
 
     window.addEventListener("message", handleMessage, { once: true });
+
+    window.open(
+      "https://building-it-system-server.vercel.app/auth/google",
+      "_blank"
+    );
   };
   const handleSubmit = (e) => {
     e.preventDefault();
