@@ -41,15 +41,7 @@ export default function VendorPostingProduct() {
     });
   }
 
-  const data = {
-    productName: productName,
-    category: category,
-    price: price,
-    stock: stock,
-    description: description,
-    file: file,
-    businessName: user.businessName
-  }
+  
 
   const handleFileChange = (event) => {
     event.preventDefault()
@@ -63,6 +55,17 @@ export default function VendorPostingProduct() {
   async function axiosPostData() {
     try {
       setLoading(true);
+      const formData = new FormData();
+      formData.append('file', file);
+      const data = {
+        productName: productName,
+        category: category,
+        price: price,
+        stock: stock,
+        description: description,
+        file: formData,
+        businessName: user.businessName
+      }
       await axios.post('https://building-it-system-server.vercel.app/add-new-product', data, { withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' } })
         .then(res => {
           setError('')

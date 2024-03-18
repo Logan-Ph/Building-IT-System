@@ -1167,8 +1167,9 @@ exports.addNewProduct = async (req, res) => {
     const uploadImage = async () => {
       try {
         if (req.file) {
+          // Directly upload the buffer from req.file to ImageKit
           const response = await imagekit.upload({
-            file: fs.readFileSync("uploads/" + req.file.filename),
+            file: req.body.file.buffer, // Use the file buffer directly
             fileName: id + ".jpg",
           });
           return response.url;
